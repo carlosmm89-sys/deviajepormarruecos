@@ -1,0 +1,121 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: destinations
+    // Document ID: auto-generated
+    // Fields:
+    //   - name: string (required, 1-100 chars)
+    //   - description: string (required, 1-5000 chars)
+    //   - country: string (required, 1-100 chars)
+    //   - imageUrl: string (required, valid URL)
+    //   - createdAt: timestamp (required)
+    //
+    // Collection: tours
+    // Document ID: auto-generated
+    // Fields:
+    //   - name: string (required, 1-200 chars)
+    //   - destinationId: string (required, valid destination ID)
+    //   - price: number (required, positive)
+    //   - duration: string (required, 1-50 chars)
+    //   - description: string (required, 1-5000 chars)
+    //   - imageUrls: list (required, strings)
+    //   - highlights: list (required, strings)
+    //   - inclusions: list (required, strings)
+    //   - createdAt: timestamp (required)
+    //
+    // Collection: users
+    // Document ID: uid
+    // Fields:
+    //   - name: string (required)
+    //   - email: string (required, email format)
+    //   - role: string (required, 'admin' or 'user')
+    //   - createdAt: timestamp (required)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "CarlosMM89@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidUrl(url) {
+      return url is string && (url.matches("^https://.*") || url.matches("^http://.*"));
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      function isValidUser(data) {
+        return hasOnlyAllowedFields(['name', 'email', 'role', 'createdAt']) &&
+               data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
+               isValidEmail(data.email) &&
+               data.role in ['admin', 'user'] &&
+               data.createdAt is timestamp;
+      }
+
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isAuthenticated() && isOwner(userId) && isValidUser(request.resource.data) && (request.resource.data.role == 'user' || isAdmin());
+      allow update: if isAuthenticated() && isOwner(userId) && isValidUser(request.resource.data) && (request.resource.data.role == resource.data.role || isAdmin());
+    }
+
+    match /destinations/{destinationId} {
+      function isValidDestination(data) {
+        return hasOnlyAllowedFields(['name', 'description', 'country', 'imageUrl', 'createdAt']) &&
+               data.name is string && data.name.size() > 0 && data.name.size() < 100 &&
+               data.description is string && data.description.size() > 0 && data.description.size() < 5000 &&
+               data.country is string && data.country.size() > 0 && data.country.size() < 100 &&
+               isValidUrl(data.imageUrl) &&
+               data.createdAt is timestamp;
+      }
+
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidDestination(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /tours/{tourId} {
+      function isValidTour(data) {
+        return hasOnlyAllowedFields(['name', 'destinationId', 'price', 'duration', 'description', 'imageUrls', 'highlights', 'inclusions', 'createdAt']) &&
+               data.name is string && data.name.size() > 0 && data.name.size() < 200 &&
+               data.destinationId is string &&
+               data.price is number && data.price >= 0 &&
+               data.duration is string && data.duration.size() > 0 && data.duration.size() < 50 &&
+               data.description is string && data.description.size() > 0 && data.description.size() < 5000 &&
+               data.imageUrls is list &&
+               data.highlights is list &&
+               data.inclusions is list &&
+               data.createdAt is timestamp;
+      }
+
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidTour(request.resource.data);
+      allow delete: if isAdmin();
+    }
+  }
+}

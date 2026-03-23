@@ -1,0 +1,75 @@
+export interface Destination {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image_url: string;
+  featured: boolean;
+  meta_data: any;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Tour {
+  id: string;
+  destination_id: string;
+  title: string;
+  slug: string;
+  category: string;
+  featured_image: string;
+  gallery: string[];
+  departure_city: string;
+  departure_time: string;
+  meeting_point: string;
+  meeting_time: string;
+  description_includes: string;
+  description_excludes: string;
+  recommendations: string;
+  itinerary_summary: string;
+  itinerary_details: string;
+  map_iframe: string;
+  itinerary_image: string;
+  price: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Lead {
+  id: string;
+  tour_id?: string;
+  form_type: string;
+  first_name: string;
+  last_name?: string;
+  email: string;
+  phone?: string;
+  travel_motive?: string;
+  passengers_count: number;
+  approximate_date?: string;
+  message?: string;
+  source?: string;
+  status: 'new' | 'contacted' | 'interested' | 'converted' | 'cancelled';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BusinessSettings {
+  id: string;
+  site_name: string;
+  admin_email: string;
+  whatsapp_number: string;
+  whatsapp_welcome_message: string;
+  instagram_url: string;
+  facebook_url: string;
+  tripadvisor_url: string;
+  footer_address: string;
+}
+
+export interface UserProfile {
+  id: string;
+  full_name: string;
+  email: string;
+  role: 'admin' | 'editor' | 'viewer';
+  avatar_url?: string;
+  created_at: string;
+}

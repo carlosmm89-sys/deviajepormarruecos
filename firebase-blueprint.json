@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "Destination": {
+      "title": "Destination",
+      "description": "A travel destination.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Name of the destination" },
+        "description": { "type": "string", "description": "Detailed description" },
+        "country": { "type": "string", "description": "Country of the destination" },
+        "imageUrl": { "type": "string", "description": "Main image URL" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["name", "description", "country", "imageUrl"]
+    },
+    "Tour": {
+      "title": "Tour",
+      "description": "A travel tour package.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Name of the tour" },
+        "destinationId": { "type": "string", "description": "ID of the associated destination" },
+        "price": { "type": "number", "description": "Price of the tour" },
+        "duration": { "type": "string", "description": "Duration (e.g., '5 days')" },
+        "description": { "type": "string", "description": "Detailed description" },
+        "imageUrls": { "type": "array", "items": { "type": "string" }, "description": "List of image URLs" },
+        "highlights": { "type": "array", "items": { "type": "string" }, "description": "Tour highlights" },
+        "inclusions": { "type": "array", "items": { "type": "string" }, "description": "What's included" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["name", "destinationId", "price", "duration", "description"]
+    },
+    "User": {
+      "title": "User",
+      "description": "App user profile.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["admin", "user"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "role"]
+    }
+  },
+  "firestore": {
+    "/destinations/{destinationId}": {
+      "schema": "Destination",
+      "description": "Collection of destinations"
+    },
+    "/tours/{tourId}": {
+      "schema": "Tour",
+      "description": "Collection of tours"
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    }
+  }
+}
