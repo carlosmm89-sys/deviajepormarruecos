@@ -6,9 +6,9 @@
   --font-serif: "Playfair Display", serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-brand-primary: #C05A2E; /* Terracotta */
-  --color-brand-accent: #E3B448; /* Sandy Yellow */
-  --color-brand-blue: #0055A4; /* Moroccan Blue */
+  --color-brand-primary: #d87b3b; /* Warm Copper Orange */
+  --color-brand-accent: #8b5226; /* Darker Copper/Brown */
+  --color-brand-blue: #232f3e; /* Dark Slate instead of bright blue */
 }
 
 @layer base {

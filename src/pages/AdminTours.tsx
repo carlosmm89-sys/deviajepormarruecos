@@ -154,42 +154,15 @@ export default function AdminTours() {
         </motion.div>
       )}
 
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="space-y-1">
-          <h1 className="text-4xl font-bold">Panel de Administración</h1>
-          <div className="flex gap-4">
-            <Link 
-              to="/admin/destinations" 
-              className={`text-sm font-bold pb-1 border-b-2 transition-all ${location.pathname.includes('destinations') ? 'border-brand-accent text-brand-accent' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
-            >
-              Destinos
-            </Link>
-            <Link 
-              to="/admin/tours" 
-              className={`text-sm font-bold pb-1 border-b-2 transition-all ${location.pathname.includes('tours') ? 'border-brand-accent text-brand-accent' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
-            >
-              Tours
-            </Link>
-            <Link 
-              to="/admin/leads" 
-              className={`text-sm font-bold pb-1 border-b-2 transition-all ${location.pathname.includes('leads') ? 'border-brand-accent text-brand-accent' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
-            >
-              Leads
-            </Link>
-            <Link 
-              to="/admin/settings" 
-              className={`text-sm font-bold pb-1 border-b-2 transition-all ${location.pathname.includes('settings') ? 'border-brand-accent text-brand-accent' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
-            >
-              Configuración
-            </Link>
-          </div>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-serif font-bold text-gray-900">Tours</h1>
+          <p className="text-gray-500 mt-1">Gestiona los tours y experiencias ofrecidas.</p>
         </div>
-        <div className="flex gap-4">
-          <button onClick={() => openModal()} className="btn-primary flex items-center gap-2">
-            <Plus className="w-5 h-5" />
-            <span>Nuevo Tour</span>
-          </button>
-        </div>
+        <button onClick={() => openModal()} className="btn-primary flex items-center gap-2 shadow-lg shadow-brand-primary/20">
+          <Plus className="w-5 h-5" />
+          <span>Nuevo Tour</span>
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
