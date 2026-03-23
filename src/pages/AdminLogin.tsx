@@ -2,22 +2,46 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, User, AlertCircle } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../context/AuthContext';
 
 export default function AdminLogin() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Hardcoded credentials for now as requested
-    if (username === 'admin' && password === 'admin123') {
-      localStorage.setItem('admin_session', 'true');
+  // Redirect if already logged in as admin
+  React.useEffect(() => {
+    if (user && user.role === 'admin') {
       navigate('/admin/destinations');
-    } else {
-      setError('Usuario o contraseña incorrectos');
+    }
+  }, [user, navigate]);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) throw signInError;
+      
+      // We don't need to manually redirect here immediately if we wait for AuthContext to update,
+      // but we can force it just in case:
+      navigate('/admin/destinations');
+      
+    } catch (err: any) {
+      console.error(err);
+      setError('Email o contraseña incorrectos');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,14 +73,14 @@ export default function AdminLogin() {
           )}
 
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-gray-700 ml-1">Usuario</label>
+            <label className="text-sm font-semibold text-gray-700 ml-1">Email</label>
             <div className="relative">
               <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="input-field pl-11"
-                placeholder="admin"
+                placeholder="admin@ejemplo.com"
                 required
               />
               <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -78,8 +102,8 @@ export default function AdminLogin() {
             </div>
           </div>
 
-          <button type="submit" className="btn-primary w-full py-4 text-lg">
-            Iniciar Sesión
+          <button type="submit" disabled={isLoading} className="btn-primary w-full py-4 text-lg">
+            {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
           </button>
         </form>
       </motion.div>

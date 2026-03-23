@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, signIn, signOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const location = useLocation();
-  const isAdminLoggedIn = localStorage.getItem('admin_session') === 'true';
+  const isAdminLoggedIn = user?.role === 'admin';
 
   const navLinks = [
     { name: 'Inicio', path: '/', icon: Compass },
@@ -19,8 +19,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     navLinks.push({ name: 'Admin', path: '/admin', icon: Shield });
   }
 
-  const handleAdminLogout = () => {
-    localStorage.removeItem('admin_session');
+  const handleAdminLogout = async () => {
+    await signOut();
     window.location.href = '/';
   };
 
@@ -60,8 +60,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <span>Cerrar Admin</span>
                 </button>
               ) : (
-                <Link to="/admin/login" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
-                  Acceso Admin
+                <Link to="/admin/login" className="p-2 text-gray-300 hover:text-brand-accent transition-colors rounded-full hover:bg-gray-50" title="Acceso Admin">
+                  <Shield className="w-4 h-4" />
                 </Link>
               )}
 
@@ -78,9 +78,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     </button>
                   </>
                 ) : (
-                  <button onClick={signIn} className="btn-primary text-sm">
-                    Iniciar Sesión
-                  </button>
+                  <a href="#contacto" className="btn-primary text-sm flex items-center justify-center">
+                    Contacto
+                  </a>
                 )}
               </div>
             </nav>
@@ -139,24 +139,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <span>Cerrar Sesión</span>
                   </button>
                 ) : (
-                  <button
-                    onClick={() => {
-                      signIn();
-                      setIsMenuOpen(false);
-                    }}
-                    className="btn-primary w-full"
+                  <a
+                    href="#contacto"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="btn-primary w-full text-center"
                   >
-                    Iniciar Sesión
-                  </button>
+                    Contacto
+                  </a>
                 )}
                 
                 {!isAdminLoggedIn && (
                   <Link
                     to="/admin/login"
                     onClick={() => setIsMenuOpen(false)}
-                    className="text-center text-sm text-gray-400 pt-4"
+                    className="flex justify-center text-gray-300 hover:text-brand-accent pt-4"
+                    title="Acceso Admin"
                   >
-                    Acceso Admin
+                    <Shield className="w-5 h-5" />
                   </Link>
                 )}
               </div>
@@ -179,7 +178,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </AnimatePresence>
       </main>
 
-      <footer className="bg-gray-50 border-t border-gray-100 py-12">
+      <footer id="contacto" className="bg-gray-50 border-t border-gray-100 py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <p className="text-gray-500 text-sm">
             © {new Date().getFullYear()} Marruecos Experiencia. Todos los derechos reservados.
