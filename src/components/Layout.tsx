@@ -15,11 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { name: 'Destinos', path: '/destinations', icon: Map },
   ];
 
-  if (isAdminLoggedIn) {
-    navLinks.push({ name: 'Admin', path: '/admin', icon: Shield });
-  }
-
-  const handleAdminLogout = async () => {
+  const handleLogout = async () => {
     await signOut();
     window.location.href = '/';
   };
@@ -27,13 +23,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="sticky top-0 z-50 glass-morphism">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-brand-primary rounded-xl flex items-center justify-center">
-                <Compass className="text-white w-6 h-6" />
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-24">
+            <Link to="/" className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-brand-primary rounded-xl flex items-center justify-center">
+                <Compass className="text-white w-7 h-7" />
               </div>
-              <span className="text-2xl font-serif font-bold tracking-tight">Marruecos Experiencia</span>
+              <span className="text-3xl font-serif font-bold tracking-tight text-gray-900">Marruecos Experiencia</span>
             </Link>
 
             {/* Desktop Nav */}
@@ -42,45 +38,43 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`flex items-center space-x-1 text-sm font-medium transition-colors hover:text-brand-accent ${
-                    location.pathname === link.path ? 'text-brand-accent' : 'text-gray-600'
+                  className={`flex items-center space-x-2 text-base font-medium transition-colors hover:text-brand-primary ${
+                    location.pathname === link.path ? 'text-brand-primary' : 'text-gray-700'
                   }`}
                 >
-                  <link.icon className="w-4 h-4" />
+                  <link.icon className="w-5 h-5" />
                   <span>{link.name}</span>
                 </Link>
               ))}
-              
-              {isAdminLoggedIn ? (
-                <button
-                  onClick={handleAdminLogout}
-                  className="flex items-center space-x-1 text-sm font-medium text-red-500 hover:text-red-600 transition-colors border-l border-gray-200 pl-4 ml-4"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Cerrar Admin</span>
-                </button>
-              ) : (
-                <Link to="/admin/login" className="p-2 text-gray-300 hover:text-brand-accent transition-colors rounded-full hover:bg-gray-50" title="Acceso Admin">
-                  <Shield className="w-4 h-4" />
-                </Link>
-              )}
 
-              <div className="flex items-center space-x-4 ml-4 pl-4 border-l border-gray-200">
-                {user ? (
+              <div className="flex items-center space-x-6 ml-4 pl-8 border-l border-gray-200">
+                {isAdminLoggedIn ? (
                   <>
-                    <span className="text-sm font-medium text-gray-700">{user.name}</span>
+                    <Link 
+                      to="/admin/destinations" 
+                      className="btn-primary text-sm flex items-center justify-center gap-2"
+                    >
+                      <Shield className="w-4 h-4" />
+                      Panel Admin
+                    </Link>
                     <button
-                      onClick={() => signOut()}
-                      className="p-2 text-gray-500 hover:text-red-500 transition-colors"
+                      onClick={handleLogout}
+                      className="flex items-center space-x-2 text-sm font-medium text-gray-500 hover:text-red-600 transition-colors"
                       title="Cerrar sesión"
                     >
                       <LogOut className="w-5 h-5" />
+                      <span>Salir</span>
                     </button>
                   </>
                 ) : (
-                  <a href="#contacto" className="btn-primary text-sm flex items-center justify-center">
-                    Contacto
-                  </a>
+                  <>
+                    <a href="#contacto" className="btn-primary text-sm flex items-center justify-center">
+                      Contacto
+                    </a>
+                    <Link to="/admin/login" className="p-2 text-gray-400 hover:text-brand-primary transition-colors rounded-full hover:bg-orange-50" title="Acceso Admin">
+                      <Shield className="w-5 h-5" />
+                    </Link>
+                  </>
                 )}
               </div>
             </nav>
@@ -114,35 +108,32 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </Link>
                 ))}
                 
-                {isAdminLoggedIn && (
-                  <button
-                    onClick={() => {
-                      handleAdminLogout();
-                      setIsMenuOpen(false);
-                    }}
-                    className="flex items-center space-x-2 text-lg font-medium text-red-500"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    <span>Cerrar Admin</span>
-                  </button>
-                )}
-
-                {user ? (
-                  <button
-                    onClick={() => {
-                      signOut();
-                      setIsMenuOpen(false);
-                    }}
-                    className="flex items-center space-x-2 text-lg font-medium text-red-500"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    <span>Cerrar Sesión</span>
-                  </button>
+                {isAdminLoggedIn ? (
+                  <>
+                    <Link
+                      to="/admin/destinations"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center space-x-2 text-lg font-medium text-brand-primary"
+                    >
+                      <Shield className="w-5 h-5" />
+                      <span>Panel Admin</span>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsMenuOpen(false);
+                      }}
+                      className="flex items-center space-x-2 text-lg font-medium text-red-500 pt-4 border-t border-gray-100"
+                    >
+                      <LogOut className="w-5 h-5" />
+                      <span>Cerrar Sesión</span>
+                    </button>
+                  </>
                 ) : (
                   <a
                     href="#contacto"
                     onClick={() => setIsMenuOpen(false)}
-                    className="btn-primary w-full text-center"
+                    className="btn-primary w-full text-center mt-4"
                   >
                     Contacto
                   </a>
@@ -152,10 +143,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <Link
                     to="/admin/login"
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex justify-center text-gray-300 hover:text-brand-accent pt-4"
+                    className="flex justify-center text-gray-300 hover:text-brand-primary pt-6"
                     title="Acceso Admin"
                   >
-                    <Shield className="w-5 h-5" />
+                    <Shield className="w-6 h-6" />
                   </Link>
                 )}
               </div>

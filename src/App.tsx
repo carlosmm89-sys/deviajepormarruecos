@@ -12,6 +12,7 @@ import AdminTours from './pages/AdminTours';
 import AdminSettings from './pages/AdminSettings';
 import AdminLeads from './pages/AdminLeads';
 import AdminLogin from './pages/AdminLogin';
+import AdminTourEdit from './pages/AdminTourEdit';
 
 export default function App() {
   return (
@@ -30,6 +31,8 @@ export default function App() {
               <Route index element={<AdminDestinations />} />
               <Route path="destinations" element={<AdminDestinations />} />
               <Route path="tours" element={<AdminTours />} />
+              <Route path="tours/new" element={<AdminTourEdit />} />
+              <Route path="tours/:id" element={<AdminTourEdit />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="leads" element={<AdminLeads />} />
             </Route>

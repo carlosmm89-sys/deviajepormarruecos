@@ -18,6 +18,10 @@ export interface Tour {
   category: string;
   featured_image: string;
   gallery: string[];
+  description: string;
+  duration: string;
+  max_people: string;
+  date_text: string;
   departure_city: string;
   departure_time: string;
   meeting_point: string;

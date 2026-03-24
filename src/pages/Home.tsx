@@ -139,7 +139,7 @@ export default function Home() {
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl text-brand-primary font-bold shadow-sm">
-                    Desde ${tour.price}
+                    Desde {tour.price} €
                   </div>
                 </div>
                 <div className="p-8 space-y-4">

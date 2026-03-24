@@ -155,15 +155,17 @@ export default function TourDetail() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-green-50 p-6 rounded-3xl border border-green-100">
                 <h3 className="font-bold text-green-900 mb-4">Incluido</h3>
-                <p className="whitespace-pre-wrap text-green-800 text-sm">
-                  {tour.description_includes}
-                </p>
+                <div 
+                  className="prose prose-sm prose-green max-w-none text-green-800"
+                  dangerouslySetInnerHTML={{ __html: tour.description_includes || '' }}
+                />
               </div>
               <div className="bg-red-50 p-6 rounded-3xl border border-red-100">
                 <h3 className="font-bold text-red-900 mb-4">No incluido</h3>
-                <p className="whitespace-pre-wrap text-red-800 text-sm">
-                  {tour.description_excludes}
-                </p>
+                <div 
+                  className="prose prose-sm prose-red max-w-none text-red-800"
+                  dangerouslySetInnerHTML={{ __html: tour.description_excludes || '' }}
+                />
               </div>
             </div>
           </div>
@@ -171,9 +173,12 @@ export default function TourDetail() {
           <div className="space-y-8">
             <div className="flex items-center gap-3">
               <div className="w-1 h-8 bg-brand-accent rounded-full" />
-              <h2 className="text-3xl font-bold text-gray-900">Recomendaciones</h2>
+                <div className="text-3xl font-bold text-white mb-2">{tour.price} €</div>
             </div>
-            <p className="text-gray-600 whitespace-pre-wrap">{tour.recommendations || 'No hay recomendaciones especiales.'}</p>
+            <div 
+              className="prose prose-sm max-w-none text-gray-600"
+              dangerouslySetInnerHTML={{ __html: tour.recommendations || '<p>No hay recomendaciones especiales.</p>' }}
+            />
           </div>
 
           <div ref={itinerarioRef} className="space-y-12">
@@ -181,9 +186,10 @@ export default function TourDetail() {
               <div className="w-1 h-8 bg-brand-accent rounded-full" />
               <h2 className="text-3xl font-bold text-gray-900">Itinerario: {tour.title}</h2>
             </div>
-            <div className="bg-white p-8 rounded-3xl border border-gray-100 whitespace-pre-wrap leading-relaxed text-gray-700">
-              {tour.itinerary_details}
-            </div>
+            <div 
+              className="bg-white p-8 rounded-3xl border border-gray-100 prose prose-sm max-w-none leading-relaxed text-gray-700"
+              dangerouslySetInnerHTML={{ __html: tour.itinerary_details || '' }}
+            />
           </div>
         </div>
 
