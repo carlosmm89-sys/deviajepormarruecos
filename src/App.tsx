@@ -7,6 +7,8 @@ import Destinations from './pages/Destinations';
 import DestinationDetail from './pages/DestinationDetail';
 import TourDetail from './pages/TourDetail';
 import Wishlist from './pages/Wishlist';
+import Blog from './pages/Blog';
+import BlogPostDetail from './pages/BlogPost';
 import AdminRoute from './components/AdminRoute';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminDestinations from './pages/AdminDestinations';
@@ -27,6 +29,8 @@ export default function App() {
             <Route path="/destinations/:id" element={<DestinationDetail />} />
             <Route path="/tours/:id" element={<TourDetail />} />
             <Route path="/favoritos" element={<Wishlist />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPostDetail />} />
             
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />

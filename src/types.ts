@@ -41,6 +41,19 @@ export interface Tour {
   updated_at: string;
 }
 
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  cover_image: string | null;
+  author: string;
+  published_at: string;
+  is_published: boolean;
+  views: number;
+}
+
 export interface Lead {
   id: string;
   tour_id?: string;

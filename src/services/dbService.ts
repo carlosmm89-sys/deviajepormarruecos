@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import { Destination, Tour, Lead, BusinessSettings } from '../types';
+import { Destination, Tour, Lead, BusinessSettings, BlogPost } from '../types';
 
 export const dbService = {
   // Storage
@@ -138,5 +138,29 @@ export const dbService = {
   },
   incrementHomeViews: async () => {
     await supabase.rpc('increment_home_views');
+  },
+  
+  // Blog
+  getBlogPosts: async (): Promise<BlogPost[]> => {
+    const { data, error } = await supabase.from('blog_posts').select('*').eq('is_published', true).order('published_at', { ascending: false });
+    if (error) throw error;
+    return data;
+  },
+  getBlogPost: async (slugOrId: string): Promise<BlogPost | null> => {
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slugOrId);
+    let query = supabase.from('blog_posts').select('*').eq('is_published', true);
+    
+    if (isUuid) {
+      query = query.eq('id', slugOrId);
+    } else {
+      query = query.eq('slug', slugOrId);
+    }
+    
+    const { data, error } = await query.single();
+    if (error) return null;
+    return data;
+  },
+  incrementBlogViews: async (id: string) => {
+    await supabase.rpc('increment_blog_views', { row_id: id });
   }
 };
