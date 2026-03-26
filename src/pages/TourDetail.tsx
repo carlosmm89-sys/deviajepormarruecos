@@ -3,15 +3,41 @@ import { useParams, Link } from 'react-router-dom';
 import { Tour, Destination } from '../types';
 import { 
   Clock, MapPin, 
-  ArrowLeft, Home, BookOpen, ShieldCheck, Map as MapIcon, Image as ImageIcon
+  ArrowLeft, Home, BookOpen, ShieldCheck, Map as MapIcon, Image as ImageIcon,
+  ChevronDown, ChevronUp, CheckCircle2, PlusSquare, HelpCircle, Star, Share, Heart
 } from 'lucide-react';
 import { dbService } from '../services/dbService';
+import ImageGalleryModal from '../components/ImageGalleryModal';
+import ReviewsModal from '../components/ReviewsModal';
+
+const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="border border-gray-100 bg-white rounded-2xl overflow-hidden transition-all duration-300">
+      <button 
+        onClick={() => setIsOpen(!isOpen)} 
+        className="w-full flex items-center justify-between p-5 md:p-6 text-left font-bold text-gray-900 focus:outline-none hover:bg-gray-50/50 transition-colors"
+      >
+        <span className="pr-4">{question}</span>
+        <span className={`flex-shrink-0 transform transition-transform duration-300 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 ${isOpen ? 'rotate-180 bg-brand-primary text-white' : 'text-gray-500'}`}>
+           {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+        </span>
+      </button>
+      <div className={`px-5 md:px-6 transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] pb-6 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+        <div className="text-gray-600 text-sm leading-relaxed">{answer}</div>
+      </div>
+    </div>
+  );
+};
 
 export default function TourDetail() {
   const { id } = useParams<{ id: string }>();
   const [tour, setTour] = useState<Tour | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('descripcion');
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [isReviewsOpen, setIsReviewsOpen] = useState(false);
 
   const descripcionRef = useRef<HTMLDivElement>(null);
   const itinerarioRef = useRef<HTMLDivElement>(null);
@@ -56,46 +82,77 @@ export default function TourDetail() {
 
   return (
     <div className="pb-24 bg-gray-50/30">
+      <ReviewsModal isOpen={isReviewsOpen} onClose={() => setIsReviewsOpen(false)} />
+      <ImageGalleryModal 
+        isOpen={isGalleryOpen}
+        images={[
+          tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/1200/800/morocco,sahara?lock=200',
+          tour.gallery?.[1] || 'https://loremflickr.com/1200/800/morocco,riad?lock=201',
+          tour.gallery?.[2] || 'https://loremflickr.com/1200/800/morocco,fez?lock=202',
+          tour.gallery?.[3] || 'https://loremflickr.com/1200/800/morocco,kasbah?lock=203',
+          tour.gallery?.[4] || 'https://loremflickr.com/1200/800/morocco,atlas?lock=204'
+        ]}
+        initialIndex={galleryIndex}
+        onClose={() => setIsGalleryOpen(false)}
+      />
+
       {/* Hero Gallery */}
-      <section className="h-[70vh] grid grid-cols-1 md:grid-cols-4 gap-2 p-2">
-        <div className="md:col-span-2 relative overflow-hidden rounded-3xl">
-          <img
-            src={tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour1/1200/800'}
-            alt={tour.title}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-            referrerPolicy="no-referrer"
-          />
-        </div>
-        <div className="hidden md:grid grid-rows-2 gap-2 md:col-span-1">
-          <div className="relative overflow-hidden rounded-3xl">
-            <img
-              src={tour.gallery?.[1] || 'https://picsum.photos/seed/tour2/800/600'}
-              alt={tour.title}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-          <div className="relative overflow-hidden rounded-3xl">
-            <img
-              src={tour.gallery?.[2] || 'https://picsum.photos/seed/tour3/800/600'}
-              alt={tour.title}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-        </div>
-        <div className="hidden md:block relative overflow-hidden rounded-3xl md:col-span-1">
-          <img
-            src={tour.gallery?.[3] || 'https://picsum.photos/seed/tour4/800/1200'}
-            alt={tour.title}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-            referrerPolicy="no-referrer"
-          />
-        </div>
+      <section className="max-w-[1600px] mx-auto p-2 md:p-4 mt-4">
+        {(() => {
+          const fullGallery = [
+            tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/1200/800/morocco,sahara?lock=200',
+            tour.gallery?.[1] || 'https://loremflickr.com/1200/800/morocco,riad?lock=201',
+            tour.gallery?.[2] || 'https://loremflickr.com/1200/800/morocco,fez?lock=202',
+            tour.gallery?.[3] || 'https://loremflickr.com/1200/800/morocco,kasbah?lock=203',
+            tour.gallery?.[4] || 'https://loremflickr.com/1200/800/morocco,atlas?lock=204'
+          ];
+          
+          const openGallery = (idx: number) => {
+            setGalleryIndex(idx);
+            setIsGalleryOpen(true);
+          };
+
+          return (
+            <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-2 md:gap-3 h-[40vh] md:h-[65vh] rounded-3xl overflow-hidden relative group">
+              <div className="md:col-span-2 row-span-2 relative cursor-pointer overflow-hidden" onClick={() => openGallery(0)}>
+                <img src={fullGallery[0]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Principal" referrerPolicy="no-referrer" />
+                <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
+              </div>
+              
+              <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(1)}>
+                <img src={fullGallery[1]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 1" referrerPolicy="no-referrer" />
+                <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
+              </div>
+
+              <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(2)}>
+                <img src={fullGallery[2]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 2" referrerPolicy="no-referrer" />
+                <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
+              </div>
+
+              <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(3)}>
+                <img src={fullGallery[3]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 3" referrerPolicy="no-referrer" />
+                <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
+              </div>
+
+              <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(4)}>
+                <img src={fullGallery[4]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 4" referrerPolicy="no-referrer" />
+                <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
+              </div>
+
+              <button 
+                onClick={() => openGallery(0)}
+                className="absolute bottom-4 right-4 md:bottom-6 md:right-6 bg-white/95 backdrop-blur-sm border border-gray-200 text-gray-900 text-sm font-bold px-4 py-2.5 md:px-5 md:py-3 rounded-xl shadow-lg hover:bg-white hover:scale-105 transition-all flex items-center gap-2 z-10"
+              >
+                <ImageIcon className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="hidden sm:inline">Ver todas las fotos</span>
+              </button>
+            </div>
+          );
+        })}
       </section>
 
       {/* Sticky Nav */}
-      <div className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+      <div className="sticky top-[72px] md:top-[88px] z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all -mx-4 px-4 md:mx-0 md:px-0">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex gap-8 overflow-x-auto no-scrollbar py-4">
             {['Descripción', 'Itinerario'].map((tab) => (
@@ -129,7 +186,38 @@ export default function TourDetail() {
               <span className="text-gray-600 font-medium">{tour.title}</span>
             </nav>
 
-            <h1 className="text-5xl md:text-6xl font-serif font-bold leading-tight text-gray-900">{tour.title}</h1>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div>
+                <h1 className="text-5xl md:text-6xl font-serif font-bold leading-tight text-gray-900 mb-4">{tour.title}</h1>
+                <div className="flex items-center gap-2 text-gray-900">
+                  <Star className="w-5 h-5 fill-current" />
+                  <span className="font-bold">5,0</span>
+                  <span className="text-gray-300">·</span>
+                  <button onClick={() => setIsReviewsOpen(true)} className="underline font-medium hover:text-brand-accent transition-colors">
+                    14 evaluaciones
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-6 pb-2">
+                <button 
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({
+                        title: tour.title,
+                        url: window.location.href
+                      }).catch(console.error);
+                    }
+                  }}
+                  className="flex items-center gap-2 font-medium underline text-gray-700 hover:text-gray-900 transition-colors"
+                >
+                  <Share className="w-4 h-4" /> Comparte
+                </button>
+                <button className="flex items-center gap-2 font-medium underline text-gray-700 hover:text-gray-900 transition-colors">
+                  <Heart className="w-4 h-4" /> Guarda
+                </button>
+              </div>
+            </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6 py-8 border-y border-gray-100">
               <div className="flex items-center gap-3">
@@ -173,7 +261,7 @@ export default function TourDetail() {
           <div className="space-y-8">
             <div className="flex items-center gap-3">
               <div className="w-1 h-8 bg-brand-accent rounded-full" />
-                <div className="text-3xl font-bold text-white mb-2">{tour.price} €</div>
+                <div className="text-4xl font-black text-gray-900">{tour.price} €</div>
             </div>
             <div 
               className="prose prose-sm max-w-none text-gray-600"
@@ -191,6 +279,72 @@ export default function TourDetail() {
               dangerouslySetInnerHTML={{ __html: tour.itinerary_details || '' }}
             />
           </div>
+
+          <div className="border-t border-gray-100 pt-12 space-y-6">
+            <div className="flex items-center gap-3 mb-8">
+              <PlusSquare className="w-8 h-8 text-gray-900" />
+              <h2 className="text-3xl font-bold text-gray-900">Experiencias Adicionales</h2>
+            </div>
+            <p className="text-gray-500 italic mb-8">Pregunte a nuestro departamento de reservas por el suplemento antes de comenzar el tour.</p>
+            
+            <div className="space-y-6">
+              <div className="flex gap-4 items-start">
+                <CheckCircle2 className="w-6 h-6 text-brand-primary flex-shrink-0 mt-1" />
+                <div>
+                  <h4 className="font-bold text-gray-900 text-lg">Paseo en globo en Marrakech:</h4>
+                  <p className="text-gray-500 text-sm mt-1">Una actividad recomendada para los visitantes de Marrakech, este recorrido por la mañana le lleva sobre las estribaciones de las Montañas al amanecer.</p>
+                </div>
+              </div>
+              <div className="flex gap-4 items-start">
+                <CheckCircle2 className="w-6 h-6 text-brand-primary flex-shrink-0 mt-1" />
+                <div>
+                  <h4 className="font-bold text-gray-900 text-lg">Cena romántica en el desierto:</h4>
+                  <p className="text-gray-500 text-sm mt-1">Disfruta de una cena en la intimidad al aire libre en pleno desierto a la luz de las velas y el cielo estrellado.</p>
+                </div>
+              </div>
+              <div className="flex gap-4 items-start">
+                <CheckCircle2 className="w-6 h-6 text-brand-primary flex-shrink-0 mt-1" />
+                <div>
+                  <h4 className="font-bold text-gray-900 text-lg">Tour en Quad o buggy en el desierto:</h4>
+                  <p className="text-gray-500 text-sm mt-1">Si lo desean en el desierto le podemos organizar un paseo en Quad o Buggy para ver el atardecer desde las dunas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-100 pt-12 space-y-6">
+            <div className="flex items-center gap-3 mb-8">
+              <HelpCircle className="w-8 h-8 text-gray-900" />
+              <h2 className="text-3xl font-bold text-gray-900">FAQs</h2>
+            </div>
+            
+            <div className="space-y-4">
+              <FAQItem 
+                question="¿Cómo puedo reservar el tour?" 
+                answer="Para reservar el tour tienes que elegir la fecha deseada y completar el formulario de esta página. La confirmación se recibirá cuando se realice la reserva." 
+              />
+              <FAQItem 
+                question="¿Qué tipo de vehículos se utilizan?" 
+                answer={<>Utilizamos vehículos todoterreno o microbuses para parejas, amigos o familia de 2 hasta 6 personas. A partir de 7 personas minibuses.<br/><br/>En la excursión en el desierto utilizamos todoterreno 4X4.<br/><br/>Todos nuestros vehículos son modernos y con aire acondicionado.</>} 
+              />
+              <FAQItem 
+                question="¿Cuáles son las políticas de cancelación y reembolso?" 
+                answer={<><ul className="space-y-2"><li><b>Temporada baja:</b> Gratis hasta 7 días antes de su llegada.</li><li><b>Temporada media:</b> (Puentes, septiembre, octubre, marzo, abril y mayo): Gratis 15 días antes de su llegada.</li><li><b>Temporada alta:</b> (Navidad, Fin de año, Semana Santa): No se reembolsa el deposito.</li></ul></>} 
+              />
+              <FAQItem 
+                question="¿Cuál es el punto de encuentro para comenzar el tour?" 
+                answer="El punto de encuentro de está excursión es vuestro alojamiento (Hotel, Riad, Airbnb o desde el aeropuerto de Marrakech si tienen el vuelo de llegada por la mañana)." 
+              />
+              <FAQItem 
+                question="¿Cuáles son los métodos de pago?" 
+                answer="Se puede realizar el pago con tarjeta de crédito, débito, transferencia bancaria o pago con PayPal." 
+              />
+              <FAQItem 
+                question="¿Podemos llevar nuestras maletas con nosotros a la excursión?" 
+                answer="Sí, pueden llevar todas sus maletas a la excursión, tenemos vehículos con espacio suficiente." 
+              />
+            </div>
+          </div>
         </div>
 
         {/* Sidebar Booking */}
@@ -201,22 +355,70 @@ export default function TourDetail() {
               
               <form className="space-y-6">
                 <div className="space-y-4">
-                  <input type="text" placeholder="Nombre completo*" className="input-field" />
-                  <input type="email" placeholder="Email*" className="input-field" />
+                  <input type="text" placeholder="Nombre completo*" className="input-field" required />
+                  <input type="email" placeholder="Email*" className="input-field" required />
                   <input type="tel" placeholder="Teléfono" className="input-field" />
-                  <textarea placeholder="Su consulta*" className="input-field min-h-[100px] resize-none" />
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Fecha de llegada*</label>
+                      <input type="date" className="input-field text-gray-600" required />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Fecha de salida*</label>
+                      <input type="date" className="input-field text-gray-600" required />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Adultos*</label>
+                      <select className="input-field text-gray-600 bg-white" required>
+                        <option value="">-</option>
+                        {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Niños (3 a 8 años)</label>
+                      <select className="input-field text-gray-600 bg-white">
+                        <option value="">-</option>
+                        {[1,2,3,4,5,6].map(n => <option key={n} value={n}>{n}</option>)}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Bebés (0 a 2 años)</label>
+                    <select className="input-field text-gray-600 bg-white">
+                      <option value="">-</option>
+                      {[1,2,3,4].map(n => <option key={n} value={n}>{n}</option>)}
+                    </select>
+                  </div>
+
+                  <textarea placeholder="Su consulta*" className="input-field min-h-[100px] resize-none" required />
                 </div>
 
                 <div className="flex gap-3">
-                  <input type="checkbox" className="mt-1 rounded border-gray-300 text-brand-accent focus:ring-brand-accent" />
+                  <input type="checkbox" className="mt-1 rounded border-gray-300 text-brand-accent focus:ring-brand-accent" required />
                   <p className="text-[10px] text-gray-400 leading-tight">
                     Doy mi consentimiento para que este sitio web almacene mi información enviada para que puedan responder a mi consulta
                   </p>
                 </div>
 
-                <button type="button" className="btn-primary w-full py-5 text-lg shadow-lg shadow-brand-primary/20">
-                  ENVIAR CONSULTA
-                </button>
+                <div className="space-y-3">
+                  <button type="button" className="btn-primary w-full py-4 text-base tracking-wide font-bold shadow-lg shadow-brand-primary/20">
+                    ENVIAR CONSULTA
+                  </button>
+                  <a 
+                    href={`https://wa.me/34600000000?text=${encodeURIComponent(`Hola, estoy interesado en el tour: ${tour.title}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 border-[#25D366] text-[#25D366] font-bold hover:bg-[#25D366]/5 transition-colors"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/></svg>
+                    Preguntar por WhatsApp
+                  </a>
+                </div>
               </form>
             </div>
 
