@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Compass, Map, User, LogOut, Menu, X, Shield } from 'lucide-react';
+import { Compass, Map, User, LogOut, Menu, X, Shield, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -13,6 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const navLinks = [
     { name: 'Inicio', path: '/', icon: Compass },
     { name: 'Destinos', path: '/destinations', icon: Map },
+    { name: 'Favoritos', path: '/favoritos', icon: Heart },
   ];
 
   const handleLogout = async () => {

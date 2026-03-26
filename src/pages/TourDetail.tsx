@@ -9,6 +9,7 @@ import {
 import { dbService } from '../services/dbService';
 import ImageGalleryModal from '../components/ImageGalleryModal';
 import ReviewsModal from '../components/ReviewsModal';
+import { useWishlist } from '../hooks/useWishlist';
 
 const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,6 +39,8 @@ export default function TourDetail() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [isReviewsOpen, setIsReviewsOpen] = useState(false);
+  
+  const { isFavorite, toggleFavorite } = useWishlist();
 
   const descripcionRef = useRef<HTMLDivElement>(null);
   const itinerarioRef = useRef<HTMLDivElement>(null);
@@ -208,8 +211,14 @@ export default function TourDetail() {
                 >
                   <Share className="w-4 h-4" /> Comparte
                 </button>
-                <button className="flex items-center gap-2 font-medium underline text-gray-700 hover:text-gray-900 transition-colors">
-                  <Heart className="w-4 h-4" /> Guarda
+                <button 
+                  onClick={() => toggleFavorite(tour.id)}
+                  className={`flex items-center gap-2 font-medium underline transition-colors ${
+                    isFavorite(tour.id) ? 'text-red-500 hover:text-red-600' : 'text-gray-700 hover:text-gray-900'
+                  }`}
+                >
+                  <Heart className={`w-4 h-4 ${isFavorite(tour.id) ? 'fill-current' : ''}`} /> 
+                  {isFavorite(tour.id) ? 'Guardado' : 'Guarda'}
                 </button>
               </div>
             </div>

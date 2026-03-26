@@ -119,60 +119,135 @@ export default function DestinationDetail() {
 
       <div className="max-w-7xl mx-auto px-4 mt-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          
+          {/* Sidebar Filters */}
+          <aside className="lg:col-span-1 space-y-8">
+            <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col gap-8">
+              {/* Reset Button */}
+              <div className="flex justify-between items-center hidden">
+                 <button onClick={resetFilters} className="text-sm font-bold text-red-500 hover:text-red-700 flex items-center gap-1">
+                   <RotateCcw className="w-4 h-4" /> Reset
+                 </button>
+              </div>
+
+              {/* Buscar */}
+              <div className="space-y-3">
+                <label className="text-gray-900 font-bold">Buscar</label>
+                <input 
+                  type="text" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-4 py-3 rounded-full border border-gray-200 focus:ring-2 focus:ring-brand-accent focus:border-transparent outline-none"
+                />
+              </div>
+
+              {/* Precio */}
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <label className="text-gray-900 font-bold">Precio</label>
+                </div>
+                <input 
+                  type="range" 
+                  min="0" 
+                  max="5000" 
+                  step="50"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(Number(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-brand-primary"
+                />
+                <div className="text-sm font-medium text-gray-500">
+                  0€ - {maxPrice}€
+                </div>
+              </div>
+
+              {/* Días */}
+              <div className="space-y-3">
+                <label className="text-gray-900 font-bold">Filtrar por días</label>
+                <div className="relative">
+                  <select 
+                    value={durationFilter}
+                    onChange={(e) => setDurationFilter(e.target.value)}
+                    className="w-full px-4 py-3 rounded-md border border-gray-200 appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-brand-accent text-sm text-gray-600"
+                  >
+                    <option value="all">todas las opciones</option>
+                    {durations.map(d => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                  <ChevronRight className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 rotate-90 pointer-events-none" />
+                </div>
+              </div>
+
+              <button 
+                onClick={resetFilters} 
+                className="w-full py-3 bg-black text-white rounded-full font-bold hover:bg-gray-800 transition-colors mt-2"
+              >
+                Resetear
+              </button>
+            </div>
+          </aside>
+
           {/* Main Content */}
-          <main className="lg:col-span-4 space-y-8">
+          <main className="lg:col-span-3 space-y-8">
 
             <div className="space-y-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-3xl font-bold">Experiencias en {destination.name}</h2>
-                  <p className="text-gray-500">Mostrando {filteredTours.length} de {allTours.length} tours</p>
+                  <h2 className="text-3xl font-bold text-[#1e293b]">{destination.name}</h2>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <select 
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="pl-4 pr-10 py-2.5 rounded-full border border-gray-200 bg-white appearance-none text-sm font-medium text-gray-600 outline-none focus:border-brand-accent"
+                    >
+                      <option value="featured">Ordenar por</option>
+                      <option value="price-asc">Precio: menor a mayor</option>
+                      <option value="price-desc">Precio: mayor a menor</option>
+                      <option value="name">Nombre: A-Z</option>
+                    </select>
+                    <ChevronRight className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 rotate-90 pointer-events-none" />
+                  </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <AnimatePresence mode="popLayout">
                   {filteredTours.map((tour) => (
                     <motion.div
                       layout
                       key={tour.id}
-                      initial={{ opacity: 0, scale: 0.9 }}
+                      initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-gray-100 flex flex-col"
+                      className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-gray-100 flex flex-col group h-full"
                     >
-                      <Link to={`/tours/${tour.id}`} className="flex-1 flex flex-col">
+                      <Link to={`/tours/${tour.slug || tour.id}`} className="flex-1 flex flex-col h-full">
                         <div className="relative h-64 overflow-hidden">
                           <img
-                            src={tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600'}
+                            src={tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/600/morocco?lock=1'}
                             alt={tour.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             referrerPolicy="no-referrer"
                           />
-                          <div className="absolute top-4 left-4 flex gap-2">
-                            <div className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-brand-primary uppercase tracking-widest shadow-lg">
-                              {tour.category || 'Tour'}
-                            </div>
-                          </div>
-                          <div className="absolute bottom-4 right-4 bg-brand-primary text-white px-4 py-2 rounded-2xl text-lg font-bold shadow-xl">
-                            {tour.price} €
-                          </div>
                         </div>
                         
-                        <div className="p-8 flex-1 flex flex-col justify-between space-y-4">
-                          <div className="space-y-3">
-                            <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                              <div className="flex items-center gap-1.5">
-                                <Clock className="w-3.5 h-3.5 text-brand-accent" />
-                                <span>{tour.itinerary_summary || 'Por determinar'}</span>
-                              </div>
-                            </div>
-                            <h3 className="text-2xl font-bold group-hover:text-brand-accent transition-colors leading-tight">{tour.title}</h3>
-                            <p className="text-gray-500 text-sm line-clamp-2 leading-relaxed">
-                              {tour.itinerary_details?.replace(/<[^>]*>?/gm, '')?.slice(0, 100) || 'Descubre esta aventura.'}
-                            </p>
+                        <div className="p-6 flex-1 flex flex-col space-y-3">
+                          <h3 className="text-xl font-bold text-[#1e293b] leading-tight group-hover:text-brand-accent transition-colors">
+                            {tour.title}
+                          </h3>
+                          <p className="text-gray-500 text-sm line-clamp-4 leading-relaxed flex-1">
+                            {tour.itinerary_details?.replace(/<[^>]*>?/gm, '') || 'Descubre esta increíble aventura en Marruecos.'}
+                          </p>
+                        </div>
+
+                        <div className="p-6 pt-0 mt-auto flex items-center justify-between w-full">
+                          <div className="font-bold text-base text-[#1e293b]">
+                            A partir de {tour.price}€
+                          </div>
+                          <div className="px-6 py-2.5 bg-black text-white text-sm font-bold rounded-full hover:bg-gray-800 transition-colors">
+                            Información
                           </div>
                         </div>
                       </Link>
