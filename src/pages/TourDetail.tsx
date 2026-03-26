@@ -47,6 +47,7 @@ export default function TourDetail() {
 
   const descripcionRef = useRef<HTMLDivElement>(null);
   const itinerarioRef = useRef<HTMLDivElement>(null);
+  const mapaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -156,13 +157,14 @@ export default function TourDetail() {
       <div className="sticky top-[72px] md:top-[88px] z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all -mx-4 px-4 md:mx-0 md:px-0">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex gap-8 overflow-x-auto no-scrollbar py-4">
-            {['Descripción', 'Itinerario'].map((tab) => (
+            {['Descripción', 'Itinerario', 'Mapa'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => {
                   const tabLower = tab.toLowerCase();
                   if (tabLower === 'descripción') scrollToSection(descripcionRef, tabLower);
                   if (tabLower === 'itinerario') scrollToSection(itinerarioRef, tabLower);
+                  if (tabLower === 'mapa') scrollToSection(mapaRef, tabLower);
                 }}
                 className={`text-sm font-bold whitespace-nowrap transition-colors ${
                   activeTab === tab.toLowerCase() ? 'text-brand-accent border-b-2 border-brand-accent pb-1' : 'text-gray-500 hover:text-gray-900'
@@ -286,6 +288,18 @@ export default function TourDetail() {
               dangerouslySetInnerHTML={{ __html: tour.itinerary_details || '' }}
             />
           </div>
+
+          {tour.map_iframe && (
+            <div ref={mapaRef} className="space-y-12">
+              <div className="flex items-center gap-3">
+                <div className="w-1 h-8 bg-brand-accent rounded-full" />
+                <h2 className="text-3xl font-bold text-gray-900">Mapa del Itinerario</h2>
+              </div>
+              <div className="w-full aspect-video rounded-3xl overflow-hidden border border-gray-100 shadow-sm [&>iframe]:w-full [&>iframe]:h-full"
+                   dangerouslySetInnerHTML={{ __html: tour.map_iframe }} 
+              />
+            </div>
+          )}
 
           <div className="border-t border-gray-100 pt-12 space-y-6">
             <div className="flex items-center gap-3 mb-8">
