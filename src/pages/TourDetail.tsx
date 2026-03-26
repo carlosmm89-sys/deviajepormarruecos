@@ -10,6 +10,7 @@ import { dbService } from '../services/dbService';
 import ImageGalleryModal from '../components/ImageGalleryModal';
 import ReviewsModal from '../components/ReviewsModal';
 import { useWishlist } from '../hooks/useWishlist';
+import { usePageViews } from '../hooks/usePageViews';
 
 const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,6 +42,8 @@ export default function TourDetail() {
   const [isReviewsOpen, setIsReviewsOpen] = useState(false);
   
   const { isFavorite, toggleFavorite } = useWishlist();
+  
+  usePageViews('tour', tour?.id);
 
   const descripcionRef = useRef<HTMLDivElement>(null);
   const itinerarioRef = useRef<HTMLDivElement>(null);

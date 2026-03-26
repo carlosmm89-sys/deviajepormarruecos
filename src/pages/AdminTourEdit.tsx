@@ -3,10 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Destination, Tour } from '../types';
 import { Save, Image as ImageIcon, CheckCircle, AlertCircle, List, Backpack, ArrowLeft, DollarSign } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { dbService } from '../services/dbService';
+import ImageUpload from '../components/ImageUpload';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 
@@ -232,31 +233,52 @@ export default function AdminTourEdit() {
             {/* Right Column: Media & Highlights */}
             <div className="space-y-6">
               <div className="space-y-1">
-                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <ImageIcon className="w-4 h-4" /> Imagen Principal (Destacada)
-                </label>
-                <input {...register('featured_image')} className="input-field text-sm" placeholder="https://..." />
-                {errors.featured_image && <p className="text-xs text-red-500">{errors.featured_image.message}</p>}
+                <Controller
+                  name="featured_image"
+                  control={control}
+                  render={({ field }) => (
+                    <ImageUpload 
+                      label="Imagen Principal (Destacada)" 
+                      value={field.value || ''} 
+                      onChange={field.onChange} 
+                    />
+                  )}
+                />
+                {errors.featured_image && <p className="text-xs text-red-500 font-medium">{errors.featured_image.message}</p>}
               </div>
 
-              <div className="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
-                <div className="flex justify-between items-center">
+              <div className="space-y-3 bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                <div className="flex justify-between items-center pb-2 border-b border-gray-200">
                   <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                    <ImageIcon className="w-4 h-4" /> Galería de Imágenes
+                    <ImageIcon className="w-5 h-5 text-brand-primary" /> Galería Secundaria
                   </label>
-                  <button type="button" onClick={() => appendGallery('')} className="text-xs text-brand-accent font-bold hover:underline px-2 py-1 bg-white rounded shadow-sm">
-                    + Añadir imagen
+                  <button type="button" onClick={() => appendGallery('' as any)} className="text-xs text-brand-accent font-bold hover:underline px-3 py-1.5 bg-white rounded-lg shadow-sm border border-gray-200">
+                    + Añadir foto
                   </button>
                 </div>
-                <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
+                <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
                   {galleryFields.map((field, index) => (
-                    <div key={field.id} className="flex gap-2">
-                      <input {...register(`gallery.${index}` as any)} className="input-field text-xs bg-white" placeholder="https://..." />
-                      <button type="button" onClick={() => removeGallery(index)} className="p-2 text-red-500 hover:bg-red-50 bg-white rounded-lg shadow-sm border border-gray-100">
-                        Quitar
+                    <div key={field.id} className="flex flex-col sm:flex-row gap-4 items-start bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                      <div className="flex-1 w-full">
+                        <Controller
+                          name={`gallery.${index}` as const}
+                          control={control}
+                          render={({ field: controllerField }) => (
+                            <ImageUpload 
+                              value={controllerField.value || ''} 
+                              onChange={controllerField.onChange} 
+                            />
+                          )}
+                        />
+                      </div>
+                      <button type="button" onClick={() => removeGallery(index)} className="p-3 text-red-500 hover:bg-red-50 hover:text-red-600 font-medium rounded-xl shadow-sm border border-gray-200 bg-gray-50 transition-colors w-full sm:w-auto text-sm mt-4 sm:mt-0 sm:self-center">
+                        Quitar 
                       </button>
                     </div>
                   ))}
+                  {galleryFields.length === 0 && (
+                    <p className="text-xs text-gray-500 text-center py-4">No hay imágenes en la galería. Añade fotos para mostrar detalles.</p>
+                  )}
                 </div>
               </div>
             </div>

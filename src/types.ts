@@ -5,6 +5,7 @@ export interface Destination {
   description: string;
   image_url: string;
   featured: boolean;
+  views?: number;
   meta_data: any;
   created_at: string;
   updated_at: string;
@@ -35,6 +36,7 @@ export interface Tour {
   itinerary_image: string;
   price: number;
   is_active: boolean;
+  views?: number;
   created_at: string;
   updated_at: string;
 }
@@ -77,6 +79,7 @@ export interface BusinessSettings {
   smtp_password?: string;
   smtp_from_email?: string;
   smtp_from_name?: string;
+  home_views?: number;
 }
 
 export interface UserProfile {

@@ -127,5 +127,16 @@ export const dbService = {
     const { data, error } = await supabase.from('business_settings').upsert([settings]).select().single();
     if (error) throw error;
     return data;
+  },
+
+  // Analytics
+  incrementTourViews: async (id: string) => {
+    await supabase.rpc('increment_tour_views', { row_id: id });
+  },
+  incrementDestViews: async (id: string) => {
+    await supabase.rpc('increment_dest_views', { row_id: id });
+  },
+  incrementHomeViews: async () => {
+    await supabase.rpc('increment_home_views');
   }
 };

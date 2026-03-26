@@ -6,11 +6,14 @@ import { motion } from 'framer-motion';
 import { dbService } from '../services/dbService';
 import { BusinessSettings } from '../types';
 import WidgetRenderer from '../components/WidgetRenderer';
+import { usePageViews } from '../hooks/usePageViews';
 
 export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [featuredTours, setFeaturedTours] = useState<Tour[]>([]);
   const [settings, setSettings] = useState<BusinessSettings | null>(null);
+
+  usePageViews('home');
 
   useEffect(() => {
     const loadData = async () => {

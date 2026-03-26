@@ -8,6 +8,7 @@ import DestinationDetail from './pages/DestinationDetail';
 import TourDetail from './pages/TourDetail';
 import Wishlist from './pages/Wishlist';
 import AdminRoute from './components/AdminRoute';
+import AdminDashboard from './pages/AdminDashboard';
 import AdminDestinations from './pages/AdminDestinations';
 import AdminTours from './pages/AdminTours';
 import AdminSettings from './pages/AdminSettings';
@@ -30,7 +31,7 @@ export default function App() {
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminRoute />}>
-              <Route index element={<AdminDestinations />} />
+              <Route index element={<AdminDashboard />} />
               <Route path="destinations" element={<AdminDestinations />} />
               <Route path="tours" element={<AdminTours />} />
               <Route path="tours/new" element={<AdminTourEdit />} />

@@ -16,6 +16,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   const navItems = [
+    { name: 'Dashboard', path: '/admin', icon: Home },
     { name: 'Destinos', path: '/admin/destinations', icon: Map },
     { name: 'Tours', path: '/admin/tours', icon: Compass },
     { name: 'Leads', path: '/admin/leads', icon: Users },
@@ -41,7 +42,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <nav className="flex-1 px-4 py-8 space-y-2 overflow-y-auto">
           <p className="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Gestión</p>
           {navItems.map((item) => {
-            const isActive = location.pathname.includes(item.path);
+            const isActive = item.path === '/admin' 
+              ? location.pathname === '/admin' || location.pathname === '/admin/' 
+              : location.pathname.includes(item.path);
             return (
               <Link
                 key={item.path}
@@ -128,7 +131,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 
                 <nav className="flex-1 px-4 py-8 space-y-2 overflow-y-auto">
                   {navItems.map((item) => {
-                    const isActive = location.pathname.includes(item.path);
+                    const isActive = item.path === '/admin' 
+                      ? location.pathname === '/admin' || location.pathname === '/admin/' 
+                      : location.pathname.includes(item.path);
                     return (
                       <Link
                         key={item.path}

@@ -3,10 +3,11 @@ import { Link, useLocation } from 'react-router-dom';
 import { Destination } from '../types';
 import { Plus, Trash2, Edit2, X, Save, Image as ImageIcon, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { dbService } from '../services/dbService';
+import ImageUpload from '../components/ImageUpload';
 
 const destinationSchema = z.object({
   name: z.string().min(1, 'El nombre es requerido').max(100),
@@ -25,7 +26,7 @@ export default function AdminDestinations() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<DestinationFormData>({
+  const { register, handleSubmit, reset, setValue, control, formState: { errors } } = useForm<DestinationFormData>({
     resolver: zodResolver(destinationSchema),
   });
 
@@ -182,12 +183,18 @@ export default function AdminDestinations() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-sm font-semibold text-gray-700">URL de Imagen</label>
-                    <div className="relative">
-                      <input {...register('image_url')} className="input-field pl-10" placeholder="https://..." />
-                      <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    </div>
-                    {errors.image_url && <p className="text-xs text-red-500">{errors.image_url.message}</p>}
+                    <Controller
+                      name="image_url"
+                      control={control}
+                      render={({ field }) => (
+                        <ImageUpload 
+                          label="Imagen Principal del Destino" 
+                          value={field.value || ''} 
+                          onChange={field.onChange} 
+                        />
+                      )}
+                    />
+                    {errors.image_url && <p className="text-xs text-red-500 font-medium">{errors.image_url.message}</p>}
                   </div>
 
                   <div className="space-y-1">

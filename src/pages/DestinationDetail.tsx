@@ -4,6 +4,7 @@ import { Destination, Tour } from '../types';
 import { MapPin, Clock, Star, ArrowLeft, ChevronRight, Search, Filter, RotateCcw, SlidersHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { dbService } from '../services/dbService';
+import { usePageViews } from '../hooks/usePageViews';
 
 export default function DestinationDetail() {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,8 @@ export default function DestinationDetail() {
   const [durationFilter, setDurationFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('featured');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  usePageViews('destination', destination?.id);
 
   useEffect(() => {
     const loadData = async () => {
