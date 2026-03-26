@@ -247,15 +247,15 @@ export default function TourDetail() {
               <div className="w-1 h-8 bg-brand-accent rounded-full" />
               <h2 className="text-3xl font-bold text-gray-900">Incluye / Excluye</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-green-50 p-6 rounded-3xl border border-green-100 min-w-0">
+            <div className="grid grid-cols-1 gap-6">
+              <div className="bg-green-50 p-6 md:p-8 rounded-3xl border border-green-100 min-w-0">
                 <h3 className="font-bold text-green-900 mb-4">Incluido</h3>
                 <div 
                   className="prose prose-sm prose-green max-w-none text-green-800 break-words w-full overflow-wrap-anywhere [&_p]:whitespace-normal"
                   dangerouslySetInnerHTML={{ __html: tour.description_includes || '' }}
                 />
               </div>
-              <div className="bg-red-50 p-6 rounded-3xl border border-red-100 min-w-0">
+              <div className="bg-red-50 p-6 md:p-8 rounded-3xl border border-red-100 min-w-0 mt-2">
                 <h3 className="font-bold text-red-900 mb-4">No incluido</h3>
                 <div 
                   className="prose prose-sm prose-red max-w-none text-red-800 break-words w-full overflow-wrap-anywhere [&_p]:whitespace-normal"
