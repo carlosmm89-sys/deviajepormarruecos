@@ -253,14 +253,14 @@ export default function TourDetail() {
               <div className="bg-green-50 p-6 md:p-8 rounded-3xl border border-green-100 min-w-0">
                 <h3 className="font-bold text-green-900 mb-4">Incluido</h3>
                 <div 
-                  className="prose prose-sm prose-green max-w-none text-green-800 break-words w-full overflow-wrap-anywhere [&_p]:whitespace-normal"
+                  className="prose prose-sm prose-green max-w-none text-green-800 break-words w-full overflow-wrap-anywhere [&_p]:whitespace-normal [&_p]:relative [&_p]:pl-5 [&_p]:before:content-['•'] [&_p]:before:absolute [&_p]:before:left-1 [&_p]:before:font-bold [&_li]:relative [&_li]:pl-5 [&_li]:before:content-['•'] [&_li]:before:absolute [&_li]:before:left-1 [&_li]:before:font-bold [&_ul]:pl-0 [&_ul]:list-none"
                   dangerouslySetInnerHTML={{ __html: tour.description_includes || '' }}
                 />
               </div>
               <div className="bg-red-50 p-6 md:p-8 rounded-3xl border border-red-100 min-w-0 mt-2">
                 <h3 className="font-bold text-red-900 mb-4">No incluido</h3>
                 <div 
-                  className="prose prose-sm prose-red max-w-none text-red-800 break-words w-full overflow-wrap-anywhere [&_p]:whitespace-normal"
+                  className="prose prose-sm prose-red max-w-none text-red-800 break-words w-full overflow-wrap-anywhere [&_p]:whitespace-normal [&_p]:relative [&_p]:pl-5 [&_p]:before:content-['•'] [&_p]:before:absolute [&_p]:before:left-1 [&_p]:before:font-bold [&_li]:relative [&_li]:pl-5 [&_li]:before:content-['•'] [&_li]:before:absolute [&_li]:before:left-1 [&_li]:before:font-bold [&_ul]:pl-0 [&_ul]:list-none"
                   dangerouslySetInnerHTML={{ __html: tour.description_excludes || '' }}
                 />
               </div>
