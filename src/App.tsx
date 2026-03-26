@@ -13,6 +13,8 @@ import AdminRoute from './components/AdminRoute';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminDestinations from './pages/AdminDestinations';
 import AdminTours from './pages/AdminTours';
+import AdminBlog from './pages/AdminBlog';
+import AdminBlogEdit from './pages/AdminBlogEdit';
 import AdminSettings from './pages/AdminSettings';
 import AdminLeads from './pages/AdminLeads';
 import AdminLogin from './pages/AdminLogin';
@@ -40,6 +42,9 @@ export default function App() {
               <Route path="tours" element={<AdminTours />} />
               <Route path="tours/new" element={<AdminTourEdit />} />
               <Route path="tours/:id" element={<AdminTourEdit />} />
+              <Route path="blog" element={<AdminBlog />} />
+              <Route path="blog/new" element={<AdminBlogEdit />} />
+              <Route path="blog/:id" element={<AdminBlogEdit />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="leads" element={<AdminLeads />} />
             </Route>

@@ -141,24 +141,35 @@ export const dbService = {
   },
   
   // Blog
-  getBlogPosts: async (): Promise<BlogPost[]> => {
-    const { data, error } = await supabase.from('blog_posts').select('*').eq('is_published', true).order('published_at', { ascending: false });
+  getBlogPosts: async (adminView = false): Promise<BlogPost[]> => {
+    let query = supabase.from('blog_posts').select('*').order('published_at', { ascending: false });
+    if (!adminView) {
+      query = query.eq('is_published', true);
+    }
+    const { data, error } = await query;
     if (error) throw error;
     return data;
   },
-  getBlogPost: async (slugOrId: string): Promise<BlogPost | null> => {
+  getBlogPost: async (slugOrId: string, adminView = false): Promise<BlogPost | null> => {
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slugOrId);
-    let query = supabase.from('blog_posts').select('*').eq('is_published', true);
+    let query = supabase.from('blog_posts').select('*');
     
-    if (isUuid) {
-      query = query.eq('id', slugOrId);
-    } else {
-      query = query.eq('slug', slugOrId);
-    }
+    if (!adminView) query = query.eq('is_published', true);
+    if (isUuid) query = query.eq('id', slugOrId);
+    else query = query.eq('slug', slugOrId);
     
     const { data, error } = await query.single();
     if (error) return null;
     return data;
+  },
+  saveBlogPost: async (post: Partial<BlogPost>): Promise<BlogPost> => {
+    const { data, error } = await supabase.from('blog_posts').upsert([post]).select().single();
+    if (error) throw error;
+    return data;
+  },
+  deleteBlogPost: async (id: string): Promise<void> => {
+    const { error } = await supabase.from('blog_posts').delete().eq('id', id);
+    if (error) throw error;
   },
   incrementBlogViews: async (id: string) => {
     await supabase.rpc('increment_blog_views', { row_id: id });
