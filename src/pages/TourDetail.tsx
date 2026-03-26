@@ -63,6 +63,19 @@ export default function TourDetail() {
     ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const fullGallery = tour ? [
+    tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/1200/800/morocco,sahara?lock=200',
+    tour.gallery?.[1] || 'https://loremflickr.com/1200/800/morocco,riad?lock=201',
+    tour.gallery?.[2] || 'https://loremflickr.com/1200/800/morocco,fez?lock=202',
+    tour.gallery?.[3] || 'https://loremflickr.com/1200/800/morocco,kasbah?lock=203',
+    tour.gallery?.[4] || 'https://loremflickr.com/1200/800/morocco,atlas?lock=204'
+  ] : [];
+
+  const openGallery = (idx: number) => {
+    setGalleryIndex(idx);
+    setIsGalleryOpen(true);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -96,59 +109,41 @@ export default function TourDetail() {
         onClose={() => setIsGalleryOpen(false)}
       />
 
-      {/* Hero Gallery */}
       <section className="max-w-[1600px] mx-auto p-2 md:p-4 mt-4">
-        {(() => {
-          const fullGallery = [
-            tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/1200/800/morocco,sahara?lock=200',
-            tour.gallery?.[1] || 'https://loremflickr.com/1200/800/morocco,riad?lock=201',
-            tour.gallery?.[2] || 'https://loremflickr.com/1200/800/morocco,fez?lock=202',
-            tour.gallery?.[3] || 'https://loremflickr.com/1200/800/morocco,kasbah?lock=203',
-            tour.gallery?.[4] || 'https://loremflickr.com/1200/800/morocco,atlas?lock=204'
-          ];
+        <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-2 md:gap-3 h-[40vh] md:h-[65vh] rounded-3xl overflow-hidden relative group">
+          <div className="md:col-span-2 row-span-2 relative cursor-pointer overflow-hidden" onClick={() => openGallery(0)}>
+            <img src={fullGallery[0]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Principal" referrerPolicy="no-referrer" />
+            <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
+          </div>
           
-          const openGallery = (idx: number) => {
-            setGalleryIndex(idx);
-            setIsGalleryOpen(true);
-          };
+          <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(1)}>
+            <img src={fullGallery[1]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 1" referrerPolicy="no-referrer" />
+            <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
+          </div>
 
-          return (
-            <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-2 md:gap-3 h-[40vh] md:h-[65vh] rounded-3xl overflow-hidden relative group">
-              <div className="md:col-span-2 row-span-2 relative cursor-pointer overflow-hidden" onClick={() => openGallery(0)}>
-                <img src={fullGallery[0]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Principal" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
-              </div>
-              
-              <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(1)}>
-                <img src={fullGallery[1]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 1" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
-              </div>
+          <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(2)}>
+            <img src={fullGallery[2]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 2" referrerPolicy="no-referrer" />
+            <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
+          </div>
 
-              <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(2)}>
-                <img src={fullGallery[2]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 2" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
-              </div>
+          <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(3)}>
+            <img src={fullGallery[3]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 3" referrerPolicy="no-referrer" />
+            <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
+          </div>
 
-              <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(3)}>
-                <img src={fullGallery[3]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 3" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
-              </div>
+          <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(4)}>
+            <img src={fullGallery[4]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 4" referrerPolicy="no-referrer" />
+            <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
+          </div>
 
-              <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(4)}>
-                <img src={fullGallery[4]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 4" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
-              </div>
-
-              <button 
-                onClick={() => openGallery(0)}
-                className="absolute bottom-4 right-4 md:bottom-6 md:right-6 bg-white/95 backdrop-blur-sm border border-gray-200 text-gray-900 text-sm font-bold px-4 py-2.5 md:px-5 md:py-3 rounded-xl shadow-lg hover:bg-white hover:scale-105 transition-all flex items-center gap-2 z-10"
-              >
-                <ImageIcon className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="hidden sm:inline">Ver todas las fotos</span>
-              </button>
-            </div>
-          );
-        })}
+          <button 
+            onClick={() => openGallery(0)}
+            className="absolute bottom-4 right-4 md:bottom-6 md:right-6 bg-white/95 backdrop-blur-sm border border-gray-200 text-gray-900 text-sm font-bold px-4 py-2.5 md:px-5 md:py-3 rounded-xl shadow-lg hover:bg-white hover:scale-105 transition-all flex items-center gap-2 z-10"
+          >
+            <ImageIcon className="w-4 h-4 md:w-5 md:h-5" />
+            <span className="hidden sm:inline">Ver todas las fotos</span>
+          </button>
+        </div>
       </section>
 
       {/* Sticky Nav */}
@@ -351,13 +346,13 @@ export default function TourDetail() {
         <div className="lg:col-span-1">
           <div className="sticky top-32 space-y-8">
             <div className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-100 space-y-8">
-              <h3 className="text-2xl font-bold text-gray-900">Solicitar Presupuesto</h3>
+              <h3 className="text-2xl font-bold text-[#E87B37]">Solicitar Presupuesto</h3>
               
               <form className="space-y-6">
                 <div className="space-y-4">
-                  <input type="text" placeholder="Nombre completo*" className="input-field" required />
-                  <input type="email" placeholder="Email*" className="input-field" required />
-                  <input type="tel" placeholder="Teléfono" className="input-field" />
+                  <input type="text" placeholder="Nombre completo*" className="input-field text-gray-900 placeholder:text-gray-900" required />
+                  <input type="email" placeholder="Email*" className="input-field text-gray-900 placeholder:text-gray-900" required />
+                  <input type="tel" placeholder="Teléfono" className="input-field text-gray-900 placeholder:text-gray-900" />
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -389,13 +384,13 @@ export default function TourDetail() {
 
                   <div>
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Bebés (0 a 2 años)</label>
-                    <select className="input-field text-gray-600 bg-white">
+                    <select className="input-field text-gray-900 bg-white">
                       <option value="">-</option>
                       {[1,2,3,4].map(n => <option key={n} value={n}>{n}</option>)}
                     </select>
                   </div>
 
-                  <textarea placeholder="Su consulta*" className="input-field min-h-[100px] resize-none" required />
+                  <textarea placeholder="Su consulta*" className="input-field min-h-[100px] resize-none text-gray-900 placeholder:text-gray-900" required />
                 </div>
 
                 <div className="flex gap-3">
