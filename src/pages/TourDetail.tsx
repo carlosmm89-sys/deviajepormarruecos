@@ -175,9 +175,9 @@ export default function TourDetail() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 mt-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="max-w-7xl mx-auto px-4 mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-16">
+        <div className="lg:col-span-2 space-y-16 min-w-0">
           <div className="space-y-8">
             <nav className="flex items-center gap-2 text-sm text-gray-400">
               <Link to="/" className="hover:text-brand-accent flex items-center gap-1">
@@ -248,17 +248,17 @@ export default function TourDetail() {
               <h2 className="text-3xl font-bold text-gray-900">Incluye / Excluye</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-green-50 p-6 rounded-3xl border border-green-100">
+              <div className="bg-green-50 p-6 rounded-3xl border border-green-100 min-w-0">
                 <h3 className="font-bold text-green-900 mb-4">Incluido</h3>
                 <div 
-                  className="prose prose-sm prose-green max-w-none text-green-800"
+                  className="prose prose-sm prose-green max-w-none text-green-800 break-words w-full overflow-wrap-anywhere [&_p]:whitespace-normal"
                   dangerouslySetInnerHTML={{ __html: tour.description_includes || '' }}
                 />
               </div>
-              <div className="bg-red-50 p-6 rounded-3xl border border-red-100">
+              <div className="bg-red-50 p-6 rounded-3xl border border-red-100 min-w-0">
                 <h3 className="font-bold text-red-900 mb-4">No incluido</h3>
                 <div 
-                  className="prose prose-sm prose-red max-w-none text-red-800"
+                  className="prose prose-sm prose-red max-w-none text-red-800 break-words w-full overflow-wrap-anywhere [&_p]:whitespace-normal"
                   dangerouslySetInnerHTML={{ __html: tour.description_excludes || '' }}
                 />
               </div>
@@ -271,7 +271,7 @@ export default function TourDetail() {
                 <div className="text-4xl font-black text-gray-900">{tour.price} €</div>
             </div>
             <div 
-              className="prose prose-sm max-w-none text-gray-600"
+              className="prose prose-sm max-w-none text-gray-600 break-words w-full overflow-hidden [&_p]:whitespace-normal"
               dangerouslySetInnerHTML={{ __html: tour.recommendations || '<p>No hay recomendaciones especiales.</p>' }}
             />
           </div>
@@ -282,7 +282,7 @@ export default function TourDetail() {
               <h2 className="text-3xl font-bold text-gray-900">Itinerario: {tour.title}</h2>
             </div>
             <div 
-              className="bg-white p-8 rounded-3xl border border-gray-100 prose prose-sm max-w-none leading-relaxed text-gray-700"
+              className="bg-white p-6 md:p-8 rounded-3xl border border-gray-100 prose prose-sm max-w-none leading-relaxed text-gray-700 break-words w-full overflow-hidden [&_p]:whitespace-normal"
               dangerouslySetInnerHTML={{ __html: tour.itinerary_details || '' }}
             />
           </div>
@@ -355,9 +355,9 @@ export default function TourDetail() {
         </div>
 
         {/* Sidebar Booking */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 min-w-0">
           <div className="sticky top-32 space-y-8">
-            <div className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-100 space-y-8">
+            <div className="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-xl border border-gray-100 space-y-8">
               <h3 className="text-2xl font-bold text-[#E87B37]">Solicitar Presupuesto</h3>
               
               <form className="space-y-6">
