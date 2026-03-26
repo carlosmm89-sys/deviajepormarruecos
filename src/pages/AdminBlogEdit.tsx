@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ArrowLeft, Save, Globe } from 'lucide-react';
 import { dbService } from '../services/dbService';
-import { ImageUpload } from '../components/ImageUpload';
+import ImageUpload from '../components/ImageUpload';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 
