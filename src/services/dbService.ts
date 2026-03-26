@@ -38,7 +38,16 @@ export const dbService = {
     return data;
   },
   getDestination: async (id: string): Promise<Destination | null> => {
-    const { data, error } = await supabase.from('destinations').select('*').eq('id', id).single();
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+    let query = supabase.from('destinations').select('*');
+    
+    if (isUuid) {
+      query = query.eq('id', id);
+    } else {
+      query = query.eq('slug', id);
+    }
+    
+    const { data, error } = await query.single();
     if (error) return null;
     return data;
   },
@@ -59,7 +68,16 @@ export const dbService = {
     return data;
   },
   getTour: async (id: string): Promise<Tour | null> => {
-    const { data, error } = await supabase.from('tours').select('*, destinations(*)').eq('id', id).single();
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+    let query = supabase.from('tours').select('*, destinations(*)');
+    
+    if (isUuid) {
+      query = query.eq('id', id);
+    } else {
+      query = query.eq('slug', id);
+    }
+
+    const { data, error } = await query.single();
     if (error) return null;
     return data;
   },
