@@ -3,8 +3,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { BusinessSettings } from '../types';
 import { Save, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { dbService } from '../services/dbService';
+import ImageUpload from '../components/ImageUpload';
 
 export default function AdminSettings() {
   const location = useLocation();
@@ -12,7 +13,7 @@ export default function AdminSettings() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const { register, handleSubmit, reset } = useForm<BusinessSettings>();
+  const { register, handleSubmit, reset, control } = useForm<BusinessSettings>();
 
   useEffect(() => {
     fetchSettings();
@@ -119,6 +120,84 @@ export default function AdminSettings() {
             <div className="space-y-1">
               <label className="text-sm font-semibold text-gray-700">Dirección Footer</label>
               <textarea {...register('footer_address')} className="input-field min-h-[80px]" placeholder="Marrakech, Marruecos..." />
+            </div>
+
+            <div className="pt-8 border-t border-gray-100">
+              <h3 className="text-lg font-bold mb-4">Recursos Gráficos</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <Controller
+                  name="logo_url"
+                  control={control}
+                  render={({ field }) => (
+                    <ImageUpload 
+                      label="Logo del Sitio Gráfico" 
+                      value={field.value || ''} 
+                      onChange={field.onChange} 
+                    />
+                  )}
+                />
+                
+                <Controller
+                  name="favicon_url"
+                  control={control}
+                  render={({ field }) => (
+                    <ImageUpload 
+                      label="Favicon (Icono de Pestaña)" 
+                      value={field.value || ''} 
+                      onChange={field.onChange} 
+                    />
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="pt-8 border-t border-gray-100">
+              <h3 className="text-lg font-bold mb-4">Widgets Externos (HTML/Scripts)</h3>
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700 block">Widget de Google Reviews (Ficha de Google)</label>
+                  <p className="text-xs text-gray-500 mb-2">Pega aquí el código HTML proporcionado por Elfsight o Trustindex para mostrar tus reseñas de Google en la web.</p>
+                  <textarea {...register('google_reviews_widget')} className="input-field font-mono text-xs min-h-[120px]" placeholder="<script src='...'></script>\n<div class='elfsight-app-...'></div>" />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700 block">Widget de Feed de Instagram (Galería)</label>
+                  <p className="text-xs text-gray-500 mb-2">Pega aquí el código HTML para inyectar tu galería interactiva de Instagram en la página de inicio.</p>
+                  <textarea {...register('instagram_widget')} className="input-field font-mono text-xs min-h-[120px]" placeholder="<script src='...'></script>\n<div class='elfsight-app-...'></div>" />
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-8 border-t border-gray-100">
+              <h3 className="text-lg font-bold mb-4">Configuración de Correo (SMTP)</h3>
+              <p className="text-sm text-gray-500 mb-6">Configura los datos del servidor para el envío de correos automatizados del sistema.</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700">Servidor SMTP (Host)</label>
+                  <input {...register('smtp_host')} className="input-field" placeholder="smtp.gmail.com" />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700">Puerto SMTP</label>
+                  <input {...register('smtp_port')} className="input-field" placeholder="587 o 465" />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700">Usuario SMTP</label>
+                  <input {...register('smtp_user')} className="input-field" placeholder="correo@ejemplo.com" />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700">Contraseña SMTP</label>
+                  <input type="password" {...register('smtp_password')} className="input-field" placeholder="••••••••••••" />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700">Remitente: Email</label>
+                  <input type="email" {...register('smtp_from_email')} className="input-field" placeholder="no-reply@ejemplo.com" />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700">Remitente: Nombre</label>
+                  <input {...register('smtp_from_name')} className="input-field" placeholder="Marruecos Experiencia" />
+                </div>
+              </div>
             </div>
           </div>
 

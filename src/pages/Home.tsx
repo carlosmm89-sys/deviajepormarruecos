@@ -4,18 +4,23 @@ import { Destination, Tour } from '../types';
 import { MapPin, Clock, ArrowRight, Star, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { dbService } from '../services/dbService';
+import { BusinessSettings } from '../types';
+import WidgetRenderer from '../components/WidgetRenderer';
 
 export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [featuredTours, setFeaturedTours] = useState<Tour[]>([]);
+  const [settings, setSettings] = useState<BusinessSettings | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const dests = await dbService.getDestinations();
         const tours = await dbService.getTours();
+        const bizSettings = await dbService.getBusinessSettings();
         setDestinations(dests.slice(0, 4));
         setFeaturedTours(tours.slice(0, 3));
+        if (bizSettings) setSettings(bizSettings);
       } catch (err) {
         console.error("Error loading home data", err);
       }
@@ -164,6 +169,23 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Google Reviews Widget */}
+      {settings?.google_reviews_widget && (
+        <section className="max-w-7xl mx-auto px-4 py-12">
+           <WidgetRenderer html={settings.google_reviews_widget} />
+        </section>
+      )}
+
+      {/* Instagram Widget */}
+      {settings?.instagram_widget && (
+        <section className="max-w-7xl mx-auto px-4 py-12">
+          <div className="text-center mb-12">
+             <h2 className="text-4xl font-serif font-bold">Síguenos en Instagram</h2>
+          </div>
+          <WidgetRenderer html={settings.instagram_widget} />
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-4">

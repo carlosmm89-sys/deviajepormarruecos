@@ -2,6 +2,35 @@ import { supabase } from '../lib/supabase';
 import { Destination, Tour, Lead, BusinessSettings } from '../types';
 
 export const dbService = {
+  // Storage
+  uploadImage: async (file: File | Blob): Promise<string> => {
+    let ext = 'jpg';
+    if (file.type === 'image/png') ext = 'png';
+    else if (file.type === 'image/webp') ext = 'webp';
+    else if (file.type === 'image/jpeg') ext = 'jpg';
+    else if ('name' in file && typeof file.name === 'string') {
+        const fileExt = file.name.split('.').pop();
+        if (fileExt) ext = fileExt;
+    }
+    
+    const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${ext}`;
+    
+    const { error } = await supabase.storage
+      .from('images')
+      .upload(fileName, file, { cacheControl: '3600', upsert: false });
+
+    if (error) {
+      console.error('Storage upload error:', error);
+      throw error;
+    }
+
+    const { data: publicData } = supabase.storage
+      .from('images')
+      .getPublicUrl(fileName);
+
+    return publicData.publicUrl;
+  },
+
   // Destinations
   getDestinations: async (): Promise<Destination[]> => {
     const { data, error } = await supabase.from('destinations').select('*').order('created_at', { ascending: false });

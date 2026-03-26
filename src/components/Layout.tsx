@@ -3,12 +3,32 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Compass, Map, User, LogOut, Menu, X, Shield, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { dbService } from '../services/dbService';
+import { BusinessSettings } from '../types';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, signIn, signOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [settings, setSettings] = React.useState<BusinessSettings | null>(null);
   const location = useLocation();
   const isAdminLoggedIn = user?.role === 'admin';
+
+  React.useEffect(() => {
+    dbService.getBusinessSettings().then(data => {
+      if (data) {
+        setSettings(data);
+        if (data.favicon_url) {
+          let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+          if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.head.appendChild(link);
+          }
+          link.href = data.favicon_url;
+        }
+      }
+    });
+  }, []);
 
   const navLinks = [
     { name: 'Inicio', path: '/', icon: Compass },
@@ -27,10 +47,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-24">
             <Link to="/" className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-brand-primary rounded-xl flex items-center justify-center">
-                <Compass className="text-white w-7 h-7" />
-              </div>
-              <span className="text-3xl font-serif font-bold tracking-tight text-gray-900">Marruecos Experiencia</span>
+              {settings?.logo_url ? (
+                <img src={settings.logo_url} alt={settings?.site_name || 'Logo'} className="h-16 w-auto object-contain" />
+              ) : (
+                <>
+                  <div className="w-12 h-12 bg-brand-primary rounded-xl flex items-center justify-center">
+                    <Compass className="text-white w-7 h-7" />
+                  </div>
+                  <span className="text-3xl font-serif font-bold tracking-tight text-gray-900">{settings?.site_name || 'Marruecos Experiencia'}</span>
+                </>
+              )}
             </Link>
 
             {/* Desktop Nav */}
@@ -173,7 +199,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <footer id="contacto" className="bg-gray-50 border-t border-gray-100 py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Marruecos Experiencia. Todos los derechos reservados.
+            © {new Date().getFullYear()} {settings?.site_name || 'Marruecos Experiencia'}. Todos los derechos reservados.
           </p>
         </div>
       </footer>

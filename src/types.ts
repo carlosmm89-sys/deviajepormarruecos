@@ -67,6 +67,16 @@ export interface BusinessSettings {
   facebook_url: string;
   tripadvisor_url: string;
   footer_address: string;
+  logo_url?: string;
+  favicon_url?: string;
+  google_reviews_widget?: string;
+  instagram_widget?: string;
+  smtp_host?: string;
+  smtp_port?: string;
+  smtp_user?: string;
+  smtp_password?: string;
+  smtp_from_email?: string;
+  smtp_from_name?: string;
 }
 
 export interface UserProfile {
