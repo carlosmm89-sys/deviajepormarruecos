@@ -15,7 +15,8 @@ import { Language } from '../context/LanguageContext';
 const tourSchema = z.object({
   title: z.string().min(1, 'El título es requerido').max(200),
   slug: z.string().min(1, 'Slug requerido'),
-  destination_id: z.string().min(1, 'El destino es requerido'),
+  destination_id: z.string().optional(),
+  destination_ids: z.array(z.string()).min(1, 'Selecciona al menos un destino'),
   category: z.string().min(1, 'Categoría requerida'),
   featured_image: z.string().url('URL inválida').or(z.literal('')),
   gallery: z.array(z.string().url('URL inválida').or(z.literal(''))),
@@ -60,7 +61,7 @@ export default function AdminTourEdit() {
   const { register, control, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<TourFormData>({
     resolver: zodResolver(tourSchema) as any,
     defaultValues: {
-      title: '', slug: '', destination_id: '', category: 'Aventura', featured_image: '',
+      title: '', slug: '', destination_id: '', destination_ids: [], category: 'Aventura', featured_image: '',
       gallery: [''], departure_city: '', departure_time: '', meeting_point: '', meeting_time: '',
       description_includes: '', description_excludes: '', recommendations: '', itinerary_summary: '',
       itinerary_details: '', map_iframe: '', itinerary_image: '', price: 0, is_active: true, translations: {}
@@ -85,7 +86,8 @@ export default function AdminTourEdit() {
         if (tour) {
           setValue('title', tour.title);
           setValue('slug', tour.slug);
-          setValue('destination_id', tour.destination_id);
+          setValue('destination_id', tour.destination_id || '');
+          setValue('destination_ids', tour.destination_ids && tour.destination_ids.length > 0 ? tour.destination_ids : (tour.destination_id ? [tour.destination_id] : []));
           setValue('category', tour.category);
           setValue('featured_image', tour.featured_image || '');
           setValue('gallery', tour.gallery?.length ? tour.gallery : ['']);
@@ -117,6 +119,11 @@ export default function AdminTourEdit() {
 
   const onSubmit = async (data: TourFormData) => {
     try {
+      // Set primary destination_id correctly to avoid null constraint failing, just in case
+      if (data.destination_ids && data.destination_ids.length > 0) {
+        data.destination_id = data.destination_ids[0];
+      }
+      
       // Remove empty gallery strings
       data.gallery = data.gallery.filter(g => g.trim() !== '');
 
@@ -217,15 +224,22 @@ export default function AdminTourEdit() {
                     <option value="Costa">Costa</option>
                   </select>
                 </div>
-                <div className="space-y-1">
-                  <label className="text-sm font-semibold text-gray-700">Destino</label>
-                  <select {...register('destination_id')} className="input-field">
-                    <option value="">Selecciona un destino</option>
+                <div className="space-y-2 col-span-1 md:col-span-2">
+                  <label className="text-sm font-semibold text-gray-700">Destinos (Puedes seleccionar varios)</label>
+                  <div className="flex flex-wrap gap-2 mt-2">
                     {destinations.map(d => (
-                      <option key={d.id} value={d.id}>{d.name}</option>
+                      <label key={d.id} className="cursor-pointer flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-2 rounded-xl hover:bg-gray-100 transition-colors">
+                        <input
+                          type="checkbox"
+                          value={d.id}
+                          {...register('destination_ids')}
+                          className="w-4 h-4 text-brand-primary rounded"
+                        />
+                        <span className="text-sm font-medium text-gray-700">{d.name}</span>
+                      </label>
                     ))}
-                  </select>
-                  {errors.destination_id && <p className="text-xs text-red-500">{errors.destination_id.message}</p>}
+                  </div>
+                  {errors.destination_ids && <p className="text-xs text-red-500">{errors.destination_ids.message}</p>}
                 </div>
               </div>
 

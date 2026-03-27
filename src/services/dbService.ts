@@ -107,9 +107,10 @@ export const dbService = {
     return adminView ? data : applyTranslations(data);
   },
   getToursByDestination: async (destinationId: string, adminView = false): Promise<Tour[]> => {
-    const { data, error } = await supabase.from('tours').select('*').eq('destination_id', destinationId);
+    const { data, error } = await supabase.from('tours').select('*');
     if (error) throw error;
-    return adminView ? data : applyTranslations(data);
+    const filtered = data.filter(t => t.destination_id === destinationId || (t.destination_ids && t.destination_ids.includes(destinationId)));
+    return adminView ? filtered : applyTranslations(filtered);
   },
   saveTour: async (tour: Partial<Tour>): Promise<Tour> => {
     const { data, error } = await supabase.from('tours').upsert([tour]).select().single();

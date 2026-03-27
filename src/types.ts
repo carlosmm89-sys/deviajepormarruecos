@@ -15,6 +15,7 @@ export interface Destination {
 export interface Tour {
   id: string;
   destination_id: string;
+  destination_ids?: string[];
   title: string;
   slug: string;
   category: string;

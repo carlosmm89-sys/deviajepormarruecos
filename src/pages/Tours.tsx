@@ -16,6 +16,9 @@ export default function Tours() {
   const [tours, setTours] = useState<Tour[]>([]);
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState<string>('Todos');
+
+  const categories = ['Todos', 'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa'];
 
   const { formatPrice } = useCurrency();
   const { t } = useTranslation();
@@ -36,7 +39,15 @@ export default function Tours() {
 
         // Filter by Destination
         if (destParam && destParam !== 'all') {
-          filtered = filtered.filter(t => t.destination_id === destParam);
+          filtered = filtered.filter(t => 
+            t.destination_id === destParam || 
+            (t.destination_ids && t.destination_ids.includes(destParam))
+          );
+        }
+
+        // Filter by Category
+        if (activeCategory && activeCategory !== 'Todos') {
+          filtered = filtered.filter(t => t.category === activeCategory);
         }
 
         // Filter by Duration
@@ -69,7 +80,7 @@ export default function Tours() {
       }
     };
     loadData();
-  }, [destParam, durationParam, dateParam]);
+  }, [destParam, durationParam, dateParam, activeCategory]);
 
   const getDestinationName = (destId: string) => {
     return destinations.find(d => d.id === destId)?.name || 'Marruecos';
@@ -82,6 +93,23 @@ export default function Tours() {
         <p className="text-xl text-gray-500 max-w-2xl mx-auto">
           Encuentra la aventura perfecta diseñada especialmente para ti.
         </p>
+      </div>
+
+      {/* Category Filter Pills */}
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        {categories.map(cat => (
+          <button
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`px-6 py-2 rounded-full font-bold text-sm transition-all shadow-sm
+              ${activeCategory === cat 
+                ? 'bg-brand-primary text-white scale-105' 
+                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100 hover:text-brand-primary hover:border-brand-primary/30'}
+            `}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -108,9 +108,8 @@ export default function Home() {
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 p-6 text-white">
-                  <p className="text-xs uppercase tracking-widest font-semibold opacity-80 mb-1">{dest.slug || 'Zona'}</p>
-                  <h3 className="text-2xl font-serif font-bold">{dest.name}</h3>
+                <div className="absolute bottom-0 left-0 p-6 text-white text-left">
+                  <h3 className="text-2xl font-serif font-bold group-hover:-translate-y-1 transition-transform">{dest.name}</h3>
                 </div>
               </Link>
             </motion.div>
