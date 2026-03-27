@@ -1,93 +1,179 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { dbService } from '../services/dbService';
 import { Destination } from '../types';
 import { MapPin, Calendar, Clock, ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function HeroSearch() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [selectedDest, setSelectedDest] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [selectedDuration, setSelectedDuration] = useState('');
   
+  const [activeDropdown, setActiveDropdown] = useState<'dest' | 'duration' | null>(null);
+  
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     dbService.getDestinations().then(data => setDestinations(data)).catch(console.error);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Almacenar en local storage
+    localStorage.setItem('search_dates', JSON.stringify({
+      startDate,
+      endDate
+    }));
+
     const params = new URLSearchParams();
-    if (selectedDest) params.append('destination', selectedDest);
-    if (selectedDate) params.append('date', selectedDate);
-    if (selectedDuration) params.append('duration', selectedDuration);
+    if (selectedDest && selectedDest !== 'all') params.append('destination', selectedDest);
+    if (startDate) params.append('startDate', startDate);
+    if (endDate) params.append('endDate', endDate);
+    if (selectedDuration && selectedDuration !== 'all') params.append('duration', selectedDuration);
     
     navigate(`/tours?${params.toString()}`);
   };
 
+  const getDestLabel = () => {
+    if (!selectedDest) return '¿A dónde vamos?';
+    if (selectedDest === 'all') return 'Cualquier destino';
+    return destinations.find(d => d.id === selectedDest)?.name || '¿A dónde vamos?';
+  };
+
+  const durationOptions = [
+    { value: 'all', label: 'Cualquier duración' },
+    { value: '1-3', label: '1-3 Días' },
+    { value: '4-6', label: '4-6 Días' },
+    { value: '7-10', label: '7-10 Días' },
+    { value: '11-14', label: '11-14 Días' },
+    { value: '15+', label: '+15 Días' },
+  ];
+
+  const getDurationLabel = () => {
+    if (!selectedDuration) return 'Seleccionar';
+    return durationOptions.find(o => o.value === selectedDuration)?.label || 'Seleccionar';
+  };
+
   return (
-    <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-2xl max-w-4xl mx-auto w-full mt-12 relative z-20">
-      <form onSubmit={handleSearch} className="flex flex-col md:flex-row items-center divide-y md:divide-y-0 md:divide-x divide-gray-100">
+    <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-2xl max-w-4xl mx-auto w-full mt-12 relative z-20" ref={dropdownRef}>
+      <form onSubmit={handleSearch} className="flex flex-col md:flex-row items-center divide-y md:divide-y-0 md:divide-x divide-gray-100 relative">
         
         {/* DESTINO */}
-        <div className="flex-1 w-full p-4 relative group">
-          <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+        <div className="flex-1 w-full p-4 relative group cursor-pointer" onClick={() => setActiveDropdown(activeDropdown === 'dest' ? null : 'dest')}>
+          <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 cursor-pointer">
             Destino
           </label>
           <div className="flex items-center gap-2">
-            <select
-              value={selectedDest}
-              onChange={(e) => setSelectedDest(e.target.value)}
-              className="w-full bg-transparent text-gray-700 font-semibold text-lg focus:outline-none appearance-none cursor-pointer placeholder-gray-300"
-            >
-              <option value="" disabled hidden>¿A dónde vamos?</option>
-              <option value="all">Cualquier destino</option>
-              {destinations.map(d => (
-                <option key={d.id} value={d.id}>{d.name}</option>
-              ))}
-            </select>
-            <ChevronDown className="w-4 h-4 text-gray-400 absolute right-4 pointer-events-none" />
+            <div className={`w-full bg-transparent font-semibold text-lg truncate ${selectedDest ? 'text-gray-900' : 'text-gray-400'}`}>
+              {getDestLabel()}
+            </div>
+            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${activeDropdown === 'dest' ? 'rotate-180' : ''}`} />
           </div>
+
+          <AnimatePresence>
+            {activeDropdown === 'dest' && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 py-2"
+              >
+                <div
+                  className="px-6 py-3 hover:bg-brand-primary/5 cursor-pointer text-gray-700 hover:text-brand-primary font-medium transition-colors"
+                  onClick={() => setSelectedDest('all')}
+                >
+                  Cualquier destino
+                </div>
+                {destinations.map(d => (
+                  <div
+                    key={d.id}
+                    className="px-6 py-3 hover:bg-brand-primary/5 cursor-pointer text-gray-700 hover:text-brand-primary font-medium transition-colors"
+                    onClick={() => setSelectedDest(d.id)}
+                  >
+                    {d.name}
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* FECHA */}
-        <div className="flex-1 w-full p-4 relative group">
-          <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
-            Fecha
-          </label>
-          <div className="flex items-center gap-2">
-             <input
-              type="month"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="w-full bg-transparent text-gray-700 font-semibold text-lg focus:outline-none cursor-pointer placeholder-gray-300"
-              placeholder="Seleccionar"
+        {/* FECHAS */}
+        <div className="flex-[1.5] w-full p-4 relative group flex items-center justify-between gap-4">
+          <div className="flex-1">
+            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+              Ida
+            </label>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="w-full bg-transparent font-semibold text-base focus:outline-none cursor-pointer text-gray-800"
+              style={{ colorScheme: 'light' }}
+            />
+          </div>
+          <div className="w-px h-8 bg-gray-200" />
+          <div className="flex-1">
+            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+              Vuelta
+            </label>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="w-full bg-transparent font-semibold text-base focus:outline-none cursor-pointer text-gray-800"
+              style={{ colorScheme: 'light' }}
             />
           </div>
         </div>
 
         {/* DURACIÓN */}
-        <div className="flex-1 w-full p-4 relative group">
-          <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+        <div className="flex-1 w-full p-4 relative group cursor-pointer" onClick={() => setActiveDropdown(activeDropdown === 'duration' ? null : 'duration')}>
+          <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 cursor-pointer">
             Duración
           </label>
           <div className="flex items-center gap-2">
-            <select
-              value={selectedDuration}
-              onChange={(e) => setSelectedDuration(e.target.value)}
-              className="w-full bg-transparent text-gray-700 font-semibold text-lg focus:outline-none appearance-none cursor-pointer placeholder-gray-300"
-            >
-               <option value="" disabled hidden>Seleccionar</option>
-               <option value="all">Cualquier duración</option>
-               <option value="1-3">1-3 Días</option>
-               <option value="4-6">4-6 Días</option>
-               <option value="7-10">7-10 Días</option>
-               <option value="11-14">11-14 Días</option>
-               <option value="15+">+15 Días</option>
-            </select>
-            <ChevronDown className="w-4 h-4 text-gray-400 absolute right-4 pointer-events-none" />
+            <div className={`w-full bg-transparent font-semibold text-lg truncate ${selectedDuration ? 'text-gray-900' : 'text-gray-400'}`}>
+              {getDurationLabel()}
+            </div>
+            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${activeDropdown === 'duration' ? 'rotate-180' : ''}`} />
           </div>
+
+          <AnimatePresence>
+            {activeDropdown === 'duration' && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 py-2"
+              >
+                {durationOptions.map(o => (
+                  <div
+                    key={o.value}
+                    className="px-6 py-3 hover:bg-brand-primary/5 cursor-pointer text-gray-700 hover:text-brand-primary font-medium transition-colors"
+                    onClick={() => setSelectedDuration(o.value)}
+                  >
+                    {o.label}
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* BOTÓN EXPLORAR */}

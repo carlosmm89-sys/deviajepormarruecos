@@ -42,6 +42,19 @@ export default function TourDetail() {
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [isReviewsOpen, setIsReviewsOpen] = useState(false);
   
+  const [dateArrival, setDateArrival] = useState(() => {
+    try {
+      const saved = localStorage.getItem('search_dates');
+      return saved ? JSON.parse(saved).startDate || '' : '';
+    } catch { return ''; }
+  });
+  const [dateDeparture, setDateDeparture] = useState(() => {
+    try {
+      const saved = localStorage.getItem('search_dates');
+      return saved ? JSON.parse(saved).endDate || '' : '';
+    } catch { return ''; }
+  });
+  
   const { isFavorite, toggleFavorite } = useWishlist();
   const { formatPrice } = useCurrency();
   
@@ -385,11 +398,11 @@ export default function TourDetail() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Fecha de llegada*</label>
-                      <input type="date" className="input-field text-gray-600" required />
+                      <input type="date" className="input-field text-gray-600" required value={dateArrival} onChange={e => setDateArrival(e.target.value)} />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Fecha de salida*</label>
-                      <input type="date" className="input-field text-gray-600" required />
+                      <input type="date" className="input-field text-gray-600" required value={dateDeparture} onChange={e => setDateDeparture(e.target.value)} />
                     </div>
                   </div>
 
