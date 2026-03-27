@@ -57,7 +57,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   };
 
   const navLinks: NavItem[] = [
-    { name: t('nav_home') || 'Inicio', path: '/', icon: Compass },
     { name: t('nav_destinations') || 'Destinos', path: '/destinations', icon: Map },
     { 
       name: 'Viajes Exclusivos', 
@@ -71,7 +70,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         { name: 'Viajes en Grupo', path: '/coleccion/viajes-en-grupo' },
       ]
     },
-    { name: 'Student Trip', path: '/coleccion/student-trip', icon: MapPin },
     { name: 'Paquetes', path: '/tours', icon: MapPin },
     { name: 'Actividades', path: '/coleccion/actividades', icon: MapPin },
     { name: t('nav_blog') || 'Blog', path: '/blog', icon: BookOpen },
@@ -105,19 +103,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               {navLinks.map((link) => (
                 <div key={link.name} className="relative group">
                   {link.subItems ? (
-                    <div className="flex items-center space-x-1 cursor-pointer text-sm lg:text-base font-bold text-gray-700 hover:text-brand-primary transition-colors py-4">
-                      <link.icon className="w-4 h-4 hidden lg:block" />
+                    <div className="flex items-center space-x-1 cursor-pointer text-[14px] font-bold text-gray-700 hover:text-brand-primary transition-colors py-4">
                       <span className="uppercase tracking-wide">{link.name}</span>
                       <ChevronDown className="w-3 h-3 ml-1 group-hover:rotate-180 transition-transform duration-300" />
                     </div>
                   ) : (
                     <Link
                       to={link.path}
-                      className={`flex items-center space-x-1 text-sm lg:text-base font-bold py-4 transition-colors hover:text-brand-primary uppercase tracking-wide ${
+                      className={`flex items-center space-x-1 text-[14px] font-bold py-4 transition-colors hover:text-brand-primary uppercase tracking-wide ${
                         location.pathname === link.path ? 'text-brand-primary' : 'text-gray-700'
                       }`}
                     >
-                      <link.icon className="w-4 h-4 hidden lg:block" />
                       <span>{link.name}</span>
                     </Link>
                   )}
@@ -227,10 +223,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     {link.subItems ? (
                       <>
                         <div className="flex items-center space-x-2 text-base font-bold text-gray-900 border-b border-gray-50 pb-2">
-                          <link.icon className="w-5 h-5 text-gray-400" />
                           <span className="uppercase">{link.name}</span>
                         </div>
-                        <div className="pl-7 flex flex-col space-y-4 pt-1 pb-2">
+                        <div className="pl-4 flex flex-col space-y-4 pt-1 pb-2">
                           {link.subItems.map(subItem => (
                             <Link
                               key={subItem.path}
@@ -250,7 +245,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         onClick={() => setIsMenuOpen(false)}
                         className="flex items-center space-x-2 text-base font-bold text-gray-900 border-b border-gray-50 pb-2"
                       >
-                        <link.icon className="w-5 h-5 text-gray-400" />
                         <span className="uppercase">{link.name}</span>
                       </Link>
                     )}
