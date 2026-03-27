@@ -40,8 +40,8 @@ export default function Home() {
   return (
     <div className="space-y-24 pb-24">
       {/* Hero Section */}
-      <section className="relative h-[85vh] flex flex-col items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
+      <section className="relative z-30 h-[85vh] flex flex-col items-center justify-center">
+        <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=80&w=2000"
             alt="Hero Morocco"
@@ -52,7 +52,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#F9F8F6] opacity-90" />
         </div>
 
-        <div className="relative z-10 max-w-5xl w-full mx-auto px-4 text-center space-y-6">
+        <div className="relative z-20 max-w-5xl w-full mx-auto px-4 text-center space-y-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

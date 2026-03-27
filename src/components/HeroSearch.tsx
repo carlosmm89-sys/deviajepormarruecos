@@ -10,9 +10,8 @@ export default function HeroSearch() {
   const [selectedDest, setSelectedDest] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [selectedDuration, setSelectedDuration] = useState('');
   
-  const [activeDropdown, setActiveDropdown] = useState<'dest' | 'duration' | null>(null);
+  const [activeDropdown, setActiveDropdown] = useState<'dest' | null>(null);
   
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -44,7 +43,6 @@ export default function HeroSearch() {
     if (selectedDest && selectedDest !== 'all') params.append('destination', selectedDest);
     if (startDate) params.append('startDate', startDate);
     if (endDate) params.append('endDate', endDate);
-    if (selectedDuration && selectedDuration !== 'all') params.append('duration', selectedDuration);
     
     navigate(`/tours?${params.toString()}`);
   };
@@ -53,20 +51,6 @@ export default function HeroSearch() {
     if (!selectedDest) return '¿A dónde vamos?';
     if (selectedDest === 'all') return 'Cualquier destino';
     return destinations.find(d => d.id === selectedDest)?.name || '¿A dónde vamos?';
-  };
-
-  const durationOptions = [
-    { value: 'all', label: 'Cualquier duración' },
-    { value: '1-3', label: '1-3 Días' },
-    { value: '4-6', label: '4-6 Días' },
-    { value: '7-10', label: '7-10 Días' },
-    { value: '11-14', label: '11-14 Días' },
-    { value: '15+', label: '+15 Días' },
-  ];
-
-  const getDurationLabel = () => {
-    if (!selectedDuration) return 'Seleccionar';
-    return durationOptions.find(o => o.value === selectedDuration)?.label || 'Seleccionar';
   };
 
   return (
@@ -140,40 +124,6 @@ export default function HeroSearch() {
               style={{ colorScheme: 'light' }}
             />
           </div>
-        </div>
-
-        {/* DURACIÓN */}
-        <div className="flex-1 w-full p-4 relative group cursor-pointer" onClick={() => setActiveDropdown(activeDropdown === 'duration' ? null : 'duration')}>
-          <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 cursor-pointer">
-            Duración
-          </label>
-          <div className="flex items-center gap-2">
-            <div className={`w-full bg-transparent font-semibold text-lg truncate ${selectedDuration ? 'text-gray-900' : 'text-gray-400'}`}>
-              {getDurationLabel()}
-            </div>
-            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${activeDropdown === 'duration' ? 'rotate-180' : ''}`} />
-          </div>
-
-          <AnimatePresence>
-            {activeDropdown === 'duration' && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="absolute top-full left-0 right-0 mt-4 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 py-2"
-              >
-                {durationOptions.map(o => (
-                  <div
-                    key={o.value}
-                    className="px-6 py-3 hover:bg-brand-primary/5 cursor-pointer text-gray-700 hover:text-brand-primary font-medium transition-colors"
-                    onClick={() => setSelectedDuration(o.value)}
-                  >
-                    {o.label}
-                  </div>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
 
         {/* BOTÓN EXPLORAR */}
