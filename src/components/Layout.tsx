@@ -150,34 +150,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </AnimatePresence>
                 </div>
 
-                {isAdminLoggedIn ? (
-                  <>
-                    <Link 
-                      to="/admin/destinations" 
-                      className="btn-primary text-sm flex items-center justify-center gap-2"
-                    >
-                      <Shield className="w-4 h-4" />
-                      Panel Admin
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="flex items-center space-x-2 text-sm font-medium text-gray-500 hover:text-red-600 transition-colors"
-                      title="Cerrar sesión"
-                    >
-                      <LogOut className="w-5 h-5" />
-                      <span>Salir</span>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <a href="#contacto" className="btn-primary text-sm flex items-center justify-center">
-                      Contacto
-                    </a>
-                    <Link to="/admin/login" className="p-2 text-gray-400 hover:text-brand-primary transition-colors rounded-full hover:bg-orange-50" title="Acceso Admin">
-                      <Shield className="w-5 h-5" />
-                    </Link>
-                  </>
-                )}
+                <a href="#contacto" className="btn-primary text-sm flex items-center justify-center">
+                  Contacto
+                </a>
               </div>
             </nav>
 
@@ -241,47 +216,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </div>
                 </div>
                 
-                {isAdminLoggedIn ? (
-                  <>
-                    <Link
-                      to="/admin/destinations"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center space-x-2 text-lg font-medium text-brand-primary"
-                    >
-                      <Shield className="w-5 h-5" />
-                      <span>Panel Admin</span>
-                    </Link>
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setIsMenuOpen(false);
-                      }}
-                      className="flex items-center space-x-2 text-lg font-medium text-red-500 pt-4 border-t border-gray-100"
-                    >
-                      <LogOut className="w-5 h-5" />
-                      <span>Cerrar Sesión</span>
-                    </button>
-                  </>
-                ) : (
-                  <a
-                    href="#contacto"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="btn-primary w-full text-center mt-4"
-                  >
-                    Contacto
-                  </a>
-                )}
-                
-                {!isAdminLoggedIn && (
-                  <Link
-                    to="/admin/login"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex justify-center text-gray-300 hover:text-brand-primary pt-6"
-                    title="Acceso Admin"
-                  >
-                    <Shield className="w-6 h-6" />
-                  </Link>
-                )}
+                <a
+                  href="#contacto"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="btn-primary w-full text-center mt-4"
+                >
+                  Contacto
+                </a>
               </div>
             </motion.div>
           )}
@@ -302,11 +243,89 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </AnimatePresence>
       </main>
 
-      <footer id="contacto" className="bg-gray-50 border-t border-gray-100 py-12">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} {settings?.site_name || 'Marruecos Experiencia'}. Todos los derechos reservados.
-          </p>
+      <footer id="contacto" className="bg-[#1A1A1A] border-t border-gray-900 pt-16 pb-8 text-gray-400">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            
+            {/* Column 1: Logo & About */}
+            <div className="space-y-6">
+              <Link to="/" className="flex items-center space-x-3">
+                {settings?.logo_url ? (
+                  <img src={settings.logo_url} alt={settings?.site_name || 'Logo'} className="h-16 w-auto object-contain brightness-0 invert" />
+                ) : (
+                  <>
+                    <div className="w-12 h-12 bg-brand-primary rounded-xl flex items-center justify-center">
+                      <Compass className="text-white w-7 h-7" />
+                    </div>
+                    <span className="text-xl font-serif font-bold tracking-tight text-white">{settings?.site_name || 'Marruecos Experiencia'}</span>
+                  </>
+                )}
+              </Link>
+              <p className="text-gray-400 leading-relaxed text-sm">
+                Especialistas en viajes a medida por Marruecos. Descubre la magia del Magreb con expertos locales, durmiendo bajo las estrellas y cruzando el Atlas.
+              </p>
+            </div>
+
+            {/* Column 2: Enlaces Rápidos */}
+            <div>
+              <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Navegación</h4>
+              <ul className="space-y-3 text-sm">
+                <li><Link to="/" className="hover:text-brand-accent transition-colors">Inicio</Link></li>
+                <li><Link to="/destinations" className="hover:text-brand-accent transition-colors">Destinos</Link></li>
+                <li><Link to="/tours" className="hover:text-brand-accent transition-colors">Experiencias y Rutas</Link></li>
+                <li><Link to="/blog" className="hover:text-brand-accent transition-colors">Blog y Consejos</Link></li>
+              </ul>
+            </div>
+
+            {/* Column 3: Legal */}
+            <div>
+              <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Información Legal</h4>
+              <ul className="space-y-3 text-sm">
+                <li><Link to="/aviso-legal" className="hover:text-brand-accent transition-colors">Aviso Legal</Link></li>
+                <li><Link to="/privacidad" className="hover:text-brand-accent transition-colors">Política de Privacidad</Link></li>
+                <li><Link to="/cookies" className="hover:text-brand-accent transition-colors">Política de Cookies</Link></li>
+                <li><Link to="/condiciones" className="hover:text-brand-accent transition-colors">Términos y Condiciones</Link></li>
+              </ul>
+            </div>
+
+            {/* Column 4: Contacto */}
+            <div>
+              <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Contacto Ráido</h4>
+              <ul className="space-y-4 text-sm">
+                <li className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-brand-accent flex-shrink-0" />
+                  <span>Marrakech, Marruecos</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="flex items-center justify-center w-5 h-5 text-brand-accent flex-shrink-0">✉</span>
+                  <a href="mailto:info@marruecosexperiencia.com" className="hover:text-white transition-colors">info@marruecosexperiencia.com</a>
+                </li>
+              </ul>
+            </div>
+            
+          </div>
+
+          {/* Footer Bottom */}
+          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+            <p>© {new Date().getFullYear()} {settings?.site_name || 'Marruecos Experiencia'}. Todos los derechos reservados.</p>
+            
+            <div className="flex items-center gap-6">
+              {isAdminLoggedIn ? (
+                <>
+                  <Link to="/admin/destinations" className="flex items-center gap-2 hover:text-white transition-colors">
+                    <Shield className="w-4 h-4" /> Panel Admin
+                  </Link>
+                  <button onClick={handleLogout} className="flex items-center gap-2 hover:text-red-400 transition-colors border-l border-white/10 pl-6">
+                    <LogOut className="w-4 h-4" /> Salir
+                  </button>
+                </>
+              ) : (
+                <Link to="/admin/login" className="flex items-center gap-2 text-gray-600 hover:text-white transition-colors" title="Acceso Privado">
+                  <Shield className="w-4 h-4" /> Intranet
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
       </footer>
     </div>
