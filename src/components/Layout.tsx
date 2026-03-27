@@ -111,10 +111,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <AnimatePresence>
                     {isI18nOpen && (
                       <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 p-2"
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        className="absolute top-full right-0 mt-4 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 p-2"
                       >
                         <div className="p-2">
                           <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-2">Idioma</p>
