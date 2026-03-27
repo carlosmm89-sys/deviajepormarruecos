@@ -38,6 +38,10 @@ const tourSchema = z.object({
 
 type TourFormData = z.infer<typeof tourSchema>;
 
+const TOUR_CATEGORIES = [
+  'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa'
+];
+
 const quillModules = {
   toolbar: [
     [{ 'header': [1, 2, 3, false] }],
@@ -217,19 +221,9 @@ export default function AdminTourEdit() {
                 <div className="space-y-1">
                   <label className="text-sm font-semibold text-gray-700">Categoría</label>
                   <select {...register('category')} className="input-field">
-                    <option value="Aventura">Aventura</option>
-                    <option value="Cultura">Cultura</option>
-                    <option value="Desierto">Desierto</option>
-                    <option value="Montaña">Montaña</option>
-                    <option value="Costa">Costa</option>
-                    <option value="Viajes de Lujo">Viajes de Lujo</option>
-                    <option value="Viajes en Grupo">Viajes en Grupo</option>
-                    <option value="Luna de Miel">Luna de Miel</option>
-                    <option value="Entrega de Anillo">Entrega de Anillo</option>
-                    <option value="Viajes en Familia">Viajes en Familia</option>
-                    <option value="Student Trip">Student Trip</option>
-                    <option value="Paquetes">Paquetes</option>
-                    <option value="Actividades">Actividades</option>
+                    {TOUR_CATEGORIES.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="space-y-2 col-span-1 md:col-span-2">
