@@ -47,6 +47,7 @@ export interface Tour {
 export interface BlogPost {
   id: string;
   slug: string;
+  category?: string;
   title: string;
   excerpt: string;
   content: string;

@@ -12,6 +12,7 @@ import Wishlist from './pages/Wishlist';
 import Blog from './pages/Blog';
 import BlogPostDetail from './pages/BlogPost';
 import Tours from './pages/Tours';
+import CollectionPage from './pages/CollectionPage';
 import AdminRoute from './components/AdminRoute';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminDestinations from './pages/AdminDestinations';
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="/destinations/:id" element={<DestinationDetail />} />
             <Route path="/tours" element={<Tours />} />
             <Route path="/tours/:id" element={<TourDetail />} />
+            <Route path="/coleccion/:categorySlug" element={<CollectionPage />} />
             <Route path="/favoritos" element={<Wishlist />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPostDetail />} />

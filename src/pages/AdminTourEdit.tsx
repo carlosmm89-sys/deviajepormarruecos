@@ -222,6 +222,14 @@ export default function AdminTourEdit() {
                     <option value="Desierto">Desierto</option>
                     <option value="Montaña">Montaña</option>
                     <option value="Costa">Costa</option>
+                    <option value="Viajes de Lujo">Viajes de Lujo</option>
+                    <option value="Viajes en Grupo">Viajes en Grupo</option>
+                    <option value="Luna de Miel">Luna de Miel</option>
+                    <option value="Entrega de Anillo">Entrega de Anillo</option>
+                    <option value="Viajes en Familia">Viajes en Familia</option>
+                    <option value="Student Trip">Student Trip</option>
+                    <option value="Paquetes">Paquetes</option>
+                    <option value="Actividades">Actividades</option>
                   </select>
                 </div>
                 <div className="space-y-2 col-span-1 md:col-span-2">

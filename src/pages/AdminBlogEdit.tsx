@@ -13,6 +13,7 @@ import { Language } from '../context/LanguageContext';
 const blogSchema = z.object({
   title: z.string().min(1, 'El título es obligatorio'),
   slug: z.string().min(1, 'El slug es obligatorio').regex(/^[a-z0-9-]+$/, 'El slug solo puede contener letras minúsculas, números y guiones'),
+  category: z.string().min(1, 'La categoría es obligatoria'),
   excerpt: z.string().optional(),
   content: z.string().min(1, 'El contenido es obligatorio'),
   cover_image: z.string().optional().nullable(),
@@ -47,6 +48,7 @@ export default function AdminBlogEdit() {
     defaultValues: {
       title: '',
       slug: '',
+      category: 'Blog',
       excerpt: '',
       content: '',
       cover_image: null,
@@ -79,6 +81,7 @@ export default function AdminBlogEdit() {
           if (post) {
             setValue('title', post.title);
             setValue('slug', post.slug);
+            setValue('category', post.category || 'Blog');
             setValue('excerpt', post.excerpt || '');
             setValue('cover_image', post.cover_image);
             setValue('author', post.author);
@@ -155,17 +158,35 @@ export default function AdminBlogEdit() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Categoría Principal</label>
+              <select {...register('category')} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors">
+                <option value="Blog">Noticias (Blog Standard)</option>
+                <option value="Actividades">Actividades</option>
+                <option value="Student Trip">Student Trip</option>
+                <option value="Paquetes">Paquetes</option>
+                <option value="Viajes en Grupo">Viajes en Grupo</option>
+                <optgroup label="Colección Viajes Exclusivos">
+                  <option value="Viajes Exclusivos">Viajes Exclusivos (General)</option>
+                  <option value="Viajes de Lujo">Viajes de Lujo</option>
+                  <option value="Luna de Miel">Luna de Miel</option>
+                  <option value="Entrega de Anillo">Entrega de Anillo</option>
+                  <option value="Viajes en Familia">Viajes en Familia</option>
+                </optgroup>
+              </select>
+            </div>
+
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">Slug (URL SEO)</label>
               <div className="flex items-center">
-                <span className="px-4 py-3 bg-gray-100 border border-r-0 border-gray-300 text-gray-500 rounded-l-xl text-sm">
-                  /blog/
+                <span className="px-4 py-3 bg-gray-100 border border-r-0 border-gray-300 text-gray-500 rounded-l-xl text-sm leading-tight max-w-[80px] truncate" title="/blog-o-viaje/">
+                  /...
                 </span>
                 <input
                   {...register('slug')}
-                  className="w-full px-4 py-3 rounded-r-xl border border-gray-300 focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors font-mono text-sm"
-                  placeholder="consejos-visitar-marrakech"
+                  className="w-full px-4 py-3 rounded-r-xl border border-gray-300 focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors font-mono text-sm leading-tight"
+                  placeholder="ejemplo-slug"
                 />
               </div>
               {errors.slug && <p className="text-red-500 text-sm mt-1">{errors.slug.message}</p>}

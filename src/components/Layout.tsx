@@ -49,10 +49,31 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  const navLinks = [
+  type NavItem = {
+    name: string;
+    path: string;
+    icon: any;
+    subItems?: { name: string; path: string }[];
+  };
+
+  const navLinks: NavItem[] = [
     { name: t('nav_home') || 'Inicio', path: '/', icon: Compass },
     { name: t('nav_destinations') || 'Destinos', path: '/destinations', icon: Map },
-    { name: 'Tours', path: '/tours', icon: MapPin },
+    { 
+      name: 'Viajes Exclusivos', 
+      path: '#', 
+      icon: MapPin,
+      subItems: [
+        { name: 'Luna de Miel', path: '/coleccion/luna-de-miel' },
+        { name: 'Entrega de Anillo', path: '/coleccion/entrega-de-anillo' },
+        { name: 'Viajes en Familia', path: '/coleccion/viajes-en-familia' },
+        { name: 'Viajes de Lujo', path: '/coleccion/viajes-de-lujo' },
+        { name: 'Viajes en Grupo', path: '/coleccion/viajes-en-grupo' },
+      ]
+    },
+    { name: 'Student Trip', path: '/coleccion/student-trip', icon: MapPin },
+    { name: 'Paquetes', path: '/tours', icon: MapPin },
+    { name: 'Actividades', path: '/coleccion/actividades', icon: MapPin },
     { name: t('nav_blog') || 'Blog', path: '/blog', icon: BookOpen },
   ];
 
@@ -80,18 +101,43 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center space-x-8">
+            <nav className="hidden md:flex items-center space-x-4 lg:space-x-6">
               {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`flex items-center space-x-2 text-base font-medium transition-colors hover:text-brand-primary ${
-                    location.pathname === link.path ? 'text-brand-primary' : 'text-gray-700'
-                  }`}
-                >
-                  <link.icon className="w-5 h-5" />
-                  <span>{link.name}</span>
-                </Link>
+                <div key={link.name} className="relative group">
+                  {link.subItems ? (
+                    <div className="flex items-center space-x-1 cursor-pointer text-sm lg:text-base font-bold text-gray-700 hover:text-brand-primary transition-colors py-4">
+                      <link.icon className="w-4 h-4 hidden lg:block" />
+                      <span className="uppercase tracking-wide">{link.name}</span>
+                      <ChevronDown className="w-3 h-3 ml-1 group-hover:rotate-180 transition-transform duration-300" />
+                    </div>
+                  ) : (
+                    <Link
+                      to={link.path}
+                      className={`flex items-center space-x-1 text-sm lg:text-base font-bold py-4 transition-colors hover:text-brand-primary uppercase tracking-wide ${
+                        location.pathname === link.path ? 'text-brand-primary' : 'text-gray-700'
+                      }`}
+                    >
+                      <link.icon className="w-4 h-4 hidden lg:block" />
+                      <span>{link.name}</span>
+                    </Link>
+                  )}
+
+                  {link.subItems && (
+                     <div className="absolute top-[100%] left-0 w-64 bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden transform origin-top scale-95 group-hover:scale-100 pt-2">
+                      <div className="py-2">
+                        {link.subItems.map((subItem) => (
+                          <Link
+                            key={subItem.path}
+                            to={subItem.path}
+                            className="block px-6 py-3 text-xs font-bold text-gray-600 hover:text-brand-primary hover:bg-gray-50 transition-colors uppercase tracking-widest"
+                          >
+                            {subItem.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               ))}
 
               <div className="flex items-center space-x-6 ml-4 pl-4 border-l border-gray-200">
@@ -177,15 +223,38 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             >
               <div className="flex flex-col space-y-4">
                 {navLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center space-x-2 text-lg font-medium text-gray-700"
-                  >
-                    <link.icon className="w-5 h-5" />
-                    <span>{link.name}</span>
-                  </Link>
+                  <div key={link.name} className="flex flex-col space-y-3 pb-2">
+                    {link.subItems ? (
+                      <>
+                        <div className="flex items-center space-x-2 text-base font-bold text-gray-900 border-b border-gray-50 pb-2">
+                          <link.icon className="w-5 h-5 text-gray-400" />
+                          <span className="uppercase">{link.name}</span>
+                        </div>
+                        <div className="pl-7 flex flex-col space-y-4 pt-1 pb-2">
+                          {link.subItems.map(subItem => (
+                            <Link
+                              key={subItem.path}
+                              to={subItem.path}
+                              onClick={() => setIsMenuOpen(false)}
+                              className="text-sm font-bold text-gray-500 hover:text-brand-primary uppercase tracking-wider"
+                            >
+                              {subItem.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <Link
+                        key={link.path}
+                        to={link.path}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center space-x-2 text-base font-bold text-gray-900 border-b border-gray-50 pb-2"
+                      >
+                        <link.icon className="w-5 h-5 text-gray-400" />
+                        <span className="uppercase">{link.name}</span>
+                      </Link>
+                    )}
+                  </div>
                 ))}
 
                 <Link

@@ -18,7 +18,13 @@ export default function Tours() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<string>('Todos');
 
-  const categories = ['Todos', 'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa'];
+  const categories = [
+    'Todos', 
+    'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa',
+    'Viajes Exclusivos', 'Viajes de Lujo', 'Viajes en Grupo', 
+    'Luna de Miel', 'Entrega de Anillo', 'Viajes en Familia', 
+    'Student Trip', 'Paquetes', 'Actividades'
+  ];
 
   const { formatPrice } = useCurrency();
   const { t } = useTranslation();
