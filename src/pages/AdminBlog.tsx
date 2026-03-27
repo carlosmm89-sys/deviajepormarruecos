@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Edit, Trash2, Plus, ArrowLeft, Image as ImageIcon, Eye, ExternalLink } from 'lucide-react';
+import { Edit, Trash2, Plus, Image as ImageIcon, Eye, ExternalLink, BookOpen, MapPin } from 'lucide-react';
 import { dbService } from '../services/dbService';
 import { BlogPost } from '../types';
 
 export default function AdminBlog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filterType, setFilterType] = useState<'blog' | 'collections'>('blog');
 
   useEffect(() => {
     loadPosts();
@@ -63,12 +64,31 @@ export default function AdminBlog() {
         </div>
       </div>
 
+      <div className="flex bg-gray-100 p-1.5 rounded-xl w-max shadow-inner">
+        <button
+          onClick={() => setFilterType('blog')}
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold uppercase tracking-wider transition-all ${
+            filterType === 'blog' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <BookOpen className="w-4 h-4" /> Noticias Blog
+        </button>
+        <button
+          onClick={() => setFilterType('collections')}
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold uppercase tracking-wider transition-all ${
+            filterType === 'collections' ? 'bg-white text-brand-primary shadow-sm ring-1 ring-gray-900/5' : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <MapPin className="w-4 h-4" /> Actividades y Colecciones
+        </button>
+      </div>
+
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        {posts.length === 0 ? (
+        {posts.filter(p => filterType === 'blog' ? p.category === 'Blog' : p.category !== 'Blog').length === 0 ? (
           <div className="p-12 text-center text-gray-500">
-            <p className="text-lg">No hay ningún artículo publicado.</p>
+            <p className="text-lg">No hay ningún contenido en esta sección.</p>
             <Link to="/admin/blog/new" className="text-brand-primary font-bold hover:underline mt-2 inline-block">
-              Crear el primer artículo
+              Crear nuevo contenido
             </Link>
           </div>
         ) : (
@@ -76,14 +96,15 @@ export default function AdminBlog() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100">Artículo</th>
-                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100">Estado</th>
-                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-center">Visitas</th>
-                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-right">Acciones</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Contenido</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Categoría</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Estado</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-center text-sm uppercase tracking-wider">Visitas</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-right text-sm uppercase tracking-wider">Acciones</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {posts.map((post) => (
+                {posts.filter(p => filterType === 'blog' ? p.category === 'Blog' : p.category !== 'Blog').map((post) => (
                   <tr key={post.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-4">
@@ -99,6 +120,11 @@ export default function AdminBlog() {
                           <div className="text-sm text-gray-500 font-mono">/{post.slug}</div>
                         </div>
                       </div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <span className="inline-flex items-center text-sm font-bold text-gray-600 bg-gray-100 px-3 py-1 rounded-full uppercase tracking-widest text-[10px]">
+                        {post.category}
+                      </span>
                     </td>
                     <td className="py-4 px-6">
                       <span className={`inline-flex px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${

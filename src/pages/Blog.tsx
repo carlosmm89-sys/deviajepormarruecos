@@ -13,7 +13,7 @@ export default function Blog() {
     const fetchPosts = async () => {
       try {
         const data = await dbService.getBlogPosts();
-        setPosts(data);
+        setPosts(data.filter(p => !p.category || p.category === 'Blog'));
       } catch (err) {
         console.error(err);
       } finally {
