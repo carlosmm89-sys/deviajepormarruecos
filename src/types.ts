@@ -96,6 +96,7 @@ export interface BusinessSettings {
   smtp_password?: string;
   smtp_from_email?: string;
   smtp_from_name?: string;
+  hero_image_url?: string;
   home_views?: number;
 }
 

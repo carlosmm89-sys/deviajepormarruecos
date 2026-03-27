@@ -43,7 +43,7 @@ export default function Home() {
       <section className="relative z-30 h-[85vh] flex flex-col items-center justify-center">
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=80&w=2000"
+            src={settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=80&w=2000"}
             alt="Hero Morocco"
             className="w-full h-full object-cover scale-105"
             referrerPolicy="no-referrer"

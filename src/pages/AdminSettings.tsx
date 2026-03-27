@@ -148,6 +148,18 @@ export default function AdminSettings() {
                     />
                   )}
                 />
+
+                <Controller
+                  name="hero_image_url"
+                  control={control}
+                  render={({ field }) => (
+                    <ImageUpload 
+                      label="Imagen Principal (Hero de la Web)" 
+                      value={field.value || ''} 
+                      onChange={field.onChange} 
+                    />
+                  )}
+                />
               </div>
             </div>
 
