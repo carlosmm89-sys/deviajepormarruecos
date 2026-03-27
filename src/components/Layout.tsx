@@ -70,7 +70,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         { name: 'Viajes en Grupo', path: '/coleccion/viajes-en-grupo' },
       ]
     },
-    { name: 'Paquetes', path: '/tours', icon: MapPin },
+    { name: t('nav_tours') || 'Tours', path: '/tours', icon: MapPin },
     { name: 'Actividades', path: '/coleccion/actividades', icon: MapPin },
     { name: t('nav_blog') || 'Blog', path: '/blog', icon: BookOpen },
   ];
