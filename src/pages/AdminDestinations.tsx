@@ -130,37 +130,72 @@ export default function AdminDestinations() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {destinations.map((dest) => (
-          <motion.div
-            layout
-            key={dest.id}
-            className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all"
-          >
-            <div className="h-48 overflow-hidden relative">
-              <img src={dest.image_url} alt={dest.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-              <div className="absolute top-4 right-4 flex gap-2">
-                <button
-                  onClick={() => openModal(dest)}
-                  className="p-2 bg-white/90 backdrop-blur-sm rounded-lg text-gray-700 hover:text-brand-accent transition-colors"
-                >
-                  <Edit2 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => deleteDestination(dest.id)}
-                  className="p-2 bg-white/90 backdrop-blur-sm rounded-lg text-gray-700 hover:text-red-500 transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <h3 className="text-xl font-bold">{dest.name}</h3>
-              <p className="text-sm text-gray-500 mb-4">Slug: {dest.slug}</p>
-              <p className="text-gray-600 text-sm line-clamp-2">{dest.description}</p>
-            </div>
-          </motion.div>
-        ))}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        {destinations.length === 0 ? (
+          <div className="p-12 text-center text-gray-500">
+            <p className="text-lg">No hay destinos registrados.</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Destino</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Destacado</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-right text-sm uppercase tracking-wider">Acciones</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {destinations.map((dest) => (
+                  <tr key={dest.id} className="hover:bg-gray-50/50 transition-colors">
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+                          {dest.image_url ? (
+                            <img src={dest.image_url} alt={dest.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                          ) : (
+                            <ImageIcon className="w-6 h-6 text-gray-400" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="font-bold text-gray-900 line-clamp-1">{dest.name}</div>
+                          <div className="text-sm text-gray-500 font-mono">/{dest.slug}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <span className={`inline-flex px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
+                        dest.featured 
+                          ? 'bg-brand-primary/10 text-brand-primary' 
+                          : 'bg-gray-100 text-gray-500'
+                      }`}>
+                        {dest.featured ? 'Sí' : 'No'}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => openModal(dest)}
+                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Editar"
+                        >
+                          <Edit2 className="w-5 h-5" />
+                        </button>
+                        <button
+                          onClick={() => deleteDestination(dest.id)}
+                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Eliminar"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       <AnimatePresence>

@@ -65,48 +65,88 @@ export default function AdminTours() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {tours.map((tour) => (
-          <motion.div
-            layout
-            key={tour.id}
-            className={`bg-white rounded-2xl overflow-hidden border ${tour.is_active ? 'border-gray-100' : 'border-red-100 opacity-70'} shadow-sm hover:shadow-md transition-all`}
-          >
-            <div className="h-48 overflow-hidden relative">
-              <img src={tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600'} alt={tour.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-              <div className="absolute top-4 right-4 flex gap-2">
-                <button
-                  onClick={() => navigate(`/admin/tours/${tour.id}`)}
-                  className="p-2 bg-white/90 backdrop-blur-sm rounded-lg text-gray-700 hover:text-brand-accent transition-colors block"
-                >
-                  <Edit2 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => deleteTour(tour.id)}
-                  className="p-2 bg-white/90 backdrop-blur-sm rounded-lg text-gray-700 hover:text-red-500 transition-colors block"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-              <div className="absolute bottom-4 left-4 bg-brand-primary/90 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                {tour.price} €
-              </div>
-            </div>
-            <div className="p-6 space-y-2">
-              <h3 className="text-xl font-bold line-clamp-1">{tour.title}</h3>
-              <p className="text-sm text-brand-accent font-medium">
-                {destinations.find(d => d.id === tour.destination_id)?.name || 'Destino desconocido'}
-              </p>
-              <div className="flex items-center gap-2 text-xs text-gray-500">
-                <Clock className="w-3 h-3" />
-                <span>{tour.itinerary_summary || 'Varios días'}</span>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-        {tours.length === 0 && (
-          <div className="col-span-full py-20 text-center text-gray-400 border-2 border-dashed border-gray-100 rounded-3xl">
-            No hay tours disponibles aún.
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        {tours.length === 0 ? (
+          <div className="p-12 text-center text-gray-500">
+            <p className="text-lg">No hay tours registrados.</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Tour</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Categoría</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Precio</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Estado</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-right text-sm uppercase tracking-wider">Acciones</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {tours.map((tour) => (
+                  <tr key={tour.id} className={`hover:bg-gray-50/50 transition-colors ${!tour.is_active ? 'opacity-70' : ''}`}>
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+                          {tour.featured_image || tour.gallery?.[0] ? (
+                            <img src={tour.featured_image || tour.gallery?.[0]} alt={tour.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                          ) : (
+                            <div className="text-gray-400 text-xs text-center">No img</div>
+                          )}
+                        </div>
+                        <div>
+                          <div className="font-bold text-gray-900 line-clamp-1">{tour.title}</div>
+                          <div className="text-sm text-gray-500 flex items-center gap-1 mt-0.5">
+                            <Clock className="w-3 h-3" /> {tour.itinerary_summary || 'Varios días'} 
+                            <span className="mx-1">•</span>
+                            {destinations.find(d => d.id === tour.destination_id)?.name || 'Destino opcional'}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="flex flex-wrap gap-1 max-w-[240px]">
+                        {tour.category?.split(',').map(c => c.trim()).filter(Boolean).map(cat => (
+                          <span key={cat} className="inline-flex items-center text-[10px] font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                            {cat}
+                          </span>
+                        )) || '-'}
+                      </div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <span className="font-bold text-gray-900">{tour.price} €</span>
+                    </td>
+                    <td className="py-4 px-6">
+                      <span className={`inline-flex px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
+                        tour.is_active 
+                          ? 'bg-green-100 text-green-700' 
+                          : 'bg-red-100 text-red-700'
+                      }`}>
+                        {tour.is_active ? 'Activo' : 'Oculto'}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-right whitespace-nowrap">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => navigate(`/admin/tours/${tour.id}`)}
+                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Editar"
+                        >
+                          <Edit2 className="w-5 h-5" />
+                        </button>
+                        <button
+                          onClick={() => deleteTour(tour.id)}
+                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Eliminar"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
