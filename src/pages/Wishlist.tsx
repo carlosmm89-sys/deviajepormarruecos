@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Tour } from '../types';
 import { dbService } from '../services/dbService';
 import { useWishlist } from '../hooks/useWishlist';
+import { useCurrency } from '../context/CurrencyContext';
 import { Heart, Clock, MapPin, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -10,6 +11,7 @@ export default function Wishlist() {
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
   const { favorites, toggleFavorite } = useWishlist();
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     async function fetchTours() {
@@ -100,7 +102,7 @@ export default function Wishlist() {
 
                   <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between">
                     <div>
-                      <span className="text-brand-primary font-bold text-2xl">{tour.price}€</span>
+                      <span className="text-brand-primary font-bold text-2xl">{formatPrice(tour.price)}</span>
                       <span className="text-gray-500 text-sm ml-1">/ pers</span>
                     </div>
                     <Link

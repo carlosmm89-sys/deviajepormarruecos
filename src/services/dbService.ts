@@ -1,6 +1,31 @@
 import { supabase } from '../lib/supabase';
 import { Destination, Tour, Lead, BusinessSettings, BlogPost } from '../types';
 
+// Translation Interceptor
+const applyTranslations = <T extends any>(data: T): T => {
+  if (!data) return data;
+  
+  // Get active language from localStorage (synced with LanguageContext)
+  const lang = typeof window !== 'undefined' ? (localStorage.getItem('app_language') || 'es') : 'es';
+  
+  // Spanish is the base language, no merge needed
+  if (lang === 'es') return data;
+
+  const mergeItem = (item: any) => {
+    if (item && typeof item === 'object' && item.translations && item.translations[lang]) {
+      // Overwrite base fields with the translated fields
+      return { ...item, ...item.translations[lang] };
+    }
+    return item;
+  };
+
+  if (Array.isArray(data)) {
+    return data.map(mergeItem) as T;
+  }
+  
+  return mergeItem(data) as T;
+};
+
 export const dbService = {
   // Storage
   uploadImage: async (file: File | Blob): Promise<string> => {
@@ -32,12 +57,12 @@ export const dbService = {
   },
 
   // Destinations
-  getDestinations: async (): Promise<Destination[]> => {
+  getDestinations: async (adminView = false): Promise<Destination[]> => {
     const { data, error } = await supabase.from('destinations').select('*').order('created_at', { ascending: false });
     if (error) throw error;
-    return data;
+    return adminView ? data : applyTranslations(data);
   },
-  getDestination: async (id: string): Promise<Destination | null> => {
+  getDestination: async (id: string, adminView = false): Promise<Destination | null> => {
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
     let query = supabase.from('destinations').select('*');
     
@@ -49,7 +74,7 @@ export const dbService = {
     
     const { data, error } = await query.single();
     if (error) return null;
-    return data;
+    return adminView ? data : applyTranslations(data);
   },
   saveDestination: async (destination: Partial<Destination>): Promise<Destination> => {
     const { data, error } = await supabase.from('destinations').upsert([destination]).select().single();
@@ -62,12 +87,12 @@ export const dbService = {
   },
 
   // Tours
-  getTours: async (): Promise<Tour[]> => {
+  getTours: async (adminView = false): Promise<Tour[]> => {
     const { data, error } = await supabase.from('tours').select('*, destinations(*)').order('created_at', { ascending: false });
     if (error) throw error;
-    return data;
+    return adminView ? data : applyTranslations(data);
   },
-  getTour: async (id: string): Promise<Tour | null> => {
+  getTour: async (id: string, adminView = false): Promise<Tour | null> => {
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
     let query = supabase.from('tours').select('*, destinations(*)');
     
@@ -79,12 +104,12 @@ export const dbService = {
 
     const { data, error } = await query.single();
     if (error) return null;
-    return data;
+    return adminView ? data : applyTranslations(data);
   },
-  getToursByDestination: async (destinationId: string): Promise<Tour[]> => {
+  getToursByDestination: async (destinationId: string, adminView = false): Promise<Tour[]> => {
     const { data, error } = await supabase.from('tours').select('*').eq('destination_id', destinationId);
     if (error) throw error;
-    return data;
+    return adminView ? data : applyTranslations(data);
   },
   saveTour: async (tour: Partial<Tour>): Promise<Tour> => {
     const { data, error } = await supabase.from('tours').upsert([tour]).select().single();
@@ -148,7 +173,7 @@ export const dbService = {
     }
     const { data, error } = await query;
     if (error) throw error;
-    return data;
+    return adminView ? data : applyTranslations(data); // Admin view needs raw translations object to edit it
   },
   getBlogPost: async (slugOrId: string, adminView = false): Promise<BlogPost | null> => {
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slugOrId);
@@ -160,7 +185,7 @@ export const dbService = {
     
     const { data, error } = await query.single();
     if (error) return null;
-    return data;
+    return adminView ? data : applyTranslations(data); // Admin view needs raw translations object
   },
   saveBlogPost: async (post: Partial<BlogPost>): Promise<BlogPost> => {
     const { data, error } = await supabase.from('blog_posts').upsert([post]).select().single();

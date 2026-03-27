@@ -11,6 +11,7 @@ import ImageGalleryModal from '../components/ImageGalleryModal';
 import ReviewsModal from '../components/ReviewsModal';
 import { useWishlist } from '../hooks/useWishlist';
 import { usePageViews } from '../hooks/usePageViews';
+import { useCurrency } from '../context/CurrencyContext';
 
 const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,6 +43,7 @@ export default function TourDetail() {
   const [isReviewsOpen, setIsReviewsOpen] = useState(false);
   
   const { isFavorite, toggleFavorite } = useWishlist();
+  const { formatPrice } = useCurrency();
   
   usePageViews('tour', tour?.id);
 
@@ -270,7 +272,7 @@ export default function TourDetail() {
           <div className="space-y-8">
             <div className="flex items-center gap-3">
               <div className="w-1 h-8 bg-brand-accent rounded-full" />
-                <div className="text-4xl font-black text-gray-900">{tour.price} €</div>
+                <div className="text-4xl font-black text-gray-900">{formatPrice(tour.price)}</div>
             </div>
             <div 
               className="prose prose-sm max-w-none text-gray-600 break-words w-full overflow-hidden [&_p]:whitespace-normal"

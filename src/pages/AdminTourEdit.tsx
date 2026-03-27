@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Destination, Tour } from '../types';
-import { Save, Image as ImageIcon, CheckCircle, AlertCircle, List, Backpack, ArrowLeft, DollarSign } from 'lucide-react';
+import { Save, Image as ImageIcon, CheckCircle, AlertCircle, List, Backpack, ArrowLeft, DollarSign, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,6 +10,7 @@ import { dbService } from '../services/dbService';
 import ImageUpload from '../components/ImageUpload';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
+import { Language } from '../context/LanguageContext';
 
 const tourSchema = z.object({
   title: z.string().min(1, 'El título es requerido').max(200),
@@ -31,6 +32,7 @@ const tourSchema = z.object({
   itinerary_image: z.string(),
   price: z.number().min(0, 'Positivo'),
   is_active: z.boolean().default(true),
+  translations: z.any().optional(),
 });
 
 type TourFormData = z.infer<typeof tourSchema>;
@@ -51,6 +53,7 @@ export default function AdminTourEdit() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<Language>('es');
 
   const isNew = id === 'new';
 
@@ -60,7 +63,7 @@ export default function AdminTourEdit() {
       title: '', slug: '', destination_id: '', category: 'Aventura', featured_image: '',
       gallery: [''], departure_city: '', departure_time: '', meeting_point: '', meeting_time: '',
       description_includes: '', description_excludes: '', recommendations: '', itinerary_summary: '',
-      itinerary_details: '', map_iframe: '', itinerary_image: '', price: 0, is_active: true
+      itinerary_details: '', map_iframe: '', itinerary_image: '', price: 0, is_active: true, translations: {}
     }
   });
 
@@ -73,11 +76,11 @@ export default function AdminTourEdit() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const dests = await dbService.getDestinations();
+      const dests = await dbService.getDestinations(true);
       setDestinations(dests);
 
       if (!isNew && id) {
-        const data = await dbService.getTours();
+        const data = await dbService.getTours(true);
         const tour = data.find(t => t.id === id);
         if (tour) {
           setValue('title', tour.title);
@@ -99,6 +102,7 @@ export default function AdminTourEdit() {
           setValue('itinerary_image', tour.itinerary_image || '');
           setValue('price', tour.price);
           setValue('is_active', tour.is_active);
+          setValue('translations', tour.translations || {});
         } else {
           setError('Tour no encontrado.');
         }
@@ -163,14 +167,38 @@ export default function AdminTourEdit() {
         className="bg-white rounded-[2rem] overflow-hidden shadow-xl border border-gray-100 p-8"
       >
         <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-8">
+          <div className="flex gap-2 p-1 bg-gray-100 rounded-lg w-max mb-6">
+            {(['es', 'en', 'fr'] as Language[]).map((lang) => (
+              <button
+                key={lang}
+                type="button"
+                onClick={() => setActiveTab(lang)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-bold uppercase transition-all ${
+                  activeTab === lang 
+                    ? 'bg-white text-brand-primary shadow-sm' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <Globe className="w-3.5 h-3.5" />
+                {lang}
+              </button>
+            ))}
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {/* Left Column: Basic Info */}
             <div className="space-y-6">
-              <div className="space-y-1">
-                <label className="text-sm font-semibold text-gray-700">Título del Tour</label>
-                <input {...register('title')} className="input-field" placeholder="Ej: Aventura en el Desierto" />
-                {errors.title && <p className="text-xs text-red-500">{errors.title.message}</p>}
-              </div>
+              {activeTab === 'es' ? (
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700">Título del Tour (Español)</label>
+                  <input {...register('title')} className="input-field" placeholder="Ej: Aventura en el Desierto" />
+                  {errors.title && <p className="text-xs text-red-500">{errors.title.message}</p>}
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700">Título ({activeTab.toUpperCase()})</label>
+                  <input {...register(`translations.${activeTab}.title` as any)} className="input-field" placeholder="Traducción opcional..." />
+                </div>
+              )}
 
               <div className="space-y-1">
                 <label className="text-sm font-semibold text-gray-700">Slug</label>
@@ -213,21 +241,43 @@ export default function AdminTourEdit() {
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-sm font-semibold text-gray-700">Resumen Itinerario</label>
-                <input {...register('itinerary_summary')} className="input-field" placeholder="Ej: 3 Días / 2 Noches" />
-              </div>
+              {activeTab === 'es' ? (
+                <>
+                  <div className="space-y-1">
+                    <label className="text-sm font-semibold text-gray-700">Resumen Itinerario (Español)</label>
+                    <input {...register('itinerary_summary')} className="input-field" placeholder="Ej: 3 Días / 2 Noches" />
+                  </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-sm font-semibold text-gray-700">Ciudad de Salida</label>
-                  <input {...register('departure_city')} className="input-field" placeholder="Ej: Marrakech" />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-sm font-semibold text-gray-700">Hora de Salida</label>
-                  <input {...register('departure_time')} className="input-field" placeholder="Ej: 08:00 AM" />
-                </div>
-              </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-sm font-semibold text-gray-700">Ciudad de Salida (Español)</label>
+                      <input {...register('departure_city')} className="input-field" placeholder="Ej: Marrakech" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-sm font-semibold text-gray-700">Hora de Salida (Español)</label>
+                      <input {...register('departure_time')} className="input-field" placeholder="Ej: 08:00 AM" />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="space-y-1">
+                    <label className="text-sm font-semibold text-gray-700">Resumen Itinerario ({activeTab.toUpperCase()})</label>
+                    <input {...register(`translations.${activeTab}.itinerary_summary` as any)} className="input-field" placeholder="Traducción opcional..." />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-sm font-semibold text-gray-700">Ciudad de Salida ({activeTab.toUpperCase()})</label>
+                      <input {...register(`translations.${activeTab}.departure_city` as any)} className="input-field" placeholder="Traducción opcional..." />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-sm font-semibold text-gray-700">Hora de Salida ({activeTab.toUpperCase()})</label>
+                      <input {...register(`translations.${activeTab}.departure_time` as any)} className="input-field" placeholder="Traducción opcional..." />
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Right Column: Media & Highlights */}
@@ -296,10 +346,10 @@ export default function AdminTourEdit() {
                   <ReactQuill 
                       theme="snow"
                       modules={quillModules}
-                      value={watch('description_includes')}
-                      onChange={(content) => setValue('description_includes', content)}
+                      value={activeTab === 'es' ? watch('description_includes') : watch(`translations.${activeTab}.description_includes` as any)}
+                      onChange={(content) => setValue(activeTab === 'es' ? 'description_includes' : `translations.${activeTab}.description_includes` as any, content)}
                       className="h-full bg-white rounded-lg"
-                      placeholder="Escribe lo que incluye..."
+                      placeholder={activeTab === 'es' ? "Escribe lo que incluye..." : "Traducción opcional..."}
                   />
                 </div>
               </div>
@@ -312,10 +362,10 @@ export default function AdminTourEdit() {
                   <ReactQuill 
                       theme="snow"
                       modules={quillModules}
-                      value={watch('description_excludes')}
-                      onChange={(content) => setValue('description_excludes', content)}
+                      value={activeTab === 'es' ? watch('description_excludes') : watch(`translations.${activeTab}.description_excludes` as any)}
+                      onChange={(content) => setValue(activeTab === 'es' ? 'description_excludes' : `translations.${activeTab}.description_excludes` as any, content)}
                       className="h-full bg-white rounded-lg"
-                      placeholder="Escribe lo que NO incluye..."
+                      placeholder={activeTab === 'es' ? "Escribe lo que NO incluye..." : "Traducción opcional..."}
                   />
                 </div>
               </div>
@@ -329,10 +379,10 @@ export default function AdminTourEdit() {
                   <ReactQuill 
                       theme="snow"
                       modules={quillModules}
-                      value={watch('itinerary_details')}
-                      onChange={(content) => setValue('itinerary_details', content)}
+                      value={activeTab === 'es' ? watch('itinerary_details') : watch(`translations.${activeTab}.itinerary_details` as any)}
+                      onChange={(content) => setValue(activeTab === 'es' ? 'itinerary_details' : `translations.${activeTab}.itinerary_details` as any, content)}
                       className="h-full bg-white rounded-lg"
-                      placeholder="Describe la ruta o itinerario completo..."
+                      placeholder={activeTab === 'es' ? "Describe la ruta o itinerario completo..." : "Traducción opcional..."}
                   />
                 </div>
             </div>
@@ -345,10 +395,10 @@ export default function AdminTourEdit() {
                   <ReactQuill 
                       theme="snow"
                       modules={quillModules}
-                      value={watch('recommendations')}
-                      onChange={(content) => setValue('recommendations', content)}
+                      value={activeTab === 'es' ? watch('recommendations') : watch(`translations.${activeTab}.recommendations` as any)}
+                      onChange={(content) => setValue(activeTab === 'es' ? 'recommendations' : `translations.${activeTab}.recommendations` as any, content)}
                       className="h-full bg-white rounded-lg"
-                      placeholder="Recomendaciones para el viaje..."
+                      placeholder={activeTab === 'es' ? "Recomendaciones para el viaje..." : "Traducción opcional..."}
                   />
                 </div>
             </div>

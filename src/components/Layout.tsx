@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Compass, Map, User, LogOut, Menu, X, Shield, Heart, BookOpen } from 'lucide-react';
+import { Compass, Map, User, LogOut, Menu, X, Shield, Heart, BookOpen, Globe, DollarSign, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { dbService } from '../services/dbService';
 import { BusinessSettings } from '../types';
+import { useTranslation } from '../hooks/useTranslation';
+import { useLanguage, Language } from '../context/LanguageContext';
+import { useCurrency, CurrencyCode } from '../context/CurrencyContext';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, signIn, signOut } = useAuth();
@@ -12,6 +15,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = React.useState<BusinessSettings | null>(null);
   const location = useLocation();
   const isAdminLoggedIn = user?.role === 'admin';
+
+  const { t } = useTranslation();
+  const { language, setLanguage } = useLanguage();
+  const { currencyCode, setCurrencyCode } = useCurrency();
+  const [isI18nOpen, setIsI18nOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.i18n-dropdown-container')) {
+        setIsI18nOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
 
   React.useEffect(() => {
     dbService.getBusinessSettings().then(data => {
@@ -31,10 +50,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, []);
 
   const navLinks = [
-    { name: 'Inicio', path: '/', icon: Compass },
-    { name: 'Destinos', path: '/destinations', icon: Map },
-    { name: 'Blog', path: '/blog', icon: BookOpen },
-    { name: 'Favoritos', path: '/favoritos', icon: Heart },
+    { name: t('nav_home'), path: '/', icon: Compass },
+    { name: t('nav_destinations'), path: '/destinations', icon: Map },
+    { name: t('nav_blog'), path: '/blog', icon: BookOpen },
+    { name: t('nav_favorites'), path: '/favoritos', icon: Heart },
   ];
 
   const handleLogout = async () => {
@@ -75,7 +94,61 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </Link>
               ))}
 
-              <div className="flex items-center space-x-6 ml-4 pl-8 border-l border-gray-200">
+              <div className="flex items-center space-x-6 ml-4 pl-4 border-l border-gray-200">
+                {/* FORCE VITE HMR UPDATE - Context Dropdown (Lang / Currency) */}
+                <div className="relative i18n-dropdown-container flex items-center">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setIsI18nOpen(!isI18nOpen); }}
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors text-sm font-bold text-gray-700"
+                  >
+                    <Globe className="w-4 h-4" />
+                    <span className="uppercase">{language}</span>
+                    <span className="text-gray-300">|</span>
+                    <span>{currencyCode}</span>
+                    <ChevronDown className={`w-3 h-3 transition-transform ${isI18nOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {isI18nOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 p-2"
+                      >
+                        <div className="p-2">
+                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-2">Idioma</p>
+                          <div className="grid grid-cols-1 gap-1">
+                            {(['es', 'en', 'fr'] as Language[]).map((l) => (
+                              <button
+                                key={l}
+                                onClick={() => { setLanguage(l); setIsI18nOpen(false); }}
+                                className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${language === l ? 'bg-brand-primary/10 text-brand-primary' : 'hover:bg-gray-50 text-gray-700'}`}
+                              >
+                                <span>{l === 'es' ? '🇪🇸 Español' : l === 'en' ? '🇬🇧 English' : '🇫🇷 Français'}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="p-2 border-t border-gray-50 mt-1 pt-3">
+                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-2">Moneda</p>
+                          <div className="grid grid-cols-2 gap-1">
+                            {(['EUR', 'USD', 'GBP', 'MAD'] as CurrencyCode[]).map((c) => (
+                              <button
+                                key={c}
+                                onClick={() => { setCurrencyCode(c); setIsI18nOpen(false); }}
+                                className={`flex items-center justify-center py-2 text-sm font-bold rounded-xl transition-colors ${currencyCode === c ? 'bg-brand-accent/10 text-brand-accent' : 'hover:bg-gray-50 text-gray-700'}`}
+                              >
+                                {c}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
                 {isAdminLoggedIn ? (
                   <>
                     <Link 
@@ -135,6 +208,37 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <span>{link.name}</span>
                   </Link>
                 ))}
+
+                <div className="grid grid-cols-2 gap-4 py-4 border-y border-gray-100">
+                  <div>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Idioma</p>
+                    <div className="flex flex-wrap gap-2">
+                      {(['es', 'en', 'fr'] as Language[]).map((l) => (
+                        <button
+                          key={l}
+                          onClick={() => setLanguage(l)}
+                          className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors uppercase ${language === l ? 'bg-brand-primary text-white' : 'bg-gray-100 text-gray-600'}`}
+                        >
+                          {l}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Divisa</p>
+                    <div className="flex flex-wrap gap-2">
+                       {(['EUR', 'USD', 'GBP', 'MAD'] as CurrencyCode[]).map((c) => (
+                        <button
+                          key={c}
+                          onClick={() => setCurrencyCode(c)}
+                          className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors ${currencyCode === c ? 'bg-brand-accent text-white' : 'bg-gray-100 text-gray-600'}`}
+                        >
+                          {c}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
                 
                 {isAdminLoggedIn ? (
                   <>

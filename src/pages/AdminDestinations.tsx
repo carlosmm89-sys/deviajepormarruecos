@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Destination } from '../types';
-import { Plus, Trash2, Edit2, X, Save, Image as ImageIcon, AlertCircle } from 'lucide-react';
+import { Plus, Trash2, Edit2, X, Save, Image as ImageIcon, AlertCircle, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { dbService } from '../services/dbService';
 import ImageUpload from '../components/ImageUpload';
+import { Language } from '../context/LanguageContext';
 
 const destinationSchema = z.object({
   name: z.string().min(1, 'El nombre es requerido').max(100),
@@ -15,6 +16,7 @@ const destinationSchema = z.object({
   description: z.string().min(1, 'La descripción es requerida').max(5000),
   image_url: z.string().url('URL de imagen inválida'),
   featured: z.boolean().optional(),
+  translations: z.any().optional(),
 });
 
 type DestinationFormData = z.infer<typeof destinationSchema>;
@@ -25,6 +27,7 @@ export default function AdminDestinations() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<Language>('es');
 
   const { register, handleSubmit, reset, setValue, control, formState: { errors } } = useForm<DestinationFormData>({
     resolver: zodResolver(destinationSchema),
@@ -36,7 +39,7 @@ export default function AdminDestinations() {
 
   const fetchDestinations = async () => {
     try {
-      const data = await dbService.getDestinations();
+      const data = await dbService.getDestinations(true);
       setDestinations(data);
     } catch (err) {
       console.error(err);
@@ -72,6 +75,7 @@ export default function AdminDestinations() {
 
   const openModal = (dest?: Destination) => {
     setError(null);
+    setActiveTab('es');
     if (dest) {
       setEditingId(dest.id);
       setValue('name', dest.name);
@@ -79,9 +83,17 @@ export default function AdminDestinations() {
       setValue('description', dest.description);
       setValue('image_url', dest.image_url);
       setValue('featured', dest.featured);
+      setValue('translations', dest.translations || {});
     } else {
       setEditingId(null);
-      reset();
+      reset({
+        name: '',
+        slug: '',
+        description: '',
+        image_url: '',
+        featured: false,
+        translations: {},
+      });
     }
     setIsModalOpen(true);
   };
@@ -169,18 +181,66 @@ export default function AdminDestinations() {
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-sm font-semibold text-gray-700">Nombre</label>
-                      <input {...register('name')} className="input-field" placeholder="Ej: Marrakech" />
-                      {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-sm font-semibold text-gray-700">Slug</label>
-                      <input {...register('slug')} className="input-field" placeholder="Ej: marrakech" />
-                      {errors.slug && <p className="text-xs text-red-500">{errors.slug.message}</p>}
-                    </div>
+                  <div className="flex gap-2 p-1 bg-gray-100 rounded-lg w-max mb-6">
+                    {(['es', 'en', 'fr'] as Language[]).map((lang) => (
+                      <button
+                        key={lang}
+                        type="button"
+                        onClick={() => setActiveTab(lang)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-bold uppercase transition-all ${
+                          activeTab === lang 
+                            ? 'bg-white text-brand-primary shadow-sm' 
+                            : 'text-gray-500 hover:text-gray-700'
+                        }`}
+                      >
+                        <Globe className="w-3.5 h-3.5" />
+                        {lang}
+                      </button>
+                    ))}
                   </div>
+
+                  {activeTab === 'es' ? (
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                          <label className="text-sm font-semibold text-gray-700">Nombre (Español) *</label>
+                          <input {...register('name')} className="input-field" placeholder="Ej: Marrakech" />
+                          {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-sm font-semibold text-gray-700">Slug (URL)</label>
+                          <input {...register('slug')} className="input-field" placeholder="Ej: marrakech" />
+                          {errors.slug && <p className="text-xs text-red-500">{errors.slug.message}</p>}
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-sm font-semibold text-gray-700">Descripción (Español) *</label>
+                        <textarea
+                          {...register('description')}
+                          className="input-field min-h-[150px] resize-none"
+                          placeholder="Describe este destino..."
+                        />
+                        {errors.description && <p className="text-xs text-red-500">{errors.description.message}</p>}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="space-y-1">
+                        <label className="text-sm font-semibold text-gray-700">Nombre ({activeTab.toUpperCase()})</label>
+                        <input {...register(`translations.${activeTab}.name`)} className="input-field" placeholder="Traducción opcional..." />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-sm font-semibold text-gray-700">Descripción ({activeTab.toUpperCase()})</label>
+                        <textarea
+                          {...register(`translations.${activeTab}.description`)}
+                          className="input-field min-h-[150px] resize-none"
+                          placeholder="Traducción opcional..."
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  <hr className="border-gray-100 my-6" />
 
                   <div className="space-y-1">
                     <Controller
@@ -196,17 +256,6 @@ export default function AdminDestinations() {
                     />
                     {errors.image_url && <p className="text-xs text-red-500 font-medium">{errors.image_url.message}</p>}
                   </div>
-
-                  <div className="space-y-1">
-                    <label className="text-sm font-semibold text-gray-700">Descripción</label>
-                    <textarea
-                      {...register('description')}
-                      className="input-field min-h-[150px] resize-none"
-                      placeholder="Describe este destino..."
-                    />
-                    {errors.description && <p className="text-xs text-red-500">{errors.description.message}</p>}
-                  </div>
-                  
                   <div className="flex items-center gap-2">
                     <input type="checkbox" {...register('featured')} id="featured" />
                     <label htmlFor="featured" className="text-sm font-semibold text-gray-700">Destacar en inicio</label>

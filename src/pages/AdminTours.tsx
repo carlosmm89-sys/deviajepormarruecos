@@ -17,8 +17,8 @@ export default function AdminTours() {
 
   const fetchData = async () => {
     try {
-      const data = await dbService.getTours();
-      const dests = await dbService.getDestinations();
+      const data = await dbService.getTours(true);
+      const dests = await dbService.getDestinations(true);
       setTours(data);
       setDestinations(dests);
     } catch (err) {

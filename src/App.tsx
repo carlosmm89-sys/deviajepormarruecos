@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
+import { CurrencyProvider } from './context/CurrencyContext';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Destinations from './pages/Destinations';
@@ -23,7 +25,9 @@ import AdminTourEdit from './pages/AdminTourEdit';
 export default function App() {
   return (
     <AuthProvider>
-      <Router>
+      <LanguageProvider>
+        <CurrencyProvider>
+          <Router>
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -51,6 +55,8 @@ export default function App() {
           </Routes>
         </Layout>
       </Router>
+      </CurrencyProvider>
+      </LanguageProvider>
     </AuthProvider>
   );
 }

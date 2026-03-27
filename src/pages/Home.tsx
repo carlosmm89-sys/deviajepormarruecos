@@ -7,11 +7,16 @@ import { dbService } from '../services/dbService';
 import { BusinessSettings } from '../types';
 import WidgetRenderer from '../components/WidgetRenderer';
 import { usePageViews } from '../hooks/usePageViews';
+import { useTranslation } from '../hooks/useTranslation';
+import { useCurrency } from '../context/CurrencyContext';
 
 export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [featuredTours, setFeaturedTours] = useState<Tour[]>([]);
   const [settings, setSettings] = useState<BusinessSettings | null>(null);
+  
+  const { t } = useTranslation();
+  const { formatPrice } = useCurrency();
 
   usePageViews('home');
 
@@ -51,7 +56,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             className="text-6xl md:text-8xl font-serif font-bold leading-tight"
           >
-            Vive la magia de <br /> Marruecos
+            {t('home_hero_title')}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 30 }}
@@ -59,7 +64,7 @@ export default function Home() {
             transition={{ delay: 0.1 }}
             className="text-xl md:text-2xl font-light max-w-2xl mx-auto"
           >
-            Desde las dunas del Sahara hasta los zocos de Marrakech. Tu aventura comienza aquí.
+            {t('home_hero_subtitle')}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -68,7 +73,7 @@ export default function Home() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link to="/destinations" className="btn-primary bg-white text-brand-primary hover:bg-gray-100 px-10 py-4 text-lg">
-              Explorar Destinos
+              {t('btn_all_destinations')}
             </Link>
           </motion.div>
         </div>
@@ -78,11 +83,10 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 space-y-12">
         <div className="flex justify-between items-end">
           <div className="space-y-2">
-            <h2 className="text-4xl font-bold">Destinos Populares</h2>
-            <p className="text-gray-500">Los lugares más buscados por nuestra comunidad.</p>
+            <h2 className="text-4xl font-bold">{t('home_featured_destinations')}</h2>
           </div>
           <Link to="/destinations" className="text-brand-accent font-semibold flex items-center gap-1 hover:gap-2 transition-all">
-            Ver todos <ArrowRight className="w-4 h-4" />
+            {t('btn_all_destinations')} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
@@ -124,8 +128,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 space-y-12">
         <div className="flex justify-between items-end">
           <div className="space-y-2">
-            <h2 className="text-4xl font-bold">Tours Destacados</h2>
-            <p className="text-gray-500">Experiencias únicas diseñadas para ti.</p>
+            <h2 className="text-4xl font-bold">{t('home_featured_tours')}</h2>
           </div>
         </div>
 
@@ -147,7 +150,7 @@ export default function Home() {
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl text-brand-primary font-bold shadow-sm">
-                    Desde {tour.price} €
+                    {t('tour_price_from')} {formatPrice(tour.price)}
                   </div>
                 </div>
                 <div className="p-8 space-y-4">

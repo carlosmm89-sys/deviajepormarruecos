@@ -6,6 +6,7 @@ export interface Destination {
   image_url: string;
   featured: boolean;
   views?: number;
+  translations?: Record<string, any>;
   meta_data: any;
   created_at: string;
   updated_at: string;
@@ -37,6 +38,7 @@ export interface Tour {
   price: number;
   is_active: boolean;
   views?: number;
+  translations?: Record<string, any>;
   created_at: string;
   updated_at: string;
 }
@@ -52,6 +54,7 @@ export interface BlogPost {
   published_at: string;
   is_published: boolean;
   views: number;
+  translations?: Record<string, any>;
 }
 
 export interface Lead {

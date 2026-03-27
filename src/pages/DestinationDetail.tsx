@@ -5,12 +5,14 @@ import { MapPin, Clock, Star, ArrowLeft, ChevronRight, Search, Filter, RotateCcw
 import { motion, AnimatePresence } from 'framer-motion';
 import { dbService } from '../services/dbService';
 import { usePageViews } from '../hooks/usePageViews';
+import { useCurrency } from '../context/CurrencyContext';
 
 export default function DestinationDetail() {
   const { id } = useParams<{ id: string }>();
   const [destination, setDestination] = useState<Destination | null>(null);
   const [allTours, setAllTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
+  const { formatPrice } = useCurrency();
 
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -158,7 +160,7 @@ export default function DestinationDetail() {
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-brand-primary"
                 />
                 <div className="text-sm font-medium text-gray-500">
-                  0€ - {maxPrice}€
+                  {formatPrice(0)} - {formatPrice(maxPrice)}
                 </div>
               </div>
 
@@ -247,7 +249,7 @@ export default function DestinationDetail() {
 
                         <div className="p-6 pt-0 mt-auto flex items-center justify-between w-full">
                           <div className="font-bold text-base text-[#1e293b]">
-                            A partir de {tour.price}€
+                            A partir de {formatPrice(tour.price)}
                           </div>
                           <div className="px-6 py-2.5 bg-black text-white text-sm font-bold rounded-full hover:bg-gray-800 transition-colors">
                             Información

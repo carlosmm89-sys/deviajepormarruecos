@@ -8,6 +8,7 @@ import { dbService } from '../services/dbService';
 import ImageUpload from '../components/ImageUpload';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
+import { Language } from '../context/LanguageContext';
 
 const blogSchema = z.object({
   title: z.string().min(1, 'El título es obligatorio'),
@@ -17,6 +18,7 @@ const blogSchema = z.object({
   cover_image: z.string().optional().nullable(),
   author: z.string().min(1, 'El autor es obligatorio'),
   is_published: z.boolean(),
+  translations: z.any().optional(),
 });
 
 type BlogFormData = z.infer<typeof blogSchema>;
@@ -36,6 +38,7 @@ export default function AdminBlogEdit() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState<Language>('es');
   
   const isNew = !id;
 
@@ -49,6 +52,7 @@ export default function AdminBlogEdit() {
       cover_image: null,
       author: 'Marruecos Experiencia',
       is_published: true,
+      translations: {},
     }
   });
 
@@ -76,10 +80,10 @@ export default function AdminBlogEdit() {
             setValue('title', post.title);
             setValue('slug', post.slug);
             setValue('excerpt', post.excerpt || '');
-            setValue('content', post.content);
             setValue('cover_image', post.cover_image);
             setValue('author', post.author);
             setValue('is_published', post.is_published);
+            setValue('translations', post.translations || {});
           } else {
             navigate('/admin/blog');
           }
@@ -151,16 +155,6 @@ export default function AdminBlogEdit() {
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Título del Artículo</label>
-            <input
-              {...register('title')}
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors"
-              placeholder="Ej: 5 Consejos para visitar Marrakech"
-            />
-            {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">Slug (URL SEO)</label>
@@ -187,15 +181,72 @@ export default function AdminBlogEdit() {
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Extracto (Resumen SEO corto)</label>
-            <textarea
-              {...register('excerpt')}
-              rows={3}
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors resize-none"
-              placeholder="Breve descripción que aparecerá en las tarjetas y en Google..."
-            />
+          <hr className="border-gray-100 my-6" />
+
+          <div className="flex gap-2 p-1 bg-gray-100 rounded-lg w-max mb-6">
+            {(['es', 'en', 'fr'] as Language[]).map((lang) => (
+              <button
+                key={lang}
+                type="button"
+                onClick={() => setActiveTab(lang)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-bold uppercase transition-all ${
+                  activeTab === lang 
+                    ? 'bg-white text-brand-primary shadow-sm' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <Globe className="w-3.5 h-3.5" />
+                {lang}
+              </button>
+            ))}
           </div>
+
+          {activeTab === 'es' ? (
+            <>
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Título del Artículo (Español) *</label>
+                <input
+                  {...register('title')}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors"
+                  placeholder="Ej: 5 Consejos para visitar Marrakech"
+                />
+                {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Extracto (Español) *</label>
+                <textarea
+                  {...register('excerpt')}
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors resize-none"
+                  placeholder="Breve descripción que aparecerá en las tarjetas y en Google..."
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Título ({activeTab.toUpperCase()})</label>
+                <input
+                  {...register(`translations.${activeTab}.title`)}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors"
+                  placeholder="Traducción opcional..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Extracto ({activeTab.toUpperCase()})</label>
+                <textarea
+                  {...register(`translations.${activeTab}.excerpt`)}
+                  rows={3}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors resize-none"
+                  placeholder="Traducción opcional..."
+                />
+              </div>
+            </>
+          )}
+
+          <hr className="border-gray-100 my-6" />
 
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">Imagen de Portada</label>
@@ -216,26 +267,63 @@ export default function AdminBlogEdit() {
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
           <h2 className="text-xl font-bold text-gray-900 border-l-4 border-brand-accent pl-3">Contenido del Artículo</h2>
           
-          <div className="prose-edit-container">
-            <Controller
-              name="content"
-              control={control}
-              render={({ field }) => (
-                <ReactQuill 
-                  theme="snow"
-                  value={field.value}
-                  onChange={field.onChange}
-                  modules={quillModules}
-                  className="bg-white rounded-xl mb-12"
-                  placeholder="Empieza a escribir tu increíble artículo..."
-                />
-              )}
-            />
-            {errors.content && <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>}
+          <div className="flex gap-2 p-1 bg-gray-100 rounded-lg w-max mb-6">
+            {(['es', 'en', 'fr'] as Language[]).map((lang) => (
+              <button
+                key={`content-tab-${lang}`}
+                type="button"
+                onClick={() => setActiveTab(lang)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-bold uppercase transition-all ${
+                  activeTab === lang 
+                    ? 'bg-white text-brand-primary shadow-sm' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <Globe className="w-3.5 h-3.5" />
+                {lang}
+              </button>
+            ))}
           </div>
+
+          {activeTab === 'es' ? (
+            <div className="prose-edit-container">
+              <Controller
+                name="content"
+                control={control}
+                render={({ field }) => (
+                  <ReactQuill 
+                    theme="snow"
+                    value={field.value}
+                    onChange={field.onChange}
+                    modules={quillModules}
+                    className="bg-white rounded-xl mb-12"
+                    placeholder="Empieza a escribir tu increíble artículo..."
+                  />
+                )}
+              />
+              {errors.content && <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>}
+            </div>
+          ) : (
+             <div className="prose-edit-container">
+              <Controller
+                name={`translations.${activeTab}.content` as "content"}
+                control={control}
+                render={({ field }) => (
+                  <ReactQuill 
+                    theme="snow"
+                    value={field.value || ''}
+                    onChange={field.onChange}
+                    modules={quillModules}
+                    className="bg-white rounded-xl mb-12"
+                    placeholder={`Traducción del contenido en ${activeTab.toUpperCase()}...`}
+                  />
+                )}
+              />
+            </div>
+          )}
         </div>
 
-        <div className="flex justify-end gap-4 sticky bottom-8 bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-gray-200 shadow-lg">
+        <div className="flex justify-end gap-4 sticky bottom-8 bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-gray-200 shadow-lg z-10">
           <Link
             to="/admin/blog"
             className="px-6 py-3 font-bold text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
