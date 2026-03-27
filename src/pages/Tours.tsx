@@ -20,7 +20,10 @@ export default function Tours() {
 
   const categories = [
     'Todos', 
-    'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa'
+    'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa',
+    'Viajes Exclusivos', 'Viajes de Lujo', 'Viajes en Grupo',
+    'Luna de Miel', 'Entrega de Anillo', 'Viajes en Familia',
+    'Paquetes', 'Actividades'
   ];
 
   const { formatPrice } = useCurrency();

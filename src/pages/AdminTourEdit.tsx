@@ -39,7 +39,10 @@ const tourSchema = z.object({
 type TourFormData = z.infer<typeof tourSchema>;
 
 const TOUR_CATEGORIES = [
-  'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa'
+  'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa',
+  'Viajes Exclusivos', 'Viajes de Lujo', 'Viajes en Grupo',
+  'Luna de Miel', 'Entrega de Anillo', 'Viajes en Familia', 
+  'Paquetes', 'Actividades'
 ];
 
 const quillModules = {
