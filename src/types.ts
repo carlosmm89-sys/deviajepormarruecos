@@ -27,6 +27,8 @@ export interface Tour {
   date_text: string;
   departure_city: string;
   departure_time: string;
+  return_city?: string;
+  return_time?: string;
   meeting_point: string;
   meeting_time: string;
   description_includes: string;

@@ -243,18 +243,30 @@ export default function TourDetail() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 py-8 border-y border-gray-100">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-gray-100">
               <div className="flex items-center gap-3">
-                <Clock className="w-5 h-5 text-brand-accent" />
-                <span className="text-sm font-medium text-gray-600">{tour.itinerary_summary}</span>
+                <Clock className="w-5 h-5 text-brand-accent shrink-0" />
+                <div className="flex flex-col">
+                  <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Duración</span>
+                  <span className="text-sm font-medium text-gray-900">{tour.itinerary_summary}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-brand-accent" />
-                <span className="text-sm font-medium text-gray-600">{tour.departure_city}</span>
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-gray-400 font-bold uppercase tracking-wider flex items-center gap-1"><MapPin className="w-3 h-3"/> Salida</span>
+                <span className="text-sm font-medium text-gray-900">{tour.departure_city} {tour.departure_time ? `• ${tour.departure_time}` : ''}</span>
               </div>
+              {tour.return_city && (
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs text-brand-primary font-bold uppercase tracking-wider flex items-center gap-1"><MapPin className="w-3 h-3"/> Regreso</span>
+                  <span className="text-sm font-medium text-gray-900">{tour.return_city} {tour.return_time ? `• ${tour.return_time}` : ''}</span>
+                </div>
+              )}
               <div className="flex items-center gap-3">
-                <MapIcon className="w-5 h-5 text-brand-accent" />
-                <span className="text-sm font-medium text-gray-600">{(tour as any).destinations?.name}</span>
+                <MapIcon className="w-5 h-5 text-brand-accent shrink-0" />
+                <div className="flex flex-col">
+                  <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Destino</span>
+                  <span className="text-sm font-medium text-gray-900">{(tour as any).destinations?.name}</span>
+                </div>
               </div>
             </div>
           </div>

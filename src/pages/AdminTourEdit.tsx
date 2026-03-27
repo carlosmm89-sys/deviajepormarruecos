@@ -17,11 +17,13 @@ const tourSchema = z.object({
   slug: z.string().min(1, 'Slug requerido'),
   destination_id: z.string().optional(),
   destination_ids: z.array(z.string()).min(1, 'Selecciona al menos un destino'),
-  category: z.string().min(1, 'Categoría requerida'),
+  category_ids: z.array(z.string()).min(1, 'Selecciona al menos una categoría'),
   featured_image: z.string().url('URL inválida').or(z.literal('')),
   gallery: z.array(z.string().url('URL inválida').or(z.literal(''))),
   departure_city: z.string(),
   departure_time: z.string(),
+  return_city: z.string().optional(),
+  return_time: z.string().optional(),
   meeting_point: z.string(),
   meeting_time: z.string(),
   description_includes: z.string(),
@@ -68,8 +70,8 @@ export default function AdminTourEdit() {
   const { register, control, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<TourFormData>({
     resolver: zodResolver(tourSchema) as any,
     defaultValues: {
-      title: '', slug: '', destination_id: '', destination_ids: [], category: 'Aventura', featured_image: '',
-      gallery: [''], departure_city: '', departure_time: '', meeting_point: '', meeting_time: '',
+      title: '', slug: '', destination_id: '', destination_ids: [], category_ids: ['Aventura'], featured_image: '',
+      gallery: [''], departure_city: '', departure_time: '', return_city: '', return_time: '', meeting_point: '', meeting_time: '',
       description_includes: '', description_excludes: '', recommendations: '', itinerary_summary: '',
       itinerary_details: '', map_iframe: '', itinerary_image: '', price: 0, is_active: true, translations: {}
     }
@@ -95,11 +97,13 @@ export default function AdminTourEdit() {
           setValue('slug', tour.slug);
           setValue('destination_id', tour.destination_id || '');
           setValue('destination_ids', tour.destination_ids && tour.destination_ids.length > 0 ? tour.destination_ids : (tour.destination_id ? [tour.destination_id] : []));
-          setValue('category', tour.category);
+          setValue('category_ids', tour.category ? tour.category.split(',').map(c => c.trim()) : ['Aventura']);
           setValue('featured_image', tour.featured_image || '');
           setValue('gallery', tour.gallery?.length ? tour.gallery : ['']);
           setValue('departure_city', tour.departure_city || '');
           setValue('departure_time', tour.departure_time || '');
+          setValue('return_city', tour.return_city || '');
+          setValue('return_time', tour.return_time || '');
           setValue('meeting_point', tour.meeting_point || '');
           setValue('meeting_time', tour.meeting_time || '');
           setValue('description_includes', tour.description_includes || '');
@@ -134,10 +138,21 @@ export default function AdminTourEdit() {
       // Remove empty gallery strings
       data.gallery = data.gallery.filter(g => g.trim() !== '');
 
+      // Prepare category string from multi-select
+      const finalCategory = data.category_ids.join(', ');
+      
+      const payload = {
+        ...data,
+        category: finalCategory,
+      };
+      
+      // Clean up virtual field before sending to DB so it doesn't fail
+      delete (payload as any).category_ids;
+
       if (!isNew && id) {
-        await dbService.saveTour({ ...data, id } as any);
+        await dbService.saveTour({ ...payload, id } as any);
       } else {
-        await dbService.saveTour(data as any);
+        await dbService.saveTour(payload as any);
       }
       navigate('/admin/tours');
     } catch (err: any) {
@@ -221,13 +236,22 @@ export default function AdminTourEdit() {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-sm font-semibold text-gray-700">Categoría</label>
-                  <select {...register('category')} className="input-field">
+                <div className="space-y-2 col-span-1 md:col-span-2">
+                  <label className="text-sm font-semibold text-gray-700">Categorías (Puedes seleccionar varias)</label>
+                  <div className="flex flex-wrap gap-2 mt-2">
                     {TOUR_CATEGORIES.map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
+                      <label key={cat} className="cursor-pointer flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-2 rounded-xl hover:bg-gray-100 transition-colors">
+                        <input
+                          type="checkbox"
+                          value={cat}
+                          {...register('category_ids')}
+                          className="w-4 h-4 text-brand-primary rounded"
+                        />
+                        <span className="text-sm font-medium text-gray-700">{cat}</span>
+                      </label>
                     ))}
-                  </select>
+                  </div>
+                  {errors.category_ids && <p className="text-xs text-red-500">{errors.category_ids.message}</p>}
                 </div>
                 <div className="space-y-2 col-span-1 md:col-span-2">
                   <label className="text-sm font-semibold text-gray-700">Destinos (Puedes seleccionar varios)</label>
@@ -267,14 +291,22 @@ export default function AdminTourEdit() {
                     <input {...register('itinerary_summary')} className="input-field" placeholder="Ej: 3 Días / 2 Noches" />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="space-y-1">
-                      <label className="text-sm font-semibold text-gray-700">Ciudad de Salida (Español)</label>
+                      <label className="text-sm font-semibold text-gray-700">Ciudad de Salida</label>
                       <input {...register('departure_city')} className="input-field" placeholder="Ej: Marrakech" />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-sm font-semibold text-gray-700">Hora de Salida (Español)</label>
+                      <label className="text-sm font-semibold text-gray-700">Hora de Salida</label>
                       <input {...register('departure_time')} className="input-field" placeholder="Ej: 08:00 AM" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-sm font-semibold text-gray-700">Ciudad de Regreso</label>
+                      <input {...register('return_city')} className="input-field" placeholder="Ej: Fez" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-sm font-semibold text-gray-700">Hora Llegada</label>
+                      <input {...register('return_time')} className="input-field" placeholder="Ej: 19:00 PM" />
                     </div>
                   </div>
                 </>
@@ -285,14 +317,22 @@ export default function AdminTourEdit() {
                     <input {...register(`translations.${activeTab}.itinerary_summary` as any)} className="input-field" placeholder="Traducción opcional..." />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="space-y-1">
-                      <label className="text-sm font-semibold text-gray-700">Ciudad de Salida ({activeTab.toUpperCase()})</label>
-                      <input {...register(`translations.${activeTab}.departure_city` as any)} className="input-field" placeholder="Traducción opcional..." />
+                      <label className="text-sm font-semibold text-gray-700">Ciudad Salida ({activeTab.toUpperCase()})</label>
+                      <input {...register(`translations.${activeTab}.departure_city` as any)} className="input-field" placeholder="Opcional..." />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-sm font-semibold text-gray-700">Hora de Salida ({activeTab.toUpperCase()})</label>
-                      <input {...register(`translations.${activeTab}.departure_time` as any)} className="input-field" placeholder="Traducción opcional..." />
+                      <label className="text-sm font-semibold text-gray-700">Hora Salida ({activeTab.toUpperCase()})</label>
+                      <input {...register(`translations.${activeTab}.departure_time` as any)} className="input-field" placeholder="Opcional..." />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-sm font-semibold text-gray-700">Ciudad Regreso ({activeTab.toUpperCase()})</label>
+                      <input {...register(`translations.${activeTab}.return_city` as any)} className="input-field" placeholder="Opcional..." />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-sm font-semibold text-gray-700">Hora Llegada ({activeTab.toUpperCase()})</label>
+                      <input {...register(`translations.${activeTab}.return_time` as any)} className="input-field" placeholder="Opcional..." />
                     </div>
                   </div>
                 </>
