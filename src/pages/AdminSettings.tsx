@@ -123,6 +123,21 @@ export default function AdminSettings() {
             </div>
 
             <div className="pt-8 border-t border-gray-100">
+              <h3 className="text-lg font-bold mb-4">Textos de la Portada (Hero)</h3>
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700 block">Antetítulo (Ej: Exclusividad en el Magreb)</label>
+                  <input {...register('hero_subtitle')} className="input-field" placeholder="EXCLUSIVIDAD EN EL MAGREB" />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700 block">Título Principal (Hero)</label>
+                  <p className="text-xs text-gray-500 mb-2">Presiona Enter para crear saltos de línea.</p>
+                  <textarea {...register('hero_title')} className="input-field font-serif text-lg min-h-[100px]" placeholder="El Arte del\nViaje Lento" />
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-8 border-t border-gray-100">
               <h3 className="text-lg font-bold mb-4">Recursos Gráficos</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <Controller

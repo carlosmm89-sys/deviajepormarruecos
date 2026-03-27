@@ -97,6 +97,8 @@ export interface BusinessSettings {
   smtp_from_email?: string;
   smtp_from_name?: string;
   hero_image_url?: string;
+  hero_title?: string;
+  hero_subtitle?: string;
   home_views?: number;
 }
 

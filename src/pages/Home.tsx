@@ -48,8 +48,8 @@ export default function Home() {
             className="w-full h-full object-cover scale-105"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-black/20" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#F9F8F6] opacity-90" />
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#F9F8F6] to-transparent" />
         </div>
 
         <div className="relative z-20 max-w-5xl w-full mx-auto px-4 text-center space-y-6">
@@ -57,16 +57,20 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-sm md:text-base font-bold tracking-[0.2em] uppercase text-[#333] drop-shadow-md"
+            className="text-sm md:text-base font-bold tracking-[0.2em] uppercase text-white/90 drop-shadow-md"
           >
-            EXCLUSIVIDAD EN EL MAGREB
+            {settings?.hero_subtitle || 'EXCLUSIVIDAD EN EL MAGREB'}
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-6xl md:text-[5.5rem] font-serif font-bold leading-tight text-[#1A1A1A]"
+            className="text-6xl md:text-[5.5rem] font-serif font-bold leading-tight text-white drop-shadow-lg"
           >
-            El Arte del<br/>Viaje Lento
+            {settings?.hero_title ? (
+              <span dangerouslySetInnerHTML={{ __html: settings.hero_title.replace(/\n/g, '<br/>') }} />
+            ) : (
+              <>El Arte del<br/>Viaje Lento</>
+            )}
           </motion.h1>
           
           <motion.div
