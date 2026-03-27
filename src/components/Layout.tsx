@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Compass, Map, User, LogOut, Menu, X, Shield, Heart, BookOpen, Globe, DollarSign, ChevronDown } from 'lucide-react';
+import { Compass, Map, User, LogOut, Menu, X, Shield, Heart, BookOpen, Globe, DollarSign, ChevronDown, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { dbService } from '../services/dbService';
 import { BusinessSettings } from '../types';
@@ -50,10 +50,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, []);
 
   const navLinks = [
-    { name: t('nav_home'), path: '/', icon: Compass },
-    { name: t('nav_destinations'), path: '/destinations', icon: Map },
-    { name: t('nav_blog'), path: '/blog', icon: BookOpen },
-    { name: t('nav_favorites'), path: '/favoritos', icon: Heart },
+    { name: t('nav_home') || 'Inicio', path: '/', icon: Compass },
+    { name: t('nav_destinations') || 'Destinos', path: '/destinations', icon: Map },
+    { name: 'Tours', path: '/tours', icon: MapPin },
+    { name: t('nav_blog') || 'Blog', path: '/blog', icon: BookOpen },
+    { name: t('nav_favorites') || 'Favoritos', path: '/favoritos', icon: Heart },
   ];
 
   const handleLogout = async () => {
@@ -63,7 +64,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 z-50 glass-morphism">
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)]">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-24">
             <Link to="/" className="flex items-center space-x-3">

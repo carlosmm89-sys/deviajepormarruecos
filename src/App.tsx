@@ -11,6 +11,7 @@ import TourDetail from './pages/TourDetail';
 import Wishlist from './pages/Wishlist';
 import Blog from './pages/Blog';
 import BlogPostDetail from './pages/BlogPost';
+import Tours from './pages/Tours';
 import AdminRoute from './components/AdminRoute';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminDestinations from './pages/AdminDestinations';
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/destinations" element={<Destinations />} />
             <Route path="/destinations/:id" element={<DestinationDetail />} />
+            <Route path="/tours" element={<Tours />} />
             <Route path="/tours/:id" element={<TourDetail />} />
             <Route path="/favoritos" element={<Wishlist />} />
             <Route path="/blog" element={<Blog />} />
