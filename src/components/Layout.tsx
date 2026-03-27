@@ -54,7 +54,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { name: t('nav_destinations') || 'Destinos', path: '/destinations', icon: Map },
     { name: 'Tours', path: '/tours', icon: MapPin },
     { name: t('nav_blog') || 'Blog', path: '/blog', icon: BookOpen },
-    { name: t('nav_favorites') || 'Favoritos', path: '/favoritos', icon: Heart },
   ];
 
   const handleLogout = async () => {
@@ -66,10 +65,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex flex-col">
       <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)]">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-24">
+          <div className="flex justify-between items-center py-2">
             <Link to="/" className="flex items-center space-x-3">
               {settings?.logo_url ? (
-                <img src={settings.logo_url} alt={settings?.site_name || 'Logo'} className="h-16 w-auto object-contain" />
+                <img src={settings.logo_url} alt={settings?.site_name || 'Logo'} className="h-20 max-h-[85px] w-auto object-contain" />
               ) : (
                 <>
                   <div className="w-12 h-12 bg-brand-primary rounded-xl flex items-center justify-center">
@@ -96,6 +95,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               ))}
 
               <div className="flex items-center space-x-6 ml-4 pl-4 border-l border-gray-200">
+                <Link to="/favoritos" className="text-gray-600 hover:text-brand-accent transition-colors flex items-center" title="Favoritos">
+                  <Heart className="w-5 h-5" />
+                </Link>
+
                 {/* FORCE VITE HMR UPDATE - Context Dropdown (Lang / Currency) */}
                 <div className="relative i18n-dropdown-container flex items-center">
                   <button
@@ -184,6 +187,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <span>{link.name}</span>
                   </Link>
                 ))}
+
+                <Link
+                  to="/favoritos"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center space-x-2 text-lg font-medium text-gray-700 pb-2"
+                >
+                  <Heart className="w-5 h-5" />
+                  <span>{t('nav_favorites') || 'Favoritos'}</span>
+                </Link>
 
                 <div className="grid grid-cols-2 gap-4 py-4 border-y border-gray-100">
                   <div>
