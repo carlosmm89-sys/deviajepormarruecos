@@ -157,7 +157,7 @@ export default function AdminTourEdit() {
       navigate('/admin/tours');
     } catch (err: any) {
       console.error('Error saving tour:', err);
-      setError('Error al guardar el tour.');
+      setError(`Error al guardar el tour: ${err?.message || err?.details || JSON.stringify(err) || 'Desconocido'}`);
     }
   };
 
