@@ -148,32 +148,32 @@ export default function CollectionPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre Completo *</label>
-                <input type="text" className="w-full px-4 py-3 rounded-xl border-none outline-none text-gray-900" required />
+                <input type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" required />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Email *</label>
-                <input type="email" className="w-full px-4 py-3 rounded-xl border-none outline-none text-gray-900" required />
+                <input type="email" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" required />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Teléfono *</label>
-                <div className="flex bg-white rounded-xl overflow-hidden">
+                <div className="flex bg-white rounded-xl overflow-hidden shadow-sm">
                   <span className="flex items-center justify-center px-4 bg-gray-50 text-gray-600 border-r border-gray-100 font-medium">🇪🇸</span>
-                  <input type="tel" className="w-full px-4 py-3 border-none outline-none text-gray-900" placeholder="+34..." required />
+                  <input type="tel" className="w-full px-4 py-3 border-none outline-none text-gray-900 bg-transparent" placeholder="+34..." required />
                 </div>
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">País</label>
-                <input type="text" className="w-full px-4 py-3 rounded-xl border-none outline-none text-gray-900" placeholder="Ej: España" />
+                <input type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" placeholder="Ej: España" />
               </div>
             </div>
 
             <div>
               <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Mensaje o Detalle del Viaje *</label>
               <textarea 
-                className="w-full px-4 py-3 rounded-xl border-none outline-none text-gray-900 min-h-[120px] resize-none" 
+                className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 min-h-[120px] resize-none shadow-sm" 
                 placeholder={`Me gustaría saber más sobre ${categoryName}...`}
                 required 
               />
