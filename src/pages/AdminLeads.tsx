@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Lead } from '../types';
-import { AlertCircle, Trash2, Mail, Phone, Calendar, User } from 'lucide-react';
+import { AlertCircle, Trash2, Mail, Phone, Calendar, User, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { dbService } from '../services/dbService';
 
@@ -141,10 +141,30 @@ export default function AdminLeads() {
                       ))}
                     </select>
                   </td>
-                  <td className="p-4">
+                  <td className="p-4 flex items-center gap-2">
+                    {lead.phone && (
+                      <>
+                        <a
+                          href={`tel:${lead.phone}`}
+                          title="Llamar"
+                          className="p-2 text-blue-500 hover:text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                        >
+                          <Phone className="w-4 h-4" />
+                        </a>
+                        <a
+                          href={`https://wa.me/${lead.phone.replace(/\D/g, '')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Contactar por WhatsApp"
+                          className="p-2 text-[#25D366] hover:text-[#1ebe5d] bg-[#25D366]/10 hover:bg-[#25D366]/20 rounded-lg transition-colors flex items-center justify-center gap-2"
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                        </a>
+                      </>
+                    )}
                     <button
                       onClick={() => deleteLead(lead.id)}
-                      className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                      className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors ml-auto"
                       title="Eliminar Lead"
                     >
                       <Trash2 className="w-4 h-4" />
