@@ -365,7 +365,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Column 4: Contacto */}
             <div>
-              <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Contacto Ráido</h4>
+              <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Contacto Rápido</h4>
               <ul className="space-y-4 text-sm">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-brand-accent flex-shrink-0" />
@@ -375,6 +375,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <span className="flex items-center justify-center w-5 h-5 text-brand-accent flex-shrink-0">✉</span>
                   <a href="mailto:info@marruecosexperiencia.com" className="hover:text-white transition-colors">info@marruecosexperiencia.com</a>
                 </li>
+                <li className="flex items-start gap-3 pt-2">
+                  <span className="flex items-center justify-center w-5 h-5 text-brand-accent flex-shrink-0">📞</span>
+                  <a href={`https://wa.me/${settings?.whatsapp_number?.replace(/\D/g, '') || ''}`} target="_blank" rel="noreferrer" className="hover:text-white transition-colors font-bold text-lg text-white">
+                    {settings?.whatsapp_number || '+212 600 000 000'}
+                  </a>
+                </li>
               </ul>
             </div>
             
@@ -382,7 +388,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Footer Bottom */}
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
-            <p>© {new Date().getFullYear()} {settings?.site_name || 'Marruecos Experiencia'}. Todos los derechos reservados.</p>
+            <p>© {new Date().getFullYear()} Vivir Marruecos. Todos los derechos reservados.</p>
             
             <div className="flex items-center gap-6">
               {isAdminLoggedIn ? (
@@ -403,6 +409,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </footer>
+
+      {/* Floating WhatsApp Button */}
+      <a 
+        href={`https://wa.me/${settings?.whatsapp_number?.replace(/\D/g, '') || ''}${settings?.whatsapp_welcome_message ? `?text=${encodeURIComponent(settings.whatsapp_welcome_message)}` : ''}`}
+        target="_blank" 
+        rel="noreferrer"
+        className="fixed bottom-6 lg:bottom-10 right-6 lg:right-10 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_4px_24px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform flex items-center justify-center group"
+        aria-label="Contactar por WhatsApp"
+      >
+        <span className="absolute right-full mr-4 bg-white text-gray-800 text-sm font-bold py-2 px-4 rounded-xl shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap">
+          ¡Hablemos de tu viaje!
+        </span>
+        <svg viewBox="0 0 24 24" className="w-8 h-8 fill-current">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+        </svg>
+      </a>
     </div>
   );
 }
