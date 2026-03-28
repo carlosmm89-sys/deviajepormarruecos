@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { dbService } from '../services/dbService';
 import { BlogPost, BusinessSettings } from '../types';
 import { motion } from 'framer-motion';
+import toast, { Toaster } from 'react-hot-toast';
 
 const CATEGORY_MAP: Record<string, string> = {
   'actividades': 'Actividades',
@@ -21,6 +22,7 @@ export default function CollectionPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState<BusinessSettings | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const categoryName = CATEGORY_MAP[categorySlug || ''] || 'Colección';
 
@@ -51,6 +53,45 @@ export default function CollectionPage() {
     document.getElementById('contacto-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleLeadSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!settings) {
+      toast.error('Error al cargar la configuración. Reintenta.');
+      return;
+    }
+    setSubmitting(true);
+    const form = e.currentTarget;
+    try {
+      const newLead = {
+        form_type: 'collection_inquiry',
+        first_name: form.first_name.value,
+        email: form.contact_email.value,
+        phone: form.phone.value || '',
+        approximate_date: form.country.value ? `País: ${form.country.value}` : '',
+        passengers_count: 1,
+        message: `[Interesado en la colección: ${categoryName}]\n${form.message.value}`,
+        status: 'new' as const
+      };
+
+      await dbService.createLead(newLead);
+
+      // Trigger Email
+      await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead: newLead, settings })
+      }).catch(err => console.error('SMTP fetch fail:', err));
+
+      toast.success('¡Consulta enviada! Nos pondremos en contacto contigo pronto.');
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      toast.error('Hubo un problema. Inténtalo de nuevo.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -65,6 +106,7 @@ export default function CollectionPage() {
 
   return (
     <div className="min-h-screen bg-white pb-24">
+      <Toaster position="top-right" />
       {/* Dynamic Hero based on category */}
       <div className="relative h-[60vh] flex items-center justify-center overflow-hidden">
         <img src={heroImage} alt={categoryName} className="absolute inset-0 w-full h-full object-cover scale-105" />
@@ -144,15 +186,15 @@ export default function CollectionPage() {
         <div className="bg-[#EBEAE5] p-8 md:p-12 rounded-[2rem] shadow-sm">
           <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-6">Para reservas o consultas</h3>
           
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleLeadSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre Completo *</label>
-                <input type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" required />
+                <input name="first_name" type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" required />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Email *</label>
-                <input type="email" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" required />
+                <input name="contact_email" type="email" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" required />
               </div>
             </div>
 
@@ -161,18 +203,19 @@ export default function CollectionPage() {
                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Teléfono *</label>
                 <div className="flex bg-white rounded-xl overflow-hidden shadow-sm">
                   <span className="flex items-center justify-center px-4 bg-gray-50 text-gray-600 border-r border-gray-100 font-medium">🇪🇸</span>
-                  <input type="tel" className="w-full px-4 py-3 border-none outline-none text-gray-900 bg-transparent" placeholder="+34..." required />
+                  <input name="phone" type="tel" className="w-full px-4 py-3 border-none outline-none text-gray-900 bg-transparent" placeholder="+34..." required />
                 </div>
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">País</label>
-                <input type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" placeholder="Ej: España" />
+                <input name="country" type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" placeholder="Ej: España" />
               </div>
             </div>
 
             <div>
               <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Mensaje o Detalle del Viaje *</label>
               <textarea 
+                name="message"
                 className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 min-h-[120px] resize-none shadow-sm" 
                 placeholder={`Me gustaría saber más sobre ${categoryName}...`}
                 required 
@@ -180,8 +223,8 @@ export default function CollectionPage() {
             </div>
 
             <div className="flex justify-center pt-4">
-              <button type="submit" className="bg-[#D97D3A] hover:bg-[#c66c2d] text-white px-12 py-3.5 rounded-full font-bold uppercase tracking-wide text-sm transition-colors shadow-lg shadow-[#D97D3A]/30">
-                Enviar mensaje
+              <button type="submit" disabled={submitting} className={`bg-[#D97D3A] hover:bg-[#c66c2d] text-white px-12 py-3.5 rounded-full font-bold uppercase tracking-wide text-sm transition-colors shadow-lg shadow-[#D97D3A]/30 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                {submitting ? 'ENVIANDO...' : 'ENVIAR MENSAJE'}
               </button>
             </div>
           </form>

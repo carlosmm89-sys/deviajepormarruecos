@@ -12,6 +12,8 @@ import ReviewsModal from '../components/ReviewsModal';
 import { useWishlist } from '../hooks/useWishlist';
 import { usePageViews } from '../hooks/usePageViews';
 import { useCurrency } from '../context/CurrencyContext';
+import { BusinessSettings } from '../types';
+import toast, { Toaster } from 'react-hot-toast';
 
 const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,6 +43,8 @@ export default function TourDetail() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [isReviewsOpen, setIsReviewsOpen] = useState(false);
+  const [settings, setSettings] = useState<BusinessSettings | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   
   const [dateArrival, setDateArrival] = useState(() => {
     try {
@@ -67,6 +71,9 @@ export default function TourDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const bs = await dbService.getBusinessSettings();
+        if (bs) setSettings(bs);
+
         if (id) {
           const t = await dbService.getTour(id);
           setTour(t);
@@ -98,6 +105,49 @@ export default function TourDetail() {
     setIsGalleryOpen(true);
   };
 
+  const handleLeadSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!tour || !settings) {
+      toast.error('Error al cargar la configuración. Reintenta.');
+      return;
+    }
+    setSubmitting(true);
+    const form = e.currentTarget;
+    try {
+      const dataStr = `Llegada: ${dateArrival}, Salida: ${dateDeparture}`;
+      const px = form.adults.value || '1';
+      
+      const newLead = {
+        tour_id: tour.id,
+        form_type: 'tour_inquiry',
+        first_name: form.first_name.value,
+        email: form.contact_email.value,
+        phone: form.phone.value || '',
+        approximate_date: dataStr,
+        passengers_count: parseInt(px, 10),
+        message: form.message.value,
+        status: 'new' as const
+      };
+
+      await dbService.createLead(newLead);
+
+      // Trigger Email
+      await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead: newLead, settings })
+      }).catch(err => console.error('SMTP fetch fail:', err));
+
+      toast.success('¡Consulta enviada! Nos pondremos en contacto contigo pronto.');
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      toast.error('Hubo un problema. Inténtalo de nuevo.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -117,6 +167,7 @@ export default function TourDetail() {
 
   return (
     <div className="pb-24 bg-gray-50/30">
+      <Toaster position="top-right" />
       <ReviewsModal isOpen={isReviewsOpen} onClose={() => setIsReviewsOpen(false)} />
       <ImageGalleryModal 
         isOpen={isGalleryOpen}
@@ -401,11 +452,11 @@ export default function TourDetail() {
             <div className="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-xl border border-gray-100 space-y-8">
               <h3 className="text-2xl font-bold text-[#E87B37]">Solicitar Presupuesto</h3>
               
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleLeadSubmit}>
                 <div className="space-y-4">
-                  <input type="text" placeholder="Nombre completo*" className="input-field text-gray-900 placeholder:text-gray-900" required />
-                  <input type="email" placeholder="Email*" className="input-field text-gray-900 placeholder:text-gray-900" required />
-                  <input type="tel" placeholder="Teléfono" className="input-field text-gray-900 placeholder:text-gray-900" />
+                  <input name="first_name" type="text" placeholder="Nombre completo*" className="input-field text-gray-900 placeholder:text-gray-900" required />
+                  <input name="contact_email" type="email" placeholder="Email*" className="input-field text-gray-900 placeholder:text-gray-900" required />
+                  <input name="phone" type="tel" placeholder="Teléfono" className="input-field text-gray-900 placeholder:text-gray-900" />
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -421,7 +472,7 @@ export default function TourDetail() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Adultos*</label>
-                      <select className="input-field text-gray-600 bg-white" required>
+                      <select name="adults" className="input-field text-gray-600 bg-white" required>
                         <option value="">-</option>
                         {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
                       </select>
@@ -443,7 +494,7 @@ export default function TourDetail() {
                     </select>
                   </div>
 
-                  <textarea placeholder="Su consulta*" className="input-field min-h-[100px] resize-none text-gray-900 placeholder:text-gray-900" required />
+                  <textarea name="message" placeholder="Su consulta*" className="input-field min-h-[100px] resize-none text-gray-900 placeholder:text-gray-900" required />
                 </div>
 
                 <div className="flex gap-3">
@@ -454,11 +505,11 @@ export default function TourDetail() {
                 </div>
 
                 <div className="space-y-3">
-                  <button type="button" className="btn-primary w-full py-4 text-base tracking-wide font-bold shadow-lg shadow-brand-primary/20">
-                    ENVIAR CONSULTA
+                  <button type="submit" disabled={submitting} className={`btn-primary w-full py-4 text-base tracking-wide font-bold shadow-lg shadow-brand-primary/20 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                    {submitting ? 'ENVIANDO...' : 'ENVIAR CONSULTA'}
                   </button>
                   <a 
-                    href={`https://wa.me/34600000000?text=${encodeURIComponent(`Hola, estoy interesado en el tour: ${tour.title}`)}`}
+                    href={`https://wa.me/${settings?.whatsapp_number?.replace(/\D/g, '') || ''}?text=${encodeURIComponent(`Hola, estoy interesado en el tour: ${tour.title}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 border-[#25D366] text-[#25D366] font-bold hover:bg-[#25D366]/5 transition-colors"
