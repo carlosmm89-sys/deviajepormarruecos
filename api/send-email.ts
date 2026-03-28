@@ -19,7 +19,7 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { lead, settings } = req.body;
+  const { lead, settings, tour_title } = req.body;
 
   if (!lead || !settings || !settings.smtp_host) {
     return res.status(400).json({ message: 'Faltan datos de envio o configuración SMTP.' });
@@ -44,7 +44,7 @@ export default async function handler(req: any, res: any) {
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
           <h2 style="color: #E87B37; border-bottom: 2px solid #E87B37; padding-bottom: 10px;">Nueva Consulta Capturada</h2>
-          <p>Se ha recibido una nueva consulta de <strong>${lead.first_name}</strong>.</p>
+          <p>Se ha recibido una nueva consulta de <strong>${lead.first_name}</strong> para: <strong style="color: #E87B37;">${tour_title || 'General'}</strong></p>
           <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
             <p><strong>Email:</strong> <a href="mailto:${lead.email}">${lead.email}</a></p>
             <p><strong>Teléfono:</strong> <a href="tel:${lead.phone}">${lead.phone || 'No especificado'}</a></p>

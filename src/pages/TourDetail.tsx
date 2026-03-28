@@ -135,7 +135,7 @@ export default function TourDetail() {
       await fetch('/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lead: newLead, settings })
+        body: JSON.stringify({ lead: newLead, settings, tour_title: tour.title })
       }).catch(err => console.error('SMTP fetch fail:', err));
 
       toast.success('¡Consulta enviada! Nos pondremos en contacto contigo pronto.');
