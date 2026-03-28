@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Lead } from '../types';
-import { AlertCircle, Trash2, Mail, Phone, Calendar, User, MessageCircle } from 'lucide-react';
+import { AlertCircle, Trash2, Mail, Phone, Calendar, User, MessageCircle, Eye, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { dbService } from '../services/dbService';
 
@@ -9,6 +9,7 @@ export default function AdminLeads() {
   const location = useLocation();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
   useEffect(() => {
     fetchLeads();
@@ -163,6 +164,13 @@ export default function AdminLeads() {
                       </>
                     )}
                     <button
+                      onClick={() => setSelectedLead(lead)}
+                      className="p-2 text-gray-400 hover:text-brand-primary hover:bg-brand-primary/10 rounded-lg transition-colors"
+                      title="Ver Detalles Completos"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <button
                       onClick={() => deleteLead(lead.id)}
                       className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors ml-auto"
                       title="Eliminar Lead"
@@ -183,6 +191,80 @@ export default function AdminLeads() {
           </table>
         </div>
       </div>
+
+      <AnimatePresence>
+        {selectedLead && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }} 
+              animate={{ scale: 1, opacity: 1 }} 
+              exit={{ scale: 0.95, opacity: 0 }} 
+              className="bg-white rounded-3xl shadow-xl w-full max-w-2xl overflow-hidden"
+            >
+              <div className="flex justify-between items-center p-6 border-b border-gray-100">
+                <h3 className="text-xl font-bold font-serif text-gray-900">
+                  {selectedLead.first_name} {selectedLead.last_name}
+                </h3>
+                <button 
+                  onClick={() => setSelectedLead(null)}
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="p-6 overflow-y-auto max-h-[70vh] space-y-6">
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <p className="text-xs uppercase text-gray-500 font-bold mb-1">Contacto</p>
+                    <p className="font-semibold text-gray-800">{selectedLead.email}</p>
+                    <p className="font-semibold text-gray-800">{selectedLead.phone || 'Sin teléfono'}</p>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <p className="text-xs uppercase text-gray-500 font-bold mb-1">Viaje / Tour</p>
+                    <p className="font-semibold text-brand-primary">{(selectedLead as any).tours?.title || 'Generico / Colección'}</p>
+                    <p className="text-gray-600 text-sm mt-1">Pax: {selectedLead.passengers_count}</p>
+                  </div>
+                </div>
+
+                <div className="bg-brand-primary/5 border border-brand-primary/20 p-5 rounded-2xl">
+                  <h4 className="text-xs uppercase text-brand-primary font-bold tracking-widest mb-3">Mensaje al completo</h4>
+                  <div className="text-gray-800 whitespace-pre-wrap leading-relaxed text-sm">
+                    {selectedLead.message || 'Sin mensaje adicional.'}
+                  </div>
+                </div>
+
+              </div>
+              
+              <div className="p-4 border-t border-gray-100 flex justify-end gap-3 bg-gray-50">
+                {selectedLead.phone && (
+                  <a 
+                    href={`https://wa.me/${selectedLead.phone.replace(/\D/g, '')}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex justify-center items-center px-6 py-2.5 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-xl font-bold transition-colors gap-2"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp
+                  </a>
+                )}
+                <button 
+                  onClick={() => setSelectedLead(null)}
+                  className="px-6 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

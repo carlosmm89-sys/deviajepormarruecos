@@ -114,8 +114,11 @@ export default function TourDetail() {
     setSubmitting(true);
     const form = e.currentTarget;
     try {
-      const dataStr = `Llegada: ${dateArrival}, Salida: ${dateDeparture}`;
-      const px = form.adults.value || '1';
+      const px = parseInt(form.adults.value || '1', 10);
+      const niños = parseInt(form.children?.value || '0', 10);
+      const bebes = parseInt(form.infants?.value || '0', 10);
+      const pxTotal = px + niños;
+      const paxDetails = `Adultos: ${px}, Niños: ${niños}, Bebés: ${bebes}`;
       
       const newLead = {
         tour_id: tour.id,
@@ -124,8 +127,8 @@ export default function TourDetail() {
         email: form.contact_email.value,
         phone: form.phone.value || '',
         approximate_date: dateArrival || new Date().toISOString().split('T')[0],
-        passengers_count: parseInt(px, 10),
-        message: `[Llegada: ${dateArrival}, Salida: ${dateDeparture}]\n${form.message.value}`,
+        passengers_count: pxTotal,
+        message: `[Llegada: ${dateArrival}, Salida: ${dateDeparture}]\n[Familia: ${paxDetails}]\n\nMensaje:\n${form.message.value}`,
         status: 'new' as const
       };
 
@@ -479,7 +482,7 @@ export default function TourDetail() {
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Niños (3 a 8 años)</label>
-                      <select className="input-field text-gray-600 bg-white">
+                      <select name="children" className="input-field text-gray-600 bg-white">
                         <option value="">-</option>
                         {[1,2,3,4,5,6].map(n => <option key={n} value={n}>{n}</option>)}
                       </select>
@@ -488,7 +491,7 @@ export default function TourDetail() {
 
                   <div>
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Bebés (0 a 2 años)</label>
-                    <select className="input-field text-gray-900 bg-white">
+                    <select name="infants" className="input-field text-gray-900 bg-white">
                       <option value="">-</option>
                       {[1,2,3,4].map(n => <option key={n} value={n}>{n}</option>)}
                     </select>
