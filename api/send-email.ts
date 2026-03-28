@@ -38,8 +38,8 @@ export default async function handler(req: any, res: any) {
 
     // Email for the Admin
     const adminMailOptions = {
-      from: `"${settings.smtp_from_name || settings.site_name || 'Web'}" <${settings.smtp_from_email || settings.smtp_user}>`,
-      to: settings.admin_email || settings.smtp_user,
+      from: `"Vivir Marruecos Web" <${settings.smtp_from_email || settings.smtp_user}>`,
+      to: settings.admin_email || 'info@vivirmarruecos.com',
       subject: `Nueva Consulta Web: ${lead.form_type} - ${lead.first_name}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
@@ -60,13 +60,13 @@ export default async function handler(req: any, res: any) {
 
     // Autoresponder Email for the Client
     const clientMailOptions = {
-      from: `"${settings.site_name || 'Vivir Marruecos'}" <${settings.smtp_from_email || settings.smtp_user}>`,
+      from: `"Vivir Marruecos" <${settings.smtp_from_email || settings.smtp_user}>`,
       to: lead.email,
       subject: `¡Hemos recibido tu mensaje, ${lead.first_name}! 🐪`,
       html: `
         <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden;">
           <div style="background-color: #111827; padding: 30px; text-align: center;">
-            <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 300; letter-spacing: 1px; text-transform: uppercase;">${settings.site_name || 'Vivir Marruecos'}</h1>
+            <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 300; letter-spacing: 1px; text-transform: uppercase;">Vivir Marruecos</h1>
             <p style="color: #E87B37; margin: 5px 0 0 0; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;">Aventuras Inolvidables</p>
           </div>
           <div style="padding: 40px; color: #4a4a4a; line-height: 1.6;">
@@ -82,10 +82,10 @@ export default async function handler(req: any, res: any) {
             <p>Si tienes alguna pregunta urgente, también puedes <a href="https://wa.me/${settings.whatsapp_number?.replace(/\D/g, '') || ''}" style="color: #25D366; font-weight: bold; text-decoration: none;">escribirnos por WhatsApp</a>.</p>
             
             <p style="margin-top: 40px; margin-bottom: 0;">Con cariño,</p>
-            <p style="font-weight: bold; color: #111827; margin-top: 5px;">El equipo de ${settings.site_name || 'Vivir Marruecos'}</p>
+            <p style="font-weight: bold; color: #111827; margin-top: 5px;">El equipo de Vivir Marruecos</p>
           </div>
           <div style="background-color: #f9f9f9; padding: 20px; text-align: center; border-top: 1px solid #eaeaea; font-size: 12px; color: #999;">
-            <p style="margin: 0;">© ${new Date().getFullYear()} ${settings.site_name || 'Vivir Marruecos'}. Todos los derechos reservados.</p>
+            <p style="margin: 0;">© ${new Date().getFullYear()} Vivir Marruecos. Todos los derechos reservados.</p>
           </div>
         </div>
       `,

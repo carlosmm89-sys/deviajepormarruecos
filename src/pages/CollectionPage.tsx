@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { dbService } from '../services/dbService';
 import { BlogPost, BusinessSettings } from '../types';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CheckCircle2 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 
 const CATEGORY_MAP: Record<string, string> = {
@@ -23,6 +24,7 @@ export default function CollectionPage() {
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState<BusinessSettings | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const categoryName = CATEGORY_MAP[categorySlug || ''] || 'Colección';
 
@@ -79,11 +81,12 @@ export default function CollectionPage() {
       await fetch('/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lead: newLead, settings })
+        body: JSON.stringify({ lead: newLead, settings, tour_title: `Colección: ${categoryName}` })
       }).catch(err => console.error('SMTP fetch fail:', err));
 
       toast.success('¡Consulta enviada! Nos pondremos en contacto contigo pronto.');
       form.reset();
+      setSubmitted(true);
     } catch (error) {
       console.error(error);
       toast.error('Hubo un problema. Inténtalo de nuevo.');
@@ -183,51 +186,89 @@ export default function CollectionPage() {
           <div className="w-12 h-1 bg-gray-300 mx-auto rounded-full"></div>
         </div>
 
-        <div className="bg-[#EBEAE5] p-8 md:p-12 rounded-[2rem] shadow-sm">
-          <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-6">Para reservas o consultas</h3>
-          
-          <form className="space-y-6" onSubmit={handleLeadSubmit}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre Completo *</label>
-                <input name="first_name" type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" required />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Email *</label>
-                <input name="contact_email" type="email" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" required />
-              </div>
-            </div>
+        <div className="bg-[#EBEAE5] p-8 md:p-12 rounded-[2rem] shadow-sm relative overflow-hidden">
+          <AnimatePresence mode="wait">
+            {!submitted ? (
+              <motion.div
+                key="form"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, x: -20 }}
+              >
+                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-6">Para reservas o consultas</h3>
+                
+                <form className="space-y-6" onSubmit={handleLeadSubmit}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre Completo *</label>
+                      <input name="first_name" type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" required />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Email *</label>
+                      <input name="contact_email" type="email" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" required />
+                    </div>
+                  </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Teléfono *</label>
-                <div className="flex bg-white rounded-xl overflow-hidden shadow-sm">
-                  <span className="flex items-center justify-center px-4 bg-gray-50 text-gray-600 border-r border-gray-100 font-medium">🇪🇸</span>
-                  <input name="phone" type="tel" className="w-full px-4 py-3 border-none outline-none text-gray-900 bg-transparent" placeholder="+34..." required />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Teléfono *</label>
+                      <div className="flex bg-white rounded-xl overflow-hidden shadow-sm">
+                        <span className="flex items-center justify-center px-4 bg-gray-50 text-gray-600 border-r border-gray-100 font-medium">🇪🇸</span>
+                        <input name="phone" type="tel" className="w-full px-4 py-3 border-none outline-none text-gray-900 bg-transparent" placeholder="+34..." required />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">País</label>
+                      <input name="country" type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" placeholder="Ej: España" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Mensaje o Detalle del Viaje *</label>
+                    <textarea 
+                      name="message"
+                      className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 min-h-[120px] resize-none shadow-sm" 
+                      placeholder={`Me gustaría saber más sobre ${categoryName}...`}
+                      required 
+                    />
+                  </div>
+
+                  <div className="flex justify-center pt-4">
+                    <button type="submit" disabled={submitting} className={`bg-[#D97D3A] hover:bg-[#c66c2d] text-white px-12 py-3.5 rounded-full font-bold uppercase tracking-wide text-sm transition-colors shadow-lg shadow-[#D97D3A]/30 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                      {submitting ? 'ENVIANDO...' : 'ENVIAR MENSAJE'}
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="success"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="flex flex-col items-center justify-center text-center py-10 space-y-6"
+              >
+                <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-4">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 10, delay: 0.2 }}
+                  >
+                    <CheckCircle2 className="w-12 h-12 text-green-500" />
+                  </motion.div>
                 </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">País</label>
-                <input name="country" type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" placeholder="Ej: España" />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Mensaje o Detalle del Viaje *</label>
-              <textarea 
-                name="message"
-                className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 min-h-[120px] resize-none shadow-sm" 
-                placeholder={`Me gustaría saber más sobre ${categoryName}...`}
-                required 
-              />
-            </div>
-
-            <div className="flex justify-center pt-4">
-              <button type="submit" disabled={submitting} className={`bg-[#D97D3A] hover:bg-[#c66c2d] text-white px-12 py-3.5 rounded-full font-bold uppercase tracking-wide text-sm transition-colors shadow-lg shadow-[#D97D3A]/30 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                {submitting ? 'ENVIANDO...' : 'ENVIAR MENSAJE'}
-              </button>
-            </div>
-          </form>
+                <h3 className="text-3xl font-bold text-gray-900 leading-tight">¡Tu Aventura Está en Marcha!</h3>
+                <p className="text-gray-500 leading-relaxed max-w-sm mx-auto">
+                  Hemos recibido tu solicitud correctamente. Nuestro equipo en Marruecos ya está revisando los detalles y <strong>te contactaremos lo antes posible</strong> con una propuesta inolvidable.
+                </p>
+                <button 
+                  onClick={() => setSubmitted(false)}
+                  className="mt-6 text-[#D97D3A] font-bold tracking-wide uppercase text-xs border-b border-transparent hover:border-[#D97D3A] transition-all pt-4"
+                >
+                  Enviar otra consulta
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>

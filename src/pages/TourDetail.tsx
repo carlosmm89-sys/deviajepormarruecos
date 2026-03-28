@@ -14,6 +14,7 @@ import { usePageViews } from '../hooks/usePageViews';
 import { useCurrency } from '../context/CurrencyContext';
 import { BusinessSettings } from '../types';
 import toast, { Toaster } from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,6 +46,7 @@ export default function TourDetail() {
   const [isReviewsOpen, setIsReviewsOpen] = useState(false);
   const [settings, setSettings] = useState<BusinessSettings | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   
   const [dateArrival, setDateArrival] = useState(() => {
     try {
@@ -143,6 +145,7 @@ export default function TourDetail() {
 
       toast.success('¡Consulta enviada! Nos pondremos en contacto contigo pronto.');
       form.reset();
+      setSubmitted(true);
     } catch (error) {
       console.error(error);
       toast.error('Hubo un problema. Inténtalo de nuevo.');
@@ -452,76 +455,115 @@ export default function TourDetail() {
         {/* Sidebar Booking */}
         <div className="lg:col-span-1 min-w-0">
           <div className="sticky top-32 space-y-8">
-            <div className="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-xl border border-gray-100 space-y-8">
-              <h3 className="text-2xl font-bold text-[#E87B37]">Solicitar Presupuesto</h3>
-              
-              <form className="space-y-6" onSubmit={handleLeadSubmit}>
-                <div className="space-y-4">
-                  <input name="first_name" type="text" placeholder="Nombre completo*" className="input-field text-gray-900 placeholder:text-gray-900" required />
-                  <input name="contact_email" type="email" placeholder="Email*" className="input-field text-gray-900 placeholder:text-gray-900" required />
-                  <input name="phone" type="tel" placeholder="Teléfono" className="input-field text-gray-900 placeholder:text-gray-900" />
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Fecha de llegada*</label>
-                      <input type="date" className="input-field text-gray-600" required value={dateArrival} onChange={e => setDateArrival(e.target.value)} />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Fecha de salida*</label>
-                      <input type="date" className="input-field text-gray-600" required value={dateDeparture} onChange={e => setDateDeparture(e.target.value)} />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Adultos*</label>
-                      <select name="adults" className="input-field text-gray-600 bg-white" required>
-                        <option value="">-</option>
-                        {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Niños (3 a 8 años)</label>
-                      <select name="children" className="input-field text-gray-600 bg-white">
-                        <option value="">-</option>
-                        {[1,2,3,4,5,6].map(n => <option key={n} value={n}>{n}</option>)}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Bebés (0 a 2 años)</label>
-                    <select name="infants" className="input-field text-gray-900 bg-white">
-                      <option value="">-</option>
-                      {[1,2,3,4].map(n => <option key={n} value={n}>{n}</option>)}
-                    </select>
-                  </div>
-
-                  <textarea name="message" placeholder="Su consulta*" className="input-field min-h-[100px] resize-none text-gray-900 placeholder:text-gray-900" required />
-                </div>
-
-                <div className="flex gap-3">
-                  <input type="checkbox" className="mt-1 rounded border-gray-300 text-brand-accent focus:ring-brand-accent" required />
-                  <p className="text-[10px] text-gray-400 leading-tight">
-                    Doy mi consentimiento para que este sitio web almacene mi información enviada para que puedan responder a mi consulta
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <button type="submit" disabled={submitting} className={`btn-primary w-full py-4 text-base tracking-wide font-bold shadow-lg shadow-brand-primary/20 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    {submitting ? 'ENVIANDO...' : 'ENVIAR CONSULTA'}
-                  </button>
-                  <a 
-                    href={`https://wa.me/${settings?.whatsapp_number?.replace(/\D/g, '') || ''}?text=${encodeURIComponent(`Hola, estoy interesado en el tour: ${tour.title}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 border-[#25D366] text-[#25D366] font-bold hover:bg-[#25D366]/5 transition-colors"
+            <div className="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-xl border border-gray-100 overflow-hidden relative">
+              <AnimatePresence mode="wait">
+                {!submitted ? (
+                  <motion.div 
+                    key="form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="space-y-8"
                   >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/></svg>
-                    Preguntar por WhatsApp
-                  </a>
-                </div>
-              </form>
+                    <h3 className="text-2xl font-bold text-[#E87B37]">Solicitar Presupuesto</h3>
+                    
+                    <form className="space-y-6" onSubmit={handleLeadSubmit}>
+                      <div className="space-y-4">
+                        <input name="first_name" type="text" placeholder="Nombre completo*" className="input-field text-gray-900 placeholder:text-gray-900" required />
+                        <input name="contact_email" type="email" placeholder="Email*" className="input-field text-gray-900 placeholder:text-gray-900" required />
+                        <input name="phone" type="tel" placeholder="Teléfono" className="input-field text-gray-900 placeholder:text-gray-900" />
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Fecha de llegada*</label>
+                            <input type="date" name="date_arrival" className="input-field text-gray-600" required value={dateArrival} onChange={e => setDateArrival(e.target.value)} />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Fecha de salida*</label>
+                            <input type="date" name="date_departure" className="input-field text-gray-600" required value={dateDeparture} onChange={e => setDateDeparture(e.target.value)} />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Adultos*</label>
+                            <select name="adults" className="input-field text-gray-600 bg-white" required>
+                              <option value="">-</option>
+                              {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Niños (3 a 8 años)</label>
+                            <select name="children" className="input-field text-gray-600 bg-white">
+                              <option value="">-</option>
+                              {[1,2,3,4,5,6].map(n => <option key={n} value={n}>{n}</option>)}
+                            </select>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Bebés (0 a 2 años)</label>
+                          <select name="infants" className="input-field text-gray-900 bg-white">
+                            <option value="">-</option>
+                            {[1,2,3,4].map(n => <option key={n} value={n}>{n}</option>)}
+                          </select>
+                        </div>
+
+                        <textarea name="message" placeholder="Su consulta*" className="input-field min-h-[100px] resize-none text-gray-900 placeholder:text-gray-900" required />
+                      </div>
+
+                      <div className="flex gap-3">
+                        <input type="checkbox" className="mt-1 rounded border-gray-300 text-brand-accent focus:ring-brand-accent" required />
+                        <p className="text-[10px] text-gray-400 leading-tight">
+                          Doy mi consentimiento para que este sitio web almacene mi información enviada para que puedan responder a mi consulta
+                        </p>
+                      </div>
+
+                      <div className="space-y-3">
+                        <button type="submit" disabled={submitting} className={`btn-primary w-full py-4 text-base tracking-wide font-bold shadow-lg shadow-brand-primary/20 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                          {submitting ? 'ENVIANDO...' : 'ENVIAR CONSULTA'}
+                        </button>
+                        <a 
+                          href={`https://wa.me/${settings?.whatsapp_number?.replace(/\D/g, '') || ''}?text=${encodeURIComponent(`Hola, estoy interesado en el tour: ${tour.title}`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 border-[#25D366] text-[#25D366] font-bold hover:bg-[#25D366]/5 transition-colors"
+                        >
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/></svg>
+                          Preguntar por WhatsApp
+                        </a>
+                      </div>
+                    </form>
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    key="success"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="flex flex-col items-center justify-center text-center py-10 space-y-6"
+                  >
+                    <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-4">
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 200, damping: 10, delay: 0.2 }}
+                      >
+                        <CheckCircle2 className="w-12 h-12 text-green-500" />
+                      </motion.div>
+                    </div>
+                    <h3 className="text-3xl font-bold text-gray-900 leading-tight">¡Tu Aventura Está en Marcha!</h3>
+                    <p className="text-gray-500 leading-relaxed max-w-sm mx-auto">
+                      Hemos recibido tu solicitud correctamente. Nuestro equipo en Marruecos ya está revisando los detalles y <strong>te contactaremos lo antes posible</strong> con una propuesta inolvidable.
+                    </p>
+                    <button 
+                      onClick={() => setSubmitted(false)}
+                      className="mt-6 text-brand-primary font-bold tracking-wide uppercase text-xs border-b border-transparent hover:border-brand-primary transition-all pt-4"
+                    >
+                      Enviar otra consulta
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <div className="bg-brand-primary/5 p-8 rounded-[2.5rem] border border-brand-primary/10 flex items-center justify-center gap-4">
