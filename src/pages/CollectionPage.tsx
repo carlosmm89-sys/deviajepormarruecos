@@ -67,9 +67,9 @@ export default function CollectionPage() {
         first_name: form.first_name.value,
         email: form.contact_email.value,
         phone: form.phone.value || '',
-        approximate_date: form.country.value ? `País: ${form.country.value}` : '',
+        approximate_date: new Date().toISOString().split('T')[0],
         passengers_count: 1,
-        message: `[Interesado en la colección: ${categoryName}]\n${form.message.value}`,
+        message: `[Interesado en la colección: ${categoryName}]\nPaís: ${form.country.value}\n${form.message.value}`,
         status: 'new' as const
       };
 

@@ -123,9 +123,9 @@ export default function TourDetail() {
         first_name: form.first_name.value,
         email: form.contact_email.value,
         phone: form.phone.value || '',
-        approximate_date: dataStr,
+        approximate_date: dateArrival || new Date().toISOString().split('T')[0],
         passengers_count: parseInt(px, 10),
-        message: form.message.value,
+        message: `[Llegada: ${dateArrival}, Salida: ${dateDeparture}]\n${form.message.value}`,
         status: 'new' as const
       };
 
