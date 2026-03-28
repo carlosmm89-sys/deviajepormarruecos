@@ -199,17 +199,32 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-4">
-        <div className="bg-brand-primary rounded-[3rem] p-12 md:p-24 text-center text-white space-y-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-accent/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-accent/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        <div className="relative rounded-[3rem] p-12 md:p-24 text-center overflow-hidden shadow-2xl">
+          <div className="absolute inset-0">
+            <img 
+              src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?q=80&w=2000&auto=format&fit=crop" 
+              alt="Desierto de Marruecos" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent" />
+          </div>
           
-          <h2 className="text-4xl md:text-6xl font-serif font-bold">¿Listo para tu próxima aventura?</h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Únete a miles de viajeros que ya están explorando el mundo con nosotros.
-          </p>
-          <button className="btn-primary bg-brand-accent hover:bg-emerald-600 px-12 py-4 text-lg">
-            Empezar Ahora
-          </button>
+          <div className="relative z-10 max-w-3xl mx-auto space-y-8">
+            <h2 className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight">
+              ¿Listo para tu próxima aventura?
+            </h2>
+            <p className="text-xl md:text-2xl text-gray-200 font-light mx-auto">
+              Únete a miles de viajeros descubriendo la auténtica esencia de Marruecos a su ritmo y a medida.
+            </p>
+            <div className="pt-8">
+              <Link 
+                to="/tours" 
+                className="inline-flex items-center gap-3 bg-brand-accent hover:bg-white text-white hover:text-brand-accent px-10 py-5 rounded-full text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-[0_0_40px_rgba(235,102,43,0.4)]"
+              >
+                Empezar Ahora <ArrowRight className="w-6 h-6" />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>

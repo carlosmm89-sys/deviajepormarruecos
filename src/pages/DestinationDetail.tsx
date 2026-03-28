@@ -115,8 +115,7 @@ export default function DestinationDetail() {
           <Link to="/destinations" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-6 group">
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" /> Volver a destinos
           </Link>
-          <div className="space-y-2">
-            <p className="text-brand-accent font-bold uppercase tracking-widest text-sm">{destination.slug}</p>
+          <div className="space-y-4">
             <h1 className="text-5xl md:text-7xl font-serif font-bold text-white leading-tight">{destination.name}</h1>
           </div>
         </div>

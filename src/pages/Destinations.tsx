@@ -56,7 +56,6 @@ export default function Destinations() {
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <h3 className="text-3xl font-serif font-bold group-hover:text-brand-accent transition-colors">{dest.name}</h3>
-                  <span className="text-sm font-semibold text-brand-accent uppercase tracking-widest">{dest.slug || 'Zona'}</span>
                 </div>
                 <p className="text-gray-500 leading-relaxed line-clamp-3">{dest.description}</p>
               </div>
