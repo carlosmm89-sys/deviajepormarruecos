@@ -16,6 +16,7 @@ export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [featuredTours, setFeaturedTours] = useState<Tour[]>([]);
   const [settings, setSettings] = useState<BusinessSettings | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   
   const { t } = useTranslation();
   const { formatPrice } = useCurrency();
@@ -33,6 +34,8 @@ export default function Home() {
         if (bizSettings) setSettings(bizSettings);
       } catch (err) {
         console.error("Error loading home data", err);
+      } finally {
+        setIsLoading(false);
       }
     };
     loadData();
@@ -47,11 +50,13 @@ export default function Home() {
       />
       {/* Hero Section */}
       <section className="relative z-30 h-[85vh] flex flex-col items-center justify-center">
-        <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 z-0 overflow-hidden bg-brand-blue/20">
           <img
-            src={settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=80&w=2000"}
+            src={settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=80&w=1000"}
             alt="Hero Morocco"
             className="w-full h-full object-cover scale-105"
+            fetchPriority="high"
+            decoding="async"
             referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-black/40" />
@@ -102,34 +107,40 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {destinations.map((dest, idx) => (
-            <motion.div
-              key={dest.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              className="group relative h-96 rounded-3xl overflow-hidden cursor-pointer"
-            >
-              <Link to={`/destinations/${dest.id}`}>
-                <img
-                  src={dest.image_url}
-                  alt={dest.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 p-6 text-white text-left">
-                  <h3 className="text-2xl font-serif font-bold group-hover:-translate-y-1 transition-transform">{dest.name}</h3>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-          {destinations.length === 0 && (
+          {isLoading ? (
+            Array(4).fill(0).map((_, i) => (
+              <div key={i} className="group relative h-96 rounded-3xl overflow-hidden bg-gray-200 animate-pulse border border-white/50 shadow-sm" />
+            ))
+          ) : destinations.length === 0 ? (
             <div className="col-span-full py-20 text-center space-y-6 border-2 border-dashed border-gray-100 rounded-3xl">
               <div className="space-y-2">
                 <p className="text-gray-400">No hay destinos disponibles aún.</p>
               </div>
             </div>
+          ) : (
+            destinations.map((dest, idx) => (
+              <motion.div
+                key={dest.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="group relative h-96 rounded-3xl overflow-hidden cursor-pointer bg-gray-100"
+              >
+                <Link to={`/destinations/${dest.id}`}>
+                  <img
+                    src={dest.image_url}
+                    alt={dest.name}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 p-6 text-white text-left">
+                    <h3 className="text-2xl font-serif font-bold group-hover:-translate-y-1 transition-transform">{dest.name}</h3>
+                  </div>
+                </Link>
+              </motion.div>
+            ))
           )}
         </div>
       </section>
@@ -143,46 +154,64 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {featuredTours.map((tour, idx) => (
-            <motion.div
-              key={tour.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all"
-            >
-              <Link to={`/tours/${tour.id}`}>
-                <div className="relative h-64 overflow-hidden">
-                  <img
-                    src={tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600'}
-                    alt={tour.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl text-brand-primary font-bold shadow-sm">
-                    {t('tour_price_from')} {formatPrice(tour.price)}
-                  </div>
+          {isLoading ? (
+            Array(3).fill(0).map((_, i) => (
+              <div key={i} className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm h-[400px] animate-pulse flex flex-col">
+                <div className="h-64 bg-gray-200 w-full" />
+                <div className="p-8 space-y-4 flex-1 bg-gray-50/50">
+                  <div className="h-4 bg-gray-200 rounded w-1/3" />
+                  <div className="h-8 bg-gray-200 rounded w-3/4" />
+                  <div className="h-4 bg-gray-200 rounded w-1/2" />
                 </div>
-                <div className="p-8 space-y-4">
-                  <div className="flex items-center gap-2 text-brand-accent text-sm font-bold uppercase tracking-widest">
-                    <MapPin className="w-4 h-4" />
-                    <span>{(tour as any).destinations?.name || 'Destino'}</span>
-                  </div>
-                  <h3 className="text-2xl font-serif font-bold group-hover:text-brand-primary transition-colors">{tour.title}</h3>
-                  <div className="flex items-center gap-6 text-gray-500 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4" />
-                      <span>{tour.itinerary_summary || 'Varios días'}</span>
+              </div>
+            ))
+          ) : featuredTours.length === 0 ? (
+            <div className="col-span-full py-20 text-center space-y-6 border-2 border-dashed border-gray-100 rounded-3xl">
+              <p className="text-gray-400">No hay tours destacados aún.</p>
+            </div>
+          ) : (
+            featuredTours.map((tour, idx) => (
+              <motion.div
+                key={tour.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all"
+              >
+                <Link to={`/tours/${tour.id}`}>
+                  <div className="relative h-64 overflow-hidden bg-gray-100">
+                    <img
+                      src={tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600'}
+                      alt={tour.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl text-brand-primary font-bold shadow-sm">
+                      {t('tour_price_from')} {formatPrice(tour.price)}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                      <span className="font-bold text-gray-900">4.9</span>
+                  </div>
+                  <div className="p-8 space-y-4">
+                    <div className="flex items-center gap-2 text-brand-accent text-sm font-bold uppercase tracking-widest">
+                      <MapPin className="w-4 h-4" />
+                      <span>{(tour as any).destinations?.name || 'Destino'}</span>
+                    </div>
+                    <h3 className="text-2xl font-serif font-bold group-hover:text-brand-primary transition-colors">{tour.title}</h3>
+                    <div className="flex items-center gap-6 text-gray-500 text-sm flex-wrap">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        <span>{tour.itinerary_summary || tour.duration || 'Varios días'}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Star className="w-4 h-4 text-[#F6B100] fill-[#F6B100]" />
+                        <span className="font-bold text-gray-900">5,0</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+                </Link>
+              </motion.div>
+            ))
+          )}
         </div>
       </section>
 
