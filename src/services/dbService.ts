@@ -42,7 +42,7 @@ export const dbService = {
     
     const { error } = await supabase.storage
       .from('images')
-      .upload(fileName, file, { cacheControl: '3600', upsert: false });
+      .upload(fileName, file, { cacheControl: '31536000', upsert: false });
 
     if (error) {
       console.error('Storage upload error:', error);

@@ -22,8 +22,8 @@ export default function ImageUpload({ value, onChange, label, className = '' }: 
       setUploading(true);
       // Compress image before upload
       const options = {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 1920,
+        maxSizeMB: 0.3,
+        maxWidthOrHeight: 1200,
         useWebWorker: true
       };
       const compressedFile = await imageCompression(file, options);
