@@ -4,6 +4,7 @@ import { BlogPost } from '../types';
 import { dbService } from '../services/dbService';
 import { motion } from 'framer-motion';
 import { Calendar, User, ArrowRight } from 'lucide-react';
+import SEO from '../components/SEO';
 
 export default function Blog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -33,6 +34,11 @@ export default function Blog() {
 
   return (
     <div className="bg-gray-50/50 min-h-screen pb-24">
+      <SEO 
+        title="Blog de Viajes a Marruecos | Marruecos Experiencia"
+        description="Descubre Marruecos a través de nuestras guías prácticas, historias y consejos de expertos locales para preparar tu próxima aventura."
+        url="/blog"
+      />
       {/* Header */}
       <section className="bg-white border-b border-gray-100 py-20 px-4">
         <div className="max-w-7xl mx-auto text-center space-y-4">
@@ -57,6 +63,7 @@ export default function Blog() {
                 <img 
                   src={post.cover_image || 'https://loremflickr.com/800/600/morocco'} 
                   alt={post.title}
+                  loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   referrerPolicy="no-referrer"
                 />

@@ -15,7 +15,8 @@ import { useCurrency } from '../context/CurrencyContext';
 import { BusinessSettings } from '../types';
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import SEO from '../components/SEO';
+import Breadcrumbs from '../components/Breadcrumbs';
 const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -171,8 +172,31 @@ export default function TourDetail() {
     );
   }
 
+  const tourSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": tour.title,
+    "image": tour.featured_image || tour.gallery?.[0] || 'https://www.vivirmarruecos.com/pwa-512x512.png',
+    "description": tour.itinerary_summary || `Tour a ${tour.title} en Marruecos`,
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "EUR",
+      "price": tour.price || 0,
+      "availability": "https://schema.org/InStock",
+      "url": `https://www.vivirmarruecos.com/tours/${tour.id}`
+    }
+  };
+
   return (
     <div className="pb-24 bg-gray-50/30">
+      <SEO 
+        title={`${tour.title} | Marruecos Experiencia`}
+        description={tour.itinerary_summary || `Reserva el tour ${tour.title} al mejor precio con Marruecos Experiencia.`}
+        image={tour.featured_image || tour.gallery?.[0]}
+        url={`/tours/${tour.id}`}
+        type="product"
+        schema={tourSchema}
+      />
       <Toaster position="top-right" />
       <ReviewsModal isOpen={isReviewsOpen} onClose={() => setIsReviewsOpen(false)} />
       <ImageGalleryModal 
@@ -253,13 +277,12 @@ export default function TourDetail() {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-16 min-w-0">
           <div className="space-y-8">
-            <nav className="flex items-center gap-2 text-sm text-gray-400">
-              <Link to="/" className="hover:text-brand-accent flex items-center gap-1">
-                <Home className="w-3 h-3" /> Inicio
-              </Link>
-              <span>/</span>
-              <span className="text-gray-600 font-medium">{tour.title}</span>
-            </nav>
+            <Breadcrumbs 
+              items={[
+                { label: 'Tours', url: '/tours' },
+                { label: tour.title }
+              ]} 
+            />
 
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div>

@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { dbService } from '../services/dbService';
 import { usePageViews } from '../hooks/usePageViews';
 import { useCurrency } from '../context/CurrencyContext';
+import SEO from '../components/SEO';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 export default function DestinationDetail() {
   const { id } = useParams<{ id: string }>();
@@ -97,8 +99,23 @@ export default function DestinationDetail() {
     );
   }
 
+  const destinationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Place",
+    "name": destination.name,
+    "description": destination.description || `Explora ${destination.name} con Marruecos Experiencia.`,
+    "image": destination.image_url
+  };
+
   return (
     <div className="pb-24 bg-gray-50/50">
+      <SEO 
+        title={`${destination.name} - Viajes a Marruecos`}
+        description={destination.description?.substring(0, 160) || `Descubre los mejores tours y excursiones en ${destination.name}.`}
+        image={destination.image_url}
+        url={`/destinations/${destination.id}`}
+        schema={destinationSchema}
+      />
       {/* Hero Section */}
       <section className="relative h-[50vh] flex items-end overflow-hidden">
         <div className="absolute inset-0 z-0">
@@ -112,11 +129,12 @@ export default function DestinationDetail() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 pb-12 w-full">
-          <Link to="/destinations" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-6 group">
-            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" /> Volver a destinos
-          </Link>
+          <Breadcrumbs items={[
+            { label: 'Destinos', url: '/destinations' },
+            { label: destination.name }
+          ]} />
           <div className="space-y-4">
-            <h1 className="text-5xl md:text-7xl font-serif font-bold text-white leading-tight">{destination.name}</h1>
+            <h1 className="text-5xl md:text-7xl font-serif font-bold text-white leading-tight mt-4">{destination.name}</h1>
           </div>
         </div>
       </section>

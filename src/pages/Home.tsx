@@ -7,6 +7,7 @@ import { dbService } from '../services/dbService';
 import { BusinessSettings } from '../types';
 import WidgetRenderer from '../components/WidgetRenderer';
 import HeroSearch from '../components/HeroSearch';
+import SEO from '../components/SEO';
 import { usePageViews } from '../hooks/usePageViews';
 import { useTranslation } from '../hooks/useTranslation';
 import { useCurrency } from '../context/CurrencyContext';
@@ -39,6 +40,11 @@ export default function Home() {
 
   return (
     <div className="space-y-24 pb-24">
+      <SEO 
+        title={settings?.business_name ? `${settings.business_name} - Agencia de Viajes en Marruecos` : undefined}
+        description={settings?.hero_subtitle || undefined}
+        url="/"
+      />
       {/* Hero Section */}
       <section className="relative z-30 h-[85vh] flex flex-col items-center justify-center">
         <div className="absolute inset-0 z-0 overflow-hidden">

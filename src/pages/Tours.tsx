@@ -6,6 +6,7 @@ import { MapPin, Clock, Star, Calendar } from 'lucide-react';
 import { dbService } from '../services/dbService';
 import { useCurrency } from '../context/CurrencyContext';
 import { useTranslation } from '../hooks/useTranslation';
+import SEO from '../components/SEO';
 
 export default function Tours() {
   const [searchParams] = useSearchParams();
@@ -94,6 +95,11 @@ export default function Tours() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-24 space-y-16">
+      <SEO 
+        title="Tours y Excursiones en Marruecos | Marruecos Experiencia"
+        description={`Explora nuestros ${tours.length > 0 ? tours.length : ''} tours y descubre la aventura perfecta en Marruecos. Desde el desierto hasta la costa.`}
+        url="/tours"
+      />
       <div className="text-center space-y-4">
         <h1 className="text-5xl md:text-7xl font-serif font-bold">Explora Nuestros Tours</h1>
         <p className="text-xl text-gray-500 max-w-2xl mx-auto">
@@ -135,6 +141,7 @@ export default function Tours() {
                     <img
                     src={tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600'}
                     alt={tour.title}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
                     />

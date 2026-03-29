@@ -4,6 +4,7 @@ import { BlogPost } from '../types';
 import { dbService } from '../services/dbService';
 import { ArrowLeft, Calendar, User, Share2 } from 'lucide-react';
 import { usePageViews } from '../hooks/usePageViews';
+import SEO from '../components/SEO';
 
 export default function BlogPostDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -56,8 +57,37 @@ export default function BlogPostDetail() {
     }
   };
 
+  const blogSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "image": post.cover_image || 'https://www.vivirmarruecos.com/pwa-512x512.png',
+    "author": {
+      "@type": "Person",
+      "name": post.author
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Marruecos Experiencia",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.vivirmarruecos.com/pwa-512x512.png"
+      }
+    },
+    "datePublished": post.published_at,
+    "description": post.excerpt
+  };
+
   return (
     <div className="bg-gray-50/30 min-h-screen pb-24">
+      <SEO 
+        title={`${post.title} | Blog Marruecos Experiencia`}
+        description={post.excerpt}
+        image={post.cover_image}
+        url={`/blog/${post.slug}`}
+        type="article"
+        schema={blogSchema}
+      />
       {/* Hero Header */}
       <section className="relative pt-24 pb-32 px-4 overflow-hidden bg-white border-b border-gray-100">
         <div className="max-w-4xl mx-auto relative z-10 text-center space-y-8">
