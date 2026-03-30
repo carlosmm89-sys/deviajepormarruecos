@@ -289,10 +289,10 @@ export default function TourDetail() {
               ]} 
             />
 
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
               <div>
                 <h1 className="text-5xl md:text-6xl font-serif font-bold leading-tight text-gray-900 mb-4">{tour.title}</h1>
-                <div className="flex items-center gap-2 text-gray-900">
+                <div className="flex items-center gap-2 text-gray-900 mb-6 md:mb-0">
                   <Star className="w-5 h-5 fill-current" />
                   <span className="font-bold">5,0</span>
                   <span className="text-gray-300">·</span>
@@ -302,33 +302,40 @@ export default function TourDetail() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-6 pb-2">
-                <button 
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: tour.title,
-                        url: window.location.href
-                      }).catch(console.error);
-                    }
-                  }}
-                  className="flex items-center gap-2 font-medium underline text-gray-700 hover:text-gray-900 transition-colors"
-                >
-                  <Share className="w-4 h-4" /> Comparte
-                </button>
-                <button 
-                  onClick={() => toggleFavorite(tour.id)}
-                  className={`flex items-center gap-2 font-medium underline transition-colors ${
-                    isFavorite(tour.id) ? 'text-red-500 hover:text-red-600' : 'text-gray-700 hover:text-gray-900'
-                  }`}
-                >
-                  <Heart className={`w-4 h-4 ${isFavorite(tour.id) ? 'fill-current' : ''}`} /> 
-                  {isFavorite(tour.id) ? 'Guardado' : 'Guarda'}
-                </button>
+              <div className="flex flex-col md:items-end gap-4 pb-2 shrink-0">
+                <div className="text-left md:text-right">
+                  <div className="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-1">Precio desde</div>
+                  <div className="text-4xl font-black text-brand-primary">{formatPrice(tour.price)}</div>
+                </div>
+                <div className="flex items-center gap-6 mt-2">
+                  <button 
+                    onClick={() => {
+                      if (navigator.share) {
+                        navigator.share({
+                          title: tour.title,
+                          url: window.location.href
+                        }).catch(console.error);
+                      }
+                    }}
+                    className="flex items-center gap-2 font-medium underline text-gray-700 hover:text-gray-900 transition-colors"
+                  >
+                    <Share className="w-4 h-4" /> Comparte
+                  </button>
+                  <button 
+                    onClick={() => toggleFavorite(tour.id)}
+                    className={`flex items-center gap-2 font-medium underline transition-colors ${
+                      isFavorite(tour.id) ? 'text-red-500 hover:text-red-600' : 'text-gray-700 hover:text-gray-900'
+                    }`}
+                  >
+                    <Heart className={`w-4 h-4 ${isFavorite(tour.id) ? 'fill-current' : ''}`} /> 
+                    {isFavorite(tour.id) ? 'Guardado' : 'Guarda'}
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-gray-100">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 py-8 border-y border-gray-100">
+              {/* Duración */}
               <div className="flex items-center gap-3">
                 <Clock className="w-5 h-5 text-brand-accent shrink-0" />
                 <div className="flex flex-col">
@@ -336,16 +343,28 @@ export default function TourDetail() {
                   <span className="text-sm font-medium text-gray-900">{tour.itinerary_summary}</span>
                 </div>
               </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-xs text-gray-400 font-bold uppercase tracking-wider flex items-center gap-1"><MapPin className="w-3 h-3"/> Salida</span>
-                <span className="text-sm font-medium text-gray-900">{tour.departure_city} {tour.departure_time ? `• ${tour.departure_time}` : ''}</span>
+              
+              {/* Salida */}
+              <div className="flex items-center gap-3">
+                <MapPin className="w-5 h-5 text-brand-accent shrink-0" />
+                <div className="flex flex-col">
+                  <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Salida</span>
+                  <span className="text-sm font-medium text-gray-900">{tour.departure_city} {tour.departure_time ? `• ${tour.departure_time}` : ''}</span>
+                </div>
               </div>
+
+              {/* Regreso (Optional) */}
               {tour.return_city && (
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs text-brand-primary font-bold uppercase tracking-wider flex items-center gap-1"><MapPin className="w-3 h-3"/> Regreso</span>
-                  <span className="text-sm font-medium text-gray-900">{tour.return_city} {tour.return_time ? `• ${tour.return_time}` : ''}</span>
+                <div className="flex items-center gap-3">
+                  <MapPin className="w-5 h-5 text-brand-accent shrink-0" />
+                  <div className="flex flex-col">
+                    <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Regreso</span>
+                    <span className="text-sm font-medium text-gray-900">{tour.return_city} {tour.return_time ? `• ${tour.return_time}` : ''}</span>
+                  </div>
                 </div>
               )}
+
+              {/* Destino */}
               <div className="flex items-center gap-3">
                 <MapIcon className="w-5 h-5 text-brand-accent shrink-0" />
                 <div className="flex flex-col">
