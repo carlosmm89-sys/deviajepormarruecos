@@ -4,7 +4,7 @@ import { dbService } from '../services/dbService';
 import { BusinessSettings } from '../types';
 import toast from 'react-hot-toast';
 import { 
-  X, MapPin, Calendar, Users, Mail, ArrowRight, ArrowLeft, Send
+  X, MapPin, Calendar, Users, Mail, ArrowRight, ArrowLeft, Send, Sparkles
 } from 'lucide-react';
 
 interface QuoteWizardProps {
@@ -24,6 +24,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
     duration: '',
     adults: 2,
     children: 0,
+    extras: [] as string[],
     firstName: '',
     email: '',
     phone: '',
@@ -32,7 +33,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
 
   if (!isOpen) return null;
 
-  const handleNext = () => setStep(s => Math.min(s + 1, 4));
+  const handleNext = () => setStep(s => Math.min(s + 1, 5));
   const handleBack = () => setStep(s => Math.max(s - 1, 1));
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -41,6 +42,15 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
   const setDestination = (val: string) => {
     setFormData(prev => ({ ...prev, destination: val }));
     handleNext();
+  };
+
+  const toggleExtra = (extra: string) => {
+    setFormData(prev => ({
+      ...prev,
+      extras: prev.extras.includes(extra) 
+        ? prev.extras.filter(e => e !== extra)
+        : [...prev.extras, extra]
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,6 +62,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
     setIsSubmitting(true);
     try {
       const paxDetails = `Adultos: ${formData.adults}, Niños: ${formData.children}`;
+      const extrasDetails = formData.extras.length > 0 ? formData.extras.join(', ') : 'Ninguna';
       
       const newLead = {
         form_type: 'wizard_quote',
@@ -60,7 +71,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
         phone: formData.phone || '',
         approximate_date: formData.travelDate || new Date().toISOString().split('T')[0],
         passengers_count: Number(formData.adults) + Number(formData.children),
-        message: `[Cotizador Mágico]\nDestino Ideal: ${formData.destination}\nDuración: ${formData.duration}\nFamilia: ${paxDetails}\n\nMensaje:\n${formData.message}`,
+        message: `[Cotizador Mágico]\nDestino Ideal: ${formData.destination}\nDuración: ${formData.duration}\nFamilia: ${paxDetails}\nActividades Extra: ${extrasDetails}\n\nMensaje:\n${formData.message}`,
         status: 'new' as const
       };
 
@@ -81,10 +92,11 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
     }
   };
 
-  const destinations = ['Desierto del Sahara', 'Norte de Marruecos', 'Ciudades Imperiales', 'Costa Atlántica', 'Gran Tour de Marruecos', 'Actividades', 'Mixto / Aún no lo sé'];
+  const destinations = ['Desierto del Sahara', 'Norte de Marruecos', 'Ciudades Imperiales', 'Costa Atlántica', 'Gran Tour de Marruecos', 'Mixto / Aún no lo sé'];
+  const possibleExtras = ['Paseo en Camello / Noche en jaima', 'Quad o Buggy', 'Vuelo en Globo Aerostático', 'Trekking guiado', 'Hammám Spa Tradicional', 'Guía Histórico / Cultural'];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onClick={onClose} />
       
       <div className="relative w-full max-w-2xl bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
@@ -92,7 +104,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
         <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between z-10 bg-white">
           <div>
             <h2 className="text-xl font-bold font-serif text-gray-900 leading-tight">Diseña tu Viaje a Medida</h2>
-            {!isSuccess && <p className="text-sm text-gray-500 font-medium mt-1">Paso {step} de 4</p>}
+            {!isSuccess && <p className="text-sm text-gray-500 font-medium mt-1">Paso {step} de 5</p>}
           </div>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <X className="w-5 h-5 text-gray-500" />
@@ -104,7 +116,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
           <div className="w-full h-1 bg-gray-100 z-10">
             <div 
               className="h-full bg-brand-accent transition-all duration-500 ease-out"
-              style={{ width: `${(step / 4) * 100}%` }}
+              style={{ width: `${(step / 5) * 100}%` }}
             />
           </div>
         )}
@@ -233,6 +245,34 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                 {step === 4 && (
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 text-brand-primary mb-6">
+                      <Sparkles className="w-6 h-6" />
+                      <h3 className="text-2xl font-bold">¿Te gustaría añadir alguna actividad al viaje?</h3>
+                    </div>
+                    <p className="text-gray-500 mb-4">Selecciona las experiencias extras que te interesen (opcional):</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {possibleExtras.map(extra => (
+                        <button
+                          key={extra}
+                          onClick={() => toggleExtra(extra)}
+                          className={`p-4 rounded-xl border-2 text-left font-bold transition-all flex items-center justify-between ${
+                            formData.extras.includes(extra) 
+                            ? 'border-brand-accent bg-brand-accent/5 text-brand-accent shadow-sm' 
+                            : 'border-gray-200 bg-white hover:border-gray-300 text-gray-700 hover:shadow-sm'
+                          }`}
+                        >
+                          <span className="text-sm">{extra}</span>
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${formData.extras.includes(extra) ? 'border-brand-accent' : 'border-gray-300'}`}>
+                            {formData.extras.includes(extra) && <div className="w-2.5 h-2.5 bg-brand-accent rounded-full" />}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {step === 5 && (
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3 text-brand-primary mb-6">
                       <Mail className="w-6 h-6" />
                       <h3 className="text-2xl font-bold">Tus datos de contacto</h3>
                     </div>
@@ -245,7 +285,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                       <input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Correo electrónico" className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent" />
                       <textarea name="message" value={formData.message} onChange={handleChange} placeholder="¿Algún detalle o petición especial? (Opcional)" className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent min-h-[100px] resize-none" />
                       <div className="flex gap-3 pt-2">
-                        <input required type="checkbox" className="mt-1 flex-shrink-0 w-4 h-4 text-brand-accent border-gray-300 rounded focus:ring-brand-accent" />
+                         <input required type="checkbox" className="mt-1 flex-shrink-0 w-4 h-4 text-brand-accent border-gray-300 rounded focus:ring-brand-accent" />
                         <span className="text-xs text-gray-500">Acepto los términos de privacidad y el uso de mis datos para ser contactado.</span>
                       </div>
                     </form>
@@ -265,7 +305,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
               </button>
             ) : <div />}
             
-            {step < 4 ? (
+            {step < 5 ? (
               <button 
                 onClick={handleNext}
                 disabled={step === 1 && !formData.destination} 

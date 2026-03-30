@@ -43,8 +43,17 @@ export default function CollectionPage() {
           dbService.getBusinessSettings()
         ]);
         
-        // Filter by category (Exact match or case insensitive)
-        const filtered = allTours.filter(t => t.category && t.category.toLowerCase() === categoryName.toLowerCase());
+        // Filter by category (Exact match or case insensitive, plus fuzzy matches)
+        const filtered = allTours.filter(t => {
+          if (!t.category) return false;
+          const c = t.category.toLowerCase();
+          const target = categoryName.toLowerCase();
+          if (target === 'actividades' && (c.includes('actividad') || c.includes('activities'))) return true;
+          if (target === 'desierto' && (c.includes('desierto') || c.includes('sahara'))) return true;
+          if (target === 'norte de marruecos' && (c.includes('norte') || c.includes('tanger'))) return true;
+          if (target === 'ciudades imperiales' && (c.includes('imperial') || c.includes('imperiales'))) return true;
+          return c === target;
+        });
         setTours(filtered);
         setSettings(businessSettings || null);
       } catch (error) {
