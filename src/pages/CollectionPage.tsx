@@ -15,12 +15,18 @@ const CATEGORY_MAP: Record<string, string> = {
   'luna-de-miel': 'Luna de Miel',
   'entrega-de-anillo': 'Entrega de Anillo',
   'viajes-en-familia': 'Viajes en Familia',
-  'viajes-en-grupo': 'Viajes en Grupo'
+  'viajes-en-grupo': 'Viajes en Grupo',
+  'viajes-norte-de-marruecos': 'Norte de Marruecos',
+  'viajes-al-desierto': 'Desierto',
+  'rutas-ciudades-imperiales': 'Ciudades Imperiales',
+  'ciudades-imperiales': 'Ciudades Imperiales',
+  'aventura': 'Aventura',
+  'cultura': 'Cultura'
 };
 
 export default function CollectionPage() {
   const { categorySlug } = useParams<{ categorySlug: string }>();
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [tours, setTours] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState<BusinessSettings | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -29,17 +35,17 @@ export default function CollectionPage() {
   const categoryName = CATEGORY_MAP[categorySlug || ''] || 'Colección';
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchTours = async () => {
       try {
         setLoading(true);
-        const [allPosts, businessSettings] = await Promise.all([
-          dbService.getBlogPosts(true),
+        const [allTours, businessSettings] = await Promise.all([
+          dbService.getTours(),
           dbService.getBusinessSettings()
         ]);
         
-        // Filter by category
-        const filtered = allPosts.filter(p => p.category === categoryName);
-        setPosts(filtered);
+        // Filter by category (Exact match or case insensitive)
+        const filtered = allTours.filter(t => t.category && t.category.toLowerCase() === categoryName.toLowerCase());
+        setTours(filtered);
         setSettings(businessSettings || null);
       } catch (error) {
         console.error('Error fetching collection:', error);
@@ -48,7 +54,7 @@ export default function CollectionPage() {
       }
     };
 
-    fetchPosts();
+    fetchTours();
   }, [categoryName]);
 
   const scrollToContact = () => {
@@ -103,9 +109,11 @@ export default function CollectionPage() {
     );
   }
 
-  const heroImage = posts.length > 0 && posts[0].cover_image 
-    ? posts[0].cover_image 
-    : 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&q=80';
+  const heroImage = categoryName === 'Actividades' 
+    ? '/images/actividades/quad.png'
+    : tours.length > 0 && tours[0].featured_image 
+      ? tours[0].featured_image 
+      : 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?auto=format&fit=crop&q=80';
 
   return (
     <div className="min-h-screen bg-white pb-24">
@@ -137,40 +145,47 @@ export default function CollectionPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-20 space-y-12">
-        {posts.length === 0 ? (
+        {tours.length === 0 ? (
           <div className="text-center text-gray-500 py-20">
             <p className="text-2xl font-bold mb-4">Aún no hay publicaciones en {categoryName}</p>
             <p className="mb-8">Estamos preparando experiencias increíbles para ti.</p>
-            <Link to="/" className="btn-primary">Explorar Tours</Link>
+            <Link to="/tours" className="btn-primary">Explorar Todos los Tours</Link>
           </div>
         ) : (
-          posts.map((post) => (
-            <div key={post.id} className="grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden rounded-2xl md:rounded-[2rem] shadow-sm transform transition-all hover:shadow-xl hover:-translate-y-1 border border-gray-100/50">
+          tours.map((tour) => (
+            <div key={tour.id} className="grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden rounded-2xl md:rounded-[2rem] shadow-sm transform transition-all hover:shadow-xl hover:-translate-y-1 border border-gray-100/50">
               {/* Text Layout (Always Left Side on Desktop) */}
               <div className="bg-[#EBEAE5] p-10 md:p-16 flex flex-col justify-center order-2 md:order-1">
                 <p className="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-4">Exclusivo en Marruecos</p>
                 <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 uppercase leading-none mb-6">
-                  {post.title}
+                  {tour.title}
                 </h2>
                 
-                <div 
-                  className="prose prose-base text-gray-700 leading-relaxed mb-8 max-w-none text-justify"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
-                />
+                <p className="text-gray-600 leading-relaxed mb-8 max-w-none text-justify line-clamp-4">
+                  {tour.description?.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&')}
+                </p>
                 
-                <button 
-                  onClick={scrollToContact}
-                  className="px-8 py-3 w-max bg-transparent border-2 border-gray-900 hover:bg-gray-900 hover:text-white text-gray-900 rounded-full font-bold uppercase tracking-wide text-xs transition-colors"
-                >
-                  Saber más
-                </button>
+                <div className="flex items-center gap-4">
+                  <Link 
+                    to={`/tours/${tour.id}`}
+                    className="px-8 py-3 w-max bg-transparent border-2 border-gray-900 hover:bg-gray-900 hover:text-white text-gray-900 rounded-full font-bold uppercase tracking-wide text-xs transition-colors"
+                  >
+                    Ver Itinerario
+                  </Link>
+                  <button 
+                    onClick={scrollToContact}
+                    className="px-6 py-3 w-max text-[#D97D3A] font-bold uppercase tracking-wide text-xs transition-colors border-b-2 border-transparent hover:border-[#D97D3A]"
+                  >
+                    Consultar
+                  </button>
+                </div>
               </div>
 
               {/* Image Layout (Always Right Side on Desktop) */}
               <div className="h-64 md:h-auto order-1 md:order-2 overflow-hidden bg-gray-200">
                 <img 
-                  src={post.cover_image || 'https://loremflickr.com/800/800/morocco,sahara'} 
-                  alt={post.title} 
+                  src={tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/800/morocco,sahara'} 
+                  alt={tour.title} 
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
                 />
               </div>

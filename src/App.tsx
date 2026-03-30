@@ -26,6 +26,8 @@ const AdminSettings = lazy(() => import('./pages/AdminSettings'));
 const AdminLeads = lazy(() => import('./pages/AdminLeads'));
 const AdminLogin = lazy(() => import('./pages/AdminLogin'));
 const AdminTourEdit = lazy(() => import('./pages/AdminTourEdit'));
+const AdminGallery = lazy(() => import('./pages/AdminGallery'));
+const Gallery = lazy(() => import('./pages/Gallery'));
 
 // Minimal loading fallback for lazy routes
 const PageLoader = () => (
@@ -52,6 +54,7 @@ export default function App() {
                   <Route path="/favoritos" element={<Wishlist />} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:slug" element={<BlogPostDetail />} />
+                  <Route path="/galeria" element={<Gallery />} />
                   
                   {/* Admin Routes */}
                   <Route path="/admin/login" element={<AdminLogin />} />
@@ -64,6 +67,7 @@ export default function App() {
                     <Route path="blog" element={<AdminBlog />} />
                     <Route path="blog/new" element={<AdminBlogEdit />} />
                     <Route path="blog/:id" element={<AdminBlogEdit />} />
+                    <Route path="gallery" element={<AdminGallery />} />
                     <Route path="settings" element={<AdminSettings />} />
                     <Route path="leads" element={<AdminLeads />} />
                   </Route>

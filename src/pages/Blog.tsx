@@ -3,18 +3,20 @@ import { Link } from 'react-router-dom';
 import { BlogPost } from '../types';
 import { dbService } from '../services/dbService';
 import { motion } from 'framer-motion';
-import { Calendar, User, ArrowRight } from 'lucide-react';
+import { Calendar, User, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import SEO from '../components/SEO';
 
 export default function Blog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 6;
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const data = await dbService.getBlogPosts();
-        setPosts(data.filter(p => !p.category || p.category === 'Blog'));
+        setPosts(data.filter(p => p.category !== 'Actividades'));
       } catch (err) {
         console.error(err);
       } finally {
@@ -51,7 +53,7 @@ export default function Blog() {
       {/* Grid de Artículos */}
       <section className="max-w-7xl mx-auto px-4 mt-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {posts.map((post, idx) => (
+          {posts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage).map((post, idx) => (
             <motion.div 
               key={post.id}
               initial={{ opacity: 0, y: 20 }}
@@ -102,6 +104,39 @@ export default function Blog() {
             </div>
           )}
         </div>
+
+        {/* Pagination Controls */}
+        {posts.length > postsPerPage && (
+          <div className="flex justify-center items-center mt-16 gap-2">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="p-3 rounded-full border border-gray-200 text-gray-500 hover:border-brand-accent hover:text-brand-accent disabled:opacity-30 disabled:hover:border-gray-200 disabled:hover:text-gray-500 transition-colors"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            
+            <div className="flex gap-2">
+              {Array.from({ length: Math.ceil(posts.length / postsPerPage) }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`w-12 h-12 rounded-full font-bold flex items-center justify-center transition-colors ${currentPage === i + 1 ? 'bg-brand-accent text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-brand-accent hover:text-brand-accent'}`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage(p => Math.min(Math.ceil(posts.length / postsPerPage), p + 1))}
+              disabled={currentPage === Math.ceil(posts.length / postsPerPage)}
+              className="p-3 rounded-full border border-gray-200 text-gray-500 hover:border-brand-accent hover:text-brand-accent disabled:opacity-30 disabled:hover:border-gray-200 disabled:hover:text-gray-500 transition-colors"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );

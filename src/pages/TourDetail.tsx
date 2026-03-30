@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Tour, Destination } from '../types';
+import { Tour, Destination, BlogPost, BusinessSettings } from '../types';
 import { 
   Clock, MapPin, 
   ArrowLeft, Home, BookOpen, ShieldCheck, Map as MapIcon, Image as ImageIcon,
-  ChevronDown, ChevronUp, CheckCircle2, PlusSquare, HelpCircle, Star, Share, Heart
+  ChevronDown, ChevronUp, CheckCircle2, PlusSquare, HelpCircle, Star, Share, Heart, Calendar, User, ArrowRight
 } from 'lucide-react';
 import { dbService } from '../services/dbService';
 import ImageGalleryModal from '../components/ImageGalleryModal';
@@ -12,11 +12,11 @@ import ReviewsModal from '../components/ReviewsModal';
 import { useWishlist } from '../hooks/useWishlist';
 import { usePageViews } from '../hooks/usePageViews';
 import { useCurrency } from '../context/CurrencyContext';
-import { BusinessSettings } from '../types';
 import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
+
 const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -40,6 +40,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNo
 export default function TourDetail() {
   const { id } = useParams<{ id: string }>();
   const [tour, setTour] = useState<Tour | null>(null);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('descripcion');
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -80,6 +81,10 @@ export default function TourDetail() {
         if (id) {
           const t = await dbService.getTour(id);
           setTour(t);
+          
+          const posts = await dbService.getBlogPosts();
+          const rel = posts.filter(p => p.category !== 'Actividades').sort(() => 0.5 - Math.random());
+          setRelatedPosts(rel.slice(0, 3));
         }
       } catch (err) {
         console.error(err);
@@ -599,6 +604,51 @@ export default function TourDetail() {
           </div>
         </div>
       </div>
+
+      {relatedPosts.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 mt-24 border-t border-gray-100 pt-16">
+          <div className="flex items-center gap-3 mb-10">
+            <BookOpen className="w-8 h-8 text-brand-accent" />
+            <h2 className="text-3xl font-bold text-gray-900 font-serif">Inspiración y Guías Recomendadas</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {relatedPosts.map((post) => (
+              <Link 
+                key={post.id} 
+                to={`/blog/${post.slug}`}
+                className="group bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all flex flex-col"
+              >
+                <div className="aspect-[4/3] overflow-hidden relative">
+                  <img 
+                    src={post.cover_image || 'https://loremflickr.com/800/600/morocco'} 
+                    alt={post.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-brand-accent">
+                    {post.category || 'Blog'}
+                  </div>
+                </div>
+                <div className="p-6 md:p-8 flex flex-col flex-1">
+                  <div className="flex items-center gap-4 text-xs font-semibold text-gray-400 mb-4 h-5">
+                    <div className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> {new Date(post.published_at).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                  </div>
+                  
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 group-hover:text-brand-accent transition-colors mb-3 line-clamp-2 leading-tight">
+                    {post.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-2 flex-1">{post.excerpt}</p>
+                  
+                  <div className="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center">
+                    <span className="inline-flex items-center gap-2 text-sm font-bold text-gray-900 group-hover:text-brand-accent transition-colors">
+                      Leer artículo <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

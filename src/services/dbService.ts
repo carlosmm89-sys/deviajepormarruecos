@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import { Destination, Tour, Lead, BusinessSettings, BlogPost } from '../types';
+import { Destination, Tour, Lead, BusinessSettings, BlogPost, GalleryImage } from '../types';
 
 // Translation Interceptor
 const applyTranslations = <T extends any>(data: T): T => {
@@ -200,5 +200,21 @@ export const dbService = {
   },
   incrementBlogViews: async (id: string) => {
     await supabase.rpc('increment_blog_views', { row_id: id });
+  },
+
+  // Gallery
+  getGalleryImages: async (): Promise<GalleryImage[]> => {
+    const { data, error } = await supabase.from('gallery_images').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    return data;
+  },
+  saveGalleryImage: async (image: Partial<GalleryImage>): Promise<GalleryImage> => {
+    const { data, error } = await supabase.from('gallery_images').upsert([image]).select().single();
+    if (error) throw error;
+    return data;
+  },
+  deleteGalleryImage: async (id: string): Promise<void> => {
+    const { error } = await supabase.from('gallery_images').delete().eq('id', id);
+    if (error) throw error;
   }
 };

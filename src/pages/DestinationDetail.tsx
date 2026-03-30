@@ -22,6 +22,8 @@ export default function DestinationDetail() {
   const [durationFilter, setDurationFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('featured');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [toc, setToc] = useState<{ id: string, text: string, level: number }[]>([]);
+  const [processedContent, setProcessedContent] = useState('');
 
   usePageViews('destination', destination?.id);
 
@@ -49,6 +51,32 @@ export default function DestinationDetail() {
     };
     loadData();
   }, [id]);
+
+  useEffect(() => {
+    if (destination?.description && destination.description.includes('<h')) {
+      // Basic TOC Generation
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = destination.description;
+      const headings = tempDiv.querySelectorAll('h2, h3');
+      const newToc: { id: string, text: string, level: number }[] = [];
+      
+      headings.forEach((heading, i) => {
+        const id = `heading-${i}`;
+        heading.id = id;
+        newToc.push({
+          id,
+          text: heading.textContent || '',
+          level: heading.tagName === 'H2' ? 2 : 3
+        });
+      });
+      
+      setToc(newToc);
+      setProcessedContent(tempDiv.innerHTML);
+    } else {
+      setProcessedContent(destination?.description || '');
+      setToc([]);
+    }
+  }, [destination]);
 
   const durations = useMemo(() => {
     const unique = new Set(allTours.map(t => t.itinerary_summary || 'Varios días'));
@@ -260,7 +288,7 @@ export default function DestinationDetail() {
                             {tour.title}
                           </h3>
                           <p className="text-gray-500 text-sm line-clamp-4 leading-relaxed flex-1">
-                            {tour.itinerary_details?.replace(/<[^>]*>?/gm, '') || 'Descubre esta increíble aventura en Marruecos.'}
+                            {tour.itinerary_details?.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&') || 'Descubre esta increíble aventura en Marruecos.'}
                           </p>
                         </div>
 
@@ -295,13 +323,50 @@ export default function DestinationDetail() {
               </div>
             </div>
 
-            <section className="bg-white p-10 md:p-16 rounded-[3rem] shadow-sm border border-gray-100 space-y-8">
-              <div className="max-w-3xl space-y-6">
-                <h2 className="text-4xl font-serif font-bold text-brand-primary">Descubre la magia de {destination.name}</h2>
-                <div className="w-20 h-1.5 bg-brand-accent rounded-full" />
-                <p className="text-gray-600 leading-relaxed text-lg whitespace-pre-wrap">
-                  {destination.description}
-                </p>
+            <section className="bg-white p-8 md:p-16 rounded-[3rem] shadow-sm border border-gray-100 flex flex-col lg:flex-row gap-12">
+              {toc.length > 0 && (
+                <aside className="w-full lg:w-1/3">
+                  <div className="sticky top-32 bg-gray-50/50 p-8 rounded-3xl border border-gray-100">
+                    <h3 className="font-serif font-bold text-xl text-gray-900 mb-6 flex items-center gap-2">Índice</h3>
+                    <ul className="space-y-3">
+                      {toc.map((item) => (
+                        <li key={item.id} className={`${item.level === 3 ? 'ml-4' : ''}`}>
+                          <a 
+                            href={`#${item.id}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }}
+                            className={`hover:text-[#d36631] transition-colors font-medium text-sm block ${item.level === 2 ? 'text-gray-900' : 'text-gray-500'}`}
+                          >
+                            {item.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </aside>
+              )}
+              
+              <div className={`w-full ${toc.length > 0 ? 'lg:w-2/3' : 'max-w-3xl'}`}>
+                {!toc.length && (
+                  <>
+                    <h2 className="text-4xl font-serif font-bold text-brand-primary">Descubre la magia de {destination.name}</h2>
+                    <div className="w-20 h-1.5 bg-brand-accent rounded-full mt-6 mb-8" />
+                  </>
+                )}
+                <div 
+                  className="prose prose-lg md:prose-xl max-w-none text-gray-600 leading-loose text-justify
+                             prose-headings:font-serif prose-headings:text-gray-900 
+                             prose-h2:text-3xl prose-h2:font-extrabold prose-h2:mt-12 prose-h2:mb-6 prose-h2:pb-2 prose-h2:border-b-2 prose-h2:border-gray-100
+                             prose-h3:text-2xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-gray-800
+                             prose-p:mb-8 prose-p:text-lg prose-p:leading-relaxed
+                             prose-a:text-[#d36631] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+                             prose-strong:text-gray-900 prose-strong:font-bold
+                             prose-ul:list-disc prose-ul:pl-6 prose-li:mb-2 prose-li:text-lg
+                             [&_p]:break-words [&_p]:overflow-wrap-anywhere whitespace-pre-wrap"
+                  dangerouslySetInnerHTML={{ __html: processedContent }}
+                />
               </div>
             </section>
           </main>

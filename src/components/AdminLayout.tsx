@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Compass, Map, LogOut, Settings, Users, BookOpen, Menu, X, Home } from 'lucide-react';
+import { Compass, Map, LogOut, Settings, Users, BookOpen, Menu, X, Home, Image } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -20,6 +20,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Destinos', path: '/admin/destinations', icon: Map },
     { name: 'Tours', path: '/admin/tours', icon: Compass },
     { name: 'Blog', path: '/admin/blog', icon: BookOpen },
+    { name: 'Galería', path: '/admin/gallery', icon: Image },
     { name: 'Leads', path: '/admin/leads', icon: Users },
     { name: 'Configuración', path: '/admin/settings', icon: Settings },
   ];
