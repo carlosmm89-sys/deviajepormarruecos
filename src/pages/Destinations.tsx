@@ -64,7 +64,7 @@ export default function Destinations() {
                 <div className="flex justify-between items-center">
                   <h3 className="text-3xl font-serif font-bold group-hover:text-brand-accent transition-colors">{dest.name}</h3>
                 </div>
-                <p className="text-gray-500 leading-relaxed line-clamp-3">{dest.description}</p>
+                <p className="text-gray-500 leading-relaxed line-clamp-3">{dest.description?.replace(/<[^>]*>?/gm, '')}</p>
               </div>
             </Link>
           </motion.div>
