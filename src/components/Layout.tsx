@@ -436,7 +436,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <span className="absolute left-full ml-4 bg-white text-gray-800 text-sm font-bold py-2 px-4 rounded-xl shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap">
           Diseña tu viaje a medida
         </span>
-        <Sparkles className="w-8 h-8" />
+        <Map className="w-8 h-8" />
       </button>
 
       {/* Quote Wizard Modal */}

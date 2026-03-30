@@ -81,7 +81,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
     }
   };
 
-  const destinations = ['Desierto del Sahara', 'Norte de Marruecos', 'Ciudades Imperiales', 'Costa Atlántica', 'Gran Tour de Marruecos', 'Mixto / Aún no lo sé'];
+  const destinations = ['Desierto del Sahara', 'Norte de Marruecos', 'Ciudades Imperiales', 'Costa Atlántica', 'Gran Tour de Marruecos', 'Actividades', 'Mixto / Aún no lo sé'];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
