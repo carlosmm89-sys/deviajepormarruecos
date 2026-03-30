@@ -6,6 +6,7 @@ import {
   ArrowLeft, Home, BookOpen, ShieldCheck, Map as MapIcon, Image as ImageIcon,
   ChevronDown, ChevronUp, CheckCircle2, PlusSquare, HelpCircle, Star, Share, Heart, Calendar, User, ArrowRight
 } from 'lucide-react';
+import TourRouteMap from '../components/TourRouteMap';
 import { dbService } from '../services/dbService';
 import ImageGalleryModal from '../components/ImageGalleryModal';
 import ReviewsModal from '../components/ReviewsModal';
@@ -441,17 +442,19 @@ export default function TourDetail() {
             />
           </div>
 
-          {tour.map_iframe && (
-            <div ref={mapaRef} className="space-y-12">
-              <div className="flex items-center gap-3">
-                <div className="w-1 h-8 bg-brand-accent rounded-full" />
-                <h2 className="text-3xl font-bold text-gray-900">Mapa del Itinerario</h2>
-              </div>
+          <div ref={mapaRef} className="border-t border-gray-100 pt-12 space-y-6">
+            <div className="flex items-center gap-3 mb-8">
+              <MapPin className="w-8 h-8 text-gray-900" />
+              <h2 className="text-3xl font-bold text-gray-900">Mapa del Itinerario</h2>
+            </div>
+            {(tour.departure_city || tour.return_city) ? (
+              <TourRouteMap departureCity={tour.departure_city} returnCity={tour.return_city} />
+            ) : tour.map_iframe ? (
               <div className="w-full aspect-video rounded-3xl overflow-hidden border border-gray-100 shadow-sm [&>iframe]:w-full [&>iframe]:h-full"
                    dangerouslySetInnerHTML={{ __html: tour.map_iframe }} 
               />
-            </div>
-          )}
+            ) : null}
+          </div>
 
           <div className="border-t border-gray-100 pt-12 space-y-6">
             <div className="flex items-center gap-3 mb-8">
@@ -544,11 +547,11 @@ export default function TourDetail() {
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Fecha de llegada*</label>
-                            <input type="date" name="date_arrival" className="input-field text-gray-600" required value={dateArrival} onChange={e => setDateArrival(e.target.value)} />
+                            <input type="date" name="date_arrival" min={new Date().toISOString().split('T')[0]} className="input-field text-gray-600" required value={dateArrival} onChange={e => setDateArrival(e.target.value)} />
                           </div>
                           <div>
                             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">Fecha de salida*</label>
-                            <input type="date" name="date_departure" className="input-field text-gray-600" required value={dateDeparture} onChange={e => setDateDeparture(e.target.value)} />
+                            <input type="date" name="date_departure" min={dateArrival || new Date().toISOString().split('T')[0]} className="input-field text-gray-600" required value={dateDeparture} onChange={e => setDateDeparture(e.target.value)} />
                           </div>
                         </div>
 
