@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Destination, Tour } from '../types';
+import { Destination, Tour, GalleryImage } from '../types';
 import { MapPin, Clock, ArrowRight, Star, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { dbService } from '../services/dbService';
@@ -16,6 +16,7 @@ import Testimonials from '../components/Testimonials';
 export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [featuredTours, setFeaturedTours] = useState<Tour[]>([]);
+  const [galleryPreview, setGalleryPreview] = useState<GalleryImage[]>([]);
   const [settings, setSettings] = useState<BusinessSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -30,8 +31,10 @@ export default function Home() {
         const dests = await dbService.getDestinations();
         const tours = await dbService.getTours();
         const bizSettings = await dbService.getBusinessSettings();
+        const photos = await dbService.getGalleryImages();
         setDestinations(dests.slice(0, 4));
         setFeaturedTours(tours.slice(0, 3));
+        setGalleryPreview(photos.slice(0, 5));
         if (bizSettings) setSettings(bizSettings);
       } catch (err) {
         console.error("Error loading home data", err);
@@ -213,6 +216,52 @@ export default function Home() {
               </motion.div>
             ))
           )}
+        </div>
+      </section>
+
+      {/* Gallery Mini Section */}
+      <section className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex justify-between items-end mb-10">
+          <div>
+            <h2 className="text-4xl text-brand-secondary font-serif font-bold">Marruecos en Imágenes</h2>
+            <p className="text-gray-500 mt-2">La esencia de nuestro país capturada en cada viaje</p>
+          </div>
+          <Link to="/galeria" className="hidden md:flex items-center gap-2 text-brand-primary font-bold hover:text-brand-accent transition-colors pb-2">
+            Ver todas <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {galleryPreview.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]">
+            {galleryPreview.map((img, idx) => (
+              <Link 
+                key={img.id} 
+                to="/galeria"
+                className={`relative group overflow-hidden rounded-2xl md:rounded-[2rem] bg-gray-100 block ${idx === 0 ? 'col-span-2 row-span-2' : ''}`}
+              >
+                <img 
+                  src={img.image_url} 
+                  alt={img.title || 'Galería de Marruecos'} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                  {img.title && <h3 className="text-white font-serif font-bold text-xl">{img.title}</h3>}
+                  {img.category && <p className="text-brand-primary uppercase text-xs font-bold tracking-wider mt-1">{img.category}</p>}
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="w-full h-[400px] border-2 border-dashed border-gray-200 rounded-3xl flex items-center justify-center">
+             <p className="text-gray-500 font-medium">Próximamente nuestra gran galería fotográfica.</p>
+          </div>
+        )}
+
+        <div className="mt-8 text-center md:hidden">
+          <Link to="/galeria" className="inline-flex items-center gap-2 text-brand-primary font-bold">
+            Ver todas las fotos <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </section>
 
