@@ -29,44 +29,54 @@ export default function AdminGallery() {
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(event.target.files || []) as File[];
+    if (files.length === 0) return;
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('Solo se permiten archivos de imagen');
-      return;
+    // Validate files
+    const validFiles = files.filter(f => f.type.startsWith('image/') && f.size <= 5 * 1024 * 1024);
+    if (validFiles.length < files.length) {
+      toast.error(`Se saltaron ${files.length - validFiles.length} archivos por no ser imagen o exceder 5MB.`);
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('El tamaño máximo de imagen es 5MB');
-      return;
-    }
+    if (validFiles.length === 0) return;
 
     try {
       setIsUploading(true);
-      const loadingToast = toast.loading('Subiendo imagen al Storage...');
+      const loadingToast = toast.loading(`Subiendo ${validFiles.length} imágenes...`);
       
-      const imageUrl = await dbService.uploadImage(file);
+      let successCount = 0;
+      for (const file of validFiles) {
+        try {
+          const imageUrl = await dbService.uploadImage(file);
+          const newImage: Partial<GalleryImage> = {
+            image_url: imageUrl,
+            title: uploadTitle || undefined,
+            category: uploadCategory || undefined
+          };
+          await dbService.saveGalleryImage(newImage);
+          successCount++;
+        } catch (fileErr) {
+          console.error('Error subiendo un archivo:', fileErr);
+        }
+      }
       
-      const newImage: Partial<GalleryImage> = {
-        image_url: imageUrl,
-        title: uploadTitle || undefined,
-        category: uploadCategory || undefined
-      };
-
-      await dbService.saveGalleryImage(newImage);
-      
-      toast.success('Imagen guardada exitosamente', { id: loadingToast });
+      if (successCount > 0) {
+        toast.success(`Se guardaron ${successCount} imágenes exitosamente`, { id: loadingToast });
+      } else {
+        toast.error('Ninguna imagen se pudo guardar', { id: loadingToast });
+      }
       
       // Reset form & Reload
       setUploadTitle('');
       setUploadCategory('');
       loadImages();
     } catch (error: any) {
-      console.error('Error en upload:', error);
-      toast.error('Ha fallado la subida: ' + error.message);
+      console.error('Error en upload batch:', error);
+      toast.error('Ha fallado el proceso: ' + error.message);
     } finally {
       setIsUploading(false);
+      // Reset the input value so the same files can be selected again if needed
+      event.target.value = '';
     }
   };
 
@@ -139,7 +149,7 @@ export default function AdminGallery() {
                       </>
                     )}
                   </div>
-                  <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} disabled={isUploading} />
+                  <input type="file" multiple className="hidden" accept="image/*" onChange={handleFileUpload} disabled={isUploading} />
                 </label>
               </div>
             </div>
