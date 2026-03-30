@@ -18,6 +18,7 @@ const Blog = lazy(() => import('./pages/Blog'));
 const BlogPostDetail = lazy(() => import('./pages/BlogPost'));
 const Tours = lazy(() => import('./pages/Tours'));
 const CollectionPage = lazy(() => import('./pages/CollectionPage'));
+const Activities = lazy(() => import('./pages/Activities'));
 
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminDestinations = lazy(() => import('./pages/AdminDestinations'));
@@ -55,6 +56,7 @@ export default function App() {
                   <Route path="/tours/:id" element={<TourDetail />} />
                   <Route path="/coleccion/:categorySlug" element={<CollectionPage />} />
                   <Route path="/favoritos" element={<Wishlist />} />
+                  <Route path="/actividades" element={<Activities />} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:slug" element={<BlogPostDetail />} />
                   <Route path="/galeria" element={<Gallery />} />

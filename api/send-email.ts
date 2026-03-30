@@ -39,7 +39,7 @@ export default async function handler(req: any, res: any) {
     // Email for the Admin
     const adminMailOptions = {
       from: `"Vivir Marruecos Web" <${settings.smtp_from_email || settings.smtp_user}>`,
-      to: settings.admin_email || 'info@vivirmarruecos.com',
+      to: [settings.admin_email, 'info@vivirmarruecos.com'].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(', '),
       subject: `Nueva Consulta Web: ${lead.form_type} - ${lead.first_name}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">

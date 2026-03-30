@@ -73,7 +73,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       ]
     },
     { name: t('nav_tours') || 'Tours', path: '/tours', icon: MapPin },
-    { name: 'Actividades', path: '/coleccion/actividades', icon: MapPin },
+    { name: 'Actividades', path: '/actividades', icon: MapPin },
     { name: 'Galería', path: '/galeria', icon: MapPin },
     { name: t('nav_blog') || 'Blog', path: '/blog', icon: BookOpen },
   ];
