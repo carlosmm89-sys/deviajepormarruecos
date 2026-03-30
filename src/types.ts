@@ -102,6 +102,7 @@ export interface BusinessSettings {
   hero_image_url?: string;
   hero_title?: string;
   hero_subtitle?: string;
+  google_analytics_id?: string;
   home_views?: number;
 }
 

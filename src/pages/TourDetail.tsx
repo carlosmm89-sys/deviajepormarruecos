@@ -379,16 +379,18 @@ export default function TourDetail() {
             </div>
           </div>
           
-          <div className="space-y-8">
-            <div className="flex items-center gap-3">
-              <div className="w-1 h-8 bg-brand-accent rounded-full" />
-                <div className="text-4xl font-black text-gray-900">{formatPrice(tour.price)}</div>
+          {tour.recommendations && (
+            <div className="space-y-8">
+              <div className="flex items-center gap-3">
+                <div className="w-1 h-8 bg-brand-accent rounded-full" />
+                <h2 className="text-3xl font-bold text-gray-900">Recomendaciones Especiales</h2>
+              </div>
+              <div 
+                className="bg-white p-6 rounded-3xl border border-gray-100 prose prose-sm max-w-none text-gray-600 break-words w-full overflow-hidden [&_p]:whitespace-normal"
+                dangerouslySetInnerHTML={{ __html: tour.recommendations }}
+              />
             </div>
-            <div 
-              className="prose prose-sm max-w-none text-gray-600 break-words w-full overflow-hidden [&_p]:whitespace-normal"
-              dangerouslySetInnerHTML={{ __html: tour.recommendations || '<p>No hay recomendaciones especiales.</p>' }}
-            />
-          </div>
+          )}
 
           <div ref={itinerarioRef} className="space-y-12">
             <div className="flex items-center gap-3">

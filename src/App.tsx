@@ -7,6 +7,7 @@ import Layout from './components/Layout';
 import AdminRoute from './components/AdminRoute';
 
 import ScrollToTop from './components/ScrollToTop';
+import GoogleAnalytics from './components/GoogleAnalytics';
 
 // --- Lazy Loading (Code Splitting) ---
 const Home = lazy(() => import('./pages/Home'));
@@ -46,6 +47,7 @@ export default function App() {
         <CurrencyProvider>
           <Router>
             <ScrollToTop />
+            <GoogleAnalytics />
             <Layout>
               <Suspense fallback={<PageLoader />}>
                 <Routes>

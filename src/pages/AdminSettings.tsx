@@ -192,6 +192,12 @@ export default function AdminSettings() {
                   <p className="text-xs text-gray-500 mb-2">Pega aquí el código HTML para inyectar tu galería interactiva de Instagram en la página de inicio.</p>
                   <textarea {...register('instagram_widget')} className="input-field font-mono text-xs min-h-[120px]" placeholder="<script src='...'></script>\n<div class='elfsight-app-...'></div>" />
                 </div>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700 block">ID de Google Analytics</label>
+                  <p className="text-xs text-gray-500 mb-2">Identificador de medición de GA4 (ej. G-XXXXXXXXX). Se inyectará automáticamente en la cabecera del sitio.</p>
+                  <input type="text" {...register('google_analytics_id')} className="input-field font-mono text-sm" placeholder="G-A1B2C3D4E5" />
+                </div>
               </div>
             </div>
 
