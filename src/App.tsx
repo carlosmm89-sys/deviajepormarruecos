@@ -6,6 +6,8 @@ import { CurrencyProvider } from './context/CurrencyContext';
 import Layout from './components/Layout';
 import AdminRoute from './components/AdminRoute';
 
+import ScrollToTop from './components/ScrollToTop';
+
 // --- Lazy Loading (Code Splitting) ---
 const Home = lazy(() => import('./pages/Home'));
 const Destinations = lazy(() => import('./pages/Destinations'));
@@ -42,6 +44,7 @@ export default function App() {
       <LanguageProvider>
         <CurrencyProvider>
           <Router>
+            <ScrollToTop />
             <Layout>
               <Suspense fallback={<PageLoader />}>
                 <Routes>
