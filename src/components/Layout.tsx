@@ -221,7 +221,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               className="md:hidden absolute top-20 left-0 right-0 bg-white border-b border-gray-100 p-4 shadow-xl"
             >
               <div className="flex flex-col space-y-4">
-                {navLinks.map((link) => (
+                {navLinks.filter(l => l.name !== 'Viajes Exclusivos').map((link) => (
                   <div key={link.name} className="flex flex-col space-y-3 pb-2">
                     {link.subItems ? (
                       <>
@@ -418,7 +418,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         href={`https://wa.me/${settings?.whatsapp_number?.replace(/\D/g, '') || ''}${settings?.whatsapp_welcome_message ? `?text=${encodeURIComponent(settings.whatsapp_welcome_message)}` : ''}`}
         target="_blank" 
         rel="noreferrer"
-        className="fixed bottom-6 lg:bottom-10 right-6 lg:right-10 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_4px_24px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform flex items-center justify-center group"
+        className={`fixed bottom-6 lg:bottom-10 right-6 lg:right-10 z-[60] bg-[#25D366] text-white p-4 rounded-full shadow-[0_4px_24px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform justify-center group ${location.pathname.includes('/tours/') ? 'hidden md:flex' : 'flex items-center'}`}
         aria-label="Contactar por WhatsApp"
       >
         <span className="absolute right-full mr-4 bg-white text-gray-800 text-sm font-bold py-2 px-4 rounded-xl shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap">
@@ -431,7 +431,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Floating Quote Wizard Button */}
       <button 
         onClick={() => setIsWizardOpen(true)}
-        className="fixed bottom-6 lg:bottom-10 left-6 lg:left-10 z-50 bg-[#D97D3A] text-white p-4 rounded-full shadow-[0_4px_24px_rgba(217,125,58,0.4)] hover:scale-110 transition-transform flex items-center justify-center group"
+        className={`fixed bottom-6 lg:bottom-10 left-6 lg:left-10 z-[60] bg-[#D97D3A] text-white p-4 rounded-full shadow-[0_4px_24px_rgba(217,125,58,0.4)] hover:scale-110 transition-transform justify-center group ${location.pathname.includes('/tours/') ? 'hidden md:flex' : 'flex items-center'}`}
       >
         <span className="absolute left-full ml-4 bg-white text-gray-800 text-sm font-bold py-2 px-4 rounded-xl shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap">
           Diseña tu viaje a medida

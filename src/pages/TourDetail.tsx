@@ -260,7 +260,7 @@ export default function TourDetail() {
       </section>
 
       {/* Sticky Nav */}
-      <div className="sticky top-[72px] md:top-[88px] z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all -mx-4 px-4 md:mx-0 md:px-0">
+      <div className="sticky top-[88px] md:top-[96px] z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all -mx-4 px-4 md:mx-0 md:px-0">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex gap-8 overflow-x-auto no-scrollbar py-4">
             {['Descripción', 'Itinerario', 'Mapa'].map((tab) => (
