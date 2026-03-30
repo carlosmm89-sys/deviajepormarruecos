@@ -11,6 +11,7 @@ import ImageUpload from '../components/ImageUpload';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { Language } from '../context/LanguageContext';
+import imageCompression from 'browser-image-compression';
 
 const tourSchema = z.object({
   title: z.string().min(1, 'El título es requerido').max(200),
@@ -64,6 +65,7 @@ export default function AdminTourEdit() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<Language>('es');
+  const [isUploadingMultiple, setIsUploadingMultiple] = useState(false);
 
   const isNew = id === 'new';
 
@@ -158,6 +160,28 @@ export default function AdminTourEdit() {
     } catch (err: any) {
       console.error('Error saving tour:', err);
       setError(`Error al guardar el tour: ${err?.message || err?.details || JSON.stringify(err) || 'Desconocido'}`);
+    }
+  };
+
+  const handleMultipleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    try {
+      setIsUploadingMultiple(true);
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const options = { maxSizeMB: 0.3, maxWidthOrHeight: 1200, useWebWorker: true };
+        const compressedFile = await imageCompression(file, options);
+        const url = await dbService.uploadImage(compressedFile);
+        appendGallery(url);
+      }
+    } catch (error) {
+      console.error('Error in multi-upload', error);
+      alert('Hubo un error al subir múltiples imágenes. Verifica la conexión o el tamaño.');
+    } finally {
+      setIsUploadingMultiple(false);
+      if (e.target) e.target.value = '';
     }
   };
 
@@ -361,9 +385,29 @@ export default function AdminTourEdit() {
                   <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                     <ImageIcon className="w-5 h-5 text-brand-primary" /> Galería Secundaria
                   </label>
-                  <button type="button" onClick={() => appendGallery('' as any)} className="text-xs text-brand-accent font-bold hover:underline px-3 py-1.5 bg-white rounded-lg shadow-sm border border-gray-200">
-                    + Añadir foto
-                  </button>
+                  
+                  <div className="relative">
+                    <input 
+                      type="file" 
+                      multiple 
+                      accept="image/*"
+                      onChange={handleMultipleUpload}
+                      disabled={isUploadingMultiple}
+                      className="hidden" 
+                      id="multiUploadInput" 
+                    />
+                    <label 
+                      htmlFor="multiUploadInput" 
+                      className={`text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm border transition-colors flex items-center gap-2 cursor-pointer 
+                        ${isUploadingMultiple ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed' : 'text-brand-accent bg-white border-gray-200 hover:underline hover:bg-gray-50'}`}
+                    >
+                      {isUploadingMultiple ? (
+                        <>Subiendo imágenes...</>
+                      ) : (
+                        <>+ Subir Varias Fotos</>
+                      )}
+                    </label>
+                  </div>
                 </div>
                 <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
                   {galleryFields.map((field, index) => (
