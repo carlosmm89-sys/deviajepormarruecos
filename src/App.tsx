@@ -8,6 +8,7 @@ import AdminRoute from './components/AdminRoute';
 
 import ScrollToTop from './components/ScrollToTop';
 import GoogleAnalytics from './components/GoogleAnalytics';
+import WhatsAppBubble from './components/WhatsAppBubble';
 
 // --- Lazy Loading (Code Splitting) ---
 const Home = lazy(() => import('./pages/Home'));
@@ -48,6 +49,7 @@ export default function App() {
           <Router>
             <ScrollToTop />
             <GoogleAnalytics />
+            <WhatsAppBubble />
             <Layout>
               <Suspense fallback={<PageLoader />}>
                 <Routes>

@@ -40,6 +40,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNo
 export default function TourDetail() {
   const { id } = useParams<{ id: string }>();
   const [tour, setTour] = useState<Tour | null>(null);
+  const [relatedTours, setRelatedTours] = useState<Tour[]>([]);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('descripcion');
@@ -81,6 +82,10 @@ export default function TourDetail() {
         if (id) {
           const t = await dbService.getTour(id);
           setTour(t);
+
+          const allTours = await dbService.getTours();
+          const rt = allTours.filter(x => x.id !== t.id && x.is_active && x.category === t.category);
+          setRelatedTours(rt.sort(() => 0.5 - Math.random()).slice(0, 3));
           
           const posts = await dbService.getBlogPosts();
           const rel = posts.filter(p => p.category !== 'Actividades').sort(() => 0.5 - Math.random());
@@ -501,8 +506,8 @@ export default function TourDetail() {
           </div>
         </div>
 
-        {/* Sidebar Booking */}
-        <div className="lg:col-span-1 min-w-0">
+        {/* Sidebar / Booking Form */}
+        <div className="lg:col-span-1 relative" id="booking-form">
           <div className="sticky top-32 space-y-8">
             <div className="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-xl border border-gray-100 overflow-hidden relative">
               <AnimatePresence mode="wait">
@@ -626,6 +631,53 @@ export default function TourDetail() {
         </div>
       </div>
 
+      {relatedTours.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 mt-24 border-t border-gray-100 pt-16">
+          <div className="flex items-center justify-between mb-10">
+            <h2 className="text-3xl font-bold text-gray-900 font-serif">Tours Similares</h2>
+            <Link to="/tours" className="hidden md:flex items-center gap-2 text-brand-primary font-bold hover:text-brand-accent transition-colors">
+              Ver todos <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {relatedTours.map((t) => (
+              <motion.div
+                  key={t.id}
+                  whileHover={{ y: -5 }}
+                  className="group bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl transition-all border border-gray-100"
+              >
+                  <Link to={`/tours/${t.id}`}>
+                      <div className="relative h-64 overflow-hidden">
+                          <img
+                              src={t.featured_image || t.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600'}
+                              alt={t.title}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              referrerPolicy="no-referrer"
+                          />
+                          <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl text-brand-primary font-bold shadow-sm">
+                              {t.price ? formatPrice(t.price) : 'Consultar'}
+                          </div>
+                      </div>
+                      <div className="p-8 space-y-4">
+                          <div className="flex items-center gap-2 text-brand-accent text-sm font-bold uppercase tracking-widest">
+                              <MapPin className="w-4 h-4" />
+                              <span className="truncate">{t.category || 'Tour'}</span>
+                          </div>
+                          <h3 className="text-xl font-serif font-bold group-hover:text-brand-primary transition-colors line-clamp-2">{t.title}</h3>
+                          <div className="flex items-center gap-4 text-gray-500 text-sm">
+                              <div className="flex items-center gap-1.5">
+                                  <Clock className="w-4 h-4" />
+                                  <span className="truncate">{t.itinerary_summary || 'Varios días'}</span>
+                              </div>
+                          </div>
+                      </div>
+                  </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {relatedPosts.length > 0 && (
         <div className="max-w-7xl mx-auto px-4 mt-24 border-t border-gray-100 pt-16">
           <div className="flex items-center gap-3 mb-10">
@@ -670,6 +722,27 @@ export default function TourDetail() {
           </div>
         </div>
       )}
+      {/* Mobile Sticky CTA */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-8px_30px_rgb(0,0,0,0.08)] z-40 transform translate-y-0 transition-transform duration-300">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500 font-bold uppercase tracking-wider">Precio desde</span>
+            <span className="text-2xl font-black text-brand-primary leading-none">{formatPrice(tour.price)}</span>
+          </div>
+          <button 
+            onClick={() => {
+              const el = document.getElementById('booking-form');
+              if (el) {
+                const y = el.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+              }
+            }}
+            className="btn-primary py-3 px-8 text-sm flex-1 shadow-lg shadow-brand-primary/20"
+          >
+            Reservar
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

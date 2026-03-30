@@ -6,6 +6,7 @@ interface CurrencyContextType {
   currencyCode: CurrencyCode;
   setCurrencyCode: (code: CurrencyCode) => void;
   formatPrice: (amountInEur: number) => string;
+  rate: number;
 }
 
 // Exchange rates relative to Base EUR
@@ -56,8 +57,10 @@ export const CurrencyProvider: React.FC<{ children: ReactNode }> = ({ children }
     return formatPriceUtil(amountInEur, currencyCode);
   };
 
+  const rate = EXCHANGE_RATES[currencyCode];
+
   return (
-    <CurrencyContext.Provider value={{ currencyCode, setCurrencyCode, formatPrice }}>
+    <CurrencyContext.Provider value={{ currencyCode, setCurrencyCode, formatPrice, rate }}>
       {children}
     </CurrencyContext.Provider>
   );
