@@ -8,9 +8,11 @@ interface Props {
   onChange: (url: string) => void;
   label?: string;
   className?: string;
+  maxWidth?: number;
+  maxSizeMB?: number;
 }
 
-export default function ImageUpload({ value, onChange, label, className = '' }: Props) {
+export default function ImageUpload({ value, onChange, label, className = '', maxWidth, maxSizeMB }: Props) {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -22,9 +24,10 @@ export default function ImageUpload({ value, onChange, label, className = '' }: 
       setUploading(true);
       // Compress image before upload
       const options = {
-        maxSizeMB: 0.3,
-        maxWidthOrHeight: 1200,
-        useWebWorker: true
+        maxSizeMB: maxSizeMB || 0.3,
+        maxWidthOrHeight: maxWidth || 1200,
+        useWebWorker: true,
+        fileType: 'image/webp'
       };
       const compressedFile = await imageCompression(file, options);
       

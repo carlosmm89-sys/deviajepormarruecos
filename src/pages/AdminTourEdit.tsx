@@ -171,7 +171,7 @@ export default function AdminTourEdit() {
       setIsUploadingMultiple(true);
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const options = { maxSizeMB: 0.3, maxWidthOrHeight: 1200, useWebWorker: true };
+        const options = { maxSizeMB: 0.3, maxWidthOrHeight: 1200, useWebWorker: true, fileType: 'image/webp' };
         const compressedFile = await imageCompression(file, options);
         const url = await dbService.uploadImage(compressedFile);
         appendGallery(url);

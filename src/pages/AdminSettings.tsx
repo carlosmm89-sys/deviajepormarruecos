@@ -159,7 +159,9 @@ export default function AdminSettings() {
                     <ImageUpload 
                       label="Imagen Principal (Hero de la Web)" 
                       value={field.value || ''} 
-                      onChange={field.onChange} 
+                      onChange={field.onChange}
+                      maxWidth={1920}
+                      maxSizeMB={1.5}
                     />
                   )}
                 />
