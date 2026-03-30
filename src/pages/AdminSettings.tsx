@@ -6,12 +6,12 @@ import { motion } from 'framer-motion';
 import { useForm, Controller } from 'react-hook-form';
 import { dbService } from '../services/dbService';
 import ImageUpload from '../components/ImageUpload';
+import toast from 'react-hot-toast';
 
 export default function AdminSettings() {
   const location = useLocation();
   const [settings, setSettings] = useState<BusinessSettings | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   const { register, handleSubmit, reset, control } = useForm<BusinessSettings>();
 
@@ -34,13 +34,13 @@ export default function AdminSettings() {
   const onSubmit = async (data: BusinessSettings) => {
     try {
       setError(null);
-      setSuccess(null);
       await dbService.saveBusinessSettings(data);
-      setSuccess('Configuración guardada correctamente.');
+      toast.success('Configuración guardada correctamente.');
       fetchSettings();
     } catch (err: any) {
       console.error('Error saving settings:', err);
       setError('Error al guardar la configuración.');
+      toast.error('Error al guardar la configuración.');
     }
   };
 
@@ -55,18 +55,6 @@ export default function AdminSettings() {
           <div className="flex items-center gap-3">
             <AlertCircle className="w-5 h-5" />
             <p>{error}</p>
-          </div>
-        </motion.div>
-      )}
-
-      {success && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-xl flex items-center justify-between"
-        >
-          <div className="flex items-center gap-3">
-            <p>{success}</p>
           </div>
         </motion.div>
       )}
