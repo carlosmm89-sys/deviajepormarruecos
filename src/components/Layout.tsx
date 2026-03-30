@@ -60,18 +60,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const navLinks: NavItem[] = [
     { name: t('nav_destinations') || 'Destinos', path: '/destinations', icon: Map },
-    { 
-      name: 'Viajes Exclusivos', 
-      path: '#', 
-      icon: MapPin,
-      subItems: [
-        { name: 'Luna de Miel', path: '/coleccion/luna-de-miel' },
-        { name: 'Entrega de Anillo', path: '/coleccion/entrega-de-anillo' },
-        { name: 'Viajes en Familia', path: '/coleccion/viajes-en-familia' },
-        { name: 'Viajes de Lujo', path: '/coleccion/viajes-de-lujo' },
-        { name: 'Viajes en Grupo', path: '/coleccion/viajes-en-grupo' },
-      ]
-    },
     { name: t('nav_tours') || 'Tours', path: '/tours', icon: MapPin },
     { name: 'Actividades', path: '/actividades', icon: MapPin },
     { name: 'Galería', path: '/galeria', icon: MapPin },
@@ -221,7 +209,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               className="md:hidden absolute top-20 left-0 right-0 bg-white border-b border-gray-100 p-4 shadow-xl"
             >
               <div className="flex flex-col space-y-4">
-                {navLinks.filter(l => l.name !== 'Viajes Exclusivos').map((link) => (
+                {navLinks.map((link) => (
                   <div key={link.name} className="flex flex-col space-y-3 pb-2">
                     {link.subItems ? (
                       <>
