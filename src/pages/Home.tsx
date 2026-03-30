@@ -125,9 +125,10 @@ export default function Home() {
             destinations.map((dest, idx) => (
               <motion.div
                 key={dest.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ delay: idx * 0.1, duration: 0.6 }}
                 className="group relative h-96 rounded-3xl overflow-hidden cursor-pointer bg-gray-100"
               >
                 <Link to={`/destinations/${dest.id}`}>
@@ -177,9 +178,10 @@ export default function Home() {
             featuredTours.map((tour, idx) => (
               <motion.div
                 key={tour.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ delay: idx * 0.1, duration: 0.6 }}
                 className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all"
               >
                 <Link to={`/tours/${tour.id}`}>

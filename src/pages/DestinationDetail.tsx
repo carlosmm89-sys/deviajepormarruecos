@@ -8,6 +8,7 @@ import { usePageViews } from '../hooks/usePageViews';
 import { useCurrency } from '../context/CurrencyContext';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
+import { useTranslation } from '../hooks/useTranslation';
 
 export default function DestinationDetail() {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +16,7 @@ export default function DestinationDetail() {
   const [allTours, setAllTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
   const { formatPrice } = useCurrency();
+  const { td } = useTranslation();
 
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -129,9 +131,9 @@ export default function DestinationDetail() {
 
   const destinationSchema = {
     "@context": "https://schema.org",
-    "@type": "Place",
-    "name": destination.name,
-    "description": destination.description || `Explora ${destination.name} con Marruecos Experiencia.`,
+    "@type": "TouristDestination",
+    "name": td(destination, 'name'),
+    "description": td(destination, 'description') || `Explora ${td(destination, 'name')} con Marruecos Experiencia.`,
     "image": destination.image_url
   };
 

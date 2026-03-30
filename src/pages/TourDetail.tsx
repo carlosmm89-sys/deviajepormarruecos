@@ -16,6 +16,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
+import { useTranslation } from '../hooks/useTranslation';
 
 const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,6 +67,7 @@ export default function TourDetail() {
   
   const { isFavorite, toggleFavorite } = useWishlist();
   const { formatPrice } = useCurrency();
+  const { td } = useTranslation();
   
   usePageViews('tour', tour?.id);
 
@@ -184,24 +186,30 @@ export default function TourDetail() {
 
   const tourSchema = {
     "@context": "https://schema.org",
-    "@type": "Product",
-    "name": tour.title,
+    "@type": "TouristTrip",
+    "name": td(tour, 'title'),
     "image": tour.featured_image || tour.gallery?.[0] || 'https://www.vivirmarruecos.com/pwa-512x512.png',
-    "description": tour.itinerary_summary || `Tour a ${tour.title} en Marruecos`,
+    "description": td(tour, 'description'),
+    "touristType": "Sightseeing",
     "offers": {
       "@type": "Offer",
       "priceCurrency": "EUR",
       "price": tour.price || 0,
       "availability": "https://schema.org/InStock",
       "url": `https://www.vivirmarruecos.com/tours/${tour.id}`
+    },
+    "provider": {
+      "@type": "TravelAgency",
+      "name": settings?.site_name || "Marruecos Experiencia",
+      "image": settings?.logo_url || 'https://www.vivirmarruecos.com/pwa-512x512.png'
     }
   };
 
   return (
     <div className="pb-24 bg-gray-50/30">
       <SEO 
-        title={`${tour.title} | Marruecos Experiencia`}
-        description={tour.itinerary_summary || `Reserva el tour ${tour.title} al mejor precio con Marruecos Experiencia.`}
+        title={`${td(tour, 'title')} | Marruecos Experiencia`}
+        description={td(tour, 'itinerary_summary') || `Reserva el tour ${td(tour, 'title')} al mejor precio con Marruecos Experiencia.`}
         image={tour.featured_image || tour.gallery?.[0]}
         url={`/tours/${tour.id}`}
         type="product"
@@ -296,7 +304,7 @@ export default function TourDetail() {
 
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
               <div>
-                <h1 className="text-5xl md:text-6xl font-serif font-bold leading-tight text-gray-900 mb-4">{tour.title}</h1>
+                <h1 className="text-5xl md:text-6xl font-serif font-bold leading-tight text-gray-900 mb-4">{td(tour, 'title')}</h1>
                 <div className="flex items-center gap-2 text-gray-900 mb-6 md:mb-0">
                   <Star className="w-5 h-5 fill-current" />
                   <span className="font-bold">5,0</span>
@@ -334,6 +342,12 @@ export default function TourDetail() {
                   >
                     <Heart className={`w-4 h-4 ${isFavorite(tour.id) ? 'fill-current' : ''}`} /> 
                     {isFavorite(tour.id) ? 'Guardado' : 'Guarda'}
+                  </button>
+                  <button 
+                    onClick={() => window.print()}
+                    className="flex items-center gap-2 font-medium bg-brand-primary/10 text-brand-primary px-3 py-1 rounded-full hover:bg-brand-primary hover:text-white transition-colors ml-2 print:hidden"
+                  >
+                    <BookOpen className="w-4 h-4" /> Guardar PDF
                   </button>
                 </div>
               </div>

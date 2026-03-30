@@ -9,5 +9,14 @@ export function useTranslation() {
     return translations[language][key] || translations['es'][key] || key;
   }, [language]);
 
-  return { t, currentLanguage: language };
+  const td = useCallback((record: any, field: string): any => {
+    if (!record) return '';
+    if (language === 'es') return record[field];
+    if (record.translations && record.translations[language] && record.translations[language][field]) {
+      return record.translations[language][field];
+    }
+    return record[field];
+  }, [language]);
+
+  return { t, td, currentLanguage: language };
 }
