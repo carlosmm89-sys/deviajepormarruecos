@@ -68,10 +68,21 @@ export default function Tours() {
     setSortBy('featured');
   };
 
-  // Derive active categories dynamically
+  // Derive active categories dynamically (splitting comma-separated categories)
   const availableCategories = useMemo(() => {
-    const activeSet = new Set(allTours.map(t => t.category).filter(Boolean));
-    return ['Todos', ...STATIC_CATEGORIES.filter(c => activeSet.has(c))];
+    const activeSet = new Set<string>();
+    allTours.forEach(t => {
+      if (!t.category) return;
+      t.category.split(',').forEach(part => {
+        const clean = part.trim();
+        if (clean) activeSet.add(clean);
+      });
+    });
+    const matched = STATIC_CATEGORIES.filter(c => activeSet.has(c));
+    activeSet.forEach(c => {
+      if (!matched.includes(c)) matched.push(c);
+    });
+    return ['Todos', ...matched];
   }, [allTours]);
 
   // Filtering Logic
@@ -88,7 +99,15 @@ export default function Tours() {
 
     // Category
     if (activeCategory !== 'Todos') {
-      result = result.filter(t => t.category === activeCategory);
+      const target = activeCategory.toLowerCase();
+      result = result.filter(t => {
+        if (!t.category) return false;
+        return t.category
+          .toLowerCase()
+          .split(',')
+          .map(s => s.trim())
+          .includes(target);
+      });
     }
 
     // Search Query
@@ -108,8 +127,9 @@ export default function Tours() {
     // Duration Filter
     if (durationFilter && durationFilter !== 'all') {
       result = result.filter(t => {
-        const daysStr = (t.duration || '').toLowerCase().replace(/[^0-9]/g, '');
-        const days = parseInt(daysStr, 10) || 0;
+        const sourceText = `${t.duration || ''} ${t.itinerary_summary || ''} ${t.title || ''}`;
+        const match = sourceText.match(/(\d+)\s*d[ií]as?/i) || sourceText.match(/(\d+)/);
+        const days = match ? parseInt(match[1], 10) : 0;
         
         if (durationFilter.includes('1-3')) return days >= 1 && days <= 3;
         if (durationFilter.includes('4-6')) return days >= 4 && days <= 6;

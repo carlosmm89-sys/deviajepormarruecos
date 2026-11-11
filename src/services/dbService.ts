@@ -26,6 +26,12 @@ const applyTranslations = <T extends any>(data: T): T => {
   return mergeItem(data) as T;
 };
 
+let settingsCache: { data: BusinessSettings | null; ts: number } | null = null;
+let settingsPromise: Promise<BusinessSettings | null> | null = null;
+let destsCache: { data: Destination[]; ts: number } | null = null;
+let toursCache: { data: Tour[]; ts: number } | null = null;
+const CACHE_TTL = 60_000; // 60 seconds
+
 export const dbService = {
   // Storage
   uploadImage: async (file: File | Blob): Promise<string> => {
@@ -58,8 +64,14 @@ export const dbService = {
 
   // Destinations
   getDestinations: async (adminView = false): Promise<Destination[]> => {
+    if (!adminView && destsCache && Date.now() - destsCache.ts < CACHE_TTL) {
+      return applyTranslations(destsCache.data);
+    }
     const { data, error } = await supabase.from('destinations').select('*').order('created_at', { ascending: false });
     if (error) throw error;
+    if (!adminView && data) {
+      destsCache = { data, ts: Date.now() };
+    }
     return adminView ? data : applyTranslations(data);
   },
   getDestination: async (id: string, adminView = false): Promise<Destination | null> => {
@@ -79,17 +91,25 @@ export const dbService = {
   saveDestination: async (destination: Partial<Destination>): Promise<Destination> => {
     const { data, error } = await supabase.from('destinations').upsert([destination]).select().single();
     if (error) throw error;
+    destsCache = null;
     return data;
   },
   deleteDestination: async (id: string): Promise<void> => {
     const { error } = await supabase.from('destinations').delete().eq('id', id);
     if (error) throw error;
+    destsCache = null;
   },
 
   // Tours
   getTours: async (adminView = false): Promise<Tour[]> => {
+    if (!adminView && toursCache && Date.now() - toursCache.ts < CACHE_TTL) {
+      return applyTranslations(toursCache.data);
+    }
     const { data, error } = await supabase.from('tours').select('*, destinations(*)').order('created_at', { ascending: false });
     if (error) throw error;
+    if (!adminView && data) {
+      toursCache = { data, ts: Date.now() };
+    }
     return adminView ? data : applyTranslations(data);
   },
   getTour: async (id: string, adminView = false): Promise<Tour | null> => {
@@ -115,11 +135,13 @@ export const dbService = {
   saveTour: async (tour: Partial<Tour>): Promise<Tour> => {
     const { data, error } = await supabase.from('tours').upsert([tour]).select().single();
     if (error) throw error;
+    toursCache = null;
     return data;
   },
   deleteTour: async (id: string): Promise<void> => {
     const { error } = await supabase.from('tours').delete().eq('id', id);
     if (error) throw error;
+    toursCache = null;
   },
 
   // Leads
@@ -144,13 +166,28 @@ export const dbService = {
 
   // Business Settings
   getBusinessSettings: async (): Promise<BusinessSettings | null> => {
-    const { data, error } = await supabase.from('business_settings').select('*').limit(1).single();
-    if (error) return null;
-    return data;
+    if (settingsCache && Date.now() - settingsCache.ts < CACHE_TTL) {
+      return settingsCache.data;
+    }
+    if (settingsPromise) {
+      return settingsPromise;
+    }
+    settingsPromise = (async () => {
+      try {
+        const { data, error } = await supabase.from('business_settings').select('*').limit(1).single();
+        if (error) return null;
+        settingsCache = { data, ts: Date.now() };
+        return data;
+      } finally {
+        settingsPromise = null;
+      }
+    })();
+    return settingsPromise;
   },
   saveBusinessSettings: async (settings: Partial<BusinessSettings>): Promise<BusinessSettings> => {
     const { data, error } = await supabase.from('business_settings').upsert([settings]).select().single();
     if (error) throw error;
+    settingsCache = { data, ts: Date.now() };
     return data;
   },
 
