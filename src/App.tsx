@@ -9,6 +9,7 @@ import AdminRoute from './components/AdminRoute';
 import ScrollToTop from './components/ScrollToTop';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import WhatsAppBubble from './components/WhatsAppBubble';
+import CookieBanner from './components/CookieBanner';
 
 // --- Lazy Loading (Code Splitting) ---
 const Home = lazy(() => import('./pages/Home'));
@@ -21,6 +22,11 @@ const BlogPostDetail = lazy(() => import('./pages/BlogPost'));
 const Tours = lazy(() => import('./pages/Tours'));
 const CollectionPage = lazy(() => import('./pages/CollectionPage'));
 const Activities = lazy(() => import('./pages/Activities'));
+
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const LegalNotice = lazy(() => import('./pages/LegalNotice'));
+const CookiesPolicy = lazy(() => import('./pages/CookiesPolicy'));
+const TermsConditions = lazy(() => import('./pages/TermsConditions'));
 
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AdminDestinations = lazy(() => import('./pages/AdminDestinations'));
@@ -50,6 +56,7 @@ export default function App() {
             <ScrollToTop />
             <GoogleAnalytics />
             <WhatsAppBubble />
+            <CookieBanner />
             <Layout>
               <Suspense fallback={<PageLoader />}>
                 <Routes>
@@ -64,6 +71,12 @@ export default function App() {
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:slug" element={<BlogPostDetail />} />
                   <Route path="/galeria" element={<Gallery />} />
+                  
+                  {/* Legal Routes */}
+                  <Route path="/privacidad" element={<PrivacyPolicy />} />
+                  <Route path="/aviso-legal" element={<LegalNotice />} />
+                  <Route path="/cookies" element={<CookiesPolicy />} />
+                  <Route path="/condiciones" element={<TermsConditions />} />
                   
                   {/* Admin Routes */}
                   <Route path="/admin/login" element={<AdminLogin />} />

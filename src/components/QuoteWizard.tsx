@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { 
   X, MapPin, Calendar, Users, Mail, ArrowRight, ArrowLeft, Send, Sparkles
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface QuoteWizardProps {
   isOpen: boolean;
@@ -285,8 +286,10 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                       <input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Correo electrónico" className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent" />
                       <textarea name="message" value={formData.message} onChange={handleChange} placeholder="¿Algún detalle o petición especial? (Opcional)" className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent min-h-[100px] resize-none" />
                       <div className="flex gap-3 pt-2">
-                         <input required type="checkbox" className="mt-1 flex-shrink-0 w-4 h-4 text-brand-accent border-gray-300 rounded focus:ring-brand-accent" />
-                        <span className="text-xs text-gray-500">Acepto los términos de privacidad y el uso de mis datos para ser contactado.</span>
+                         <input required type="checkbox" className="mt-1 flex-shrink-0 w-4 h-4 text-brand-accent border-gray-300 rounded focus:ring-brand-accent cursor-pointer" />
+                        <span className="text-xs text-gray-500">
+                          He leído y acepto la <Link to="/privacidad" className="underline hover:text-brand-primary transition-colors">Política de Privacidad</Link>.
+                        </span>
                       </div>
                     </form>
                   </div>

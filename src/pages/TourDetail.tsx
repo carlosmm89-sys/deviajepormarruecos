@@ -584,9 +584,9 @@ export default function TourDetail() {
                       </div>
 
                       <div className="flex gap-3">
-                        <input type="checkbox" className="mt-1 rounded border-gray-300 text-brand-accent focus:ring-brand-accent" required />
-                        <p className="text-[10px] text-gray-400 leading-tight">
-                          Doy mi consentimiento para que este sitio web almacene mi información enviada para que puedan responder a mi consulta
+                        <input type="checkbox" className="mt-1 flex-shrink-0 w-4 h-4 rounded border-gray-300 text-brand-accent focus:ring-brand-accent cursor-pointer" required />
+                        <p className="text-xs text-gray-400 leading-tight pt-0.5">
+                          He leído y acepto la <Link to="/privacidad" className="underline hover:text-brand-primary transition-colors">Política de Privacidad</Link> referida al almacenamiento de mi consulta.
                         </p>
                       </div>
 

@@ -255,6 +255,13 @@ export default function CollectionPage() {
                     />
                   </div>
 
+                  <div className="flex gap-3 pt-2">
+                    <input type="checkbox" className="mt-1 flex-shrink-0 w-4 h-4 rounded border-gray-300 text-[#D97D3A] focus:ring-[#D97D3A] cursor-pointer" required />
+                    <p className="text-xs text-gray-500 leading-tight pt-0.5">
+                      He leído y acepto la <Link to="/privacidad" className="underline hover:text-[#D97D3A] transition-colors">Política de Privacidad</Link> referida al almacenamiento de mi consulta.
+                    </p>
+                  </div>
+
                   <div className="flex justify-center pt-4">
                     <button type="submit" disabled={submitting} className={`bg-[#D97D3A] hover:bg-[#c66c2d] text-white px-12 py-3.5 rounded-full font-bold uppercase tracking-wide text-sm transition-colors shadow-lg shadow-[#D97D3A]/30 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
                       {submitting ? 'ENVIANDO...' : 'ENVIAR MENSAJE'}

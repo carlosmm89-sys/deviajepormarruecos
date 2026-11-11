@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Destination } from '../types';
-import { Plus, Trash2, Edit2, X, Save, Image as ImageIcon, AlertCircle, Globe } from 'lucide-react';
+import { Plus, Trash2, Edit2, X, Save, Image as ImageIcon, AlertCircle, Globe, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -142,6 +142,7 @@ export default function AdminDestinations() {
                 <tr className="bg-gray-50">
                   <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Destino</th>
                   <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Destacado</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-center text-sm uppercase tracking-wider">Visitas</th>
                   <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-right text-sm uppercase tracking-wider">Acciones</th>
                 </tr>
               </thead>
@@ -170,6 +171,12 @@ export default function AdminDestinations() {
                           : 'bg-gray-100 text-gray-500'
                       }`}>
                         {dest.featured ? 'Sí' : 'No'}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      <span className="inline-flex items-center gap-1.5 text-sm font-bold text-gray-700 bg-gray-100 px-3 py-1 rounded-full">
+                        <Eye className="w-4 h-4" />
+                        {dest.views || 0}
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right">

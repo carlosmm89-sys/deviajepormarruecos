@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Destination, Tour } from '../types';
-import { Plus, Trash2, Edit2, Clock, AlertCircle } from 'lucide-react';
+import { Plus, Trash2, Edit2, Clock, AlertCircle, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { dbService } from '../services/dbService';
 
@@ -79,6 +79,7 @@ export default function AdminTours() {
                   <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Categoría</th>
                   <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Precio</th>
                   <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-sm uppercase tracking-wider">Estado</th>
+                  <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-center text-sm uppercase tracking-wider">Visitas</th>
                   <th className="py-4 px-6 font-semibold text-gray-600 border-b border-gray-100 text-right text-sm uppercase tracking-wider">Acciones</th>
                 </tr>
               </thead>
@@ -123,6 +124,12 @@ export default function AdminTours() {
                           : 'bg-red-100 text-red-700'
                       }`}>
                         {tour.is_active ? 'Activo' : 'Oculto'}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      <span className="inline-flex items-center gap-1.5 text-sm font-bold text-gray-700 bg-gray-100 px-3 py-1 rounded-full">
+                        <Eye className="w-4 h-4" />
+                        {tour.views || 0}
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right whitespace-nowrap">
