@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
     "prebuild": "node generate-sitemap.mjs",
-    "build": "vite build",
+    "build": "vite build && node prerender-seo.mjs",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"

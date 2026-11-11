@@ -56,12 +56,9 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!settings) {
-      toast.error('Error de configuración. Intente de nuevo.');
-      return;
-    }
     setIsSubmitting(true);
     try {
+      const activeSettings = settings || await dbService.getBusinessSettings();
       const paxDetails = `Adultos: ${formData.adults}, Niños: ${formData.children}`;
       const extrasDetails = formData.extras.length > 0 ? formData.extras.join(', ') : 'Ninguna';
       
@@ -78,11 +75,13 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
 
       await dbService.createLead(newLead);
 
-      await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lead: newLead, settings, tour_title: `Cotización Personalizada` })
-      }).catch(err => console.error('SMTP fetch fail:', err));
+      if (activeSettings) {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lead: newLead, settings: activeSettings, tour_title: `Cotización Personalizada` })
+        }).catch(err => console.error('SMTP fetch fail:', err));
+      }
 
       setIsSuccess(true);
     } catch (error) {

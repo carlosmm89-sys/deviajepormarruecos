@@ -5,6 +5,7 @@ import { BlogPost, BusinessSettings } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
+import SEO from '../components/SEO';
 
 const CATEGORY_MAP: Record<string, string> = {
   'actividades': 'Actividades',
@@ -17,11 +18,15 @@ const CATEGORY_MAP: Record<string, string> = {
   'viajes-en-familia': 'Viajes en Familia',
   'viajes-en-grupo': 'Viajes en Grupo',
   'viajes-norte-de-marruecos': 'Norte de Marruecos',
+  'norte-de-marruecos': 'Norte de Marruecos',
   'viajes-al-desierto': 'Desierto',
+  'desierto': 'Desierto',
   'rutas-ciudades-imperiales': 'Ciudades Imperiales',
   'ciudades-imperiales': 'Ciudades Imperiales',
   'aventura': 'Aventura',
-  'cultura': 'Cultura'
+  'cultura': 'Cultura',
+  'montana': 'Montaña',
+  'costa': 'Costa'
 };
 
 export default function CollectionPage() {
@@ -49,8 +54,8 @@ export default function CollectionPage() {
           const target = categoryName.toLowerCase();
           if (target === 'desierto' && (c.includes('desierto') || c.includes('sahara'))) return true;
           if (target === 'norte de marruecos' && (c.includes('norte') || c.includes('tanger'))) return true;
-          if (target === 'ciudades imperiales' && (c.includes('imperial') || c.includes('imperiales'))) return true;
-          return c === target;
+          if (target === 'ciudades imperiales' && (c.includes('imperial') || c.includes('imperiales') || c.includes('gran tour'))) return true;
+          return c.split(',').map((s: string) => s.trim()).includes(target) || c.includes(target);
         });
         setTours(filtered);
         setSettings(businessSettings || null);
@@ -70,13 +75,10 @@ export default function CollectionPage() {
 
   const handleLeadSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!settings) {
-      toast.error('Error al cargar la configuración. Reintenta.');
-      return;
-    }
     setSubmitting(true);
     const form = e.currentTarget;
     try {
+      const activeSettings = settings || await dbService.getBusinessSettings();
       const newLead = {
         form_type: 'collection_inquiry',
         first_name: form.first_name.value,
@@ -91,11 +93,13 @@ export default function CollectionPage() {
       await dbService.createLead(newLead);
 
       // Trigger Email
-      await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lead: newLead, settings, tour_title: `Colección: ${categoryName}` })
-      }).catch(err => console.error('SMTP fetch fail:', err));
+      if (activeSettings) {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lead: newLead, settings: activeSettings, tour_title: `Colección: ${categoryName}` })
+        }).catch(err => console.error('SMTP fetch fail:', err));
+      }
 
       toast.success('¡Consulta enviada! Nos pondremos en contacto contigo pronto.');
       form.reset();
@@ -124,6 +128,12 @@ export default function CollectionPage() {
 
   return (
     <div className="min-h-screen bg-white pb-24">
+      <SEO
+        title={`${categoryName} en Marruecos | Marruecos Experiencia`}
+        description={`Descubre nuestras mejores rutas y circuitos de ${categoryName.toLowerCase()} en Marruecos a medida.`}
+        image={heroImage}
+        url={`/coleccion/${categorySlug}`}
+      />
       <Toaster position="top-right" />
       {/* Dynamic Hero based on category */}
       <div className="relative h-[60vh] flex items-center justify-center overflow-hidden">

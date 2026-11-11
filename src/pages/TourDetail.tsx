@@ -123,13 +123,14 @@ export default function TourDetail() {
 
   const handleLeadSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!tour || !settings) {
-      toast.error('Error al cargar la configuración. Reintenta.');
+    if (!tour) {
+      toast.error('Error al cargar el tour. Reintenta.');
       return;
     }
     setSubmitting(true);
     const form = e.currentTarget;
     try {
+      const activeSettings = settings || await dbService.getBusinessSettings();
       const px = parseInt(form.adults.value || '1', 10);
       const niños = parseInt(form.children?.value || '0', 10);
       const bebes = parseInt(form.infants?.value || '0', 10);
@@ -151,11 +152,13 @@ export default function TourDetail() {
       await dbService.createLead(newLead);
 
       // Trigger Email
-      await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lead: newLead, settings, tour_title: tour.title })
-      }).catch(err => console.error('SMTP fetch fail:', err));
+      if (activeSettings) {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lead: newLead, settings: activeSettings, tour_title: tour.title })
+        }).catch(err => console.error('SMTP fetch fail:', err));
+      }
 
       toast.success('¡Consulta enviada! Nos pondremos en contacto contigo pronto.');
       form.reset();

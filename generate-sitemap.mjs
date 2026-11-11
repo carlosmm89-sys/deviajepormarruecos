@@ -6,8 +6,8 @@ import dotenv from 'dotenv';
 // Cargar variables de entorno pre-build
 dotenv.config({ path: fs.existsSync('.env.local') ? '.env.local' : '.env' });
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL;
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
   console.warn('⚠️ No se encontraron credenciales de Supabase. El sitemap generado solo tendrá las rutas estáticas.');
@@ -16,13 +16,23 @@ if (!supabaseUrl || !supabaseKey) {
 const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 const DOMAIN = 'https://www.vivirmarruecos.com';
 
+function slugifyCategory(str) {
+  return str
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
+}
+
 async function generateSitemap() {
   console.log('Generando sitemap.xml...');
 
   const staticRoutes = [
     '/',
     '/tours',
-    '/destinos',
+    '/destinations',
     '/actividades',
     '/galeria',
     '/blog',
@@ -37,15 +47,15 @@ async function generateSitemap() {
   if (supabase) {
     try {
       // Fetch Tours
-      const { data: tours } = await supabase.from('tours').select('id, updated_at').eq('is_active', true);
+      const { data: tours } = await supabase.from('tours').select('id, slug, updated_at').eq('is_active', true);
       if (tours) {
         tours.forEach(tour => dynamicRoutes.push(`/tours/${tour.id}`));
       }
 
       // Fetch Destinations
-      const { data: destinations } = await supabase.from('destinations').select('slug, updated_at');
+      const { data: destinations } = await supabase.from('destinations').select('id, slug, updated_at');
       if (destinations) {
-        destinations.forEach(dest => dynamicRoutes.push(`/destino/${dest.slug}`));
+        destinations.forEach(dest => dynamicRoutes.push(`/destinations/${dest.slug || dest.id}`));
       }
 
       // Fetch Blog Posts
@@ -53,16 +63,19 @@ async function generateSitemap() {
       if (posts) {
         posts.forEach(post => dynamicRoutes.push(`/blog/${post.slug}`));
       }
-      
-      // Fetch Collections
+
+      // Fetch Collections (separando categorías múltiples por coma)
       const { data: collections } = await supabase.from('tours').select('category').eq('is_active', true);
       if (collections) {
-        // Obtenemos categorias unicas mapeadas a slug
-        const cats = [...new Set(collections.map(c => c.category).filter(Boolean))];
-        cats.forEach(c => {
-          let catSlug = c.toLowerCase()
-              .replace(/ /g, '-')
-              .normalize('NFD').replace(/[\u0300-\u036f]/g, ""); // quitar tildes
+        const individualCats = new Set();
+        collections.forEach(item => {
+          if (!item.category) return;
+          item.category.split(',').forEach(part => {
+            const clean = slugifyCategory(part);
+            if (clean) individualCats.add(clean);
+          });
+        });
+        individualCats.forEach(catSlug => {
           dynamicRoutes.push(`/coleccion/${catSlug}`);
         });
       }
@@ -71,18 +84,17 @@ async function generateSitemap() {
     }
   }
 
-  // Quitar duplicados por si acaso
   dynamicRoutes = [...new Set(dynamicRoutes)];
-  
   const allRoutes = [...staticRoutes, ...dynamicRoutes];
+  const today = new Date().toISOString().split('T')[0];
 
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allRoutes.map(route => `  <url>
     <loc>${DOMAIN}${route}</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <lastmod>${today}</lastmod>
     <changefreq>${route === '/' ? 'daily' : 'weekly'}</changefreq>
-    <priority>${route === '/' ? '1.0' : route.startsWith('/tours/') || route.startsWith('/coleccion/') ? '0.9' : '0.8'}</priority>
+    <priority>${route === '/' ? '1.0' : route.startsWith('/tours/') || route.startsWith('/coleccion/') || route.startsWith('/destinations/') ? '0.9' : '0.8'}</priority>
   </url>`).join('\n')}
 </urlset>`;
 

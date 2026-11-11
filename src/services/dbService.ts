@@ -123,11 +123,9 @@ export const dbService = {
   },
 
   // Leads
-  // Leads
-  createLead: async (lead: Partial<Lead>): Promise<Lead> => {
-    const { data, error } = await supabase.from('leads').insert([lead]).select().single();
+  createLead: async (lead: Partial<Lead>): Promise<void> => {
+    const { error } = await supabase.from('leads').insert([lead]);
     if (error) throw error;
-    return data;
   },
   getLeads: async (): Promise<Lead[]> => {
     const { data, error } = await supabase.from('leads').select('*, tours(title)').order('created_at', { ascending: false });

@@ -36,7 +36,7 @@ export default function DestinationDetail() {
           const dest = await dbService.getDestination(id);
           if (dest) {
             setDestination(dest);
-            const destTours = await dbService.getToursByDestination(id);
+            const destTours = await dbService.getToursByDestination(dest.id);
             setAllTours(destTours);
             
             if (destTours.length > 0) {
