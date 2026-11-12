@@ -4,6 +4,7 @@ import { dbService } from '../services/dbService';
 import { GalleryImage } from '../types';
 import SEO from '../components/SEO';
 import { Maximize2, X } from 'lucide-react';
+import { optImg } from '../lib/image';
 
 export default function Gallery() {
   const [images, setImages] = useState<GalleryImage[]>([]);
@@ -70,7 +71,7 @@ export default function Gallery() {
                 onClick={() => setSelectedImage(img)}
               >
                 <img 
-                  src={img.image_url} 
+                  src={optImg(img.image_url, 800)} 
                   alt={img.title || 'Marruecos Paisaje'} 
                   className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
@@ -107,7 +108,7 @@ export default function Gallery() {
           </button>
           
           <img 
-            src={selectedImage.image_url} 
+            src={optImg(selectedImage.image_url, 1600)} 
             alt={selectedImage.title || 'Marruecos Expanded'}
             className="max-w-full max-h-full object-contain rounded-lg"
             onClick={(e) => e.stopPropagation()} 

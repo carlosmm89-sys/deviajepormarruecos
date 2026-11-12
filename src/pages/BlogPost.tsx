@@ -7,6 +7,7 @@ import { usePageViews } from '../hooks/usePageViews';
 import { motion } from 'framer-motion';
 import SEO from '../components/SEO';
 import { tourPath } from '../data/seoContent';
+import { optImg } from '../lib/image';
 
 export default function BlogPostDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -137,7 +138,7 @@ export default function BlogPostDetail() {
       <section className="max-w-4xl mx-auto px-4 -mt-16 relative z-20">
         <div className="w-full aspect-video md:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl mb-16 bg-white shrink-0">
           <img 
-            src={post.cover_image || 'https://loremflickr.com/1200/600/morocco'} 
+            src={optImg(post.cover_image || 'https://loremflickr.com/1200/600/morocco', 1400)} 
             alt={post.title}
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
@@ -206,7 +207,7 @@ export default function BlogPostDetail() {
                   <Link to={tourPath(tour)}>
                   <div className="relative h-64 overflow-hidden">
                       <img
-                      src={tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/600/morocco,sahara'}
+                      src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/600/morocco,sahara', 800)}
                       alt={tour.title}
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -244,7 +245,7 @@ export default function BlogPostDetail() {
               <Link key={related.id} to={`/blog/${related.slug}`} className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full hover:-translate-y-1">
                 <div className="aspect-[4/3] overflow-hidden relative">
                   <img 
-                    src={related.cover_image || 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70'} 
+                    src={optImg(related.cover_image || 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70', 800)} 
                     alt={related.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />

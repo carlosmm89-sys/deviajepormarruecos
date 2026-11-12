@@ -10,6 +10,7 @@ import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useTranslation } from '../hooks/useTranslation';
 import { destinationHeadings } from '../data/seoContent';
+import { optImg } from '../lib/image';
 
 export default function DestinationDetail() {
   const { id } = useParams<{ id: string }>();
@@ -151,7 +152,7 @@ export default function DestinationDetail() {
       <section className="relative h-[50vh] flex items-end overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src={destination.image_url}
+            src={optImg(destination.image_url, 1600)}
             alt={destination.name}
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
@@ -279,7 +280,7 @@ export default function DestinationDetail() {
                       <Link to={`/tours/${tour.slug || tour.id}`} className="flex-1 flex flex-col h-full">
                         <div className="relative h-64 overflow-hidden">
                           <img
-                            src={tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/600/morocco?lock=1'}
+                            src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/600/morocco?lock=1', 800)}
                             alt={tour.title}
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             referrerPolicy="no-referrer"

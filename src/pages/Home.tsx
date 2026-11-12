@@ -12,6 +12,7 @@ import { usePageViews } from '../hooks/usePageViews';
 import { useTranslation } from '../hooks/useTranslation';
 import { useCurrency } from '../context/CurrencyContext';
 import { tourPath, HOME_META_DESCRIPTION } from '../data/seoContent';
+import { optImg } from '../lib/image';
 
 export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -56,7 +57,7 @@ export default function Home() {
       <section className="relative z-30 min-h-[85vh] py-16 md:py-24 flex flex-col items-center justify-center">
         <div className="absolute inset-0 z-0 overflow-hidden bg-brand-blue/20">
           <img
-            src={settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800"}
+            src={optImg(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800", 1600)}
             alt="Hero Morocco"
             className="w-full h-full object-cover scale-105"
             fetchPriority="high"
@@ -133,7 +134,7 @@ export default function Home() {
               >
                 <Link to={`/destinations/${dest.id}`}>
                   <img
-                    src={dest.image_url}
+                    src={optImg(dest.image_url, 800)}
                     alt={dest.name}
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -187,7 +188,7 @@ export default function Home() {
                 <Link to={tourPath(tour)}>
                   <div className="relative h-64 overflow-hidden bg-gray-100">
                     <img
-                      src={tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600'}
+                      src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600', 800)}
                       alt={tour.title}
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -242,7 +243,7 @@ export default function Home() {
                 className={`relative group overflow-hidden rounded-2xl md:rounded-[2rem] bg-gray-100 block ${idx === 0 ? 'col-span-2 row-span-2' : ''}`}
               >
                 <img 
-                  src={img.image_url} 
+                  src={optImg(img.image_url, 600)} 
                   alt={img.title || 'Galería de Marruecos'} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
@@ -289,7 +290,7 @@ export default function Home() {
         <div className="relative rounded-[3rem] p-12 md:p-24 text-center overflow-hidden shadow-2xl">
           <div className="absolute inset-0">
             <img 
-              src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?q=80&w=2000&auto=format&fit=crop" 
+              src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?q=70&w=1200&auto=format&fit=crop" 
               alt="Desierto de Marruecos" 
               className="w-full h-full object-cover"
             />
