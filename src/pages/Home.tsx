@@ -11,7 +11,7 @@ import SEO from '../components/SEO';
 import { usePageViews } from '../hooks/usePageViews';
 import { useTranslation } from '../hooks/useTranslation';
 import { useCurrency } from '../context/CurrencyContext';
-import { tourPath, HOME_META_DESCRIPTION } from '../data/seoContent';
+import { tourPath, HOME_META_DESCRIPTION, HOME_TITLE } from '../data/seoContent';
 import { optImg, optSrcSet } from '../lib/image';
 
 export default function Home() {
@@ -49,7 +49,7 @@ export default function Home() {
   return (
     <div className="space-y-24 pb-24">
       <SEO 
-        title="Vivir Marruecos | Tours privados por Marruecos y el desierto de Merzouga"
+        title={HOME_TITLE}
         description={settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION}
         url="/"
       />

@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import { optImg, optSrcSet } from './src/lib/image.js';
+import { fitTitle, HOME_TITLE } from './src/data/seoContent.js';
 import { tourPath, tourMetaDescription, destinationHeadings, collectionContent, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME } from './src/data/seoContent.js';
 
 dotenv.config({ path: fs.existsSync('.env.local') ? '.env.local' : '.env' });
@@ -37,7 +38,7 @@ function slugifyCategory(str = '') {
 }
 
 function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml, preloadImage }) {
-  const safeTitle = escapeHtml(title || 'Vivir Marruecos - Tu Agencia de Viajes en Marruecos');
+  const safeTitle = escapeHtml(fitTitle(title || HOME_TITLE));
   const safeDesc = escapeHtml(
     (description || 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas a medida.').slice(0, 160)
   );
@@ -125,7 +126,7 @@ async function prerender() {
   // 1. Home (/)
   const homeBody = `<main>${navHtml}<h1>${escapeHtml(stripHtml(settings?.hero_title || HOME_H1_FALLBACK))}</h1><p>${escapeHtml(settings?.hero_subtitle || 'Agencia especializada en tours privados, excursiones al desierto de Merzouga y rutas por Marruecos.')}</p><section><h2>Destinos Destacados en Marruecos</h2><ul>${destinations.map(d => `<li><a href="/destinations/${d.slug || d.id}">${escapeHtml(d.name)}</a></li>`).join('')}</ul></section><section><h2>Rutas y Circuitos por Marruecos</h2><ul>${tours.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul></section></main>`;
   writeRouteHtml('/', injectPageSeo(baseHtml, {
-    title: `${siteName} | Tours privados por Marruecos y el desierto de Merzouga`,
+    title: HOME_TITLE,
     description: settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION,
     canonicalPath: '/',
     image: settings?.hero_image_url,
@@ -191,7 +192,7 @@ async function prerender() {
 
   // 6. Galería (/galeria) y Legales
   const staticPages = [
-    { path: '/galeria', title: `Galería de Imágenes de Marruecos | ${siteName}`, desc: 'Descubre Marruecos en imágenes: desierto de Merzouga, Marrakech, Chefchaouen y experiencias reales de nuestros viajeros.' },
+    { path: '/galeria', title: `Fotos de Marruecos y Merzouga | ${siteName}`, desc: 'Descubre Marruecos en imágenes: desierto de Merzouga, Marrakech, Chefchaouen y experiencias reales de nuestros viajeros.' },
     { path: '/privacidad', title: `Política de Privacidad | ${siteName}`, desc: 'Política de privacidad y protección de datos de Vivir Marruecos.' },
     { path: '/aviso-legal', title: `Aviso Legal | ${siteName}`, desc: 'Aviso legal e información general de Vivir Marruecos.' },
     { path: '/cookies', title: `Política de Cookies | ${siteName}`, desc: 'Información sobre el uso de cookies en vivirmarruecos.com.' },

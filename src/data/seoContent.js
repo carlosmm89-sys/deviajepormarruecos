@@ -3,6 +3,20 @@
 
 export const SITE_DOMAIN = 'https://www.vivirmarruecos.com';
 
+/**
+ * Ajusta el <title> a lo que Google muestra (~60 caracteres).
+ * Quita cualquier sufijo de marca que traiga y añade " | Vivir Marruecos" solo si cabe;
+ * si no cabe, deja el título sin marca (Google ya muestra el nombre del sitio aparte).
+ */
+export function fitTitle(raw, brand = 'Vivir Marruecos', max = 60) {
+  const base = String(raw || '').replace(/\s*[|\-–—]\s*(Blog\s+)?Vivir Marruecos\s*$/i, '').trim();
+  if (!base) return brand;
+  const full = `${base} | ${brand}`;
+  return full.length <= max ? full : base;
+}
+
+export const HOME_TITLE = 'Tours privados por Marruecos y Merzouga | Vivir Marruecos';
+
 export const HOME_META_DESCRIPTION =
   'Tours privados por Marruecos desde Marrakech, Fez, Tánger y Casablanca: desierto de Merzouga, noche en jaima en Erg Chebbi y viajes a medida.';
 
@@ -48,7 +62,7 @@ export function destinationHeadings(dest, siteName = 'Vivir Marruecos') {
     const city = name.replace(/^rutas\s+desde\s+/i, '').trim();
     return {
       h1: `Tours desde ${city}`,
-      title: `Tours desde ${city} al desierto y por Marruecos | ${siteName}`
+      title: `Tours desde ${city} al desierto de Merzouga | ${siteName}`
     };
   }
   if (slug === 'excursiones-cortas') {
@@ -59,7 +73,7 @@ export function destinationHeadings(dest, siteName = 'Vivir Marruecos') {
   }
   return {
     h1: `${name}: tours y excursiones`,
-    title: `${name}: tours y excursiones en Marruecos | ${siteName}`
+    title: `${name}: tours y excursiones | ${siteName}`
   };
 }
 

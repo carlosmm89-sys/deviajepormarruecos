@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { fitTitle } from '../data/seoContent';
 
 interface SEOProps {
   title?: string;
@@ -17,6 +18,7 @@ export default function SEO({
   type = 'website',
   schema,
 }: SEOProps) {
+  title = fitTitle(title);
   const canonicalUrl = url.startsWith('http') ? url : `https://www.vivirmarruecos.com${url}`;
 
   return (
