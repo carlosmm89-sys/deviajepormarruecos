@@ -9,6 +9,7 @@ import { useTranslation } from '../hooks/useTranslation';
 import { useLanguage, Language } from '../context/LanguageContext';
 import { useCurrency, CurrencyCode } from '../context/CurrencyContext';
 import QuoteWizard from './QuoteWizard';
+import { optImg } from '../lib/image';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, signIn, signOut } = useAuth();
@@ -84,7 +85,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex justify-between items-center py-2">
             <Link to="/" className="flex items-center space-x-3">
               {settings?.logo_url ? (
-                <img src={settings.logo_url} width="150" height="80" alt="Vivir Marruecos Logo" className="h-20 max-h-[85px] w-auto object-contain" />
+                <img src={optImg(settings.logo_url, 300)} width="150" height="80" alt="Vivir Marruecos Logo" className="h-20 max-h-[85px] w-auto object-contain" />
               ) : (
                 <>
                   <div className="w-12 h-12 bg-brand-primary rounded-xl flex items-center justify-center">
@@ -323,7 +324,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="space-y-6">
               <Link to="/" className="flex items-center space-x-3">
                 {settings?.logo_url ? (
-                  <img src={settings.logo_url} width="120" height="64" alt="Vivir Marruecos" className="h-16 w-auto object-contain brightness-0 invert" />
+                  <img src={optImg(settings.logo_url, 300)} width="120" height="64" alt="Vivir Marruecos" className="h-16 w-auto object-contain brightness-0 invert" />
                 ) : (
                   <>
                     <div className="w-12 h-12 bg-brand-primary rounded-xl flex items-center justify-center">

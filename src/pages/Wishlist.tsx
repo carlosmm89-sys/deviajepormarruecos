@@ -6,6 +6,7 @@ import { useWishlist } from '../hooks/useWishlist';
 import { useCurrency } from '../context/CurrencyContext';
 import { Heart, Clock, MapPin, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
+import { optImg } from '../lib/image';
 
 export default function Wishlist() {
   const [tours, setTours] = useState<Tour[]>([]);
@@ -64,7 +65,7 @@ export default function Wishlist() {
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <img
-                    src={tour.featured_image || tour.gallery?.[0]}
+                    src={optImg(tour.featured_image || tour.gallery?.[0], 800)}
                     alt={tour.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />

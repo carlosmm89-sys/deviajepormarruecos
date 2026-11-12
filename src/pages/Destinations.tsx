@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { dbService } from '../services/dbService';
 import SEO from '../components/SEO';
+import { optImg } from '../lib/image';
 
 export default function Destinations() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -47,7 +48,7 @@ export default function Destinations() {
             <Link to={`/destinations/${dest.id}`} className="block space-y-6">
               <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden relative">
                 <img
-                  src={dest.image_url}
+                  src={optImg(dest.image_url, 800)}
                   alt={dest.name}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

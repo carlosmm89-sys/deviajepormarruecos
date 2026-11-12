@@ -7,6 +7,7 @@ import { CheckCircle2 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import SEO from '../components/SEO';
 import { tourPath, collectionContent } from '../data/seoContent';
+import { optImg } from '../lib/image';
 
 const CATEGORY_MAP: Record<string, string> = {
   'actividades': 'Actividades',
@@ -139,7 +140,7 @@ export default function CollectionPage() {
       <Toaster position="top-right" />
       {/* Dynamic Hero based on category */}
       <div className="relative h-[60vh] flex items-center justify-center overflow-hidden">
-        <img src={heroImage} alt={categoryName} className="absolute inset-0 w-full h-full object-cover scale-105" />
+        <img src={optImg(heroImage, 1600)} alt={categoryName} className="absolute inset-0 w-full h-full object-cover scale-105" />
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent" />
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
@@ -207,7 +208,7 @@ export default function CollectionPage() {
               {/* Image Layout (Always Right Side on Desktop) */}
               <div className="h-64 md:h-auto order-1 md:order-2 overflow-hidden bg-gray-200">
                 <img 
-                  src={tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/800/morocco,sahara'} 
+                  src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/800/morocco,sahara', 800)} 
                   alt={tour.title} 
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
                 />

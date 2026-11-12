@@ -19,6 +19,7 @@ import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useTranslation } from '../hooks/useTranslation';
 import { tourPath, tourMetaDescription } from '../data/seoContent';
+import { optImg } from '../lib/image';
 
 const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -243,27 +244,27 @@ export default function TourDetail() {
       <section className="max-w-[1600px] mx-auto p-2 md:p-4 mt-4">
         <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-2 md:gap-3 h-[40vh] md:h-[65vh] rounded-3xl overflow-hidden relative group">
           <div className="md:col-span-2 row-span-2 relative cursor-pointer overflow-hidden" onClick={() => openGallery(0)}>
-            <img src={fullGallery[0]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Principal" referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[0], 1400)} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Principal" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
           
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(1)}>
-            <img src={fullGallery[1]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 1" referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[1], 800)} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 1" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(2)}>
-            <img src={fullGallery[2]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 2" referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[2], 800)} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 2" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(3)}>
-            <img src={fullGallery[3]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 3" referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[3], 800)} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 3" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(4)}>
-            <img src={fullGallery[4]} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 4" referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[4], 800)} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 4" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
@@ -675,7 +676,7 @@ export default function TourDetail() {
                   <Link to={tourPath(t)}>
                       <div className="relative h-64 overflow-hidden">
                           <img
-                              src={t.featured_image || t.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600'}
+                              src={optImg(t.featured_image || t.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600', 800)}
                               alt={t.title}
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                               referrerPolicy="no-referrer"
@@ -719,7 +720,7 @@ export default function TourDetail() {
               >
                 <div className="aspect-[4/3] overflow-hidden relative">
                   <img 
-                    src={post.cover_image || 'https://loremflickr.com/800/600/morocco'} 
+                    src={optImg(post.cover_image || 'https://loremflickr.com/800/600/morocco', 800)} 
                     alt={post.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
