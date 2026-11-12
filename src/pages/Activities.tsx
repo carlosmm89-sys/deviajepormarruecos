@@ -37,7 +37,7 @@ export default function Activities() {
   return (
     <div className="bg-gray-50/50 min-h-screen pb-24">
       <SEO 
-        title="Actividades y Experiencias en Marruecos | Marruecos Experiencia"
+        title="Actividades y Experiencias en Marruecos | Vivir Marruecos"
         description="Complementa tu viaje con actividades únicas: paseos en globo, quads en el desierto, rutas en camello y mucho más."
         url="/actividades"
       />

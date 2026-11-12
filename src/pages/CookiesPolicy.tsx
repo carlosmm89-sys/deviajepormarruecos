@@ -4,7 +4,7 @@ import SEO from '../components/SEO';
 export default function CookiesPolicy() {
   return (
     <>
-      <SEO title="Política de Cookies | Marruecos Experiencia" description="Información detallada sobre el uso de cookies en nuestra plataforma online." />
+      <SEO title="Política de Cookies | Vivir Marruecos" description="Información detallada sobre el uso de cookies en nuestra plataforma online." />
       <div className="max-w-4xl mx-auto px-4 py-20 bg-white/50 my-12 rounded-2xl">
         <h1 className="text-4xl font-serif font-bold text-gray-900 mb-8">Política de Cookies</h1>
         

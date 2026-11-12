@@ -10,7 +10,7 @@ interface SEOProps {
 }
 
 export default function SEO({
-  title = 'Marruecos Experiencia - Tu Agencia de Viajes en Marruecos',
+  title = 'Vivir Marruecos - Tu Agencia de Viajes en Marruecos',
   description = 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas desde España y Marruecos. Experiencias únicas en el desierto, ciudades imperiales y más.',
   image = 'https://www.vivirmarruecos.com/pwa-512x512.png',
   url = 'https://www.vivirmarruecos.com',

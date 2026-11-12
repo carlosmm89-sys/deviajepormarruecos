@@ -35,7 +35,7 @@ function slugifyCategory(str = '') {
 }
 
 function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml }) {
-  const safeTitle = escapeHtml(title || 'Marruecos Experiencia - Tu Agencia de Viajes en Marruecos');
+  const safeTitle = escapeHtml(title || 'Vivir Marruecos - Tu Agencia de Viajes en Marruecos');
   const safeDesc = escapeHtml(
     (description || 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas a medida.').slice(0, 160)
   );
@@ -106,7 +106,7 @@ async function prerender() {
     }
   }
 
-  const siteName = settings?.business_name || settings?.site_name || 'Marruecos Experiencia';
+  const siteName = settings?.business_name || settings?.site_name || 'Vivir Marruecos';
   const navHtml = `<nav aria-label="Navegación principal"><a href="/">Inicio</a> | <a href="/destinations">Destinos</a> | <a href="/tours">Tours en Marruecos</a> | <a href="/actividades">Actividades</a> | <a href="/blog">Blog</a> | <a href="/galeria">Galería</a></nav>`;
 
   let count = 0;
@@ -176,8 +176,8 @@ async function prerender() {
   // 6. Galería (/galeria) y Legales
   const staticPages = [
     { path: '/galeria', title: `Galería de Imágenes de Marruecos | ${siteName}`, desc: 'Descubre Marruecos en imágenes: desierto de Merzouga, Marrakech, Chefchaouen y experiencias reales de nuestros viajeros.' },
-    { path: '/privacidad', title: `Política de Privacidad | ${siteName}`, desc: 'Política de privacidad y protección de datos de Marruecos Experiencia.' },
-    { path: '/aviso-legal', title: `Aviso Legal | ${siteName}`, desc: 'Aviso legal e información general de Marruecos Experiencia.' },
+    { path: '/privacidad', title: `Política de Privacidad | ${siteName}`, desc: 'Política de privacidad y protección de datos de Vivir Marruecos.' },
+    { path: '/aviso-legal', title: `Aviso Legal | ${siteName}`, desc: 'Aviso legal e información general de Vivir Marruecos.' },
     { path: '/cookies', title: `Política de Cookies | ${siteName}`, desc: 'Información sobre el uso de cookies en vivirmarruecos.com.' },
     { path: '/condiciones', title: `Condiciones Generales de Contratación | ${siteName}`, desc: 'Términos y condiciones generales para nuestros viajes y rutas por Marruecos.' }
   ];

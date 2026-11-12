@@ -79,7 +79,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
         await fetch('/api/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lead: newLead, settings: activeSettings, tour_title: `Cotización Personalizada` })
+          body: JSON.stringify({ lead: newLead, tour_title: `Cotización Personalizada` })
         }).catch(err => console.error('SMTP fetch fail:', err));
       }
 

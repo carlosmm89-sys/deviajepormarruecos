@@ -57,7 +57,7 @@ export default async function handler(req: any, res: any) {
     rateLimitMap.set(clientIp, { count: 1, resetAt: now + 10 * 60 * 1000 });
   }
 
-  const { lead, settings: clientSettings, tour_title } = req.body || {};
+  const { lead, tour_title } = req.body || {};
 
   if (!lead || typeof lead !== 'object' || !lead.email || !lead.first_name) {
     return res.status(400).json({ message: 'Datos de formulario incompletos.' });
@@ -68,10 +68,11 @@ export default async function handler(req: any, res: any) {
     return res.status(400).json({ message: 'Datos de contacto no válidos.' });
   }
 
-  // Fetch authoritative SMTP settings from Supabase when env vars are available
-  let settings = clientSettings;
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+  // La configuración SMTP se lee SOLO en el servidor (nunca se acepta desde el navegador).
+  // Usa la clave service_role si está configurada en Vercel; si no, la anon (comportamiento anterior).
+  let settings: any = null;
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
   if (supabaseUrl && supabaseKey) {
     try {
       const sb = createClient(supabaseUrl, supabaseKey);
@@ -80,7 +81,7 @@ export default async function handler(req: any, res: any) {
         settings = dbSettings;
       }
     } catch (e) {
-      // Fallback to clientSettings if Supabase fetch fails
+      console.error('No se pudo leer la configuración SMTP de Supabase', e);
     }
   }
 

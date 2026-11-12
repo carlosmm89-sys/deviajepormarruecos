@@ -156,7 +156,7 @@ export default function TourDetail() {
         await fetch('/api/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lead: newLead, settings: activeSettings, tour_title: tour.title })
+          body: JSON.stringify({ lead: newLead, tour_title: tour.title })
         }).catch(err => console.error('SMTP fetch fail:', err));
       }
 
@@ -204,7 +204,7 @@ export default function TourDetail() {
     },
     "provider": {
       "@type": "TravelAgency",
-      "name": settings?.site_name || "Marruecos Experiencia",
+      "name": settings?.site_name || "Vivir Marruecos",
       "image": settings?.logo_url || 'https://www.vivirmarruecos.com/pwa-512x512.png'
     }
   };
@@ -212,8 +212,8 @@ export default function TourDetail() {
   return (
     <div className="pb-24 bg-gray-50/30">
       <SEO 
-        title={`${td(tour, 'title')} | Marruecos Experiencia`}
-        description={td(tour, 'itinerary_summary') || `Reserva el tour ${td(tour, 'title')} al mejor precio con Marruecos Experiencia.`}
+        title={`${td(tour, 'title')} | Vivir Marruecos`}
+        description={td(tour, 'itinerary_summary') || `Reserva el tour ${td(tour, 'title')} al mejor precio con Vivir Marruecos.`}
         image={tour.featured_image || tour.gallery?.[0]}
         url={`/tours/${tour.id}`}
         type="product"

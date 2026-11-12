@@ -24,7 +24,7 @@ export default function Destinations() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-24 space-y-16">
       <SEO 
-        title="Destinos en Marruecos | Marruecos Experiencia"
+        title="Destinos en Marruecos | Vivir Marruecos"
         description="Descubre la esencia de Marruecos a través de nuestras ciudades más emblemáticas. Un viaje a través del desierto, la costa y atlas."
         url="/destinations"
       />

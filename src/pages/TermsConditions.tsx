@@ -4,7 +4,7 @@ import SEO from '../components/SEO';
 export default function TermsConditions() {
   return (
     <>
-      <SEO title="Términos y Condiciones | Marruecos Experiencia" description="Términos de servicio comerciales y condiciones de reserva aplicables." />
+      <SEO title="Términos y Condiciones | Vivir Marruecos" description="Términos de servicio comerciales y condiciones de reserva aplicables." />
       <div className="max-w-4xl mx-auto px-4 py-20 bg-white/50 my-12 rounded-2xl">
         <h1 className="text-4xl font-serif font-bold text-gray-900 mb-8">Términos y Condiciones de Uso y Reserva</h1>
         

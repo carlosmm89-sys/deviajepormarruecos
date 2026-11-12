@@ -52,7 +52,7 @@ export default function AdminBlogEdit() {
       excerpt: '',
       content: '',
       cover_image: null,
-      author: 'Marruecos Experiencia',
+      author: 'Vivir Marruecos',
       is_published: true,
       translations: {},
     }

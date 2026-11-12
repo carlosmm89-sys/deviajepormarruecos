@@ -84,13 +84,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex justify-between items-center py-2">
             <Link to="/" className="flex items-center space-x-3">
               {settings?.logo_url ? (
-                <img src={settings.logo_url} width="150" height="80" alt="Marruecos Experiencia Logo" className="h-20 max-h-[85px] w-auto object-contain" />
+                <img src={settings.logo_url} width="150" height="80" alt="Vivir Marruecos Logo" className="h-20 max-h-[85px] w-auto object-contain" />
               ) : (
                 <>
                   <div className="w-12 h-12 bg-brand-primary rounded-xl flex items-center justify-center">
                     <Compass className="text-white w-7 h-7" />
                   </div>
-                  <span className="text-3xl font-serif font-bold tracking-tight text-gray-900">{settings?.site_name || 'Marruecos Experiencia'}</span>
+                  <span className="text-3xl font-serif font-bold tracking-tight text-gray-900">{settings?.site_name || 'Vivir Marruecos'}</span>
                 </>
               )}
             </Link>
@@ -329,7 +329,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <div className="w-12 h-12 bg-brand-primary rounded-xl flex items-center justify-center">
                       <Compass className="text-white w-7 h-7" />
                     </div>
-                    <span className="text-xl font-serif font-bold tracking-tight text-white">{settings?.site_name || 'Marruecos Experiencia'}</span>
+                    <span className="text-xl font-serif font-bold tracking-tight text-white">{settings?.site_name || 'Vivir Marruecos'}</span>
                   </>
                 )}
               </Link>

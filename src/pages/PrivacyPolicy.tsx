@@ -4,7 +4,7 @@ import SEO from '../components/SEO';
 export default function PrivacyPolicy() {
   return (
     <>
-      <SEO title="Política de Privacidad | Marruecos Experiencia" description="Nuestra Política de Privacidad describe cómo recopilamos, usamos y protegemos sus datos personales." />
+      <SEO title="Política de Privacidad | Vivir Marruecos" description="Nuestra Política de Privacidad describe cómo recopilamos, usamos y protegemos sus datos personales." />
       <div className="max-w-4xl mx-auto px-4 py-20 bg-white/50 my-12 rounded-2xl">
         <h1 className="text-4xl font-serif font-bold text-gray-900 mb-8">Política de Privacidad</h1>
         

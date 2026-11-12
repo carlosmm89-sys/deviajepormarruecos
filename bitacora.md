@@ -66,3 +66,11 @@
 - **Enlace directo para aceptar la invitación:** `https://github.com/carlosmm89-sys/deviajepormarruecos/invitations`
 
 
+
+---
+
+### 6. Marca, seguridad SMTP y limpieza (12/11/2026, rama `mejoras-vivir-marruecos`)
+- **Marca:** sustituido "Marruecos Experiencia" por "Vivir Marruecos" en títulos, metadatos, PWA, SEO y pre-renderizado (pendiente: testimonios fijos de `Testimonials.tsx`, a sustituir por reseñas reales).
+- **Seguridad SMTP:** la web pública ya no descarga `smtp_*` de `business_settings` (lectura por columnas en `dbService.getBusinessSettings`); el panel usa `getBusinessSettingsAdmin`. Los formularios ya no envían los ajustes a `/api/send-email`, que lee la configuración solo en el servidor (prioriza `SUPABASE_SERVICE_ROLE_KEY`).
+- **Pendiente en Supabase/Vercel:** añadir `SUPABASE_SERVICE_ROLE_KEY` en Vercel, retirar al rol `anon` el acceso a las columnas `smtp_*` y cambiar la contraseña del buzón.
+- **Limpieza:** scripts `.sql` movidos a `supabase/sql/`, README y `.env.example` reescritos.
