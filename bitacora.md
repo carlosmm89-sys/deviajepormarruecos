@@ -58,3 +58,11 @@
   - Añadido rate limiting por IP (máx. 5 envíos / 10 min), restricción de CORS a `vivirmarruecos.com`, lectura de credenciales SMTP desde Supabase en el servidor y sanitización HTML (`escapeHtml`) en todos los campos del correo.
   - Añadidas cabeceras HTTP de seguridad en `vercel.json` (`Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`) y caché inmutable (`max-age=31536000, immutable`) para `/assets/*`.
   - Eliminados 20 scripts temporales de pruebas en la raíz (incluyendo credenciales hardcodeadas en `update_images_auth.mjs`) y aplicado `npm audit fix`.
+
+---
+
+### 5. Accesos y Colaboradores (GitHub)
+- **Invitación enviada (12/11/2026):** Se ha invitado como colaborador del repositorio `carlosmm89-sys/deviajepormarruecos` al correo `Aliourokch1233@gmail.com` (usuario de GitHub `@aliourokch1233-cloud`).
+- **Enlace directo para aceptar la invitación:** `https://github.com/carlosmm89-sys/deviajepormarruecos/invitations`
+
+
