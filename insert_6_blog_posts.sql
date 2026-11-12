@@ -16,7 +16,7 @@ VALUES
   <h3>Día 3: Oasis en la Ciudad</h3>
   <p>El último día reserva una visita a los bellísimos Jardines Majorelle, el colorido retiro de Yves Saint Laurent que te transportará a un ambiente de tranquilidad. Por la tarde, piérdete en la contemporaneidad de la Ville Nouvelle, donde podrás comprar recuerdos únicos antes del retorno.</p>',
   '/images/blog/marrakech.png',
-  'Marruecos Experiencia',
+  'Vivir Marruecos',
   NOW(),
   true,
   0
@@ -33,7 +33,7 @@ VALUES
   <p>Situado más cerca de Marrakech, llegar a Zagora toma alrededor de 7 horas en total, por lo que una escapada express de 2 días y 1 noche sí es viable. Ahora bien, Zagora carece de las gigantes dunas características. Su desierto es más bien árido y pedregoso, aunque cuenta con hermosos oasis y ofrece igualmente el espectacular manto de estrellas nocturno.</p>
   <p><strong>El Veredicto:</strong> Si cuentas con tiempo y quieres sumergirte entre impresionantes colinas de arena, opta por Merzouga, es sin duda una experiencia inolvidable. Si corres contra el reloj, Zagora es una excelente y muy accesible bocanada de sahara.</p>',
   '/images/blog/desert.png',
-  'Marruecos Experiencia',
+  'Vivir Marruecos',
   NOW(),
   true,
   0
@@ -55,7 +55,7 @@ VALUES
   <h3>5. Té de Menta y Pastas</h3>
   <p>Más allá de toda la oferta copiosa antes expuesta, beber té (y mucho) de verde menta es lo más cercano a la bebida oficial de Marruecos. No vayas a olvidar coronarlo con una rica variedad de panecillos y pastas basadas en almendra, destacando por demás el popular <em>Cuerno de Gacela</em>.</p>',
   '/images/blog/food.png',
-  'Marruecos Experiencia',
+  'Vivir Marruecos',
   NOW(),
   true,
   0
@@ -73,7 +73,7 @@ VALUES
   <h3>El desayuno en su terraza... simplemente único</h3>
   <p>Para redondear tu experiencia al cien por ciento, prácticamente todos los Riads modernos conllevan acceso a idílicas terrazas o azoteas llanas superiores, llenas de almohadones tupidos muy coloridos, ideales para reposar luego de arduas caminatas a ras de suelo y, desde luego, en los que la mañana inicia majestuosamente con exquisitos ritos brindados de cafés potentes árabes, crujientes <em>msemen</em> o tortas finas saladas acompañando jugosos frutos al romper el hermoso amanecer bañado de luz doradísima.</p>',
   '/images/blog/riad.png',
-  'Marruecos Experiencia',
+  'Vivir Marruecos',
   NOW(),
   true,
   0
@@ -93,7 +93,7 @@ VALUES
     <li>Relájate y tómate las cosas con calma para emprender una bonita visita con ascenso visual guiado hasta la muy venerada edificación blanquecina de la pequeña <em>Mezquita Cuna (Mezquita del Asfal)</em> a las afueras, para vislumbrar la incesante luz caer tras la ciudad en una completa postal.</li>
   </ul>',
   '/images/blog/chefchaouen.png',
-  'Marruecos Experiencia',
+  'Vivir Marruecos',
   NOW(),
   true,
   0
@@ -113,7 +113,7 @@ VALUES
   <h3>4. Consumo de alimentos, frutas crudas y preciada agua</h3>
   <p>En el gran tramo de toda extensa red turística general los controles son estrictos, aun así, a menos que adores los dolores puntuales abdominales que truncan las salidas planificadas o bien cuentes con invulnerabilidad plena gástrica local; mantente completamente firme requiriendo únicamente ricas bebidas provistas directamente de botella, evitando así hielos sueltos en jugos. Trata a su vez todo producto descascarillado exento proveniente de cáscaras duras crudas de ser retiradas fuera si tu opción inmediata optativa carece o dudosamente fue sumergida previamente ante limpieza acuciosa rigurosa del sitio de su distribución. Marruecos te fascinará a ciencia cierta y todo se enfoca finalmente nada más a tu gran disfrute e invaluable memoria. ¡Ahlan Wa Sahlan!</p>',
   '/images/blog/tips.png',
-  'Marruecos Experiencia',
+  'Vivir Marruecos',
   NOW(),
   true,
   0

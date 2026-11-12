@@ -8,7 +8,7 @@ INSERT INTO public.blog_posts (id, slug, title, excerpt, content, cover_image, c
 <p>A primera hora, explora las <strong>Tumbas Saadíes</strong>, un mausoleo oculto durante siglos. Continúa hacia la <strong>Madrasa de Ben Youssef</strong>, una antigua escuela coránica fascinante. Por la tarde, escapa del bullicio en los famosos <strong>Jardines Majorelle</strong>, diseñados por Jacques Majorelle y posteriormente adquiridos por Yves Saint Laurent. Su característico color "Azul Majorelle" te enamorará.</p>
 <h2>Día 3: Zocos, Regateo y Palmeral</h2>
 <p>Dedica el tercer día a perderte sin rumbo por los <strong>Zocos de Marrakech</strong>. Aquí podrás comprar especias, cuero, lámparas de cristal y alfombras. ¡Recuerda que el regateo es un arte obligatorio!</p>
-<p>Para culminar el viaje, reserva nuestro espectacular <a href="/tours/b283028f-9123-4ab2-a000-b8b9946feddb" class="text-brand-accent underline">Tour 9 Días desde Marrakech hacia Tánger</a> si quieres seguir descubriendo el país, o realiza una excursión de medio día al Palmeral.</p>', 'https://images.unsplash.com/photo-1553603227-2358aabe8eb8?auto=format&fit=crop&q=80', 'Ciudades Imperiales', 'Marruecos Experiencia', true, 12),
+<p>Para culminar el viaje, reserva nuestro espectacular <a href="/tours/b283028f-9123-4ab2-a000-b8b9946feddb" class="text-brand-accent underline">Tour 9 Días desde Marrakech hacia Tánger</a> si quieres seguir descubriendo el país, o realiza una excursión de medio día al Palmeral.</p>', 'https://images.unsplash.com/photo-1553603227-2358aabe8eb8?auto=format&fit=crop&q=80', 'Ciudades Imperiales', 'Vivir Marruecos', true, 12),
 
 (gen_random_uuid(), 'zagora-vs-merzouga-que-desierto-elegir', 'Zagora vs Merzouga: ¿Qué Desierto Elegir en tu Viaje a Marruecos?', 'Si estás planeando una excursión al desierto de Marruecos, seguramente te enfrentes al gran dilema: ¿Zagora o Merzouga? Te damos la respuesta definitiva.', 
 '<p>Una de las experiencias más demandadas al viajar a Marruecos es pasar la noche en el desierto del Sáhara. Sin embargo, el "Sáhara marroquí" tiene dos puntos principales de acceso turístico: <strong>Zagora y Merzouga</strong>. ¿Cuál deberías elegir?</p>
@@ -21,7 +21,7 @@ INSERT INTO public.blog_posts (id, slug, title, excerpt, content, cover_image, c
 <p><strong>Lo bueno:</strong> Es el desierto de dunas gigantes por excelencia. Fotográficamente es espectacular.<br/>
 <strong>Lo malo:</strong> Requiere más días de viaje de ida y vuelta.</p>
 <h2>Nuestra Recomendación Final</h2>
-<p>Si dispones de al menos 3 o 4 días, no lo dudes: <strong>ve a Merzouga</strong> atravesando el Alto Atlas y las Gargantas del Todra. La recompensa visual de Erg Chebbi supera con creces las horas de coche.</p>', 'https://images.unsplash.com/photo-1542614488-82ab817452d7?auto=format&fit=crop&q=80', 'Desierto', 'Marruecos Experiencia', true, 25),
+<p>Si dispones de al menos 3 o 4 días, no lo dudes: <strong>ve a Merzouga</strong> atravesando el Alto Atlas y las Gargantas del Todra. La recompensa visual de Erg Chebbi supera con creces las horas de coche.</p>', 'https://images.unsplash.com/photo-1542614488-82ab817452d7?auto=format&fit=crop&q=80', 'Desierto', 'Vivir Marruecos', true, 25),
 
 (gen_random_uuid(), 'magia-chefchaouen-pueblo-azul-marruecos', 'La Magia de Chefchaouen: Guía Práctica del Pueblo Azul de Marruecos', 'Perderse en Chefchaouen es como caminar dentro de un sueño de tonos índigo. Te enseñamos los mejores rincones fotográficos y qué probar.', 
 '<p>Ubicado en las faldas de las montañas del Rif, <strong>Chefchaouen (o Chaouen)</strong> es mundialmente conocido por las paredes de sus edificios construidos en la ladera de la montaña, totalmente revestidas en brillantes tonos azules.</p>
@@ -35,7 +35,7 @@ INSERT INTO public.blog_posts (id, slug, title, excerpt, content, cover_image, c
 <li><strong>La Kasbah (Alcazaba):</strong> Una fortaleza restaurada que alberga un pequeño museo etnográfico.</li>
 </ul>
 <h2>Cómo llegar y dónde encajarlo en tu ruta</h2>
-<p>Chefchaouen es una parada obligatoria en nuestras <a href="/coleccion/viajes-norte-de-marruecos" class="text-brand-accent underline">Rutas por el Norte de Marruecos</a>. Al aterrizar o llegar en ferry a Tánger, puedes contratar nuestra <a href="/tours/2ce49d91-8740-40ad-8ead-82b147afcb6b" class="text-brand-accent underline">Ruta Norte a Sur: 8 Días de Tánger a Marrakech</a>, donde el pueblo azul es uno de los platos principales.</p>', 'https://images.unsplash.com/photo-1548680101-7ecdbd4303d8?auto=format&fit=crop&q=80', 'Norte de Marruecos', 'Marruecos Experiencia', true, 31),
+<p>Chefchaouen es una parada obligatoria en nuestras <a href="/coleccion/viajes-norte-de-marruecos" class="text-brand-accent underline">Rutas por el Norte de Marruecos</a>. Al aterrizar o llegar en ferry a Tánger, puedes contratar nuestra <a href="/tours/2ce49d91-8740-40ad-8ead-82b147afcb6b" class="text-brand-accent underline">Ruta Norte a Sur: 8 Días de Tánger a Marrakech</a>, donde el pueblo azul es uno de los platos principales.</p>', 'https://images.unsplash.com/photo-1548680101-7ecdbd4303d8?auto=format&fit=crop&q=80', 'Norte de Marruecos', 'Vivir Marruecos', true, 31),
 
 (gen_random_uuid(), 'rutas-imprescindibles-desde-tanger', '5 Rutas Increíbles y Roadtrips desde Tánger hacia el Sur', 'Tánger es el puerto de entrada romántico por excelencia. Si inicias tu viaje aquí, te proponemos las mejores rutas para cruzar Marruecos.', 
 '<p>Tánger une África y Europa a través del Estrecho de Gibraltar. Su aire bohemio la hace el inicio perfecto para un viaje a través de Marruecos.</p>
@@ -46,7 +46,7 @@ INSERT INTO public.blog_posts (id, slug, title, excerpt, content, cover_image, c
 <h2>3. La Ruta Costa a Costa (Tánger - Asilah - Rabat - Casablanca)</h2>
 <p>Si prefieres el océano, bordea la costa atlántica. Asilah te sorprenderá con sus murales y ambiente portuario. Excelente si viajas en verano y quieres huir de los 40°C del interior.</p>
 <h2>Consejo Viajero</h2>
-<p>El norte de Marruecos suele tener un ritmo más pausado y reminiscencias españolas muy marcadas. No dudes en consultarnos en la sección de <a href="/contacto" class="text-brand-accent underline">Consultas a medida</a> para diseñar tu itinerario soñado saliendo desde el puerto de Tánger Ville.</p>', 'https://images.unsplash.com/photo-1512633017083-67231aba710d?auto=format&fit=crop&q=80', 'Cultura', 'Marruecos Experiencia', true, 19),
+<p>El norte de Marruecos suele tener un ritmo más pausado y reminiscencias españolas muy marcadas. No dudes en consultarnos en la sección de <a href="/contacto" class="text-brand-accent underline">Consultas a medida</a> para diseñar tu itinerario soñado saliendo desde el puerto de Tánger Ville.</p>', 'https://images.unsplash.com/photo-1512633017083-67231aba710d?auto=format&fit=crop&q=80', 'Cultura', 'Vivir Marruecos', true, 19),
 
 (gen_random_uuid(), 'que-comer-marruecos-10-platos-estrella', 'Gastronomía de Marruecos: Qué Platos DEBES Probar', 'Olvida las dietas. Marruecos es un paraíso para el paladar. Te contamos los platos estrella, desde el Tajín de ciruelas hasta la Pastela.', 
 '<p>La cocina marroquí es una de las más ricas y especiadas del mundo. Se basa en una mezcla de influencias árabes, bereberes, mediterráneas e incluso andalusíes. Aquí tienes lo esencial que debes pedir en los restaurantes:</p>
@@ -59,7 +59,7 @@ INSERT INTO public.blog_posts (id, slug, title, excerpt, content, cover_image, c
 <h2>4. Harira</h2>
 <p>La sopa tradicional con la que se rompe el ayuno en el Ramadán. Lleva lentejas, garbanzos, tomate, cordero y mucho cilantro fresco.</p>
 <h2>5. Té de Menta (Whisky Marroquí)</h2>
-<p>El símbolo absoluto de la hospitalidad. Ver cómo lo escancian desde grandes alturas para crear la "corona" de espuma es un espectáculo que acompañará cada parada de tus <a href="/tours" class="text-brand-accent underline">Rutas con nosotros</a>.</p>', 'https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&q=80', 'Blog', 'Marruecos Experiencia', true, 42),
+<p>El símbolo absoluto de la hospitalidad. Ver cómo lo escancian desde grandes alturas para crear la "corona" de espuma es un espectáculo que acompañará cada parada de tus <a href="/tours" class="text-brand-accent underline">Rutas con nosotros</a>.</p>', 'https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&q=80', 'Blog', 'Vivir Marruecos', true, 42),
 
 (gen_random_uuid(), 'consejos-compras-marruecos-regateo', '10 Consejos de Supervivencia y Regateo en los Zocos', '¿Vas a viajar a Marruecos y quieres comprar artesanía? Aquí tienes la guía definitiva para conseguir el mejor precio sin estresarte.', 
 '<p>Entrar en un zoco (mercado tradicional) en Marruecos es una experiencia sensorial increíble, pero también puede ser un desafío para el viajero inexperto. El arte del "regateo" (negociar el precio) no es solo comercial, es cultural.</p>
@@ -72,5 +72,5 @@ INSERT INTO public.blog_posts (id, slug, title, excerpt, content, cover_image, c
 <li><strong>La retirada táctica:</strong> Si no alcanzas el precio que quieres, di "gracias" amablemente y haz ademán de irte. Suele ser el momento donde lanzan su "última y mejor oferta".</li>
 </ol>
 <h2>¿Qué comprar?</h2>
-<p>El Aceite de Argán es espectacular y el auténtico cuero en las curtidurías de Fez (visitadas en nuestra fantástica <a href="/tours/e94ea028-5cf4-4aa6-82b5-a7648c7b726b" class="text-brand-accent underline">Ruta de 5 Días hacia Fez</a>) te permitirá llevarte bolsos de alta calidad hechos a mano.</p>', 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&q=80', 'Blog', 'Marruecos Experiencia', true, 38)
+<p>El Aceite de Argán es espectacular y el auténtico cuero en las curtidurías de Fez (visitadas en nuestra fantástica <a href="/tours/e94ea028-5cf4-4aa6-82b5-a7648c7b726b" class="text-brand-accent underline">Ruta de 5 Días hacia Fez</a>) te permitirá llevarte bolsos de alta calidad hechos a mano.</p>', 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&q=80', 'Blog', 'Vivir Marruecos', true, 38)
 ON CONFLICT (id) DO NOTHING;
