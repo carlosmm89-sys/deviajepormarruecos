@@ -39,7 +39,7 @@ function slugifyCategory(str = '') {
     .replace(/[^a-z0-9-]/g, '');
 }
 
-function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml, preloadImage }) {
+function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml, preloadImage, modulePreload }) {
   const safeTitle = escapeHtml(fitTitle(title || HOME_TITLE));
   const safeDesc = escapeHtml(
     (description || 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas a medida.').slice(0, 160)
@@ -61,6 +61,7 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
     // Conexión anticipada con Supabase (datos de tours y fotos): ahorra tiempo en móvil antes de pintar la página.
     // Dos conexiones: sin crossorigin para las imágenes (peticiones no-CORS) y con crossorigin para la API de datos.
     SUPABASE_ORIGIN ? `<link rel="preconnect" href="${SUPABASE_ORIGIN}" /><link rel="preconnect" href="${SUPABASE_ORIGIN}" crossorigin />` : '',
+    modulePreload ? `<link rel="modulepreload" crossorigin href="${modulePreload}" />` : '',
     preloadImage ? `<link rel="preload" as="image" href="${escapeHtml(optImg(preloadImage, 1600))}"${optSrcSet(preloadImage) ? ` imagesrcset="${escapeHtml(optSrcSet(preloadImage))}" imagesizes="100vw"` : ''} fetchpriority="high" />` : '',
     schema ? `<script type="application/ld+json">${JSON.stringify(schema)}</script>` : ''
   ]
@@ -147,6 +148,12 @@ async function prerender() {
     }
   }
 
+  let HOME_CHUNK = '';
+  try {
+    const f = fs.readdirSync(path.join(DIST_DIR, 'assets')).find(n => /^Home-[\w-]+\.js$/.test(n));
+    if (f) HOME_CHUNK = `/assets/${f}`;
+  } catch { HOME_CHUNK = ''; }
+
   const siteName = settings?.business_name || settings?.site_name || 'Vivir Marruecos';
 
   // Datos básicos del negocio incrustados en el HTML: el logo y el texto de portada se pintan desde el primer
@@ -170,6 +177,8 @@ async function prerender() {
     canonicalPath: '/',
     image: settings?.hero_image_url,
     preloadImage: settings?.hero_image_url,
+    // Descarga anticipada del código de la portada (si no, el navegador solo lo pide después de ejecutar el JS principal).
+    modulePreload: HOME_CHUNK,
     schema: {
       '@context': 'https://schema.org',
       '@type': 'TravelAgency',

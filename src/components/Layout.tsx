@@ -303,7 +303,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       <main className="flex-grow min-h-screen">
-        <AnimatePresence mode="wait">
+        {/* initial={false}: la primera página que se abre se muestra al instante, sin aparecer desde opacidad 0
+            (eso retrasaba el "mayor elemento con contenido"/LCP). Al navegar entre páginas sí se mantiene la transición. */}
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={location.pathname}
             initial={{ opacity: 0, y: 10 }}
