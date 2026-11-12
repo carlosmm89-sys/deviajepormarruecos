@@ -74,7 +74,7 @@ export default function WhatsAppBubble() {
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 font-serif font-bold text-sm">VM</span>
             <div className="leading-tight">
               <p className="font-semibold text-sm">Vivir Marruecos</p>
-              <p className="text-[11px] text-white/80">Normalmente responde en pocos minutos</p>
+              <p className="text-[11px] text-white/80">Te respondemos lo antes posible</p>
             </div>
             <button
               type="button"
