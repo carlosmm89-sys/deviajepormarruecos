@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Destination, Tour, GalleryImage } from '../types';
 import { MapPin, Clock, ArrowRight, Star, Sparkles } from 'lucide-react';
@@ -52,25 +52,6 @@ export default function Home() {
   const bootBiz = typeof window !== 'undefined' ? (window as any).__BIZ__ : null;
   const heroLocal = bootBiz?.hero_local_src && (!settings?.hero_image_url || settings.hero_image_url === bootBiz.hero_image_url) ? bootBiz : null;
 
-  // Retira la portada provisional del HTML (#hero-boot) cuando la foto de React ya está pintada.
-  const heroImgRef = useRef<HTMLImageElement | null>(null);
-  useEffect(() => {
-    const boot = document.getElementById('hero-boot');
-    if (!boot) return;
-    let done = false;
-    const removeBoot = () => {
-      if (done) return;
-      done = true;
-      requestAnimationFrame(() => requestAnimationFrame(() => boot.remove()));
-    };
-    const img = heroImgRef.current;
-    if (img && img.complete && img.naturalWidth > 0) removeBoot();
-    else img?.addEventListener('load', removeBoot, { once: true });
-    img?.addEventListener('error', removeBoot, { once: true });
-    const timer = window.setTimeout(removeBoot, 4000);
-    return () => { window.clearTimeout(timer); boot.remove(); };
-  }, []);
-
   return (
     <div className="space-y-24 pb-24">
       <SEO 
@@ -82,7 +63,6 @@ export default function Home() {
       <section className="relative z-30 min-h-[85vh] py-16 md:py-24 flex flex-col items-center justify-center">
         <div className="absolute inset-0 z-0 overflow-hidden bg-brand-blue/20">
           <img
-            ref={heroImgRef}
             src={heroLocal ? heroLocal.hero_local_src : optImg(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800", 1600)}
             srcSet={heroLocal ? heroLocal.hero_local_srcset : optSrcSet(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800")}
             sizes="100vw"
