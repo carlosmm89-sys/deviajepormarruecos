@@ -61,9 +61,12 @@
 
 ---
 
-### 5. Accesos y Colaboradores (GitHub)
-- **Invitación enviada (12/11/2026):** Se ha invitado como colaborador del repositorio `carlosmm89-sys/deviajepormarruecos` al correo `Aliourokch1233@gmail.com` (usuario de GitHub `@aliourokch1233-cloud`).
-- **Enlace directo para aceptar la invitación:** `https://github.com/carlosmm89-sys/deviajepormarruecos/invitations`
+### 5. Accesos y Colaboradores (GitHub y Vercel)
+- **GitHub — Invitación enviada (12/11/2026):** Se ha invitado como colaborador del repositorio `carlosmm89-sys/deviajepormarruecos` al correo `Aliourokch1233@gmail.com` (usuario de GitHub `@aliourokch1233-cloud`).
+  - **Enlace directo para aceptar la invitación:** `https://github.com/carlosmm89-sys/deviajepormarruecos/invitations`
+- **Vercel — Invitación de Miembro y Vistas Previas (12/11/2026):**
+  - Se ha enviado invitación oficial de miembro (`role: MEMBER`) en el equipo de Vercel (`team_0Jwv6DQq0BIQeEwiPbNctk9p`) al correo `Aliourokch1233@gmail.com`.
+  - Se ha desactivado `ssoProtection` en el proyecto `deviajepormarruecos` (`prj_FG9poBRToJImqeQKhnA42yARhjOt`) para que cualquier URL de vista previa (Preview Deployment) sea accesible públicamente sin pedir login en la cuenta de Carlos.
 
 ---
 
