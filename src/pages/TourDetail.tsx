@@ -457,8 +457,8 @@ export default function TourDetail() {
               <MapPin className="w-8 h-8 text-gray-900" />
               <h2 className="text-3xl font-bold text-gray-900">Mapa del Itinerario</h2>
             </div>
-            {(tour.departure_city || tour.return_city) ? (
-              <TourRouteMap departureCity={tour.departure_city} returnCity={tour.return_city} />
+            {(tour.itinerary_details || tour.departure_city || tour.return_city) ? (
+              <TourRouteMap itineraryHtml={tour.itinerary_details} departureCity={tour.departure_city} returnCity={tour.return_city} />
             ) : tour.map_iframe ? (
               <div className="w-full aspect-video rounded-3xl overflow-hidden border border-gray-100 shadow-sm [&>iframe]:w-full [&>iframe]:h-full"
                    dangerouslySetInnerHTML={{ __html: tour.map_iframe }} 
