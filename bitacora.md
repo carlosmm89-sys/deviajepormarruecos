@@ -93,3 +93,4 @@
 - La descarga de la portada (`Home`) arranca en paralelo al iniciar la app en `/` (`src/App.tsx`), sin esperar al primer render.
 - Imagen de portada con `loading="eager"` (sin `decoding="async"`).
 - `prerender-seo.mjs`: `preconnect` a Supabase en todas las páginas pre-renderizadas.
+- (2ª tanda) Fuentes de Google cargadas sin bloquear el renderizado (`display=optional`, sin saltos de diseño); `srcset`/`sizes` en las fotos de destinos, tours y galería de la portada para no descargar fotos más grandes de lo que se ven; caché de 30 días en Vercel para `/images/*`, iconos PWA y favicon.

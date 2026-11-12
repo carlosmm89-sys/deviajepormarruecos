@@ -51,8 +51,10 @@
     <!-- LCP/FCP Optimizations: Font Preloading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Fuentes: hoja normal (cargarla en diferido provocaba saltos de diseño/CLS al cambiar la fuente) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Fuentes sin bloquear el renderizado. display=optional: si la fuente no ha llegado a tiempo se queda la del sistema
+         en esa visita (sin cambio de fuente a mitad = sin saltos de diseño/CLS); en las siguientes visitas ya sale de caché. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=optional" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=optional"></noscript>
 
     <!-- Google Analytics injected dynamically by React Component -->
 

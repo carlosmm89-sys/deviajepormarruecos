@@ -130,6 +130,8 @@ export default function Home() {
                 <Link to={`/destinations/${dest.id}`}>
                   <img
                     src={optImg(dest.image_url, 800)}
+                    srcSet={optSrcSet(dest.image_url, [400, 640, 800])}
+                    sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
                     alt=""
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -184,6 +186,8 @@ export default function Home() {
                   <div className="relative h-64 overflow-hidden bg-gray-100">
                     <img
                       src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600', 800)}
+                      srcSet={optSrcSet(tour.featured_image || tour.gallery?.[0], [400, 640, 800])}
+                      sizes="(min-width: 768px) 33vw, 100vw"
                       alt={tour.title}
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -244,7 +248,9 @@ export default function Home() {
                 className={`relative group overflow-hidden rounded-2xl md:rounded-[2rem] bg-gray-100 block ${idx === 0 ? 'col-span-2 row-span-2' : ''}`}
               >
                 <img 
-                  src={optImg(img.image_url, 600)} 
+                  src={optImg(img.image_url, 600)}
+                  srcSet={optSrcSet(img.image_url, idx === 0 ? [480, 800, 1200] : [320, 480, 600])}
+                  sizes={idx === 0 ? '(min-width: 768px) 50vw, 100vw' : '(min-width: 768px) 25vw, 50vw'}
                   alt={img.title || 'Galería de Marruecos'} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
