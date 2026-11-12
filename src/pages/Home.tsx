@@ -164,7 +164,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {isLoading ? (
             Array(3).fill(0).map((_, i) => (
-              <div key={i} className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm h-[400px] animate-pulse flex flex-col">
+              <div key={i} className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm h-[500px] animate-pulse flex flex-col">
                 <div className="h-64 bg-gray-200 w-full" />
                 <div className="p-8 space-y-4 flex-1 bg-gray-50/50">
                   <div className="h-4 bg-gray-200 rounded w-1/3" />
@@ -236,7 +236,13 @@ export default function Home() {
           </Link>
         </div>
 
-        {galleryPreview.length > 0 ? (
+        {isLoading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]" aria-hidden="true">
+            {Array(5).fill(0).map((_, idx) => (
+              <div key={idx} className={`rounded-2xl md:rounded-[2rem] bg-gray-200 animate-pulse ${idx === 0 ? 'col-span-2 row-span-2' : ''}`} />
+            ))}
+          </div>
+        ) : galleryPreview.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]">
             {galleryPreview.map((img, idx) => (
               <Link 
@@ -264,7 +270,7 @@ export default function Home() {
         )}
 
         <div className="mt-8 text-center md:hidden">
-          <Link to="/galeria" className="inline-flex items-center gap-2 text-brand-primary font-bold">
+          <Link to="/galeria" className="inline-flex items-center gap-2 text-[#9a4d1c] font-bold">
             Ver todas las fotos <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
