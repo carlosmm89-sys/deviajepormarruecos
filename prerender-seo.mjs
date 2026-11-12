@@ -224,7 +224,7 @@ async function prerender() {
     bootHtml: heroLocal ? `<div id="hero-boot" aria-hidden="true" style="position:absolute;top:0;left:0;width:100%;z-index:60;pointer-events:none">`
       + `<div style="box-sizing:border-box;height:97px;background:#fff;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;padding:0 16px">`
       + (settings?.logo_url ? `<img src="${escapeHtml(optImg(settings.logo_url, 300))}" width="150" height="80" alt="" style="height:80px;width:auto;object-fit:contain">` : '')
-      + `</div><div style="position:relative;height:100vh;overflow:hidden;background:#F9F8F6">`
+      + `</div><div style="position:relative;height:85vh;overflow:hidden;background:#F9F8F6">`
       + `<img src="${escapeHtml(heroLocal.src)}" srcset="${escapeHtml(heroLocal.srcset)}" sizes="100vw" fetchpriority="high" alt="" style="display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.05)">`
       + `<div style="position:absolute;inset:0;background:rgba(0,0,0,.4)"></div>`
       + `<div style="position:absolute;left:0;right:0;bottom:0;height:160px;background:linear-gradient(to top,#F9F8F6,transparent)"></div>`
