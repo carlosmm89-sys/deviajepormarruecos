@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import dotenv from 'dotenv';
 import { optImg, optSrcSet } from './src/lib/image.js';
 import { fitTitle, HOME_TITLE } from './src/data/seoContent.js';
@@ -62,7 +63,9 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
     // Dos conexiones: sin crossorigin para las imágenes (peticiones no-CORS) y con crossorigin para la API de datos.
     SUPABASE_ORIGIN ? `<link rel="preconnect" href="${SUPABASE_ORIGIN}" /><link rel="preconnect" href="${SUPABASE_ORIGIN}" crossorigin />` : '',
     modulePreload ? `<link rel="modulepreload" crossorigin href="${modulePreload}" />` : '',
-    preloadImage ? `<link rel="preload" as="image" href="${escapeHtml(optImg(preloadImage, 1600))}"${optSrcSet(preloadImage) ? ` imagesrcset="${escapeHtml(optSrcSet(preloadImage))}" imagesizes="100vw"` : ''} fetchpriority="high" />` : '',
+    preloadImage && typeof preloadImage === 'object'
+      ? `<link rel="preload" as="image" href="${escapeHtml(preloadImage.src)}" imagesrcset="${escapeHtml(preloadImage.srcset)}" imagesizes="100vw" fetchpriority="high" />`
+      : preloadImage ? `<link rel="preload" as="image" href="${escapeHtml(optImg(preloadImage, 1600))}"${optSrcSet(preloadImage) ? ` imagesrcset="${escapeHtml(optSrcSet(preloadImage))}" imagesizes="100vw"` : ''} fetchpriority="high" />` : '',
     schema ? `<script type="application/ld+json">${JSON.stringify(schema)}</script>` : ''
   ]
     .filter(Boolean)
@@ -113,6 +116,36 @@ function itemListLd(name, path, entries) {
   };
 }
 
+/**
+ * Copia la foto de portada a la propia web (dist/images/hero/) en varios anchos y en WebP.
+ * Así el móvil la descarga por la misma conexión que la página, sin abrir otra con Supabase (mejora el LCP).
+ */
+async function localizeHeroImage(url) {
+  if (!url || !/\.supabase\.co\/storage\/v1\/object\/public\//.test(url)) return null;
+  try {
+    const hash = crypto.createHash('md5').update(url).digest('hex').slice(0, 8);
+    const dir = path.join(DIST_DIR, 'images', 'hero');
+    fs.mkdirSync(dir, { recursive: true });
+    const entries = [];
+    for (const w of [480, 768, 1024, 1600]) {
+      const res = await fetch(optImg(url, w, w <= 768 ? 55 : 65), { headers: { Accept: 'image/webp,image/*;q=0.8' } });
+      if (!res.ok) return null;
+      const ct = res.headers.get('content-type') || '';
+      const ext = ct.includes('webp') ? 'webp' : ct.includes('avif') ? 'avif' : ct.includes('png') ? 'png' : 'jpg';
+      const file = `hero-${hash}-${w}.${ext}`;
+      fs.writeFileSync(path.join(dir, file), Buffer.from(await res.arrayBuffer()));
+      entries.push({ w, path: `/images/hero/${file}` });
+    }
+    return {
+      src: entries.find(e => e.w === 1024).path,
+      srcset: entries.map(e => `${e.path} ${e.w}w`).join(', ')
+    };
+  } catch (err) {
+    console.warn('No se pudo copiar la foto de portada:', err?.message || err);
+    return null;
+  }
+}
+
 async function prerender() {
   const templatePath = path.join(DIST_DIR, 'index.html');
   if (!fs.existsSync(templatePath)) {
@@ -156,11 +189,17 @@ async function prerender() {
 
   const siteName = settings?.business_name || settings?.site_name || 'Vivir Marruecos';
 
+  let heroLocal = null;
   // Datos básicos del negocio incrustados en el HTML: el logo y el texto de portada se pintan desde el primer
   // momento, sin esperar a Supabase, y así no hay saltos de diseño (CLS) cuando llegan los datos.
   if (settings) {
     const pick = ['logo_url', 'site_name', 'business_name', 'hero_title', 'hero_subtitle', 'hero_image_url'];
     const biz = Object.fromEntries(pick.filter(k => settings[k] != null).map(k => [k, settings[k]]));
+    heroLocal = await localizeHeroImage(settings.hero_image_url);
+    if (heroLocal) {
+      biz.hero_local_src = heroLocal.src;
+      biz.hero_local_srcset = heroLocal.srcset;
+    }
     const bizScript = `<script>window.__BIZ__=${JSON.stringify(biz).replace(/</g, '\\u003c')}</script>`;
     baseHtml = baseHtml.replace('</head>', `    ${bizScript}\n  </head>`);
     fs.writeFileSync(path.join(DIST_DIR, 'spa-shell.html'), baseHtml, 'utf-8');
@@ -176,7 +215,7 @@ async function prerender() {
     description: settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION,
     canonicalPath: '/',
     image: settings?.hero_image_url,
-    preloadImage: settings?.hero_image_url,
+    preloadImage: heroLocal || settings?.hero_image_url,
     // Descarga anticipada del código de la portada (si no, el navegador solo lo pide después de ejecutar el JS principal).
     modulePreload: HOME_CHUNK,
     schema: {

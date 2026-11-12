@@ -48,6 +48,10 @@ export default function Home() {
     loadData();
   }, []);
 
+  // Foto de portada servida desde la propia web (la copia el build) mientras siga siendo la misma que en Supabase.
+  const bootBiz = typeof window !== 'undefined' ? (window as any).__BIZ__ : null;
+  const heroLocal = bootBiz?.hero_local_src && (!settings?.hero_image_url || settings.hero_image_url === bootBiz.hero_image_url) ? bootBiz : null;
+
   return (
     <div className="space-y-24 pb-24">
       <SEO 
@@ -59,8 +63,8 @@ export default function Home() {
       <section className="relative z-30 min-h-[85vh] py-16 md:py-24 flex flex-col items-center justify-center">
         <div className="absolute inset-0 z-0 overflow-hidden bg-brand-blue/20">
           <img
-            src={optImg(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800", 1600)}
-            srcSet={optSrcSet(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800")}
+            src={heroLocal ? heroLocal.hero_local_src : optImg(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800", 1600)}
+            srcSet={heroLocal ? heroLocal.hero_local_srcset : optSrcSet(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800")}
             sizes="100vw"
             alt="Desierto de Merzouga al atardecer"
             className="w-full h-full object-cover scale-105"
