@@ -162,12 +162,12 @@ export default function BlogPostDetail() {
           )}
 
           <div 
-            className="prose prose-lg md:prose-xl max-w-none text-gray-600 leading-loose text-justify
+            className="prose prose-lg md:prose-xl max-w-none text-gray-600 leading-loose text-left md:text-justify hyphens-auto prose-headings:text-left
                        prose-headings:font-serif prose-headings:text-gray-900 
-                       prose-h1:text-4xl prose-h1:font-extrabold prose-h1:mb-8 prose-h1:tracking-tight
-                       prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-14 prose-h2:mb-6 prose-h2:pb-2 prose-h2:border-b-2 prose-h2:border-gray-100
-                       prose-h3:text-2xl prose-h3:font-semibold prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-gray-800
-                       prose-p:mb-8 prose-p:text-lg prose-p:leading-relaxed
+                       prose-h1:text-3xl md:prose-h1:text-4xl prose-h1:font-extrabold prose-h1:mb-8 prose-h1:tracking-tight
+                       prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-10 md:prose-h2:mt-14 prose-h2:mb-6 prose-h2:pb-2 prose-h2:border-b-2 prose-h2:border-gray-100
+                       prose-h3:text-xl md:prose-h3:text-2xl prose-h3:font-semibold prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-gray-800
+                       prose-p:mb-6 md:prose-p:mb-8 prose-p:text-lg prose-p:leading-relaxed
                        prose-a:text-[#d36631] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
                        prose-strong:text-gray-900 prose-strong:font-bold
                        prose-ul:list-disc prose-ul:pl-6 prose-li:mb-2 prose-li:text-lg

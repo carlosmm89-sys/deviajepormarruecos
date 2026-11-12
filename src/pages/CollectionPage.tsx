@@ -184,7 +184,7 @@ export default function CollectionPage() {
                   {tour.title}
                 </h2>
                 
-                <p className="text-gray-600 leading-relaxed mb-8 max-w-none text-justify line-clamp-4">
+                <p className="text-gray-600 leading-relaxed mb-8 max-w-none text-left md:text-justify hyphens-auto line-clamp-4">
                   {tour.description?.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&')}
                 </p>
                 
