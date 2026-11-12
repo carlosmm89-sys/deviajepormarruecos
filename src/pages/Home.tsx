@@ -12,7 +12,7 @@ import { usePageViews } from '../hooks/usePageViews';
 import { useTranslation } from '../hooks/useTranslation';
 import { useCurrency } from '../context/CurrencyContext';
 import { tourPath, HOME_META_DESCRIPTION } from '../data/seoContent';
-import { optImg } from '../lib/image';
+import { optImg, optSrcSet } from '../lib/image';
 
 export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -58,7 +58,9 @@ export default function Home() {
         <div className="absolute inset-0 z-0 overflow-hidden bg-brand-blue/20">
           <img
             src={optImg(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800", 1600)}
-            alt="Hero Morocco"
+            srcSet={optSrcSet(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800")}
+            sizes="100vw"
+            alt="Desierto de Merzouga al atardecer"
             className="w-full h-full object-cover scale-105"
             fetchPriority="high"
             decoding="async"
@@ -290,8 +292,12 @@ export default function Home() {
         <div className="relative rounded-[3rem] p-12 md:p-24 text-center overflow-hidden shadow-2xl">
           <div className="absolute inset-0">
             <img 
-              src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?q=70&w=1200&auto=format&fit=crop" 
+              src={optImg("https://images.unsplash.com/photo-1539020140153-e479b8c22e70", 1200, 55)}
+              srcSet={optSrcSet("https://images.unsplash.com/photo-1539020140153-e479b8c22e70", [640, 960, 1200], 55)}
+              sizes="100vw"
               alt="Desierto de Marruecos" 
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent" />

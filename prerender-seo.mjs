@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
+import { optImg, optSrcSet } from './src/lib/image.js';
 import { tourPath, tourMetaDescription, destinationHeadings, collectionContent, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME } from './src/data/seoContent.js';
 
 dotenv.config({ path: fs.existsSync('.env.local') ? '.env.local' : '.env' });
@@ -35,7 +36,7 @@ function slugifyCategory(str = '') {
     .replace(/[^a-z0-9-]/g, '');
 }
 
-function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml }) {
+function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml, preloadImage }) {
   const safeTitle = escapeHtml(title || 'Vivir Marruecos - Tu Agencia de Viajes en Marruecos');
   const safeDesc = escapeHtml(
     (description || 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas a medida.').slice(0, 160)
@@ -54,6 +55,7 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
 
   const extraHead = [
     `<link rel="canonical" href="${fullUrl}" />`,
+    preloadImage ? `<link rel="preload" as="image" href="${escapeHtml(optImg(preloadImage, 1600))}"${optSrcSet(preloadImage) ? ` imagesrcset="${escapeHtml(optSrcSet(preloadImage))}" imagesizes="100vw"` : ''} fetchpriority="high" />` : '',
     schema ? `<script type="application/ld+json">${JSON.stringify(schema)}</script>` : ''
   ]
     .filter(Boolean)
@@ -119,6 +121,7 @@ async function prerender() {
     description: settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION,
     canonicalPath: '/',
     image: settings?.hero_image_url,
+    preloadImage: settings?.hero_image_url,
     schema: {
       '@context': 'https://schema.org',
       '@type': 'TravelAgency',
