@@ -366,7 +366,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <ul className="space-y-4 text-sm">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-brand-accent flex-shrink-0" />
-                  <span>Marrakech, Marruecos</span>
+                  <span className="whitespace-pre-line">{settings?.footer_address || 'Hassi Labied, Merzouga, Marruecos'}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="flex items-center justify-center w-5 h-5 text-brand-accent flex-shrink-0">✉</span>

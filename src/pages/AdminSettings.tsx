@@ -107,7 +107,7 @@ export default function AdminSettings() {
 
             <div className="space-y-1">
               <label className="text-sm font-semibold text-gray-700">Dirección Footer</label>
-              <textarea {...register('footer_address')} className="input-field min-h-[80px]" placeholder="Marrakech, Marruecos..." />
+              <textarea {...register('footer_address')} className="input-field min-h-[80px]" placeholder="Hassi Labied, Merzouga, Marruecos" />
             </div>
 
             <div className="pt-8 border-t border-gray-100">

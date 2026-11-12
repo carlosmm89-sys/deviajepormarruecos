@@ -11,7 +11,6 @@ import SEO from '../components/SEO';
 import { usePageViews } from '../hooks/usePageViews';
 import { useTranslation } from '../hooks/useTranslation';
 import { useCurrency } from '../context/CurrencyContext';
-import Testimonials from '../components/Testimonials';
 
 export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -266,9 +265,6 @@ export default function Home() {
           </Link>
         </div>
       </section>
-
-      {/* Testimonios */}
-      <Testimonials />
 
       {/* Google Reviews Widget */}
       {settings?.google_reviews_widget && (
