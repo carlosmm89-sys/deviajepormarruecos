@@ -129,7 +129,7 @@ export default function CollectionPage() {
   return (
     <div className="min-h-screen bg-white pb-24">
       <SEO
-        title={`${categoryName} en Marruecos | Marruecos Experiencia`}
+        title={`${categoryName} en Marruecos | Vivir Marruecos`}
         description={`Descubre nuestras mejores rutas y circuitos de ${categoryName.toLowerCase()} en Marruecos a medida.`}
         image={heroImage}
         url={`/coleccion/${categorySlug}`}

@@ -13,8 +13,8 @@ export default defineConfig(({mode}) => {
       VitePWA({
         registerType: 'autoUpdate',
         manifest: {
-          name: 'Marruecos Experiencia',
-          short_name: 'MarruecosExp',
+          name: 'Vivir Marruecos',
+          short_name: 'VivirMarruecos',
           description: 'Tu agencia de viajes en Marruecos',
           theme_color: '#1a5f7a',
           background_color: '#ffffff',

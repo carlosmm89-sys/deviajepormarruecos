@@ -72,7 +72,7 @@ export default function AdminSettings() {
           <div className="space-y-4">
             <div className="space-y-1">
               <label className="text-sm font-semibold text-gray-700">Nombre del Sitio</label>
-              <input {...register('site_name')} className="input-field" placeholder="Marruecos Experiencia" />
+              <input {...register('site_name')} className="input-field" placeholder="Vivir Marruecos" />
             </div>
             
             <div className="space-y-1">
@@ -218,7 +218,7 @@ export default function AdminSettings() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-sm font-semibold text-gray-700">Remitente: Nombre</label>
-                  <input {...register('smtp_from_name')} className="input-field" placeholder="Marruecos Experiencia" />
+                  <input {...register('smtp_from_name')} className="input-field" placeholder="Vivir Marruecos" />
                 </div>
               </div>
             </div>

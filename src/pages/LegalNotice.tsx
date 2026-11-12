@@ -4,7 +4,7 @@ import SEO from '../components/SEO';
 export default function LegalNotice() {
   return (
     <>
-      <SEO title="Aviso Legal | Marruecos Experiencia" description="Aviso Legal y de cumplimiento normativo de la plataforma web." />
+      <SEO title="Aviso Legal | Vivir Marruecos" description="Aviso Legal y de cumplimiento normativo de la plataforma web." />
       <div className="max-w-4xl mx-auto px-4 py-20 bg-white/50 my-12 rounded-2xl">
         <h1 className="text-4xl font-serif font-bold text-gray-900 mb-8">Aviso Legal</h1>
         

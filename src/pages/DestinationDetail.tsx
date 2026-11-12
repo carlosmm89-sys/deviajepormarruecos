@@ -133,7 +133,7 @@ export default function DestinationDetail() {
     "@context": "https://schema.org",
     "@type": "TouristDestination",
     "name": td(destination, 'name'),
-    "description": td(destination, 'description') || `Explora ${td(destination, 'name')} con Marruecos Experiencia.`,
+    "description": td(destination, 'description') || `Explora ${td(destination, 'name')} con Vivir Marruecos.`,
     "image": destination.image_url
   };
 
