@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { getSupabase } from '../lib/supabaseLazy';
 import { UserProfile } from '../types';
 
 interface AuthContextType {
@@ -15,6 +15,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Supabase se carga en diferido (ver lib/supabaseLazy) para no frenar la primera pintura de la web.
+    let cancelled = false;
+    let unsubscribe: (() => void) | null = null;
+    getSupabase().then((supabase) => {
+    if (cancelled) return;
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         fetchProfile(session.user.id, session.user.email || '');
@@ -33,11 +38,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    return () => subscription.unsubscribe();
+    unsubscribe = () => subscription.unsubscribe();
+    });
+
+    return () => {
+      cancelled = true;
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   const fetchProfile = async (userId: string, email: string) => {
     try {
+      const supabase = await getSupabase();
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -56,6 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signOutUser = async () => {
+    const supabase = await getSupabase();
     await supabase.auth.signOut();
   };
 

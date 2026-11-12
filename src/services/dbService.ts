@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+import { getSupabase } from '../lib/supabaseLazy';
 import { Destination, Tour, Lead, BusinessSettings, BlogPost, GalleryImage } from '../types';
 
 // Translation Interceptor
@@ -46,7 +46,7 @@ export const dbService = {
     
     const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${ext}`;
     
-    const { error } = await supabase.storage
+    const { error } = await (await getSupabase()).storage
       .from('images')
       .upload(fileName, file, { cacheControl: '31536000', upsert: false });
 
@@ -55,7 +55,7 @@ export const dbService = {
       throw error;
     }
 
-    const { data: publicData } = supabase.storage
+    const { data: publicData } = (await getSupabase()).storage
       .from('images')
       .getPublicUrl(fileName);
 
@@ -67,7 +67,7 @@ export const dbService = {
     if (!adminView && destsCache && Date.now() - destsCache.ts < CACHE_TTL) {
       return applyTranslations(destsCache.data);
     }
-    const { data, error } = await supabase.from('destinations').select('*').order('created_at', { ascending: false });
+    const { data, error } = await (await getSupabase()).from('destinations').select('*').order('created_at', { ascending: false });
     if (error) throw error;
     if (!adminView && data) {
       destsCache = { data, ts: Date.now() };
@@ -76,7 +76,7 @@ export const dbService = {
   },
   getDestination: async (id: string, adminView = false): Promise<Destination | null> => {
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
-    let query = supabase.from('destinations').select('*');
+    let query = (await getSupabase()).from('destinations').select('*');
     
     if (isUuid) {
       query = query.eq('id', id);
@@ -89,13 +89,13 @@ export const dbService = {
     return adminView ? data : applyTranslations(data);
   },
   saveDestination: async (destination: Partial<Destination>): Promise<Destination> => {
-    const { data, error } = await supabase.from('destinations').upsert([destination]).select().single();
+    const { data, error } = await (await getSupabase()).from('destinations').upsert([destination]).select().single();
     if (error) throw error;
     destsCache = null;
     return data;
   },
   deleteDestination: async (id: string): Promise<void> => {
-    const { error } = await supabase.from('destinations').delete().eq('id', id);
+    const { error } = await (await getSupabase()).from('destinations').delete().eq('id', id);
     if (error) throw error;
     destsCache = null;
   },
@@ -105,7 +105,7 @@ export const dbService = {
     if (!adminView && toursCache && Date.now() - toursCache.ts < CACHE_TTL) {
       return applyTranslations(toursCache.data);
     }
-    const { data, error } = await supabase.from('tours').select('*, destinations(*)').order('created_at', { ascending: false });
+    const { data, error } = await (await getSupabase()).from('tours').select('*, destinations(*)').order('created_at', { ascending: false });
     if (error) throw error;
     if (!adminView && data) {
       toursCache = { data, ts: Date.now() };
@@ -114,7 +114,7 @@ export const dbService = {
   },
   getTour: async (id: string, adminView = false): Promise<Tour | null> => {
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
-    let query = supabase.from('tours').select('*, destinations(*)');
+    let query = (await getSupabase()).from('tours').select('*, destinations(*)');
     
     if (isUuid) {
       query = query.eq('id', id);
@@ -127,39 +127,39 @@ export const dbService = {
     return adminView ? data : applyTranslations(data);
   },
   getToursByDestination: async (destinationId: string, adminView = false): Promise<Tour[]> => {
-    const { data, error } = await supabase.from('tours').select('*');
+    const { data, error } = await (await getSupabase()).from('tours').select('*');
     if (error) throw error;
     const filtered = data.filter(t => t.destination_id === destinationId || (t.destination_ids && t.destination_ids.includes(destinationId)));
     return adminView ? filtered : applyTranslations(filtered);
   },
   saveTour: async (tour: Partial<Tour>): Promise<Tour> => {
-    const { data, error } = await supabase.from('tours').upsert([tour]).select().single();
+    const { data, error } = await (await getSupabase()).from('tours').upsert([tour]).select().single();
     if (error) throw error;
     toursCache = null;
     return data;
   },
   deleteTour: async (id: string): Promise<void> => {
-    const { error } = await supabase.from('tours').delete().eq('id', id);
+    const { error } = await (await getSupabase()).from('tours').delete().eq('id', id);
     if (error) throw error;
     toursCache = null;
   },
 
   // Leads
   createLead: async (lead: Partial<Lead>): Promise<void> => {
-    const { error } = await supabase.from('leads').insert([lead]);
+    const { error } = await (await getSupabase()).from('leads').insert([lead]);
     if (error) throw error;
   },
   getLeads: async (): Promise<Lead[]> => {
-    const { data, error } = await supabase.from('leads').select('*, tours(title)').order('created_at', { ascending: false });
+    const { data, error } = await (await getSupabase()).from('leads').select('*, tours(title)').order('created_at', { ascending: false });
     if (error) throw error;
     return data;
   },
   deleteLead: async (id: string): Promise<void> => {
-    const { error } = await supabase.from('leads').delete().eq('id', id);
+    const { error } = await (await getSupabase()).from('leads').delete().eq('id', id);
     if (error) throw error;
   },
   updateLeadStatus: async (id: string, status: string): Promise<Lead> => {
-    const { data, error } = await supabase.from('leads').update({ status }).eq('id', id).select().single();
+    const { data, error } = await (await getSupabase()).from('leads').update({ status }).eq('id', id).select().single();
     if (error) throw error;
     return data;
   },
@@ -174,7 +174,7 @@ export const dbService = {
     }
     settingsPromise = (async () => {
       try {
-        const { data, error } = await supabase.from('business_settings').select('*').limit(1).single();
+        const { data, error } = await (await getSupabase()).from('business_settings').select('*').limit(1).single();
         if (error) return null;
         settingsCache = { data, ts: Date.now() };
         return data;
@@ -185,7 +185,7 @@ export const dbService = {
     return settingsPromise;
   },
   saveBusinessSettings: async (settings: Partial<BusinessSettings>): Promise<BusinessSettings> => {
-    const { data, error } = await supabase.from('business_settings').upsert([settings]).select().single();
+    const { data, error } = await (await getSupabase()).from('business_settings').upsert([settings]).select().single();
     if (error) throw error;
     settingsCache = { data, ts: Date.now() };
     return data;
@@ -193,18 +193,18 @@ export const dbService = {
 
   // Analytics
   incrementTourViews: async (id: string) => {
-    await supabase.rpc('increment_tour_views', { row_id: id });
+    await (await getSupabase()).rpc('increment_tour_views', { row_id: id });
   },
   incrementDestViews: async (id: string) => {
-    await supabase.rpc('increment_dest_views', { row_id: id });
+    await (await getSupabase()).rpc('increment_dest_views', { row_id: id });
   },
   incrementHomeViews: async () => {
-    await supabase.rpc('increment_home_views');
+    await (await getSupabase()).rpc('increment_home_views');
   },
   
   // Blog
   getBlogPosts: async (adminView = false): Promise<BlogPost[]> => {
-    let query = supabase.from('blog_posts').select('*').order('published_at', { ascending: false });
+    let query = (await getSupabase()).from('blog_posts').select('*').order('published_at', { ascending: false });
     if (!adminView) {
       query = query.eq('is_published', true);
     }
@@ -214,7 +214,7 @@ export const dbService = {
   },
   getBlogPost: async (slugOrId: string, adminView = false): Promise<BlogPost | null> => {
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slugOrId);
-    let query = supabase.from('blog_posts').select('*');
+    let query = (await getSupabase()).from('blog_posts').select('*');
     
     if (!adminView) query = query.eq('is_published', true);
     if (isUuid) query = query.eq('id', slugOrId);
@@ -225,31 +225,31 @@ export const dbService = {
     return adminView ? data : applyTranslations(data); // Admin view needs raw translations object
   },
   saveBlogPost: async (post: Partial<BlogPost>): Promise<BlogPost> => {
-    const { data, error } = await supabase.from('blog_posts').upsert([post]).select().single();
+    const { data, error } = await (await getSupabase()).from('blog_posts').upsert([post]).select().single();
     if (error) throw error;
     return data;
   },
   deleteBlogPost: async (id: string): Promise<void> => {
-    const { error } = await supabase.from('blog_posts').delete().eq('id', id);
+    const { error } = await (await getSupabase()).from('blog_posts').delete().eq('id', id);
     if (error) throw error;
   },
   incrementBlogViews: async (id: string) => {
-    await supabase.rpc('increment_blog_views', { row_id: id });
+    await (await getSupabase()).rpc('increment_blog_views', { row_id: id });
   },
 
   // Gallery
   getGalleryImages: async (): Promise<GalleryImage[]> => {
-    const { data, error } = await supabase.from('gallery_images').select('*').order('created_at', { ascending: false });
+    const { data, error } = await (await getSupabase()).from('gallery_images').select('*').order('created_at', { ascending: false });
     if (error) throw error;
     return data;
   },
   saveGalleryImage: async (image: Partial<GalleryImage>): Promise<GalleryImage> => {
-    const { data, error } = await supabase.from('gallery_images').upsert([image]).select().single();
+    const { data, error } = await (await getSupabase()).from('gallery_images').upsert([image]).select().single();
     if (error) throw error;
     return data;
   },
   deleteGalleryImage: async (id: string): Promise<void> => {
-    const { error } = await supabase.from('gallery_images').delete().eq('id', id);
+    const { error } = await (await getSupabase()).from('gallery_images').delete().eq('id', id);
     if (error) throw error;
   }
 };

@@ -95,3 +95,4 @@
 - `prerender-seo.mjs`: `preconnect` a Supabase en todas las páginas pre-renderizadas.
 - (2ª tanda) Fuentes de Google cargadas sin bloquear el renderizado (`display=optional`, sin saltos de diseño); `srcset`/`sizes` en las fotos de destinos, tours y galería de la portada para no descargar fotos más grandes de lo que se ven; caché de 30 días en Vercel para `/images/*`, iconos PWA y favicon.
 - (3ª tanda) `Layout.tsx`: `AnimatePresence initial={false}` — la primera página ya no aparece desde opacidad 0 (retrasaba el LCP); la transición entre páginas se mantiene. `prerender-seo.mjs`: `modulepreload` del código de la portada (`Home-*.js`) en `/`.
+- (4ª tanda) Supabase (~190 KB de JS) se carga en diferido (`src/lib/supabaseLazy.ts`, usado por `dbService` y `AuthContext`): ya no está en la ruta crítica de la primera pintura. `AdminLogin` sigue importándolo directamente (página de admin, carga diferida).
