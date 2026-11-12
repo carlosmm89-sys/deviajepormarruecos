@@ -4,7 +4,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { optImg, optSrcSet } from './src/lib/image.js';
 import { fitTitle, HOME_TITLE } from './src/data/seoContent.js';
-import { tourPath, tourMetaDescription, destinationHeadings, collectionContent, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME } from './src/data/seoContent.js';
+import { tourPath, tourMetaDescription, destinationHeadings, collectionContent, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME, ACTIVITIES_EXTRA } from './src/data/seoContent.js';
 
 dotenv.config({ path: fs.existsSync('.env.local') ? '.env.local' : '.env' });
 
@@ -83,6 +83,30 @@ function writeRouteHtml(routePath, htmlContent) {
   fs.writeFileSync(path.join(targetDir, 'index.html'), htmlContent, 'utf-8');
 }
 
+function breadcrumbLd(items) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [{ name: 'Inicio', path: '/' }, ...items].map((it, i) => ({
+      '@type': 'ListItem', position: i + 1, name: it.name, item: `${DOMAIN}${it.path}`
+    }))
+  };
+}
+
+function itemListLd(name, path, entries) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name,
+    url: `${DOMAIN}${path}`,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: entries.length,
+      itemListElement: entries.map((e, i) => ({ '@type': 'ListItem', position: i + 1, name: e.name, url: `${DOMAIN}${e.path}` }))
+    }
+  };
+}
+
 async function prerender() {
   const templatePath = path.join(DIST_DIR, 'index.html');
   if (!fs.existsSync(templatePath)) {
@@ -153,6 +177,7 @@ async function prerender() {
     title: `Tours y circuitos por Marruecos | ${siteName}`,
     description: 'Explora todos nuestros tours por Marruecos: excursiones al desierto de Merzouga, rutas desde Marrakech, Fez, Tánger y viajes a medida.',
     canonicalPath: '/tours',
+    schema: [itemListLd('Tours y circuitos por Marruecos', '/tours', tours.map(t => ({ name: t.title, path: tourPath(t) }))), breadcrumbLd([{ name: 'Tours', path: '/tours' }])],
     bodyHtml: toursBody
   }));
   count++;
@@ -164,6 +189,7 @@ async function prerender() {
       title: `Destinos en Marruecos | ${siteName}`,
       description: 'Guía de destinos en Marruecos: Marrakech, Fez, Desierto de Merzouga, Chefchaouen, Tánger y Casablanca.',
       canonicalPath: '/destinations',
+      schema: [itemListLd('Destinos en Marruecos', '/destinations', destinations.map(d => ({ name: d.name, path: `/destinations/${d.slug || d.id}` }))), breadcrumbLd([{ name: 'Destinos', path: '/destinations' }])],
       bodyHtml: destsBody
     }));
     count++;
@@ -171,11 +197,12 @@ async function prerender() {
 
   // 4. Actividades (/actividades)
   const actPosts = posts.filter(p => p.category === 'Actividades');
-  const actBody = `<main>${navHtml}<h1>Actividades en Marruecos</h1><p>Las mejores actividades para completar tu viaje por Marruecos: paseos en globo, quads en el desierto, rutas en dromedario y noche en campamento.</p><ul>${actPosts.map(p => `<li><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || '')}</p></li>`).join('')}</ul></main>`;
+  const actBody = `<main>${navHtml}<h1>Actividades en Marruecos</h1><p>Las mejores actividades para completar tu viaje por Marruecos: paseos en globo, quads en el desierto, rutas en dromedario y noche en campamento.</p><p>${escapeHtml(ACTIVITIES_EXTRA)}</p><ul>${actPosts.map(p => `<li><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || '')}</p></li>`).join('')}</ul></main>`;
   writeRouteHtml('/actividades', injectPageSeo(baseHtml, {
     title: `Actividades en Marruecos | ${siteName}`,
     description: 'Complementa tu viaje con actividades únicas: paseos en globo, quads en el desierto, rutas en camello y mucho más.',
     canonicalPath: '/actividades',
+    schema: [itemListLd('Actividades en Marruecos', '/actividades', actPosts.map(p => ({ name: p.title, path: `/blog/${p.slug}` }))), breadcrumbLd([{ name: 'Actividades', path: '/actividades' }])],
     bodyHtml: actBody
   }));
   count++;
@@ -186,6 +213,7 @@ async function prerender() {
     title: `Blog de viajes a Marruecos: guías y consejos | ${siteName}`,
     description: 'Artículos, consejos prácticos y guías completas para preparar tu viaje a Marruecos: qué ver, mejor época, gastronomía y desierto.',
     canonicalPath: '/blog',
+    schema: [itemListLd('Blog de viajes a Marruecos', '/blog', posts.filter(p => p.slug).map(p => ({ name: p.title, path: `/blog/${p.slug}` }))), breadcrumbLd([{ name: 'Blog', path: '/blog' }])],
     bodyHtml: blogBody
   }));
   count++;
@@ -219,7 +247,7 @@ async function prerender() {
       canonicalPath,
       image: tour.featured_image || tour.gallery?.[0],
       type: 'product',
-      schema: {
+      schema: [{
         '@context': 'https://schema.org',
         '@type': 'TouristTrip',
         name: tour.title,
@@ -233,7 +261,7 @@ async function prerender() {
           availability: 'https://schema.org/InStock',
           url: `${DOMAIN}${canonicalPath}`
         }
-      },
+      }, breadcrumbLd([{ name: 'Tours', path: '/tours' }, { name: tour.title, path: canonicalPath }])],
       bodyHtml: tourHtml
     };
     writeRouteHtml(canonicalPath, injectPageSeo(baseHtml, seoPayload));
@@ -260,13 +288,13 @@ async function prerender() {
       description: descText.slice(0, 160),
       canonicalPath: canonical,
       image: dest.image_url,
-      schema: {
+      schema: [{
         '@context': 'https://schema.org',
         '@type': 'TouristDestination',
         name: dest.name,
         description: descText.slice(0, 300),
         image: dest.image_url
-      },
+      }, breadcrumbLd([{ name: 'Destinos', path: '/destinations' }, { name: String(dest.name).trim(), path: canonical }])],
       bodyHtml: destHtml
     };
     writeRouteHtml(`/destinations/${dest.id}`, injectPageSeo(baseHtml, seoPayload));
@@ -289,7 +317,7 @@ async function prerender() {
       canonicalPath: `/blog/${post.slug}`,
       image: post.cover_image,
       type: 'article',
-      schema: {
+      schema: [{
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
         headline: post.title,
@@ -297,7 +325,7 @@ async function prerender() {
         image: post.cover_image,
         datePublished: post.published_at || post.created_at,
         author: { '@type': 'Organization', name: siteName }
-      },
+      }, breadcrumbLd([{ name: 'Blog', path: '/blog' }, { name: post.title, path: `/blog/${post.slug}` }])],
       bodyHtml: postHtml
     }));
     count++;
@@ -320,11 +348,12 @@ async function prerender() {
   for (const slug of collectionSlugs) {
     const col = collectionContent(slug);
     const colTours = tours.filter(t => (t.category || '').split(',').some(part => slugifyCategory(part) === slug));
-    const colHtml = `<main>${navHtml}<h1>${escapeHtml(col.title)}</h1><p>${escapeHtml(col.intro)}</p>${colTours.length ? `<ul>${colTours.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul>` : ''}</main>`;
+    const colHtml = `<main>${navHtml}<h1>${escapeHtml(col.title)}</h1><p>${escapeHtml(col.intro)}</p>${(col.body || []).map(b => `<p>${escapeHtml(b)}</p>`).join('')}${colTours.length ? `<ul>${colTours.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul>` : ''}</main>`;
     writeRouteHtml(`/coleccion/${slug}`, injectPageSeo(baseHtml, {
       title: `${col.title} | ${siteName}`,
       description: col.intro,
       canonicalPath: `/coleccion/${slug}`,
+      schema: [itemListLd(col.title, `/coleccion/${slug}`, colTours.map(t => ({ name: t.title, path: tourPath(t) }))), breadcrumbLd([{ name: col.title, path: `/coleccion/${slug}` }])],
       bodyHtml: colHtml
     }));
     count++;

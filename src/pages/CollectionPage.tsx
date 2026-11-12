@@ -157,6 +157,9 @@ export default function CollectionPage() {
       <div className="max-w-7xl mx-auto px-4 py-20 space-y-12">
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <p className="text-lg text-gray-600 leading-relaxed">{collection.intro}</p>
+          {(collection.body || []).map((para: string, i: number) => (
+            <p key={i} className="text-base text-gray-600 leading-relaxed">{para}</p>
+          ))}
         </div>
         {tours.length === 0 ? (
           <div className="text-center text-gray-500 py-20">

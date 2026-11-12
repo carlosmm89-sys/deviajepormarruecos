@@ -5,6 +5,7 @@ import { dbService } from '../services/dbService';
 import { motion } from 'framer-motion';
 import { Calendar, User, ArrowRight, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import SEO from '../components/SEO';
+import { ACTIVITIES_EXTRA } from '../data/seoContent';
 import { optImg } from '../lib/image';
 
 export default function Activities() {
@@ -48,6 +49,7 @@ export default function Activities() {
           <p className="text-brand-accent font-bold uppercase tracking-widest text-sm">Experiencias Únicas</p>
           <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900">Actividades en Marruecos</h1>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg pt-4">Descubre y añade actividades exclusivas a tu aventura. Desde un increíble vuelo en globo hasta recorrer las dunas en quad o dormir bajo las estrellas del Sahara.</p>
+          <p className="text-gray-500 max-w-2xl mx-auto text-base">{ACTIVITIES_EXTRA}</p>
         </div>
       </section>
 
