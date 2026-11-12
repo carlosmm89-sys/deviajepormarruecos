@@ -40,7 +40,7 @@ function slugifyCategory(str = '') {
     .replace(/[^a-z0-9-]/g, '');
 }
 
-function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml, preloadImage, modulePreload }) {
+function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml, preloadImage, modulePreload, bootHtml }) {
   const safeTitle = escapeHtml(fitTitle(title || HOME_TITLE));
   const safeDesc = escapeHtml(
     (description || 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas a medida.').slice(0, 160)
@@ -80,6 +80,11 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
       '<div id="root"></div>',
       `<div id="root"><div data-prerender style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">${bodyHtml}</div></div>`
     );
+  }
+
+  if (bootHtml) {
+    // Portada pintada directamente desde el HTML (sin esperar al JavaScript). Home.tsx la retira cuando React ya ha pintado la suya.
+    html = html.replace('</body>', `${bootHtml}\n  </body>`);
   }
 
   return html;
@@ -216,6 +221,14 @@ async function prerender() {
     canonicalPath: '/',
     image: settings?.hero_image_url,
     preloadImage: heroLocal || settings?.hero_image_url,
+    bootHtml: heroLocal ? `<div id="hero-boot" aria-hidden="true" style="position:absolute;top:0;left:0;width:100%;z-index:60;pointer-events:none">`
+      + `<div style="box-sizing:border-box;height:97px;background:#fff;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;padding:0 16px">`
+      + (settings?.logo_url ? `<img src="${escapeHtml(optImg(settings.logo_url, 300))}" width="150" height="80" alt="" style="height:80px;width:auto;object-fit:contain">` : '')
+      + `</div><div style="position:relative;height:85vh;overflow:hidden;background:#F9F8F6">`
+      + `<img src="${escapeHtml(heroLocal.src)}" srcset="${escapeHtml(heroLocal.srcset)}" sizes="100vw" fetchpriority="high" alt="" style="display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.05)">`
+      + `<div style="position:absolute;inset:0;background:rgba(0,0,0,.4)"></div>`
+      + `<div style="position:absolute;left:0;right:0;bottom:0;height:160px;background:linear-gradient(to top,#F9F8F6,transparent)"></div>`
+      + `</div></div>` : '',
     // Descarga anticipada del código de la portada (si no, el navegador solo lo pide después de ejecutar el JS principal).
     modulePreload: HOME_CHUNK,
     schema: {
