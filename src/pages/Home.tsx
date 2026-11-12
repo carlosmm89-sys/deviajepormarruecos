@@ -11,6 +11,7 @@ import SEO from '../components/SEO';
 import { usePageViews } from '../hooks/usePageViews';
 import { useTranslation } from '../hooks/useTranslation';
 import { useCurrency } from '../context/CurrencyContext';
+import { tourPath, HOME_META_DESCRIPTION } from '../data/seoContent';
 
 export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -47,8 +48,8 @@ export default function Home() {
   return (
     <div className="space-y-24 pb-24">
       <SEO 
-        title={settings?.business_name ? `${settings.business_name} - Agencia de Viajes en Marruecos` : undefined}
-        description={settings?.hero_subtitle || undefined}
+        title="Vivir Marruecos | Tours privados por Marruecos y el desierto de Merzouga"
+        description={settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION}
         url="/"
       />
       {/* Hero Section */}
@@ -183,7 +184,7 @@ export default function Home() {
                 transition={{ delay: idx * 0.1, duration: 0.6 }}
                 className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all"
               >
-                <Link to={`/tours/${tour.id}`}>
+                <Link to={tourPath(tour)}>
                   <div className="relative h-64 overflow-hidden bg-gray-100">
                     <img
                       src={tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600'}

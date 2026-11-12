@@ -7,6 +7,7 @@ import { dbService } from '../services/dbService';
 import { useCurrency } from '../context/CurrencyContext';
 import { useTranslation } from '../hooks/useTranslation';
 import SEO from '../components/SEO';
+import { tourPath } from '../data/seoContent';
 
 const STATIC_CATEGORIES = [
   'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa',
@@ -301,7 +302,7 @@ export default function Tours() {
                     transition={{ delay: idx * 0.05 }}
                     className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all"
                 >
-                    <Link to={`/tours/${tour.id}`}>
+                    <Link to={tourPath(tour)}>
                     <div className="relative h-64 overflow-hidden">
                         <img
                         src={tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600'}

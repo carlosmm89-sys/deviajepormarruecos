@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import SEO from '../components/SEO';
+import { tourPath, collectionContent } from '../data/seoContent';
 
 const CATEGORY_MAP: Record<string, string> = {
   'actividades': 'Actividades',
@@ -38,6 +39,7 @@ export default function CollectionPage() {
   const [submitted, setSubmitted] = useState(false);
 
   const categoryName = CATEGORY_MAP[categorySlug || ''] || 'Colección';
+  const collection = collectionContent(categorySlug || '', categoryName);
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -129,8 +131,8 @@ export default function CollectionPage() {
   return (
     <div className="min-h-screen bg-white pb-24">
       <SEO
-        title={`${categoryName} en Marruecos | Vivir Marruecos`}
-        description={`Descubre nuestras mejores rutas y circuitos de ${categoryName.toLowerCase()} en Marruecos a medida.`}
+        title={`${collection.title} | Vivir Marruecos`}
+        description={collection.intro}
         image={heroImage}
         url={`/coleccion/${categorySlug}`}
       />
@@ -162,6 +164,10 @@ export default function CollectionPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-20 space-y-12">
+        <div className="max-w-3xl mx-auto text-center space-y-4">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">{collection.title}</h2>
+          <p className="text-lg text-gray-600 leading-relaxed">{collection.intro}</p>
+        </div>
         {tours.length === 0 ? (
           <div className="text-center text-gray-500 py-20">
             <p className="text-2xl font-bold mb-4">Aún no hay publicaciones en {categoryName}</p>
@@ -184,7 +190,7 @@ export default function CollectionPage() {
                 
                 <div className="flex items-center gap-4">
                   <Link 
-                    to={`/tours/${tour.id}`}
+                    to={tourPath(tour)}
                     className="px-8 py-3 w-max bg-transparent border-2 border-gray-900 hover:bg-gray-900 hover:text-white text-gray-900 rounded-full font-bold uppercase tracking-wide text-xs transition-colors"
                   >
                     Ver Itinerario

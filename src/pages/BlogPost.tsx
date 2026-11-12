@@ -6,6 +6,7 @@ import { ArrowLeft, Calendar, User, Share2, MapPin, ArrowRight } from 'lucide-re
 import { usePageViews } from '../hooks/usePageViews';
 import { motion } from 'framer-motion';
 import SEO from '../components/SEO';
+import { tourPath } from '../data/seoContent';
 
 export default function BlogPostDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -202,7 +203,7 @@ export default function BlogPostDetail() {
                   transition={{ delay: idx * 0.1 }}
                   className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all"
               >
-                  <Link to={`/tours/${tour.id}`}>
+                  <Link to={tourPath(tour)}>
                   <div className="relative h-64 overflow-hidden">
                       <img
                       src={tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/600/morocco,sahara'}

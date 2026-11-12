@@ -75,7 +75,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     (tours || []).forEach((tour: any) => {
       urls.push({
-        loc: `${SITE_URL}/tours/${tour.id}`,
+        loc: `${SITE_URL}/tours/${tour.slug || tour.id}`,
         lastmod: tour.updated_at ? new Date(tour.updated_at).toISOString().split('T')[0] : today,
         changefreq: 'weekly',
         priority: '0.9',

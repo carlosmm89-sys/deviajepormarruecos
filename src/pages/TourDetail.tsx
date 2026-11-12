@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Tour, Destination, BlogPost, BusinessSettings } from '../types';
 import { 
   Clock, MapPin, 
@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useTranslation } from '../hooks/useTranslation';
+import { tourPath, tourMetaDescription } from '../data/seoContent';
 
 const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,6 +42,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNo
 
 export default function TourDetail() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [tour, setTour] = useState<Tour | null>(null);
   const [relatedTours, setRelatedTours] = useState<Tour[]>([]);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
@@ -85,6 +87,10 @@ export default function TourDetail() {
         if (id) {
           const t = await dbService.getTour(id);
           setTour(t);
+          // Las URLs antiguas con ID (/tours/<uuid>) redirigen a la URL con slug
+          if (t?.slug && id !== t.slug && /^[0-9a-f-]{36}$/i.test(id)) {
+            navigate(`/tours/${t.slug}`, { replace: true });
+          }
 
           const allTours = await dbService.getTours();
           const rt = allTours.filter(x => x.id !== t.id && x.is_active && x.category === t.category);
@@ -200,7 +206,7 @@ export default function TourDetail() {
       "priceCurrency": "EUR",
       "price": tour.price || 0,
       "availability": "https://schema.org/InStock",
-      "url": `https://www.vivirmarruecos.com/tours/${tour.id}`
+      "url": `https://www.vivirmarruecos.com${tourPath(tour)}`
     },
     "provider": {
       "@type": "TravelAgency",
@@ -213,9 +219,9 @@ export default function TourDetail() {
     <div className="pb-24 bg-gray-50/30">
       <SEO 
         title={`${td(tour, 'title')} | Vivir Marruecos`}
-        description={td(tour, 'itinerary_summary') || `Reserva el tour ${td(tour, 'title')} al mejor precio con Vivir Marruecos.`}
+        description={tourMetaDescription({ ...tour, title: td(tour, 'title'), itinerary_summary: td(tour, 'itinerary_summary') })}
         image={tour.featured_image || tour.gallery?.[0]}
-        url={`/tours/${tour.id}`}
+        url={tourPath(tour)}
         type="product"
         schema={tourSchema}
       />
@@ -666,7 +672,7 @@ export default function TourDetail() {
                   whileHover={{ y: -5 }}
                   className="group bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl transition-all border border-gray-100"
               >
-                  <Link to={`/tours/${t.id}`}>
+                  <Link to={tourPath(t)}>
                       <div className="relative h-64 overflow-hidden">
                           <img
                               src={t.featured_image || t.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600'}

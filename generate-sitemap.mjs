@@ -49,7 +49,7 @@ async function generateSitemap() {
       // Fetch Tours
       const { data: tours } = await supabase.from('tours').select('id, slug, updated_at').eq('is_active', true);
       if (tours) {
-        tours.forEach(tour => dynamicRoutes.push(`/tours/${tour.id}`));
+        tours.forEach(tour => dynamicRoutes.push(`/tours/${tour.slug || tour.id}`));
       }
 
       // Fetch Destinations

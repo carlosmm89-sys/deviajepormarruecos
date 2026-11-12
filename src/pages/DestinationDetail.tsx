@@ -9,6 +9,7 @@ import { useCurrency } from '../context/CurrencyContext';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useTranslation } from '../hooks/useTranslation';
+import { destinationHeadings } from '../data/seoContent';
 
 export default function DestinationDetail() {
   const { id } = useParams<{ id: string }>();
@@ -140,10 +141,10 @@ export default function DestinationDetail() {
   return (
     <div className="pb-24 bg-gray-50/50">
       <SEO 
-        title={`${destination.name} - Viajes a Marruecos`}
-        description={destination.description?.substring(0, 160) || `Descubre los mejores tours y excursiones en ${destination.name}.`}
+        title={destinationHeadings(destination).title}
+        description={(destination.description || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 160) || `Descubre los mejores tours y excursiones en ${destination.name}.`}
         image={destination.image_url}
-        url={`/destinations/${destination.id}`}
+        url={`/destinations/${destination.slug || destination.id}`}
         schema={destinationSchema}
       />
       {/* Hero Section */}
@@ -164,7 +165,7 @@ export default function DestinationDetail() {
             { label: destination.name }
           ]} />
           <div className="space-y-4">
-            <h1 className="text-5xl md:text-7xl font-serif font-bold text-white leading-tight mt-4">{destination.name}</h1>
+            <h1 className="text-5xl md:text-7xl font-serif font-bold text-white leading-tight mt-4">{destinationHeadings(destination).h1}</h1>
           </div>
         </div>
       </section>

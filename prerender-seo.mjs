@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
+import { tourPath, tourMetaDescription, destinationHeadings, collectionContent, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME } from './src/data/seoContent.js';
 
 dotenv.config({ path: fs.existsSync('.env.local') ? '.env.local' : '.env' });
 
@@ -112,10 +113,10 @@ async function prerender() {
   let count = 0;
 
   // 1. Home (/)
-  const homeBody = `<main>${navHtml}<h1>${escapeHtml(stripHtml(settings?.hero_title || 'Viajes y Rutas por Marruecos a Medida'))}</h1><p>${escapeHtml(settings?.hero_subtitle || 'Agencia especializada en tours privados, excursiones al desierto de Merzouga y rutas por Marruecos.')}</p><section><h2>Destinos Destacados en Marruecos</h2><ul>${destinations.map(d => `<li><a href="/destinations/${d.slug || d.id}">${escapeHtml(d.name)}</a></li>`).join('')}</ul></section><section><h2>Rutas y Circuitos por Marruecos</h2><ul>${tours.map(t => `<li><a href="/tours/${t.id}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul></section></main>`;
+  const homeBody = `<main>${navHtml}<h1>${escapeHtml(stripHtml(settings?.hero_title || HOME_H1_FALLBACK))}</h1><p>${escapeHtml(settings?.hero_subtitle || 'Agencia especializada en tours privados, excursiones al desierto de Merzouga y rutas por Marruecos.')}</p><section><h2>Destinos Destacados en Marruecos</h2><ul>${destinations.map(d => `<li><a href="/destinations/${d.slug || d.id}">${escapeHtml(d.name)}</a></li>`).join('')}</ul></section><section><h2>Rutas y Circuitos por Marruecos</h2><ul>${tours.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul></section></main>`;
   writeRouteHtml('/', injectPageSeo(baseHtml, {
-    title: `${siteName} - Agencia de Viajes y Rutas en Marruecos`,
-    description: settings?.hero_subtitle || 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas a medida. Desierto del Sahara, Marrakech, Fez y más.',
+    title: `${siteName} | Tours privados por Marruecos y el desierto de Merzouga`,
+    description: settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION,
     canonicalPath: '/',
     image: settings?.hero_image_url,
     schema: {
@@ -124,14 +125,18 @@ async function prerender() {
       name: siteName,
       url: DOMAIN,
       telephone: settings?.whatsapp_number || '+34 604 48 82 23',
-      email: settings?.admin_email || 'info@vivirmarruecos.com'
+      email: 'info@vivirmarruecos.com',
+      legalName: BUSINESS_LEGAL_NAME,
+      address: BUSINESS_ADDRESS,
+      image: settings?.logo_url || `${DOMAIN}/pwa-512x512.png`,
+      sameAs: [settings?.instagram_url, settings?.facebook_url, settings?.tripadvisor_url].filter(Boolean)
     },
     bodyHtml: homeBody
   }));
   count++;
 
   // 2. Catálogo de Tours (/tours)
-  const toursBody = `<main>${navHtml}<h1>Tours y Circuitos por Marruecos</h1><p>Explora nuestras rutas privadas y en grupo por el desierto del Sahara, Marrakech, Fez, Tánger y las Ciudades Imperiales.</p><ul>${tours.map(t => `<li><article><h2><a href="/tours/${t.id}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(stripHtml(t.itinerary_summary || t.description || '').slice(0, 220))}</p><p>Precio desde: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
+  const toursBody = `<main>${navHtml}<h1>Tours y Circuitos por Marruecos</h1><p>Explora nuestras rutas privadas y en grupo por el desierto del Sahara, Marrakech, Fez, Tánger y las Ciudades Imperiales.</p><ul>${tours.map(t => `<li><article><h2><a href="${tourPath(t)}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(stripHtml(t.itinerary_summary || t.description || '').slice(0, 220))}</p><p>Precio desde: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
   writeRouteHtml('/tours', injectPageSeo(baseHtml, {
     title: `Tours y Circuitos por Marruecos | ${siteName}`,
     description: 'Explora todos nuestros tours por Marruecos: excursiones al desierto de Merzouga, rutas desde Marrakech, Fez, Tánger y viajes a medida.',
@@ -186,41 +191,46 @@ async function prerender() {
       title: sp.title,
       description: sp.desc,
       canonicalPath: sp.path,
-      bodyHtml: `<main>${navHtml}<h1>${escapeHtml(sp.title)}</h1><p>${escapeHtml(sp.desc)}</p></main>`
+      bodyHtml: `<main>${navHtml}<h1>${escapeHtml(sp.title.split(' | ')[0])}</h1><p>${escapeHtml(sp.desc)}</p></main>`
     }));
     count++;
   }
 
-  // 7. Cada Tour individual (/tours/:id y /tours/:slug)
+  // 7. Cada Tour individual: URL principal /tours/:slug; /tours/:id redirige a la de slug
   for (const tour of tours) {
-    const descText = stripHtml(tour.itinerary_summary || tour.description || `Reserva el tour ${tour.title} en Marruecos.`);
-    const tourHtml = `<main>${navHtml}<article><h1>${escapeHtml(tour.title)}</h1><p>${escapeHtml(descText)}</p><p><strong>Precio desde:</strong> ${tour.price || 0}€ | <strong>Categoría:</strong> ${escapeHtml(tour.category || 'Marruecos')}</p><div>${tour.description || ''}</div></article></main>`;
+    const canonicalPath = tourPath(tour);
+    const descText = tourMetaDescription(tour);
+    const tourHtml = `<main>${navHtml}<article><h1>${escapeHtml(tour.title)}</h1><p>${escapeHtml(descText)}</p><p><strong>Precio desde:</strong> ${tour.price || 0}€ | <strong>Duración:</strong> ${escapeHtml(tour.duration || '')} | <strong>Salida:</strong> ${escapeHtml(tour.departure_city || '')}</p><div>${tour.description || ''}</div></article></main>`;
     const seoPayload = {
       title: `${tour.title} | ${siteName}`,
-      description: descText.slice(0, 160),
-      canonicalPath: `/tours/${tour.id}`,
+      description: descText,
+      canonicalPath,
       image: tour.featured_image || tour.gallery?.[0],
       type: 'product',
       schema: {
         '@context': 'https://schema.org',
         '@type': 'TouristTrip',
         name: tour.title,
-        description: descText.slice(0, 300),
+        description: descText,
         image: tour.featured_image || tour.gallery?.[0],
+        provider: { '@type': 'TravelAgency', name: siteName, url: DOMAIN, address: BUSINESS_ADDRESS },
         offers: {
           '@type': 'Offer',
           priceCurrency: 'EUR',
           price: tour.price || 0,
           availability: 'https://schema.org/InStock',
-          url: `${DOMAIN}/tours/${tour.id}`
+          url: `${DOMAIN}${canonicalPath}`
         }
       },
       bodyHtml: tourHtml
     };
-    writeRouteHtml(`/tours/${tour.id}`, injectPageSeo(baseHtml, seoPayload));
+    writeRouteHtml(canonicalPath, injectPageSeo(baseHtml, seoPayload));
     count++;
-    if (tour.slug) {
-      writeRouteHtml(`/tours/${tour.slug}`, injectPageSeo(baseHtml, seoPayload));
+    if (tour.slug && tour.slug !== tour.id) {
+      // Página ligera de redirección para las URLs antiguas con ID que Google ya conoce
+      const target = `${DOMAIN}${canonicalPath}`;
+      const redirectHtml = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>${escapeHtml(tour.title)}</title><link rel="canonical" href="${target}"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0; url=${target}"></head><body><a href="${target}">${escapeHtml(tour.title)}</a></body></html>`;
+      writeRouteHtml(`/tours/${tour.id}`, redirectHtml);
       count++;
     }
   }
@@ -229,9 +239,10 @@ async function prerender() {
   for (const dest of destinations) {
     const descText = stripHtml(dest.description || `Descubre los mejores tours y excursiones en ${dest.name}.`);
     const canonical = `/destinations/${dest.slug || dest.id}`;
-    const destHtml = `<main>${navHtml}<article><h1>${escapeHtml(dest.name)} - Viajes y Rutas en Marruecos</h1><div>${dest.description || `<p>${escapeHtml(descText)}</p>`}</div></article></main>`;
+    const headings = destinationHeadings(dest, siteName);
+    const destHtml = `<main>${navHtml}<article><h1>${escapeHtml(headings.h1)}</h1><div>${dest.description || `<p>${escapeHtml(descText)}</p>`}</div></article></main>`;
     const seoPayload = {
-      title: `${dest.name} - Viajes y Rutas a Marruecos | ${siteName}`,
+      title: headings.title,
       description: descText.slice(0, 160),
       canonicalPath: canonical,
       image: dest.image_url,
@@ -293,11 +304,12 @@ async function prerender() {
   });
 
   for (const slug of collectionSlugs) {
-    const readable = slug.replace(/-/g, ' ');
-    const colHtml = `<main>${navHtml}<h1>Rutas y Viajes: ${escapeHtml(readable)} en Marruecos</h1><p>Descubre nuestra selección de tours de ${escapeHtml(readable)} en Marruecos diseñados a medida.</p></main>`;
+    const col = collectionContent(slug);
+    const colTours = tours.filter(t => (t.category || '').split(',').some(part => slugifyCategory(part) === slug));
+    const colHtml = `<main>${navHtml}<h1>${escapeHtml(col.title)}</h1><p>${escapeHtml(col.intro)}</p>${colTours.length ? `<ul>${colTours.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul>` : ''}</main>`;
     writeRouteHtml(`/coleccion/${slug}`, injectPageSeo(baseHtml, {
-      title: `Viajes de ${readable} en Marruecos | ${siteName}`,
-      description: `Descubre nuestras mejores rutas y circuitos de ${readable} en Marruecos organizados a medida.`,
+      title: `${col.title} | ${siteName}`,
+      description: col.intro,
       canonicalPath: `/coleccion/${slug}`,
       bodyHtml: colHtml
     }));
