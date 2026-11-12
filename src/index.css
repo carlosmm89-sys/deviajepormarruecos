@@ -7,7 +7,7 @@
   --font-serif: "Playfair Display", serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-brand-primary: #d87b3b; /* Warm Copper Orange */
+  --color-brand-primary: #b05a22; /* Warm Copper Orange (oscurecido desde #d87b3b para cumplir el contraste WCAG AA) */
   --color-brand-accent: #8b5226; /* Darker Copper/Brown */
   --color-brand-blue: #232f3e; /* Dark Slate instead of bright blue */
 
