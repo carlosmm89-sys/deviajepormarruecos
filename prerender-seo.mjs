@@ -64,7 +64,12 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
   html = html.replace('</head>', `    ${extraHead}\n  </head>`);
 
   if (bodyHtml) {
-    html = html.replace('<div id="root"></div>', `<div id="root">${bodyHtml}</div>`);
+    // El contenido pre-renderizado es para buscadores y navegadores sin JS. Se oculta visualmente (patrón "sr-only")
+    // para que no ocupe espacio y no provoque un salto de diseño (CLS) cuando React lo sustituye por la página real.
+    html = html.replace(
+      '<div id="root"></div>',
+      `<div id="root"><div data-prerender style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">${bodyHtml}</div></div>`
+    );
   }
 
   return html;
