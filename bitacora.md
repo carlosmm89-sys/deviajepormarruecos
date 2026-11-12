@@ -85,3 +85,11 @@
 
 
 
+
+---
+
+### Velocidad móvil: LCP de la portada (12/11/2026)
+- Quitada la animación de entrada (opacidad 0) del título, subtítulo y buscador de la portada: se pintan al instante.
+- La descarga de la portada (`Home`) arranca en paralelo al iniciar la app en `/` (`src/App.tsx`), sin esperar al primer render.
+- Imagen de portada con `loading="eager"` (sin `decoding="async"`).
+- `prerender-seo.mjs`: `preconnect` a Supabase en todas las páginas pre-renderizadas.

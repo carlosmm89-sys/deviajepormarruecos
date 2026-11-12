@@ -9,6 +9,8 @@ import { tourPath, tourMetaDescription, destinationHeadings, collectionContent, 
 dotenv.config({ path: fs.existsSync('.env.local') ? '.env.local' : '.env' });
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+let SUPABASE_ORIGIN = '';
+try { SUPABASE_ORIGIN = supabaseUrl ? new URL(supabaseUrl).origin : ''; } catch { SUPABASE_ORIGIN = ''; }
 const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
 const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
@@ -56,6 +58,8 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
 
   const extraHead = [
     `<link rel="canonical" href="${fullUrl}" />`,
+    // Conexión anticipada con Supabase (datos de tours y fotos): ahorra tiempo en móvil antes de pintar la página.
+    SUPABASE_ORIGIN ? `<link rel="preconnect" href="${SUPABASE_ORIGIN}" crossorigin />` : '',
     preloadImage ? `<link rel="preload" as="image" href="${escapeHtml(optImg(preloadImage, 1600))}"${optSrcSet(preloadImage) ? ` imagesrcset="${escapeHtml(optSrcSet(preloadImage))}" imagesizes="100vw"` : ''} fetchpriority="high" />` : '',
     schema ? `<script type="application/ld+json">${JSON.stringify(schema)}</script>` : ''
   ]

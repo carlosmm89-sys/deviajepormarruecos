@@ -12,7 +12,10 @@ import WhatsAppBubble from './components/WhatsAppBubble';
 import CookieBanner from './components/CookieBanner';
 
 // --- Lazy Loading (Code Splitting) ---
-const Home = lazy(() => import('./pages/Home'));
+// La portada se empieza a descargar en cuanto arranca la app (en paralelo, sin esperar al primer render),
+// para que el título y la foto de portada se pinten antes en móvil (LCP).
+const homeChunk = typeof window !== 'undefined' && window.location.pathname === '/' ? import('./pages/Home') : null;
+const Home = lazy(() => homeChunk ?? import('./pages/Home'));
 const Destinations = lazy(() => import('./pages/Destinations'));
 const DestinationDetail = lazy(() => import('./pages/DestinationDetail'));
 const TourDetail = lazy(() => import('./pages/TourDetail'));

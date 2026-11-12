@@ -65,7 +65,7 @@ export default function Home() {
             alt="Desierto de Merzouga al atardecer"
             className="w-full h-full object-cover scale-105"
             fetchPriority="high"
-            decoding="async"
+            loading="eager"
             referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-black/40" />
@@ -73,17 +73,13 @@ export default function Home() {
         </div>
 
         <div className="relative z-20 max-w-5xl w-full mx-auto px-4 text-center space-y-4 md:space-y-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+          {/* Sin animación de entrada: el texto de portada se pinta al instante (mejora el LCP en móvil) */}
+          <div
             className="text-xs sm:text-sm md:text-base font-bold tracking-wider md:tracking-[0.15em] uppercase text-white/90 drop-shadow-md max-w-3xl mx-auto"
           >
             {settings?.hero_subtitle || 'EXCLUSIVIDAD EN EL MAGREB'}
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+          </div>
+          <h1
             className="text-3xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-serif font-bold leading-tight text-white drop-shadow-lg"
           >
             {settings?.hero_title ? (
@@ -91,16 +87,11 @@ export default function Home() {
             ) : (
               <>El Arte del<br/>Viaje Lento</>
             )}
-          </motion.h1>
+          </h1>
           
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="pt-8"
-          >
+          <div className="pt-8">
             <HeroSearch />
-          </motion.div>
+          </div>
         </div>
       </section>
 
