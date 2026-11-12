@@ -53,7 +53,7 @@ export default function Home() {
         url="/"
       />
       {/* Hero Section */}
-      <section className="relative z-30 h-[85vh] flex flex-col items-center justify-center">
+      <section className="relative z-30 min-h-[85vh] py-16 md:py-24 flex flex-col items-center justify-center">
         <div className="absolute inset-0 z-0 overflow-hidden bg-brand-blue/20">
           <img
             src={settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800"}
@@ -67,19 +67,19 @@ export default function Home() {
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#F9F8F6] to-transparent" />
         </div>
 
-        <div className="relative z-20 max-w-5xl w-full mx-auto px-4 text-center space-y-6">
+        <div className="relative z-20 max-w-5xl w-full mx-auto px-4 text-center space-y-4 md:space-y-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-sm md:text-base font-bold tracking-[0.2em] uppercase text-white/90 drop-shadow-md"
+            className="text-xs sm:text-sm md:text-base font-bold tracking-wider md:tracking-[0.15em] uppercase text-white/90 drop-shadow-md max-w-3xl mx-auto"
           >
             {settings?.hero_subtitle || 'EXCLUSIVIDAD EN EL MAGREB'}
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-6xl md:text-[5.5rem] font-serif font-bold leading-tight text-white drop-shadow-lg"
+            className="text-3xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-serif font-bold leading-tight text-white drop-shadow-lg"
           >
             {settings?.hero_title ? (
               <span dangerouslySetInnerHTML={{ __html: settings.hero_title.replace(/\n/g, '<br/>') }} />

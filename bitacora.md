@@ -65,4 +65,20 @@
 - **Invitación enviada (12/11/2026):** Se ha invitado como colaborador del repositorio `carlosmm89-sys/deviajepormarruecos` al correo `Aliourokch1233@gmail.com` (usuario de GitHub `@aliourokch1233-cloud`).
 - **Enlace directo para aceptar la invitación:** `https://github.com/carlosmm89-sys/deviajepormarruecos/invitations`
 
+---
+
+### 6. Integración de PR #2 (Cambio de Marca) y PR #3 (Mejoras SEO) + Ejecución SQL en Supabase
+- **Propuesta #2 (`claude/marca-vivir-marruecos`) y Propuesta #3 (`claude/seo-mejoras`):**
+  - Integradas en la rama principal `main`.
+  - Unificación de marca de `"Marruecos Experiencia"` a `"Vivir Marruecos"` en todos los componentes, metadatos y `prerender-seo.mjs`.
+  - URLs de tours actualizadas a formato amigable con `slug` (`/tours/<slug>`) con redirección automática desde UUIDs antiguos en `src/pages/TourDetail.tsx`.
+  - Añadido `src/data/seoContent.js` con títulos, descripciones de ciudades, colecciones y datos fiscales/dirección en Hassi Labied (Merzouga).
+- **Ejecución en Supabase (`rebrand_vivir_marruecos.sql` y `seo_contenidos.sql`):**
+  - Actualizado `business_settings` (`site_name`, `hero_title`, `hero_subtitle`).
+  - Corregido el slug sin tilde (`ruta-de-9-dias-desde-marrakech-hacia-tanger`) y nombre del destino `'Excursiones de un día'`.
+  - Actualizadas las descripciones SEO en HTML en la tabla `destinations` para `merzouga`, `desierto-erg-chebbi`, `fez`, `chefchaouen`, `rutas-desde-casablanca` y `rutas-desde-tanger`.
+- **Ajuste responsive del Hero en móvil (`src/pages/Home.tsx`):**
+  - Ajustado el tamaño tipográfico del nuevo `H1` en móvil (`text-3xl sm:text-5xl md:text-6xl lg:text-[4.5rem]`) y altura flexible (`min-h-[85vh] py-16 md:py-24`) para que el título largo se adapte perfectamente en pantallas pequeñas.
+
+
 
