@@ -137,7 +137,7 @@ export default function Home() {
                 <Link to={`/destinations/${dest.id}`}>
                   <img
                     src={optImg(dest.image_url, 800)}
-                    alt={dest.name}
+                    alt=""
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
@@ -229,7 +229,7 @@ export default function Home() {
         <div className="flex justify-between items-end mb-10">
           <div>
             <h2 className="text-4xl text-brand-secondary font-serif font-bold">Marruecos en Imágenes</h2>
-            <p className="text-gray-500 mt-2">La esencia de nuestro país capturada en cada viaje</p>
+            <p className="text-gray-600 mt-2">La esencia de nuestro país capturada en cada viaje</p>
           </div>
           <Link to="/galeria" className="hidden md:flex items-center gap-2 text-brand-primary font-bold hover:text-brand-accent transition-colors pb-2">
             Ver todas <ArrowRight className="w-4 h-4" />
