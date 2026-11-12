@@ -10,7 +10,7 @@
  * @param {number} [quality]
  * @returns {string}
  */
-export function optImg(url, width = 800, quality = 70) {
+export function optImg(url, width = 800, quality = 80) {
   if (!url) return url || '';
   if (/\.(svg|gif)(\?|$)/i.test(url)) return url;
 

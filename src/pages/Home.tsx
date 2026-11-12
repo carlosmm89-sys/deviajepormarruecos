@@ -134,7 +134,7 @@ export default function Home() {
                 <Link to={`/destinations/${dest.id}`}>
                   <img
                     src={optImg(dest.image_url, 800)}
-                    srcSet={optSrcSet(dest.image_url, [400, 640, 800])}
+                    srcSet={optSrcSet(dest.image_url, [400, 640, 800, 1080])}
                     sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
                     alt=""
                     loading="lazy"
@@ -190,7 +190,7 @@ export default function Home() {
                   <div className="relative h-64 overflow-hidden bg-gray-100">
                     <img
                       src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600', 800)}
-                      srcSet={optSrcSet(tour.featured_image || tour.gallery?.[0], [400, 640, 800])}
+                      srcSet={optSrcSet(tour.featured_image || tour.gallery?.[0], [400, 640, 800, 1080])}
                       sizes="(min-width: 768px) 33vw, 100vw"
                       alt={tour.title}
                       loading="lazy"
@@ -253,7 +253,7 @@ export default function Home() {
               >
                 <img 
                   src={optImg(img.image_url, 600)}
-                  srcSet={optSrcSet(img.image_url, idx === 0 ? [480, 800, 1200] : [320, 480, 600])}
+                  srcSet={optSrcSet(img.image_url, idx === 0 ? [640, 1000, 1400] : [320, 480, 640, 800])}
                   sizes={idx === 0 ? '(min-width: 768px) 50vw, 100vw' : '(min-width: 768px) 25vw, 50vw'}
                   alt={img.title || 'Galería de Marruecos'} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -301,8 +301,8 @@ export default function Home() {
         <div className="relative rounded-[3rem] p-12 md:p-24 text-center overflow-hidden shadow-2xl">
           <div className="absolute inset-0">
             <img 
-              src={optImg("https://images.unsplash.com/photo-1539020140153-e479b8c22e70", 1200, 55)}
-              srcSet={optSrcSet("https://images.unsplash.com/photo-1539020140153-e479b8c22e70", [640, 960, 1200], 55)}
+              src={optImg("https://images.unsplash.com/photo-1539020140153-e479b8c22e70", 1200, 75)}
+              srcSet={optSrcSet("https://images.unsplash.com/photo-1539020140153-e479b8c22e70", [640, 960, 1200, 1600], 75)}
               sizes="100vw"
               alt="Desierto de Marruecos" 
               loading="lazy"

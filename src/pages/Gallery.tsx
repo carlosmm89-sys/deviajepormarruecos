@@ -4,7 +4,7 @@ import { dbService } from '../services/dbService';
 import { GalleryImage } from '../types';
 import SEO from '../components/SEO';
 import { Maximize2, X } from 'lucide-react';
-import { optImg } from '../lib/image';
+import { optImg, optSrcSet } from '../lib/image';
 
 export default function Gallery() {
   const [images, setImages] = useState<GalleryImage[]>([]);
@@ -72,6 +72,8 @@ export default function Gallery() {
               >
                 <img 
                   src={optImg(img.image_url, 800)} 
+                  srcSet={optSrcSet(img.image_url, [400, 640, 800, 1080])}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                   alt={img.title || 'Marruecos Paisaje'} 
                   className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"

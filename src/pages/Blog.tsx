@@ -5,7 +5,7 @@ import { dbService } from '../services/dbService';
 import { motion } from 'framer-motion';
 import { Calendar, User, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import SEO from '../components/SEO';
-import { optImg } from '../lib/image';
+import { optImg, optSrcSet } from '../lib/image';
 
 export default function Blog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -65,6 +65,8 @@ export default function Blog() {
               <Link to={`/blog/${post.slug}`} className="block relative aspect-[4/3] overflow-hidden">
                 <img 
                   src={optImg(post.cover_image || 'https://loremflickr.com/800/600/morocco', 800)} 
+                  srcSet={optSrcSet(post.cover_image, [400, 640, 800, 1080])} 
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" 
                   alt={post.title}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

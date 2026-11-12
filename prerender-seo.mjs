@@ -128,7 +128,7 @@ async function localizeHeroImage(url) {
     fs.mkdirSync(dir, { recursive: true });
     const entries = [];
     for (const w of [480, 768, 1024, 1600]) {
-      const res = await fetch(optImg(url, w, w <= 768 ? 55 : 65), { headers: { Accept: 'image/webp,image/*;q=0.8' } });
+      const res = await fetch(optImg(url, w, w <= 768 ? 75 : 82), { headers: { Accept: 'image/webp,image/*;q=0.8' } });
       if (!res.ok) return null;
       const ct = res.headers.get('content-type') || '';
       const ext = ct.includes('webp') ? 'webp' : ct.includes('avif') ? 'avif' : ct.includes('png') ? 'png' : 'jpg';
