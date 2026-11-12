@@ -100,10 +100,11 @@ export default function HeroSearch() {
         {/* FECHAS */}
         <div className="flex-[1.5] w-full p-4 relative group flex items-center justify-between gap-4">
           <div className="flex-1">
-            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+            <label htmlFor="hero-fecha-ida" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">
               Ida
             </label>
             <input
+              id="hero-fecha-ida"
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
@@ -113,10 +114,11 @@ export default function HeroSearch() {
           </div>
           <div className="w-px h-8 bg-gray-200" />
           <div className="flex-1">
-            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+            <label htmlFor="hero-fecha-vuelta" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">
               Vuelta
             </label>
             <input
+              id="hero-fecha-vuelta"
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}

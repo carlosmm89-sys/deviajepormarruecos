@@ -49,7 +49,7 @@ export default function Destinations() {
               <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden relative">
                 <img
                   src={optImg(dest.image_url, 800)}
-                  alt={dest.name}
+                  alt=""
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   referrerPolicy="no-referrer"

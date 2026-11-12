@@ -200,7 +200,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </nav>
 
             {/* Mobile Menu Button */}
-            <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={isMenuOpen}>
               {isMenuOpen ? <X /> : <Menu />}
             </button>
           </div>
@@ -341,7 +341,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Column 2: Enlaces Rápidos */}
             <div>
-              <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Navegación</h4>
+              <h3 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Navegación</h3>
               <ul className="space-y-3 text-sm">
                 <li><Link to="/" className="hover:text-brand-accent transition-colors">Inicio</Link></li>
                 <li><Link to="/destinations" className="hover:text-brand-accent transition-colors">Destinos</Link></li>
@@ -352,7 +352,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Column 3: Legal */}
             <div>
-              <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Información Legal</h4>
+              <h3 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Información Legal</h3>
               <ul className="space-y-3 text-sm">
                 <li><Link to="/aviso-legal" className="hover:text-brand-accent transition-colors">Aviso Legal</Link></li>
                 <li><Link to="/privacidad" className="hover:text-brand-accent transition-colors">Política de Privacidad</Link></li>
@@ -363,7 +363,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
             {/* Column 4: Contacto */}
             <div>
-              <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Contacto Rápido</h4>
+              <h3 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Contacto Rápido</h3>
               <ul className="space-y-4 text-sm">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-brand-accent flex-shrink-0" />
@@ -399,7 +399,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </button>
                 </>
               ) : (
-                <Link to="/admin/login" className="flex items-center gap-2 text-gray-600 hover:text-white transition-colors" title="Acceso Privado">
+                <Link to="/admin/login" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors" title="Acceso Privado">
                   <Shield className="w-4 h-4" /> Intranet
                 </Link>
               )}
