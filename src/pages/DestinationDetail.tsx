@@ -166,7 +166,7 @@ export default function DestinationDetail() {
             { label: destination.name }
           ]} />
           <div className="space-y-4">
-            <h1 className="text-5xl md:text-7xl font-serif font-bold text-white leading-tight mt-4">{destinationHeadings(destination).h1}</h1>
+            <h1 className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight mt-4">{destinationHeadings(destination).h1}</h1>
           </div>
         </div>
       </section>

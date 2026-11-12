@@ -157,13 +157,13 @@ export default function Tours() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-24 space-y-16">
       <SEO 
-        title="Tours y Excursiones en Marruecos | Vivir Marruecos"
+        title="Tours y circuitos por Marruecos | Vivir Marruecos"
         description={`Explora nuestros ${filteredTours.length > 0 ? filteredTours.length : ''} tours y descubre la aventura perfecta en Marruecos. Desde el desierto hasta la costa.`}
         url="/tours"
       />
       
       <div className="text-center space-y-4">
-        <h1 className="text-5xl md:text-7xl font-serif font-bold">Explora Nuestros Tours</h1>
+        <h1 className="text-5xl md:text-7xl font-serif font-bold">Tours y circuitos por Marruecos</h1>
         <p className="text-xl text-gray-500 max-w-2xl mx-auto">
           Encuentra la aventura perfecta diseñada especialmente para ti.
         </p>

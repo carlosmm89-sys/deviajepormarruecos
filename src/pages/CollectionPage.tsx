@@ -147,26 +147,15 @@ export default function CollectionPage() {
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-white drop-shadow-lg"
+            className="text-4xl md:text-6xl font-bold uppercase tracking-tight text-white drop-shadow-lg"
           >
-            {categoryName}
+            {collection.title}
           </motion.h1>
-          {categoryName === 'Actividades' && (
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-xl text-white/90 mt-4 uppercase tracking-widest font-medium"
-            >
-              En Marruecos
-            </motion.p>
-          )}
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-20 space-y-12">
         <div className="max-w-3xl mx-auto text-center space-y-4">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">{collection.title}</h2>
           <p className="text-lg text-gray-600 leading-relaxed">{collection.intro}</p>
         </div>
         {tours.length === 0 ? (

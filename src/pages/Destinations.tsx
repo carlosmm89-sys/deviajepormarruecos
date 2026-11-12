@@ -30,7 +30,7 @@ export default function Destinations() {
         url="/destinations"
       />
       <div className="text-center space-y-4">
-        <h1 className="text-5xl md:text-7xl font-serif font-bold">Nuestros Destinos</h1>
+        <h1 className="text-5xl md:text-7xl font-serif font-bold">Destinos en Marruecos</h1>
         <p className="text-xl text-gray-500 max-w-2xl mx-auto">
           Descubre la esencia de Marruecos a través de nuestras ciudades más emblemáticas.
         </p>

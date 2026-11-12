@@ -148,9 +148,9 @@ async function prerender() {
   count++;
 
   // 2. Catálogo de Tours (/tours)
-  const toursBody = `<main>${navHtml}<h1>Tours y Circuitos por Marruecos</h1><p>Explora nuestras rutas privadas y en grupo por el desierto del Sahara, Marrakech, Fez, Tánger y las Ciudades Imperiales.</p><ul>${tours.map(t => `<li><article><h2><a href="${tourPath(t)}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(stripHtml(t.itinerary_summary || t.description || '').slice(0, 220))}</p><p>Precio desde: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
+  const toursBody = `<main>${navHtml}<h1>Tours y circuitos por Marruecos</h1><p>Explora nuestras rutas privadas y en grupo por el desierto del Sahara, Marrakech, Fez, Tánger y las Ciudades Imperiales.</p><ul>${tours.map(t => `<li><article><h2><a href="${tourPath(t)}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(stripHtml(t.itinerary_summary || t.description || '').slice(0, 220))}</p><p>Precio desde: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
   writeRouteHtml('/tours', injectPageSeo(baseHtml, {
-    title: `Tours y Circuitos por Marruecos | ${siteName}`,
+    title: `Tours y circuitos por Marruecos | ${siteName}`,
     description: 'Explora todos nuestros tours por Marruecos: excursiones al desierto de Merzouga, rutas desde Marrakech, Fez, Tánger y viajes a medida.',
     canonicalPath: '/tours',
     bodyHtml: toursBody
@@ -171,9 +171,9 @@ async function prerender() {
 
   // 4. Actividades (/actividades)
   const actPosts = posts.filter(p => p.category === 'Actividades');
-  const actBody = `<main>${navHtml}<h1>Actividades y Experiencias en Marruecos</h1><p>Complementa tu viaje con actividades únicas: paseos en globo, quads en el desierto, rutas en camello y noche en campamento bereber.</p><ul>${actPosts.map(p => `<li><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || '')}</p></li>`).join('')}</ul></main>`;
+  const actBody = `<main>${navHtml}<h1>Actividades en Marruecos</h1><p>Complementa tu viaje con actividades únicas: paseos en globo, quads en el desierto, rutas en camello y noche en campamento bereber.</p><ul>${actPosts.map(p => `<li><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || '')}</p></li>`).join('')}</ul></main>`;
   writeRouteHtml('/actividades', injectPageSeo(baseHtml, {
-    title: `Actividades y Experiencias en Marruecos | ${siteName}`,
+    title: `Actividades en Marruecos | ${siteName}`,
     description: 'Complementa tu viaje con actividades únicas: paseos en globo, quads en el desierto, rutas en camello y mucho más.',
     canonicalPath: '/actividades',
     bodyHtml: actBody
@@ -181,9 +181,9 @@ async function prerender() {
   count++;
 
   // 5. Blog (/blog)
-  const blogBody = `<main>${navHtml}<h1>Blog de Viajes a Marruecos</h1><p>Consejos, guías prácticas, rutas y secretos para viajar a Marruecos.</p><ul>${posts.map(p => `<li><article><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || stripHtml(p.content || '').slice(0, 200))}</p></article></li>`).join('')}</ul></main>`;
+  const blogBody = `<main>${navHtml}<h1>Blog de viajes a Marruecos</h1><p>Consejos, guías prácticas, rutas y secretos para viajar a Marruecos.</p><ul>${posts.map(p => `<li><article><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || stripHtml(p.content || '').slice(0, 200))}</p></article></li>`).join('')}</ul></main>`;
   writeRouteHtml('/blog', injectPageSeo(baseHtml, {
-    title: `Blog de Viajes a Marruecos: Guías y Consejos | ${siteName}`,
+    title: `Blog de viajes a Marruecos: guías y consejos | ${siteName}`,
     description: 'Artículos, consejos prácticos y guías completas para preparar tu viaje a Marruecos: qué ver, mejor época, gastronomía y desierto.',
     canonicalPath: '/blog',
     bodyHtml: blogBody
@@ -192,7 +192,7 @@ async function prerender() {
 
   // 6. Galería (/galeria) y Legales
   const staticPages = [
-    { path: '/galeria', title: `Fotos de Marruecos y Merzouga | ${siteName}`, desc: 'Descubre Marruecos en imágenes: desierto de Merzouga, Marrakech, Chefchaouen y experiencias reales de nuestros viajeros.' },
+    { path: '/galeria', title: `Marruecos en imágenes: fotos de nuestros viajes | ${siteName}`, desc: 'Descubre Marruecos en imágenes: desierto de Merzouga, Marrakech, Chefchaouen y experiencias reales de nuestros viajeros.' },
     { path: '/privacidad', title: `Política de Privacidad | ${siteName}`, desc: 'Política de privacidad y protección de datos de Vivir Marruecos.' },
     { path: '/aviso-legal', title: `Aviso Legal | ${siteName}`, desc: 'Aviso legal e información general de Vivir Marruecos.' },
     { path: '/cookies', title: `Política de Cookies | ${siteName}`, desc: 'Información sobre el uso de cookies en vivirmarruecos.com.' },

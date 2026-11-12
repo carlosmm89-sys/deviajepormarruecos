@@ -37,7 +37,7 @@ export default function Gallery() {
   return (
     <div className="min-h-screen bg-white pb-24">
       <SEO 
-        title="Fotos de Marruecos y Merzouga | Vivir Marruecos"
+        title="Marruecos en imágenes: fotos de nuestros viajes"
         description="Explora las maravillas de Marruecos a través de nuestra galería de fotografías exclusivas de viajes: desierto, medinas, montañas y cultura."
         url="/galeria"
       />

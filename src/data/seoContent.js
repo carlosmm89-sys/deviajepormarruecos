@@ -61,7 +61,7 @@ export function destinationHeadings(dest, siteName = 'Vivir Marruecos') {
   if (slug.startsWith('rutas-desde-')) {
     const city = name.replace(/^rutas\s+desde\s+/i, '').trim();
     return {
-      h1: `Tours desde ${city}`,
+      h1: `Tours desde ${city} al desierto de Merzouga`,
       title: `Tours desde ${city} al desierto de Merzouga | ${siteName}`
     };
   }

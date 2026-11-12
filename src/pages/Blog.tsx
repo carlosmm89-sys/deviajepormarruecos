@@ -38,7 +38,7 @@ export default function Blog() {
   return (
     <div className="bg-gray-50/50 min-h-screen pb-24">
       <SEO 
-        title="Blog de Viajes a Marruecos | Vivir Marruecos"
+        title="Blog de viajes a Marruecos: guías y consejos"
         description="Descubre Marruecos a través de nuestras guías prácticas, historias y consejos de expertos locales para preparar tu próxima aventura."
         url="/blog"
       />
@@ -46,7 +46,7 @@ export default function Blog() {
       <section className="bg-white border-b border-gray-100 py-20 px-4">
         <div className="max-w-7xl mx-auto text-center space-y-4">
           <p className="text-brand-accent font-bold uppercase tracking-widest text-sm">Consejos y Guías</p>
-          <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900">Blog de Viajes</h1>
+          <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900">Blog de viajes a Marruecos</h1>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg pt-4">Descubre Marruecos a través de nuestras guías prácticas, historias y consejos de expertos locales para preparar tu próxima aventura.</p>
         </div>
       </section>
