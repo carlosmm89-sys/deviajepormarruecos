@@ -1,6 +1,14 @@
 import { supabase } from '../lib/supabase';
 import { Destination, Tour, Lead, BusinessSettings, BlogPost, GalleryImage } from '../types';
 
+// Columnas de business_settings que puede leer la web pública (sin smtp_*)
+const PUBLIC_SETTINGS_COLUMNS = [
+  'id', 'site_name', 'admin_email', 'whatsapp_number', 'whatsapp_welcome_message',
+  'instagram_url', 'facebook_url', 'tripadvisor_url', 'footer_address', 'logo_url',
+  'favicon_url', 'google_reviews_widget', 'instagram_widget', 'hero_image_url',
+  'hero_title', 'hero_subtitle', 'google_analytics_id', 'home_views'
+].join(',');
+
 // Translation Interceptor
 const applyTranslations = <T extends any>(data: T): T => {
   if (!data) return data;
@@ -174,20 +182,27 @@ export const dbService = {
     }
     settingsPromise = (async () => {
       try {
-        const { data, error } = await supabase.from('business_settings').select('*').limit(1).single();
+        // Solo columnas públicas: las credenciales SMTP nunca se envían al navegador
+        const { data, error } = await supabase.from('business_settings').select(PUBLIC_SETTINGS_COLUMNS).limit(1).single();
         if (error) return null;
-        settingsCache = { data, ts: Date.now() };
-        return data;
+        settingsCache = { data: data as unknown as BusinessSettings, ts: Date.now() };
+        return data as unknown as BusinessSettings;
       } finally {
         settingsPromise = null;
       }
     })();
     return settingsPromise;
   },
+  // Solo para el panel de administración (usuario autenticado): incluye la configuración SMTP
+  getBusinessSettingsAdmin: async (): Promise<BusinessSettings | null> => {
+    const { data, error } = await supabase.from('business_settings').select('*').limit(1).single();
+    if (error) return null;
+    return data;
+  },
   saveBusinessSettings: async (settings: Partial<BusinessSettings>): Promise<BusinessSettings> => {
     const { data, error } = await supabase.from('business_settings').upsert([settings]).select().single();
     if (error) throw error;
-    settingsCache = { data, ts: Date.now() };
+    settingsCache = null; // se recargará sin credenciales SMTP
     return data;
   },
 

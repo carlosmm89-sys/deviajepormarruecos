@@ -36,7 +36,7 @@ export default function Gallery() {
   return (
     <div className="min-h-screen bg-white pb-24">
       <SEO 
-        title="Galería Visual - Marruecos Experiencia"
+        title="Galería Visual - Vivir Marruecos"
         description="Explora las maravillas de Marruecos a través de nuestra galería de fotografías exclusivas de viajes: desierto, medinas, montañas y cultura."
         url="/galeria"
       />

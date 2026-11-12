@@ -1,20 +1,37 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Vivir Marruecos — www.vivirmarruecos.com
 
-# Run and deploy your AI Studio app
+Web de **Vivir Marruecos** (Vivirmarruecos SARL), agencia de viajes y transporte turístico con sede en Hassi Labied (Merzouga, Marruecos).
 
-This contains everything you need to run your app locally.
+## Tecnología
 
-View your app in AI Studio: https://ai.studio/apps/53308a92-1375-4b3d-a82f-d86c3c9b4cc8
+- **Frontend:** React 19 + Vite + Tailwind CSS (SPA con pre-renderizado SEO estático en el build)
+- **Base de datos y panel admin:** Supabase (tours, destinos, blog, galería, leads, ajustes)
+- **Hosting:** Vercel (funciones serverless en `api/`)
+- **Correo:** `api/send-email.ts` envía los formularios por SMTP
 
-## Run Locally
+## Desarrollo
 
-**Prerequisites:**  Node.js
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # genera sitemap + build + páginas SEO estáticas
+npm run lint     # comprobación de tipos
+```
 
+## Variables de entorno
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Ver `.env.example`. En Vercel deben estar configuradas:
+
+| Variable | Uso |
+|---|---|
+| `VITE_SUPABASE_URL` | URL del proyecto Supabase (web y funciones) |
+| `VITE_SUPABASE_ANON_KEY` | Clave pública de Supabase (web) |
+| `SUPABASE_SERVICE_ROLE_KEY` | **Solo servidor.** Permite a `api/send-email.ts` leer la configuración SMTP sin exponerla al público |
+
+## Estructura
+
+- `src/` — páginas, componentes y servicios de la web
+- `api/` — funciones serverless de Vercel (email, sitemap, imagen OG)
+- `public/` — archivos estáticos (robots.txt, iconos, llms.txt)
+- `supabase/sql/` — scripts SQL históricos usados para crear y actualizar la base de datos
+- `bitacora.md` — registro de cambios y actuaciones

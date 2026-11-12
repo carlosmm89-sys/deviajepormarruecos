@@ -91,7 +91,7 @@ export default function BlogPostDetail() {
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Marruecos Experiencia",
+      "name": "Vivir Marruecos",
       "logo": {
         "@type": "ImageObject",
         "url": "https://www.vivirmarruecos.com/pwa-512x512.png"
@@ -104,7 +104,7 @@ export default function BlogPostDetail() {
   return (
     <div className="bg-gray-50/30 min-h-screen pb-24">
       <SEO 
-        title={`${post.title} | Blog Marruecos Experiencia`}
+        title={`${post.title} | Blog Vivir Marruecos`}
         description={post.excerpt}
         image={post.cover_image}
         url={`/blog/${post.slug}`}

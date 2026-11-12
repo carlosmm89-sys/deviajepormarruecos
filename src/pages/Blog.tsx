@@ -37,7 +37,7 @@ export default function Blog() {
   return (
     <div className="bg-gray-50/50 min-h-screen pb-24">
       <SEO 
-        title="Blog de Viajes a Marruecos | Marruecos Experiencia"
+        title="Blog de Viajes a Marruecos | Vivir Marruecos"
         description="Descubre Marruecos a través de nuestras guías prácticas, historias y consejos de expertos locales para preparar tu próxima aventura."
         url="/blog"
       />

@@ -97,7 +97,7 @@ export default function CollectionPage() {
         await fetch('/api/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ lead: newLead, settings: activeSettings, tour_title: `Colección: ${categoryName}` })
+          body: JSON.stringify({ lead: newLead, tour_title: `Colección: ${categoryName}` })
         }).catch(err => console.error('SMTP fetch fail:', err));
       }
 
@@ -129,7 +129,7 @@ export default function CollectionPage() {
   return (
     <div className="min-h-screen bg-white pb-24">
       <SEO
-        title={`${categoryName} en Marruecos | Marruecos Experiencia`}
+        title={`${categoryName} en Marruecos | Vivir Marruecos`}
         description={`Descubre nuestras mejores rutas y circuitos de ${categoryName.toLowerCase()} en Marruecos a medida.`}
         image={heroImage}
         url={`/coleccion/${categorySlug}`}
