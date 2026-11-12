@@ -123,7 +123,7 @@ function itemListLd(name, path, entries) {
 async function localizeHeroImage(url) {
   if (!url || !/\.supabase\.co\/storage\/v1\/object\/public\//.test(url)) return null;
   try {
-    const hash = crypto.createHash('md5').update(url).digest('hex').slice(0, 8);
+    const hash = crypto.createHash('md5').update(url + '|q2').digest('hex').slice(0, 8);
     const dir = path.join(DIST_DIR, 'images', 'hero');
     fs.mkdirSync(dir, { recursive: true });
     const entries = [];
