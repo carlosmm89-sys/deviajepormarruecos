@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, signIn, signOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isWizardOpen, setIsWizardOpen] = React.useState(false);
-  const [settings, setSettings] = React.useState<BusinessSettings | null>(null);
+  const [settings, setSettings] = React.useState<BusinessSettings | null>(() => ((typeof window !== 'undefined' && (window as any).__BIZ__) || null) as BusinessSettings | null);
   const location = useLocation();
   const isAdminLoggedIn = user?.role === 'admin';
 
@@ -302,7 +302,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </AnimatePresence>
       </header>
 
-      <main className="flex-grow">
+      <main className="flex-grow min-h-screen">
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}

@@ -18,7 +18,7 @@ export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [featuredTours, setFeaturedTours] = useState<Tour[]>([]);
   const [galleryPreview, setGalleryPreview] = useState<GalleryImage[]>([]);
-  const [settings, setSettings] = useState<BusinessSettings | null>(null);
+  const [settings, setSettings] = useState<BusinessSettings | null>(() => ((typeof window !== 'undefined' && (window as any).__BIZ__) || null) as BusinessSettings | null);
   const [isLoading, setIsLoading] = useState(true);
   
   const { t } = useTranslation();
@@ -29,10 +29,12 @@ export default function Home() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const dests = await dbService.getDestinations();
-        const tours = await dbService.getTours();
-        const bizSettings = await dbService.getBusinessSettings();
-        const photos = await dbService.getGalleryImages();
+        const [dests, tours, bizSettings, photos] = await Promise.all([
+          dbService.getDestinations(),
+          dbService.getTours(),
+          dbService.getBusinessSettings(),
+          dbService.getGalleryImages()
+        ]);
         setDestinations(dests.slice(0, 4));
         setFeaturedTours(tours.slice(0, 3));
         setGalleryPreview(photos.slice(0, 5));

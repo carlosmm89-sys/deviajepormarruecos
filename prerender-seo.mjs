@@ -114,7 +114,7 @@ async function prerender() {
     return;
   }
 
-  const baseHtml = fs.readFileSync(templatePath, 'utf-8');
+  let baseHtml = fs.readFileSync(templatePath, 'utf-8');
   // Copia limpia de la app (sin metadatos de ninguna página concreta) para las rutas que no se pre-renderizan:
   // artículos nuevos del blog, /wishlist, etc. vercel.json reescribe esas rutas a /spa-shell.
   fs.writeFileSync(path.join(DIST_DIR, 'spa-shell.html'), baseHtml, 'utf-8');
@@ -143,6 +143,16 @@ async function prerender() {
   }
 
   const siteName = settings?.business_name || settings?.site_name || 'Vivir Marruecos';
+
+  // Datos básicos del negocio incrustados en el HTML: el logo y el texto de portada se pintan desde el primer
+  // momento, sin esperar a Supabase, y así no hay saltos de diseño (CLS) cuando llegan los datos.
+  if (settings) {
+    const pick = ['logo_url', 'site_name', 'business_name', 'hero_title', 'hero_subtitle', 'hero_image_url'];
+    const biz = Object.fromEntries(pick.filter(k => settings[k] != null).map(k => [k, settings[k]]));
+    const bizScript = `<script>window.__BIZ__=${JSON.stringify(biz).replace(/</g, '\\u003c')}</script>`;
+    baseHtml = baseHtml.replace('</head>', `    ${bizScript}\n  </head>`);
+    fs.writeFileSync(path.join(DIST_DIR, 'spa-shell.html'), baseHtml, 'utf-8');
+  }
   const navHtml = `<nav aria-label="Navegación principal"><a href="/">Inicio</a> | <a href="/destinations">Destinos</a> | <a href="/tours">Tours en Marruecos</a> | <a href="/actividades">Actividades</a> | <a href="/blog">Blog</a> | <a href="/galeria">Galería</a></nav>`;
 
   let count = 0;
