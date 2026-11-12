@@ -85,6 +85,9 @@ async function prerender() {
   }
 
   const baseHtml = fs.readFileSync(templatePath, 'utf-8');
+  // Copia limpia de la app (sin metadatos de ninguna página concreta) para las rutas que no se pre-renderizan:
+  // artículos nuevos del blog, /wishlist, etc. vercel.json reescribe esas rutas a /spa-shell.
+  fs.writeFileSync(path.join(DIST_DIR, 'spa-shell.html'), baseHtml, 'utf-8');
   console.log('🚀 Pre-renderizando páginas SEO en dist/...');
 
   let tours = [];
