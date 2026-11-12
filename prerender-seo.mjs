@@ -193,7 +193,7 @@ async function prerender() {
   // Datos básicos del negocio incrustados en el HTML: el logo y el texto de portada se pintan desde el primer
   // momento, sin esperar a Supabase, y así no hay saltos de diseño (CLS) cuando llegan los datos.
   if (settings) {
-    const pick = ['logo_url', 'site_name', 'business_name', 'hero_title', 'hero_subtitle', 'hero_image_url'];
+    const pick = ['logo_url', 'site_name', 'business_name', 'hero_title', 'hero_subtitle', 'hero_image_url', 'whatsapp_number', 'whatsapp_welcome_message'];
     const biz = Object.fromEntries(pick.filter(k => settings[k] != null).map(k => [k, settings[k]]));
     heroLocal = await localizeHeroImage(settings.hero_image_url);
     if (heroLocal) {
