@@ -124,7 +124,7 @@ async function prerender() {
   let count = 0;
 
   // 1. Home (/)
-  const homeBody = `<main>${navHtml}<h1>${escapeHtml(stripHtml(settings?.hero_title || HOME_H1_FALLBACK))}</h1><p>${escapeHtml(settings?.hero_subtitle || 'Agencia especializada en tours privados, excursiones al desierto de Merzouga y rutas por Marruecos.')}</p><section><h2>Destinos Destacados en Marruecos</h2><ul>${destinations.map(d => `<li><a href="/destinations/${d.slug || d.id}">${escapeHtml(d.name)}</a></li>`).join('')}</ul></section><section><h2>Rutas y Circuitos por Marruecos</h2><ul>${tours.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul></section></main>`;
+  const homeBody = `<main>${navHtml}<h1>${escapeHtml(stripHtml(settings?.hero_title || HOME_H1_FALLBACK))}</h1><p>${escapeHtml(settings?.hero_subtitle || 'Agencia especializada en tours privados, excursiones al desierto de Merzouga y rutas por Marruecos.')}</p><p>Vivir Marruecos organiza tours privados por Marruecos y el desierto de Merzouga, con conductor de habla española y salidas desde Marrakech, Fez, Tánger y Casablanca.</p><section><h2>Destinos Destacados en Marruecos</h2><ul>${destinations.map(d => `<li><a href="/destinations/${d.slug || d.id}">${escapeHtml(d.name)}</a></li>`).join('')}</ul></section><section><h2>Tours privados por Marruecos</h2><ul>${tours.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul></section></main>`;
   writeRouteHtml('/', injectPageSeo(baseHtml, {
     title: HOME_TITLE,
     description: settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION,
@@ -148,7 +148,7 @@ async function prerender() {
   count++;
 
   // 2. Catálogo de Tours (/tours)
-  const toursBody = `<main>${navHtml}<h1>Tours y circuitos por Marruecos</h1><p>Explora nuestras rutas privadas y en grupo por el desierto del Sahara, Marrakech, Fez, Tánger y las Ciudades Imperiales.</p><ul>${tours.map(t => `<li><article><h2><a href="${tourPath(t)}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(stripHtml(t.itinerary_summary || t.description || '').slice(0, 220))}</p><p>Precio desde: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
+  const toursBody = `<main>${navHtml}<h1>Tours y circuitos por Marruecos</h1><p>Todos nuestros tours y circuitos privados por Marruecos: el desierto del Sáhara, Marrakech, Fez, Tánger y las ciudades imperiales.</p><ul>${tours.map(t => `<li><article><h2><a href="${tourPath(t)}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(stripHtml(t.itinerary_summary || t.description || '').slice(0, 220))}</p><p>Precio desde: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
   writeRouteHtml('/tours', injectPageSeo(baseHtml, {
     title: `Tours y circuitos por Marruecos | ${siteName}`,
     description: 'Explora todos nuestros tours por Marruecos: excursiones al desierto de Merzouga, rutas desde Marrakech, Fez, Tánger y viajes a medida.',
@@ -158,7 +158,7 @@ async function prerender() {
   count++;
 
   // 3. Catálogo de Destinos (/destinations y /destinos)
-  const destsBody = `<main>${navHtml}<h1>Destinos en Marruecos</h1><p>Descubre nuestras rutas desde Marrakech, Fez, Tánger, Casablanca, Chefchaouen y el desierto de Merzouga.</p><ul>${destinations.map(d => `<li><article><h2><a href="/destinations/${d.slug || d.id}">${escapeHtml(d.name)}</a></h2><p>${escapeHtml(stripHtml(d.description || '').slice(0, 220))}</p></article></li>`).join('')}</ul></main>`;
+  const destsBody = `<main>${navHtml}<h1>Destinos en Marruecos</h1><p>Nuestros destinos en Marruecos: rutas desde Marrakech, Fez, Tánger y Casablanca, Chefchaouen y el desierto de Merzouga.</p><ul>${destinations.map(d => `<li><article><h2><a href="/destinations/${d.slug || d.id}">${escapeHtml(d.name)}</a></h2><p>${escapeHtml(stripHtml(d.description || '').slice(0, 220))}</p></article></li>`).join('')}</ul></main>`;
   for (const r of ['/destinations', '/destinos']) {
     writeRouteHtml(r, injectPageSeo(baseHtml, {
       title: `Destinos en Marruecos | ${siteName}`,
@@ -171,7 +171,7 @@ async function prerender() {
 
   // 4. Actividades (/actividades)
   const actPosts = posts.filter(p => p.category === 'Actividades');
-  const actBody = `<main>${navHtml}<h1>Actividades en Marruecos</h1><p>Complementa tu viaje con actividades únicas: paseos en globo, quads en el desierto, rutas en camello y noche en campamento bereber.</p><ul>${actPosts.map(p => `<li><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || '')}</p></li>`).join('')}</ul></main>`;
+  const actBody = `<main>${navHtml}<h1>Actividades en Marruecos</h1><p>Las mejores actividades para completar tu viaje por Marruecos: paseos en globo, quads en el desierto, rutas en dromedario y noche en campamento.</p><ul>${actPosts.map(p => `<li><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || '')}</p></li>`).join('')}</ul></main>`;
   writeRouteHtml('/actividades', injectPageSeo(baseHtml, {
     title: `Actividades en Marruecos | ${siteName}`,
     description: 'Complementa tu viaje con actividades únicas: paseos en globo, quads en el desierto, rutas en camello y mucho más.',
@@ -181,7 +181,7 @@ async function prerender() {
   count++;
 
   // 5. Blog (/blog)
-  const blogBody = `<main>${navHtml}<h1>Blog de viajes a Marruecos</h1><p>Consejos, guías prácticas, rutas y secretos para viajar a Marruecos.</p><ul>${posts.map(p => `<li><article><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || stripHtml(p.content || '').slice(0, 200))}</p></article></li>`).join('')}</ul></main>`;
+  const blogBody = `<main>${navHtml}<h1>Blog de viajes a Marruecos</h1><p>Nuestro blog de viajes a Marruecos: consejos, guías prácticas, rutas y secretos para preparar tu viaje.</p><ul>${posts.map(p => `<li><article><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || stripHtml(p.content || '').slice(0, 200))}</p></article></li>`).join('')}</ul></main>`;
   writeRouteHtml('/blog', injectPageSeo(baseHtml, {
     title: `Blog de viajes a Marruecos: guías y consejos | ${siteName}`,
     description: 'Artículos, consejos prácticos y guías completas para preparar tu viaje a Marruecos: qué ver, mejor época, gastronomía y desierto.',
@@ -192,11 +192,11 @@ async function prerender() {
 
   // 6. Galería (/galeria) y Legales
   const staticPages = [
-    { path: '/galeria', title: `Marruecos en imágenes: fotos de nuestros viajes | ${siteName}`, desc: 'Descubre Marruecos en imágenes: desierto de Merzouga, Marrakech, Chefchaouen y experiencias reales de nuestros viajeros.' },
+    { path: '/galeria', title: `Marruecos en imágenes: fotos de nuestros viajes | ${siteName}`, desc: 'Fotos de nuestros viajes por Marruecos: el desierto de Merzouga, Marrakech, Chefchaouen y mucho más, Marruecos en imágenes.' },
     { path: '/privacidad', title: `Política de Privacidad | ${siteName}`, desc: 'Política de privacidad y protección de datos de Vivir Marruecos.' },
     { path: '/aviso-legal', title: `Aviso Legal | ${siteName}`, desc: 'Aviso legal e información general de Vivir Marruecos.' },
-    { path: '/cookies', title: `Política de Cookies | ${siteName}`, desc: 'Información sobre el uso de cookies en vivirmarruecos.com.' },
-    { path: '/condiciones', title: `Condiciones Generales de Contratación | ${siteName}`, desc: 'Términos y condiciones generales para nuestros viajes y rutas por Marruecos.' }
+    { path: '/cookies', title: `Política de Cookies | ${siteName}`, desc: 'Política de cookies: información sobre el uso de cookies en vivirmarruecos.com.' },
+    { path: '/condiciones', title: `Condiciones Generales de Contratación | ${siteName}`, desc: 'Condiciones generales de contratación de nuestros viajes y rutas por Marruecos.' }
   ];
   for (const sp of staticPages) {
     writeRouteHtml(sp.path, injectPageSeo(baseHtml, {
@@ -252,7 +252,9 @@ async function prerender() {
     const descText = stripHtml(dest.description || `Descubre los mejores tours y excursiones en ${dest.name}.`);
     const canonical = `/destinations/${dest.slug || dest.id}`;
     const headings = destinationHeadings(dest, siteName);
-    const destHtml = `<main>${navHtml}<article><h1>${escapeHtml(headings.h1)}</h1><div>${dest.description || `<p>${escapeHtml(descText)}</p>`}</div></article></main>`;
+    const destTours = tours.filter(t => t.destination_id === dest.id || (t.destination_ids || []).includes(dest.id));
+    const destToursHtml = `<section><h2>Tours y excursiones en ${escapeHtml(String(dest.name).trim())}</h2>${destTours.length ? `<ul>${destTours.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul>` : `<p>Organizamos tours y excursiones privadas a medida. <a href="/tours">Ver todos los tours</a>.</p>`}</section>`;
+    const destHtml = `<main>${navHtml}<article><h1>${escapeHtml(headings.h1)}</h1><div>${dest.description || `<p>${escapeHtml(descText)}</p>`}</div>${destToursHtml}</article></main>`;
     const seoPayload = {
       title: headings.title,
       description: descText.slice(0, 160),

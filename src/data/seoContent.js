@@ -81,11 +81,11 @@ export function destinationHeadings(dest, siteName = 'Vivir Marruecos') {
 export const COLLECTION_INTROS = {
   'desierto': {
     title: 'Viajes al desierto de Merzouga',
-    intro: 'Rutas privadas al desierto del Sáhara con noche en jaima en las dunas de Erg Chebbi, paseo en dromedario al atardecer y amanecer entre dunas. Salidas desde Marrakech, Fez, Tánger o Casablanca, con conductor y vehículo solo para vuestro grupo.'
+    intro: 'Viajes privados al desierto del Sáhara con noche en jaima en las dunas de Erg Chebbi, paseo en dromedario al atardecer y amanecer entre dunas. Salidas desde Marrakech, Fez, Tánger o Casablanca, con conductor y vehículo solo para vuestro grupo.'
   },
   'norte-de-marruecos': {
     title: 'Viajes por el norte de Marruecos',
-    intro: 'Tánger, Tetuán, Chefchaouen y las montañas del Rif: rutas por el norte de Marruecos ideales si llegas en ferry desde España, que pueden continuar hacia Fez y el desierto de Merzouga.'
+    intro: 'Viajes por Tánger, Tetuán, Chefchaouen y las montañas del Rif: rutas por el norte de Marruecos ideales si llegas en ferry desde España, que pueden continuar hacia Fez y el desierto de Merzouga.'
   },
   'ciudades-imperiales': {
     title: 'Rutas por las ciudades imperiales',
@@ -93,47 +93,47 @@ export const COLLECTION_INTROS = {
   },
   'aventura': {
     title: 'Viajes de aventura en Marruecos',
-    intro: 'Quads y buggies en las dunas, sandboarding, travesías en dromedario y pistas del Atlas: rutas para quienes buscan algo más que visitar ciudades.'
+    intro: 'Viajes de aventura en Marruecos: quads y buggies en las dunas, sandboarding, travesías en dromedario y pistas del Atlas para quienes buscan algo más que visitar ciudades.'
   },
   'cultura': {
     title: 'Viajes culturales por Marruecos',
-    intro: 'Medinas declaradas Patrimonio de la Humanidad, kasbahs de adobe como Aït Ben Haddou, pueblos amazigh (bereberes) y la vida diaria de Marruecos contada por gente local.'
+    intro: 'Viajes culturales por medinas declaradas Patrimonio de la Humanidad, kasbahs de adobe como Aït Ben Haddou, pueblos amazigh (bereberes) y la vida diaria de Marruecos contada por gente local.'
   },
   'montana': {
     title: 'Rutas por el Atlas y la montaña',
-    intro: 'Puertos de montaña del Alto Atlas, valles como el del Dades y gargantas como las del Todra: paisajes de montaña camino del desierto.'
+    intro: 'Rutas por los puertos de montaña del Alto Atlas, valles como el del Dades y gargantas como las del Todra: paisajes de montaña camino del desierto.'
   },
   'costa': {
     title: 'Viajes a la costa de Marruecos',
-    intro: 'Essaouira, la costa atlántica y el norte mediterráneo para combinar playa, pescado fresco y medinas tranquilas con el resto de tu ruta.'
+    intro: 'Viajes a Essaouira, la costa atlántica y el norte mediterráneo para combinar playa, pescado fresco y medinas tranquilas con el resto de tu ruta.'
   },
   'luna-de-miel': {
     title: 'Luna de miel en Marruecos',
-    intro: 'Riads con encanto, cena bajo las estrellas en el desierto y una ruta privada a vuestro ritmo: viajes de novios por Marruecos diseñados a medida.'
+    intro: 'Una luna de miel en Marruecos con riads con encanto, cena bajo las estrellas en el desierto y una ruta privada a vuestro ritmo, diseñada a medida.'
   },
   'viajes-en-familia': {
     title: 'Viajes en familia por Marruecos',
-    intro: 'Rutas con etapas cómodas, paradas frecuentes y actividades para niños como el paseo en dromedario o la noche en jaima en el desierto.'
+    intro: 'Viajes en familia con etapas cómodas, paradas frecuentes y actividades para niños como el paseo en dromedario o la noche en jaima en el desierto.'
   },
   'viajes-de-lujo': {
     title: 'Viajes de lujo por Marruecos',
-    intro: 'Campamentos de lujo en las dunas, riads seleccionados y traslados privados: Marruecos con el máximo confort.'
+    intro: 'Viajes de lujo con campamentos en las dunas, riads seleccionados y traslados privados: Marruecos con el máximo confort.'
   },
   'viajes-exclusivos': {
     title: 'Viajes exclusivos por Marruecos',
-    intro: 'Rutas privadas solo para tu grupo, con itinerario, alojamientos y ritmo adaptados a lo que buscas.'
+    intro: 'Viajes exclusivos: rutas privadas solo para tu grupo, con itinerario, alojamientos y ritmo adaptados a lo que buscas.'
   },
   'viajes-en-grupo': {
     title: 'Viajes en grupo por Marruecos',
-    intro: 'Rutas para grupos de amigos, asociaciones o empresas, con vehículo privado y precio por persona que baja cuantos más sois.'
+    intro: 'Viajes en grupo para amigos, asociaciones o empresas, con vehículo privado y precio por persona que baja cuantos más sois.'
   },
   'paquetes': {
     title: 'Paquetes de viaje a Marruecos',
-    intro: 'Rutas completas con transporte, alojamiento y actividades incluidas, listas para reservar o adaptar a tus fechas.'
+    intro: 'Paquetes de viaje completos con transporte, alojamiento y actividades incluidas, listas para reservar o adaptar a tus fechas.'
   },
   'actividades': {
     title: 'Actividades en Marruecos',
-    intro: 'Paseos en globo, quads, dromedarios, sandboarding y experiencias para completar tu viaje por Marruecos.'
+    intro: 'Actividades en Marruecos para completar tu viaje: paseos en globo, quads, dromedarios, sandboarding y otras experiencias.'
   },
   'entrega-de-anillo': {
     title: 'Pedida de mano en el desierto',

@@ -20,7 +20,7 @@ export const translations = {
     // Home Page
     home_hero_title: 'Marruecos, a tu manera.',
     home_hero_subtitle: 'Experiencias de viaje premium, a medida y auténticas, sin intermediarios. Tu aventura bereber empieza aquí.',
-    home_featured_tours: 'Tours Destacados',
+    home_featured_tours: 'Tours privados destacados',
     home_featured_destinations: 'Destinos Populares',
     home_why_us: '¿Por qué viajar con nosotros?',
     home_why_us_1_title: 'Expertos Locales',

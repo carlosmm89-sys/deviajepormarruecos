@@ -47,7 +47,7 @@ export default function Gallery() {
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900 leading-tight">Marruecos en<br/>Imágenes</h1>
           <p className="text-xl text-gray-600 font-light max-w-2xl mx-auto">
-            Descubre los rincones ocultos, los colores vibrantes y la majestuosidad de un país que cautiva el alma en cada instante.
+            Fotos de nuestros viajes por Marruecos: rincones ocultos, colores vibrantes y la majestuosidad de un país que cautiva el alma.
           </p>
         </div>
       </section>

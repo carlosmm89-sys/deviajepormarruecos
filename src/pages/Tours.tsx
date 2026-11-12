@@ -165,7 +165,7 @@ export default function Tours() {
       <div className="text-center space-y-4">
         <h1 className="text-5xl md:text-7xl font-serif font-bold">Tours y circuitos por Marruecos</h1>
         <p className="text-xl text-gray-500 max-w-2xl mx-auto">
-          Encuentra la aventura perfecta diseñada especialmente para ti.
+          Todos nuestros tours y circuitos privados por Marruecos, diseñados a tu medida.
         </p>
       </div>
 

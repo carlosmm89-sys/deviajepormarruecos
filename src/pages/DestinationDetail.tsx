@@ -246,7 +246,7 @@ export default function DestinationDetail() {
             <div className="space-y-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-3xl font-bold text-[#1e293b]">{destination.name}</h2>
+                  <h2 className="text-3xl font-bold text-[#1e293b]">Tours y excursiones en {String(destination.name).trim()}</h2>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="relative">
