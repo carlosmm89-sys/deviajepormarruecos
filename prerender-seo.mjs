@@ -59,7 +59,8 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
   const extraHead = [
     `<link rel="canonical" href="${fullUrl}" />`,
     // Conexión anticipada con Supabase (datos de tours y fotos): ahorra tiempo en móvil antes de pintar la página.
-    SUPABASE_ORIGIN ? `<link rel="preconnect" href="${SUPABASE_ORIGIN}" crossorigin />` : '',
+    // Dos conexiones: sin crossorigin para las imágenes (peticiones no-CORS) y con crossorigin para la API de datos.
+    SUPABASE_ORIGIN ? `<link rel="preconnect" href="${SUPABASE_ORIGIN}" /><link rel="preconnect" href="${SUPABASE_ORIGIN}" crossorigin />` : '',
     preloadImage ? `<link rel="preload" as="image" href="${escapeHtml(optImg(preloadImage, 1600))}"${optSrcSet(preloadImage) ? ` imagesrcset="${escapeHtml(optSrcSet(preloadImage))}" imagesizes="100vw"` : ''} fetchpriority="high" />` : '',
     schema ? `<script type="application/ld+json">${JSON.stringify(schema)}</script>` : ''
   ]
