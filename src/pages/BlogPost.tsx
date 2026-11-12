@@ -163,7 +163,7 @@ export default function BlogPostDetail() {
           )}
 
           <div 
-            className="prose prose-lg md:prose-xl max-w-none text-gray-600 leading-loose text-left md:text-justify hyphens-auto prose-headings:text-left
+            className="prose prose-lg md:prose-xl max-w-none text-gray-600 leading-loose text-left md:text-justify prose-headings:text-left
                        prose-headings:font-serif prose-headings:text-gray-900 
                        prose-h1:text-3xl md:prose-h1:text-4xl prose-h1:font-extrabold prose-h1:mb-8 prose-h1:tracking-tight
                        prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-10 md:prose-h2:mt-14 prose-h2:mb-6 prose-h2:pb-2 prose-h2:border-b-2 prose-h2:border-gray-100
