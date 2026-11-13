@@ -19,6 +19,11 @@ const INACTIVE_TOUR_TARGET: Record<string, string> = {
   '979c2415-6305-477f-b722-a453a99a75c5': '/tours/ruta-de-9-dias-desde-marrakech-hacia-tanger',
 };
 
+// URLs antiguas de tours desactivados (comparadas sin tildes): los tours inactivos no son visibles desde aquí
+const OLD_TOUR_SLUGS: Record<string, string> = {
+  'tour-de-9-dias-marrakech-a-tanger': '/tours/ruta-de-9-dias-desde-marrakech-hacia-tanger',
+};
+
 let shellCache: { html: string; ts: number } | null = null;
 
 async function getShell(host: string): Promise<string> {
@@ -43,6 +48,10 @@ async function resolve(pathname: string): Promise<Result> {
   if (pathname === '/favoritos' || section === 'admin') return { status: 200 };
 
   if (parts.length !== 2 || !key) return { status: 404 };
+
+  if (section === 'tours' && OLD_TOUR_SLUGS[slugify(key)]) {
+    return { status: 301, location: OLD_TOUR_SLUGS[slugify(key)] };
+  }
 
   if (section === 'tours') {
     const q = supabase.from('tours').select('id, slug, is_active');
