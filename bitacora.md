@@ -116,3 +116,7 @@
 - `src/pages/Home.tsx`: nota bajo los tours destacados (precios para grupo de 4), sección «Cómo funciona», tipos de viaje, preguntas frecuentes (desplegables) y botones de presupuesto, WhatsApp y email en el bloque final.
 - `src/components/Layout.tsx`: el formulario de presupuesto (`QuoteWizard`) se abre también con el evento `open-quote-wizard` (lo usan los botones de la portada).
 - `prerender-seo.mjs`: el HTML estático de `/` incluye los 4 pasos y las preguntas frecuentes, y datos estructurados `FAQPage` para Google (solo en el HTML estático, para no duplicarlos).
+
+### Portada: opiniones de Google (13/11/2026)
+- Sección «Lo que dicen nuestros viajeros» en `src/pages/Home.tsx` con las reseñas reales de la ficha de Google «Vivir Marruecos» (lista `REVIEWS` en `src/data/homeContent.js`), enlace a la ficha y enlace para escribir una opinión. También en el HTML estático de `/` (`prerender-seo.mjs`).
+- Para añadir reseñas nuevas, sumarlas a `REVIEWS` (nombre, mes y texto tal cual aparecen en Google). No se usa la ficha de TripAdvisor «De Viaje Por Marruecos».

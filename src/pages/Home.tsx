@@ -13,7 +13,7 @@ import { useTranslation } from '../hooks/useTranslation';
 import { useCurrency } from '../context/CurrencyContext';
 import { tourPath, HOME_META_DESCRIPTION, HOME_TITLE } from '../data/seoContent';
 import { optImg, optSrcSet } from '../lib/image';
-import { HOW_IT_WORKS, TRIP_TYPES, HOME_FAQS, PRICE_NOTE } from '../data/homeContent';
+import { HOW_IT_WORKS, TRIP_TYPES, HOME_FAQS, PRICE_NOTE, REVIEWS, GOOGLE_RATING, GOOGLE_REVIEWS_URL, GOOGLE_WRITE_REVIEW_URL } from '../data/homeContent';
 
 const TRIP_ICONS: Record<string, React.ElementType> = { heart: Heart, family: Users, gem: Gem, compass: Compass, users: Users, sparkles: Sparkles };
 
@@ -343,6 +343,46 @@ export default function Home() {
              <h2 className="text-4xl font-serif font-bold">Síguenos en Instagram</h2>
           </div>
           <WidgetRenderer html={settings.instagram_widget} />
+        </section>
+      )}
+
+      {/* Opiniones de viajeros (Google) */}
+      {REVIEWS.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 space-y-10">
+          <div className="text-center space-y-3">
+            <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">Opiniones</p>
+            <h2 className="text-4xl font-serif font-bold">Lo que dicen nuestros viajeros</h2>
+            <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-gray-600 hover:text-brand-primary transition-colors">
+              <span className="flex">{Array(5).fill(0).map((_, i) => <Star key={i} className="w-5 h-5 text-[#F6B100] fill-[#F6B100]" />)}</span>
+              <span className="font-bold text-gray-900">{GOOGLE_RATING}</span>
+              <span>· {REVIEWS.length} {REVIEWS.length === 1 ? 'opinión' : 'opiniones'} en Google</span>
+            </a>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            {REVIEWS.map((review, idx) => (
+              <figure key={idx} className="bg-white rounded-[2rem] border border-gray-100 shadow-sm p-8 space-y-4">
+                <div className="flex" aria-label={`${review.rating} de 5 estrellas`}>
+                  {Array(review.rating).fill(0).map((_, i) => <Star key={i} className="w-4 h-4 text-[#F6B100] fill-[#F6B100]" />)}
+                </div>
+                <blockquote className="text-gray-700 leading-relaxed">“{review.text}”</blockquote>
+                <figcaption className="flex items-center gap-3 pt-2">
+                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-brand-primary/10 text-brand-primary font-bold">{review.author.charAt(0)}</span>
+                  <span>
+                    <span className="block font-bold text-gray-900">{review.author}</span>
+                    <span className="block text-sm text-gray-500">{review.date} · Google</span>
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <div className="flex flex-wrap justify-center gap-6 text-sm font-bold">
+            <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-brand-primary hover:text-brand-accent">
+              Ver opiniones en Google <ArrowRight className="w-4 h-4" />
+            </a>
+            <a href={GOOGLE_WRITE_REVIEW_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-gray-600 hover:text-brand-accent">
+              ¿Viajaste con nosotros? Deja tu opinión
+            </a>
+          </div>
         </section>
       )}
 

@@ -57,3 +57,25 @@ export const HOME_FAQS = [
 ];
 
 export const PRICE_NOTE = 'Precios orientativos por persona para un grupo de 4. Si viajáis 2 o 3 personas, el precio por persona cambia: pídenos presupuesto sin compromiso.';
+
+// Reseñas reales de la ficha de Google «Vivir Marruecos» (copiadas tal cual, nov. 2026).
+// Para añadir más: copia el texto, el nombre y el mes de la reseña de Google y súmala a esta lista.
+export const GOOGLE_PLACE_ID = 'ChIJGfCCnI5rfQYRbR8TsTEnINM';
+export const GOOGLE_REVIEWS_URL = `https://www.google.com/maps/place/?q=place_id:${GOOGLE_PLACE_ID}`;
+export const GOOGLE_WRITE_REVIEW_URL = `https://search.google.com/local/writereview?placeid=${GOOGLE_PLACE_ID}`;
+export const GOOGLE_RATING = '5,0';
+
+export const REVIEWS = [
+  {
+    author: 'Rosario Isabel L.',
+    date: 'noviembre 2026',
+    rating: 5,
+    text: 'Fuimos 4 amigas de viaje con la agencia vivirmarruecos, todo de 10 los alojamientos, guías y sobre todo el paseo en camello nos encantó el desierto, gracias a todos los guías. Recomendado 100/1000'
+  },
+  {
+    author: 'Rosario Isabel L.',
+    date: 'noviembre 2026',
+    rating: 5,
+    text: 'Una experiencia de 10 hemos disfrutado mucho de nuestra experiencia, muchas gracias por todo.'
+  }
+];
