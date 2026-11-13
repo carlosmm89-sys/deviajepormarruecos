@@ -119,4 +119,5 @@
 
 ### Portada: opiniones de Google (13/11/2026)
 - Sección «Lo que dicen nuestros viajeros» en `src/pages/Home.tsx` con las reseñas reales de la ficha de Google «Vivir Marruecos» (lista `REVIEWS` en `src/data/homeContent.js`), enlace a la ficha y enlace para escribir una opinión. También en el HTML estático de `/` (`prerender-seo.mjs`).
-- Para añadir reseñas nuevas, sumarlas a `REVIEWS` (nombre, mes y texto tal cual aparecen en Google). No se usa la ficha de TripAdvisor «De Viaje Por Marruecos».
+- Para añadir reseñas nuevas, sumarlas a `REVIEWS` (nombre, mes y texto tal cual aparecen en la ficha).
+- (2ª tanda) Añadidas 6 opiniones de Tripadvisor (ficha de 105 opiniones, 5,0, Travellers' Choice 2026) junto a las 2 de Google; totales en `REVIEW_TOTALS` (actualizar a mano). Textos largos recortados con «…» sin cambiar palabras.

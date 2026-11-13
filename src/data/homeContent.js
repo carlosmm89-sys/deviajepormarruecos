@@ -58,24 +58,75 @@ export const HOME_FAQS = [
 
 export const PRICE_NOTE = 'Precios orientativos por persona para un grupo de 4. Si viajáis 2 o 3 personas, el precio por persona cambia: pídenos presupuesto sin compromiso.';
 
-// Reseñas reales de la ficha de Google «Vivir Marruecos» (copiadas tal cual, nov. 2026).
-// Para añadir más: copia el texto, el nombre y el mes de la reseña de Google y súmala a esta lista.
+// Opiniones reales copiadas de las fichas de Tripadvisor y Google (nov. 2026).
+// Los textos largos están recortados con «…», sin cambiar palabras.
+// Para añadir una opinión nueva, súmala a REVIEWS (nombre, mes, fuente y texto tal cual).
+// Actualiza también los totales de abajo cuando cambien en las fichas.
 export const GOOGLE_PLACE_ID = 'ChIJGfCCnI5rfQYRbR8TsTEnINM';
 export const GOOGLE_REVIEWS_URL = `https://www.google.com/maps/place/?q=place_id:${GOOGLE_PLACE_ID}`;
 export const GOOGLE_WRITE_REVIEW_URL = `https://search.google.com/local/writereview?placeid=${GOOGLE_PLACE_ID}`;
-export const GOOGLE_RATING = '5,0';
+export const TRIPADVISOR_URL = 'https://www.tripadvisor.es/Attraction_Review-g293737-d27433997-Reviews-De_Viaje_Por_Marruecos-Tangier_Tanger_Tetouan_Al_Hoceima.html';
+
+export const REVIEW_TOTALS = {
+  tripadvisor: { rating: '5,0', count: 105, award: "Travellers' Choice 2026" },
+  google: { rating: '5,0', count: 2 }
+};
 
 export const REVIEWS = [
   {
+    source: 'tripadvisor',
+    author: 'Carmen N',
+    date: 'noviembre 2026',
+    trip: 'Con amigos',
+    text: 'Acabamos de terminar nuestra escapada con Ali. Esta es nuestra 4 vez. Pero a sido la mejor con diferencia. Lo a consejo 100/1000. Mil gracias Ali'
+  },
+  {
+    source: 'tripadvisor',
+    author: 'BRB78',
+    date: 'agosto 2026',
+    trip: 'En familia',
+    text: 'Hemos hecho un tour de 10 días de norte a sur y vuelta, y la experiencia ha sido EXCEPCIONAL. Viaje muy bien organizado por Ali, que ha tenido infinita paciencia con nuestros miedos y dudas… Resumiendo: 100% fiables y recomendables.'
+  },
+  {
+    source: 'tripadvisor',
+    author: 'juan jose m',
+    date: 'agosto 2026',
+    trip: 'En pareja',
+    text: 'Estuvimos 5 dias y 4 noches y todo fue genial, desde el minuto uno que nos pusimos en contacto hasta el final del viaje… tuvieron un gran detalle en nuestro cumpleaños regalandonos una tarta y vino.'
+  },
+  {
+    source: 'tripadvisor',
+    author: 'Lorena S',
+    date: 'junio 2026',
+    trip: 'En familia',
+    text: 'Nuestra experiencia fue simplemente genial. Desde el primer momento todo estuvo muy bien organizado y nos hicieron sentir cómodos y bien atendidos durante todo el viaje… Sin duda, una experiencia totalmente recomendable.'
+  },
+  {
+    source: 'tripadvisor',
+    author: 'Davide Nahmias',
+    date: 'diciembre 2025',
+    trip: 'En familia',
+    text: 'Nuestro viaje de 9 días por Marruecos en familia ha sido una experiencia extraordinaria, auténtica y perfectamente organizada… Desde las ciudades imperiales hasta el desierto, cada etapa estuvo bien pensada, sin prisas y con alojamientos auténticos.'
+  },
+  {
+    source: 'tripadvisor',
+    author: 'Daniel J',
+    date: 'octubre 2026',
+    trip: 'En pareja',
+    text: '¡Hamid y Abdul son guías super amables y cercanos, además de un gran sentido del humor! El viaje ha sido genial y nos ha encantado! Recomendaría este viaje siempre. Muy completo'
+  },
+  {
+    source: 'google',
     author: 'Rosario Isabel L.',
     date: 'noviembre 2026',
-    rating: 5,
+    trip: 'Con amigas',
     text: 'Fuimos 4 amigas de viaje con la agencia vivirmarruecos, todo de 10 los alojamientos, guías y sobre todo el paseo en camello nos encantó el desierto, gracias a todos los guías. Recomendado 100/1000'
   },
   {
+    source: 'google',
     author: 'Rosario Isabel L.',
     date: 'noviembre 2026',
-    rating: 5,
+    trip: '',
     text: 'Una experiencia de 10 hemos disfrutado mucho de nuestra experiencia, muchas gracias por todo.'
   }
 ];
