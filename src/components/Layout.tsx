@@ -382,6 +382,26 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     {settings?.whatsapp_number || '+212 600 000 000'}
                   </a>
                 </li>
+                <li className="pt-4">
+                  {/* Logo oficial de Tripadvisor (servido por Tripadvisor) con enlace a nuestra ficha. La URL se cambia en Ajustes del panel. */}
+                  <a
+                    href={settings?.tripadvisor_url || 'https://www.tripadvisor.es/Attraction_Review-g293737-d27433997-Reviews-De_Viaje_Por_Marruecos-Tangier_Tanger_Tetouan_Al_Hoceima.html'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Lee nuestras opiniones en Tripadvisor"
+                    className="inline-flex flex-col items-start gap-1 bg-white rounded-xl px-4 py-3 hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                  >
+                    <img
+                      src="https://static.tacdn.com/img2/brand_refresh/Tripadvisor_lockup_horizontal_secondary_registered.svg"
+                      alt="Tripadvisor"
+                      width="140"
+                      height="30"
+                      loading="lazy"
+                      className="h-7 w-auto"
+                    />
+                    <span className="text-xs font-semibold text-gray-700">Lee nuestras opiniones</span>
+                  </a>
+                </li>
               </ul>
             </div>
             
