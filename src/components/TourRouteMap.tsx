@@ -32,8 +32,25 @@ function numberedIcon(n: number, isEnd: boolean) {
   });
 }
 
+// Nombres de lugares del mapa en inglés y francés (los que cambian respecto al español)
+const PLACE_NAMES: Record<string, { en: string; fr: string }> = {
+  "Alto Atlas (Tizi n'Tichka)": { en: "High Atlas (Tizi n'Tichka)", fr: "Haut Atlas (Tizi n'Tichka)" },
+  'Valle de las Rosas': { en: 'Valley of Roses', fr: 'Vallée des Roses' },
+  'Valle del Dades': { en: 'Dades Valley', fr: 'Vallée du Dadès' },
+  'Gargantas del Todra': { en: 'Todra Gorges', fr: 'Gorges du Todra' },
+  'Valle del Draa': { en: 'Draa Valley', fr: 'Vallée du Drâa' },
+  'Valle del Ziz': { en: 'Ziz Valley', fr: 'Vallée du Ziz' },
+  'Bosque de cedros (Azrou)': { en: 'Cedar forest (Azrou)', fr: 'Forêt de cèdres (Azrou)' },
+  'Fez': { en: 'Fez', fr: 'Fès' },
+  'Meknes': { en: 'Meknes', fr: 'Meknès' },
+  'Tetuán': { en: 'Tetouan', fr: 'Tétouan' },
+  'Tánger': { en: 'Tangier', fr: 'Tanger' },
+  'Cabo Espartel': { en: 'Cape Spartel', fr: 'Cap Spartel' },
+};
+
 export default function TourRouteMap({ itineraryHtml, departureCity, returnCity }: Props) {
-  const { tr } = useTranslation();
+  const { tr, currentLanguage } = useTranslation();
+  const placeName = (n: string) => currentLanguage === 'es' ? n : ((PLACE_NAMES[n] as any)?.[currentLanguage] || n);
   const dayWord = tr({ es: 'Día', en: 'Day', fr: 'Jour' });
   const { days, stops } = useMemo(
     () => buildRoute(itineraryHtml || '', departureCity, returnCity) as { days: { day: number; title: string; stops: Stop[] }[]; stops: Stop[] },
@@ -52,7 +69,7 @@ export default function TourRouteMap({ itineraryHtml, departureCity, returnCity 
 
   const line = stops.map((s) => [s.lat, s.lng] as [number, number]);
   const bounds = L.latLngBounds(line).pad(0.15);
-  const routeNames = stops.map((s) => s.name).join(' → ');
+  const routeNames = stops.map((s) => placeName(s.name)).join(' → ');
 
   return (
     <div className="space-y-6">
@@ -69,7 +86,7 @@ export default function TourRouteMap({ itineraryHtml, departureCity, returnCity 
             <Marker key={m.stop.name} position={[m.stop.lat, m.stop.lng]} icon={numberedIcon(m.n, idx === 0 || idx === markers.length - 1)}>
               <Popup>
                 <div className="text-center">
-                  <p className="font-bold text-gray-900">{m.stop.name}</p>
+                  <p className="font-bold text-gray-900">{placeName(m.stop.name)}</p>
                   {m.visits.length > 0 && (
                     <p className="text-xs text-gray-500">{dayWord} {[...new Set(m.visits)].join(', ')}</p>
                   )}
@@ -95,7 +112,7 @@ export default function TourRouteMap({ itineraryHtml, departureCity, returnCity 
           {days.filter((d) => d.stops.length).map((d) => (
             <li key={d.day} className="flex gap-3 text-gray-700">
               <span className="shrink-0 font-bold" style={{ color: ROUTE_COLOR }}>{dayWord} {d.day}</span>
-              <span>{d.stops.map((s) => s.name).join(' → ')}</span>
+              <span>{d.stops.map((s) => placeName(s.name)).join(' → ')}</span>
             </li>
           ))}
         </ol>
