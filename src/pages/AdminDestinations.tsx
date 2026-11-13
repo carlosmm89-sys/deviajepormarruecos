@@ -246,7 +246,7 @@ export default function AdminDestinations() {
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1">
                           <label className="text-sm font-semibold text-gray-700">Nombre (Español) *</label>
-                          <input {...register('name')} className="input-field" placeholder="Ej: Marrakech" />
+                          <input key="name-es" {...register('name')} className="input-field" placeholder="Ej: Marrakech" />
                           {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
                         </div>
                         <div className="space-y-1">
@@ -258,6 +258,7 @@ export default function AdminDestinations() {
                       <div className="space-y-1">
                         <label className="text-sm font-semibold text-gray-700">Descripción (Español) *</label>
                         <textarea
+                          key="description-es"
                           {...register('description')}
                           className="input-field min-h-[150px] resize-none"
                           placeholder="Describe este destino..."
@@ -269,11 +270,12 @@ export default function AdminDestinations() {
                     <div className="space-y-4">
                       <div className="space-y-1">
                         <label className="text-sm font-semibold text-gray-700">Nombre ({activeTab.toUpperCase()})</label>
-                        <input {...register(`translations.${activeTab}.name`)} className="input-field" placeholder="Traducción opcional..." />
+                        <input key={`name-${activeTab}`} {...register(`translations.${activeTab}.name`)} className="input-field" placeholder="Traducción opcional..." />
                       </div>
                       <div className="space-y-1">
                         <label className="text-sm font-semibold text-gray-700">Descripción ({activeTab.toUpperCase()})</label>
                         <textarea
+                          key={`description-${activeTab}`}
                           {...register(`translations.${activeTab}.description`)}
                           className="input-field min-h-[150px] resize-none"
                           placeholder="Traducción opcional..."

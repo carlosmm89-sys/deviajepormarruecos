@@ -132,3 +132,6 @@
 - `ReviewsModal`: quitadas las 4 opiniones inventadas y las notas por categoría; ahora muestra las opiniones reales de `homeContent.js` y el total de Tripadvisor. La ficha de tour enseña el total real (105) en vez de «14 evaluaciones».
 - Siguen en español: artículos del blog, guía «Viaje a Marruecos» (pensada para búsquedas en España) y páginas legales.
 - Panel → editar tour: arreglado el cambio de pestaña ES/EN/FR. Los campos y editores se reutilizaban entre idiomas y el texto de una pestaña podía copiarse en otra; ahora cada idioma tiene sus propios campos (`key` por idioma en inputs y ReactQuill).
+- Panel → destinos: mismo arreglo de pestañas ES/EN/FR (`key` por idioma).
+- Contenido de los 10 tours publicados traducido al inglés y francés desde el panel (título, duración, salida/regreso, incluye, no incluye, itinerario y recomendaciones). El tour oculto «Tour de 9 días: Marrakech a Tánger» no se tocó.
+- `routeStops.js`: el mapa reconoce «Day N:» y «Jour N :» y nombres de lugares en inglés/francés (High Atlas, Valley of Roses, cedar…).
