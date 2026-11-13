@@ -107,3 +107,6 @@
 ### Google Search Console: verificación con archivo HTML (13/11/2026)
 - Propiedad `https://www.vivirmarruecos.com/` verificada con la cuenta de Google del propietario (método «Archivo HTML»).
 - `/google8246ce4ddafaea89.html` se sirve desde `api/google-verification.ts` (rewrite en `vercel.json`) para evitar la redirección de `cleanUrls`. **No borrar.**
+
+### Search Console: redirecciones 301 de URLs antiguas (13/11/2026)
+- `vercel.json` → `redirects`: las URLs antiguas que Google tenía como «Rastreada: actualmente sin indexar» (destinos y tour con UUID, `/destino/:slug`, `/destinos`, la colección con comas y el post `consejos-compras-marruecos-regateo`) redirigen con 301 a su URL actual.

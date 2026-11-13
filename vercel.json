@@ -46,6 +46,19 @@
       ]
     }
   ],
+  "redirects": [
+    { "source": "/destinations/0b3a68e0-d1cb-44c3-b65d-c90a5664e2a1", "destination": "/destinations/chefchaouen", "permanent": true },
+    { "source": "/destinations/938ea398-81c7-482c-b4e3-23ffa13d13f7", "destination": "/destinations/desierto-erg-chebbi", "permanent": true },
+    { "source": "/destinations/eb32e5f0-f00c-4be6-b90a-fd1092feb4bd", "destination": "/destinations/rutas-desde-tanger", "permanent": true },
+    { "source": "/destinations/9904823f-3b8c-4106-8e31-992ab38b374e", "destination": "/destinations/rutas-desde-fez", "permanent": true },
+    { "source": "/destinations/8385ba05-8a1e-4fa6-82c1-ad38f02101c9", "destination": "/destinations/rutas-desde-marrakech", "permanent": true },
+    { "source": "/destinations/f939237a-0157-4aed-b4cd-5703f89b35f3", "destination": "/destinations/rutas-desde-casablanca", "permanent": true },
+    { "source": "/tours/f34861fb-a177-4fe9-ab91-a57a5389df95", "destination": "/tours/gran-tour-de-marruecos-de-13-dias", "permanent": true },
+    { "source": "/blog/consejos-compras-marruecos-regateo", "destination": "/blog/secretos-del-zoco-marrakech-regateo", "permanent": true },
+    { "source": "/coleccion/:slug(.*,.*)", "destination": "/tours", "permanent": true },
+    { "source": "/destino/:slug", "destination": "/destinations/:slug", "permanent": true },
+    { "source": "/destinos", "destination": "/destinations", "permanent": true }
+  ],
   "rewrites": [
     {
       "source": "/google8246ce4ddafaea89.html",
