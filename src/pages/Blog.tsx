@@ -56,7 +56,7 @@ export default function Blog() {
       {/* Grid de Artículos */}
       {currentLanguage !== 'es' && (
         <p className="max-w-3xl mx-auto px-4 mt-10 text-center text-sm text-gray-500">
-          {tr({ es: '', en: 'Our articles are currently only available in Spanish.', fr: 'Nos articles ne sont pour le moment disponibles qu’en espagnol.' })}
+          {tr({ es: '', en: 'Some of our articles are only available in Spanish.', fr: 'Certains de nos articles ne sont disponibles qu’en espagnol.' })}
         </p>
       )}
       <section className="max-w-7xl mx-auto px-4 mt-16">

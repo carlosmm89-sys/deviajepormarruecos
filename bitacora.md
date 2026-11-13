@@ -139,3 +139,4 @@
 - En inglés/francés: aviso en /blog y /actividades de que los artículos están en español, la ficha de tour no muestra artículos relacionados, y la portada indica que las opiniones van en su idioma original.
 - Panel → editar artículo del blog: mismo arreglo de pestañas EN/FR (`key` por idioma en título, extracto y editor).
 - Panel → editar artículo: el contenido en español no se cargaba en el editor (faltaba `setValue('content', …)`), así que el editor salía vacío y no se podía guardar ningún cambio. Arreglado.
+- Blog: traducidos al inglés y francés (desde el panel) los 5 artículos publicados más leídos: mejor época, regatear en los zocos, imazighen, qué llevar al desierto y Ait Ben Haddou. El aviso de /blog dice ahora que «algunos» artículos solo están en español.
