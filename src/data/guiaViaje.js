@@ -41,7 +41,8 @@ export const GUIDE = {
 <li>Excursión de 3 días al desierto: desde 180 €.</li>
 <li>Tour de 4 días: desde 250 €.</li>
 <li>Viaje de 5 días: desde 300 €.</li>
-<li>Rutas de 8 a 13 días: desde 400–500 €.</li>
+<li>Rutas de 8 días: desde 200 €.</li>
+<li>Rutas de 9 a 13 días: desde 400 €.</li>
 </ul>
 <p>A eso hay que sumar los vuelos, las comidas que no estén incluidas y tus gastos personales. Lo desglosamos con más detalle en <a href="/blog/cuanto-cuesta-viaje-marruecos">cuánto cuesta un viaje a Marruecos</a>. Siempre te damos un presupuesto cerrado según fechas y número de personas.</p>`
     },
