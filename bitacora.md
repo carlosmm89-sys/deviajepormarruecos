@@ -135,3 +135,5 @@
 - Panel → destinos: mismo arreglo de pestañas ES/EN/FR (`key` por idioma).
 - Contenido de los 10 tours publicados traducido al inglés y francés desde el panel (título, duración, salida/regreso, incluye, no incluye, itinerario y recomendaciones). El tour oculto «Tour de 9 días: Marrakech a Tánger» no se tocó.
 - `routeStops.js`: el mapa reconoce «Day N:» y «Jour N :» y nombres de lugares en inglés/francés (High Atlas, Valley of Roses, cedar…).
+- Destinos (9) traducidos al inglés y francés desde el panel (nombre y descripción).
+- En inglés/francés: aviso en /blog y /actividades de que los artículos están en español, la ficha de tour no muestra artículos relacionados, y la portada indica que las opiniones van en su idioma original.

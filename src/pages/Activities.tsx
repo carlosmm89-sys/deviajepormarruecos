@@ -56,6 +56,11 @@ export default function Activities() {
       </section>
 
       {/* Grid de Actividades */}
+      {currentLanguage !== 'es' && (
+        <p className="max-w-3xl mx-auto px-4 mt-10 text-center text-sm text-gray-500">
+          {tr({ es: '', en: 'The detailed activity pages are currently only available in Spanish.', fr: 'Les fiches détaillées des activités ne sont pour le moment disponibles qu’en espagnol.' })}
+        </p>
+      )}
       <section className="max-w-7xl mx-auto px-4 mt-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage).map((post, idx) => (
@@ -99,7 +104,7 @@ export default function Activities() {
                     to={`/blog/${post.slug}`}
                     className="inline-flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-brand-accent transition-colors group/link"
                   >
-                    Ver Detalles <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+                    {tr({ es: 'Ver Detalles', en: 'See details', fr: 'Voir les détails' })} <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
                   </Link>
                 </div>
               </div>

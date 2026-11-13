@@ -372,6 +372,7 @@ export default function Home() {
               </a>
             </div>
             <p className="text-sm font-bold text-[#00AA6C]">🏆 Tripadvisor {REVIEW_TOTALS.tripadvisor.award}</p>
+            {currentLanguage !== 'es' && <p className="text-xs text-gray-500">{tr({ es: '', en: 'Reviews are shown in their original language.', fr: 'Les avis sont affichés dans leur langue d’origine.' })}</p>}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {REVIEWS.map((review, idx) => (

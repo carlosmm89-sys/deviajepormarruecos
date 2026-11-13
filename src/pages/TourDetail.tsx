@@ -724,7 +724,8 @@ export default function TourDetail() {
         </div>
       )}
 
-      {relatedPosts.length > 0 && (
+      {/* Los artículos del blog solo están en español */}
+      {relatedPosts.length > 0 && currentLanguage === 'es' && (
         <div className="max-w-7xl mx-auto px-4 mt-24 border-t border-gray-100 pt-16">
           <div className="flex items-center gap-3 mb-10">
             <BookOpen className="w-8 h-8 text-brand-accent" />
