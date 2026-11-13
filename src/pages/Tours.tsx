@@ -10,8 +10,8 @@ import SEO from '../components/SEO';
 import { tourPath } from '../data/seoContent';
 import { optImg, optSrcSet } from '../lib/image';
 
-// Foto de cabecera: dunas del Erg Chebbi (foto propia de la galería de tours).
-const TOURS_HERO_IMAGE = 'https://kitavxpezfqxebadhazf.supabase.co/storage/v1/object/public/images/1774666026583_g80wgu.jpg';
+// Foto de cabecera: caravana de camellos en las dunas (Unsplash, foto de Carlos Leret, licencia Unsplash gratuita).
+const TOURS_HERO_IMAGE = 'https://images.unsplash.com/photo-1559586616-361e18714958';
 
 const STATIC_CATEGORIES = [
   'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa',
@@ -170,7 +170,7 @@ export default function Tours() {
           src={optImg(TOURS_HERO_IMAGE, 1600)}
           srcSet={optSrcSet(TOURS_HERO_IMAGE, [640, 960, 1600])}
           sizes="(min-width: 1280px) 1280px, 100vw"
-          alt="Dunas del desierto de Erg Chebbi en Merzouga"
+          alt="Caravana de camellos en las dunas del desierto de Marruecos"
           loading="eager"
           className="absolute inset-0 w-full h-full object-cover"
         />

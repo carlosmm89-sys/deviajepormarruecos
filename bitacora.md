@@ -123,4 +123,4 @@
 - (2ª tanda) Añadidas 6 opiniones de Tripadvisor (ficha de 105 opiniones, 5,0, Travellers' Choice 2026) junto a las 2 de Google; totales en `REVIEW_TOTALS` (actualizar a mano). Textos largos recortados con «…» sin cambiar palabras.
 
 ### Página /tours: foto de fondo en la cabecera (13/11/2026)
-- `src/pages/Tours.tsx`: la cabecera «Tours y circuitos por Marruecos» lleva de fondo una foto propia de las dunas del Erg Chebbi, con degradado oscuro y texto en blanco.
+- `src/pages/Tours.tsx`: la cabecera «Tours y circuitos por Marruecos» lleva de fondo una foto de Unsplash (caravana de camellos en las dunas, de Carlos Leret), con degradado oscuro y texto en blanco.
