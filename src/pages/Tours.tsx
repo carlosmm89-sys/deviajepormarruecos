@@ -8,7 +8,10 @@ import { useCurrency } from '../context/CurrencyContext';
 import { useTranslation } from '../hooks/useTranslation';
 import SEO from '../components/SEO';
 import { tourPath } from '../data/seoContent';
-import { optImg } from '../lib/image';
+import { optImg, optSrcSet } from '../lib/image';
+
+// Foto de cabecera: dunas del Erg Chebbi (foto propia de la galería de tours).
+const TOURS_HERO_IMAGE = 'https://kitavxpezfqxebadhazf.supabase.co/storage/v1/object/public/images/1774666026583_g80wgu.jpg';
 
 const STATIC_CATEGORIES = [
   'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa',
@@ -162,11 +165,22 @@ export default function Tours() {
         url="/tours"
       />
       
-      <div className="text-center space-y-4">
-        <h1 className="text-5xl md:text-7xl font-serif font-bold">Tours y circuitos por Marruecos</h1>
-        <p className="text-xl text-gray-500 max-w-2xl mx-auto">
-          Todos nuestros tours y circuitos privados por Marruecos, diseñados a tu medida.
-        </p>
+      <div className="relative rounded-[2.5rem] overflow-hidden shadow-xl">
+        <img
+          src={optImg(TOURS_HERO_IMAGE, 1600)}
+          srcSet={optSrcSet(TOURS_HERO_IMAGE, [640, 960, 1600])}
+          sizes="(min-width: 1280px) 1280px, 100vw"
+          alt="Dunas del desierto de Erg Chebbi en Merzouga"
+          loading="eager"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+        <div className="relative text-center space-y-4 px-6 py-20 md:py-28">
+          <h1 className="text-5xl md:text-7xl font-serif font-bold text-white drop-shadow-lg">Tours y circuitos por Marruecos</h1>
+          <p className="text-xl text-white/90 max-w-2xl mx-auto drop-shadow">
+            Todos nuestros tours y circuitos privados por Marruecos, diseñados a tu medida.
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-12">
