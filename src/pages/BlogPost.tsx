@@ -7,7 +7,7 @@ import { usePageViews } from '../hooks/usePageViews';
 import { motion } from 'framer-motion';
 import SEO from '../components/SEO';
 import { tourPath } from '../data/seoContent';
-import { optImg, optSrcSet } from '../lib/image';
+import { optImg } from '../lib/image';
 
 export default function BlogPostDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -208,8 +208,6 @@ export default function BlogPostDetail() {
                   <div className="relative h-64 overflow-hidden">
                       <img
                       src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/600/morocco,sahara', 800)}
-                      srcSet={optSrcSet(tour.featured_image || tour.gallery?.[0], [400, 640, 800, 1080])}
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                       alt={tour.title}
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -248,8 +246,6 @@ export default function BlogPostDetail() {
                 <div className="aspect-[4/3] overflow-hidden relative">
                   <img 
                     src={optImg(related.cover_image || 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70', 800)} 
-                    srcSet={optSrcSet(related.cover_image || 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70', [400, 640, 800, 1080])} 
-                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" 
                     alt={related.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />

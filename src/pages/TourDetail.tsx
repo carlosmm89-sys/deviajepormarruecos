@@ -19,7 +19,7 @@ import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useTranslation } from '../hooks/useTranslation';
 import { tourPath, tourMetaDescription } from '../data/seoContent';
-import { optImg, optSrcSet } from '../lib/image';
+import { optImg } from '../lib/image';
 
 const FAQItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -677,8 +677,6 @@ export default function TourDetail() {
                       <div className="relative h-64 overflow-hidden">
                           <img
                               src={optImg(t.featured_image || t.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600', 800)}
-                              srcSet={optSrcSet(t.featured_image || t.gallery?.[0], [400, 640, 800, 1080])}
-                              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                               alt={t.title}
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                               referrerPolicy="no-referrer"
@@ -723,8 +721,6 @@ export default function TourDetail() {
                 <div className="aspect-[4/3] overflow-hidden relative">
                   <img 
                     src={optImg(post.cover_image || 'https://loremflickr.com/800/600/morocco', 800)} 
-                    srcSet={optSrcSet(post.cover_image, [400, 640, 800, 1080])} 
-                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" 
                     alt={post.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />

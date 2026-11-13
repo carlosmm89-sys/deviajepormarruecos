@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { dbService } from '../services/dbService';
 import SEO from '../components/SEO';
-import { optImg, optSrcSet } from '../lib/image';
+import { optImg } from '../lib/image';
 
 export default function Destinations() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -49,8 +49,6 @@ export default function Destinations() {
               <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden relative">
                 <img
                   src={optImg(dest.image_url, 800)}
-                  srcSet={optSrcSet(dest.image_url, [400, 640, 800, 1080])}
-                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                   alt=""
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

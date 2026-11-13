@@ -8,7 +8,7 @@ import { useCurrency } from '../context/CurrencyContext';
 import { useTranslation } from '../hooks/useTranslation';
 import SEO from '../components/SEO';
 import { tourPath } from '../data/seoContent';
-import { optImg, optSrcSet } from '../lib/image';
+import { optImg } from '../lib/image';
 
 const STATIC_CATEGORIES = [
   'Aventura', 'Cultura', 'Desierto', 'Montaña', 'Costa',
@@ -307,8 +307,6 @@ export default function Tours() {
                     <div className="relative h-64 overflow-hidden">
                         <img
                         src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600', 800)}
-                        srcSet={optSrcSet(tour.featured_image || tour.gallery?.[0], [400, 640, 800, 1080])}
-                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                         alt={tour.title}
                         loading="lazy"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

@@ -7,7 +7,7 @@ import { CheckCircle2 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import SEO from '../components/SEO';
 import { tourPath, collectionContent } from '../data/seoContent';
-import { optImg, optSrcSet } from '../lib/image';
+import { optImg } from '../lib/image';
 
 const CATEGORY_MAP: Record<string, string> = {
   'actividades': 'Actividades',
@@ -201,8 +201,6 @@ export default function CollectionPage() {
               <div className="h-64 md:h-auto order-1 md:order-2 overflow-hidden bg-gray-200">
                 <img 
                   src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/800/morocco,sahara', 800)} 
-                  srcSet={optSrcSet(tour.featured_image || tour.gallery?.[0], [400, 640, 800, 1080])} 
-                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" 
                   alt={tour.title} 
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
                 />
