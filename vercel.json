@@ -55,6 +55,11 @@
     { "source": "/destinations/f939237a-0157-4aed-b4cd-5703f89b35f3", "destination": "/destinations/rutas-desde-casablanca", "permanent": true },
     { "source": "/tours/f34861fb-a177-4fe9-ab91-a57a5389df95", "destination": "/tours/gran-tour-de-marruecos-de-13-dias", "permanent": true },
     { "source": "/blog/consejos-compras-marruecos-regateo", "destination": "/blog/secretos-del-zoco-marrakech-regateo", "permanent": true },
+    { "source": "/blog/magia-chefchaouen-pueblo-azul-marruecos", "destination": "/blog/chefchaouen-el-pueblo-azul", "permanent": true },
+    { "source": "/blog/que-comer-marruecos-10-platos-estrella", "destination": "/blog/gastronomia-marroqui-platos-tipicos", "permanent": true },
+    { "source": "/blog/zagora-vs-merzouga-que-desierto-elegir", "destination": "/blog/desierto-merzouga-o-zagora", "permanent": true },
+    { "source": "/blog/que-ver-en-marrakech-3-dias-itinerario-seo", "destination": "/blog/que-ver-en-marrakech-en-3-dias", "permanent": true },
+    { "source": "/tours/979c2415-6305-477f-b722-a453a99a75c5", "destination": "/tours/ruta-de-9-dias-desde-marrakech-hacia-tanger", "permanent": true },
     { "source": "/coleccion/:slug(.*,.*)", "destination": "/tours", "permanent": true },
     { "source": "/destino/:slug", "destination": "/destinations/:slug", "permanent": true },
     { "source": "/destinos", "destination": "/destinations", "permanent": true }

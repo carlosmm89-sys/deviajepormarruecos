@@ -14,6 +14,11 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+// Tours desactivados con una ruta equivalente activa
+const INACTIVE_TOUR_TARGET: Record<string, string> = {
+  '979c2415-6305-477f-b722-a453a99a75c5': '/tours/ruta-de-9-dias-desde-marrakech-hacia-tanger',
+};
+
 let shellCache: { html: string; ts: number } | null = null;
 
 async function getShell(host: string): Promise<string> {
@@ -42,7 +47,9 @@ async function resolve(pathname: string): Promise<Result> {
   if (section === 'tours') {
     const q = supabase.from('tours').select('id, slug, is_active');
     const { data } = await (UUID.test(key) ? q.eq('id', key) : q.eq('slug', key)).maybeSingle();
-    if (!data || data.is_active === false) return { status: 404 };
+    // Tour desactivado: se lleva a la página equivalente (si la hay) o al catálogo, en vez de dar 404
+    if (data && data.is_active === false) return { status: 301, location: INACTIVE_TOUR_TARGET[data.id] || '/tours' };
+    if (!data) return { status: 404 };
     if (data.slug && data.slug !== key) return { status: 301, location: `/tours/${encodeURI(data.slug)}` };
     return { status: 200 };
   }
