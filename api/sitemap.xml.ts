@@ -24,6 +24,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const baseRoutes = [
       '/',
       '/tours',
+      '/viaje-a-marruecos',
       '/destinations',
       '/actividades',
       '/galeria',
@@ -60,7 +61,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         loc: `${SITE_URL}${route}`,
         lastmod: today,
         changefreq: route === '/' ? 'daily' : 'weekly',
-        priority: route === '/' ? '1.0' : '0.8',
+        priority: route === '/' ? '1.0' : route === '/viaje-a-marruecos' ? '0.9' : '0.8',
       });
     });
 

@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
           
           <h2 className="text-2xl font-bold mt-8 mb-4">1. Responsable del Tratamiento</h2>
           <p className="mb-4">
-            [Nombre de tu Empresa / Tu Nombre] es responsable del tratamiento de los datos personales recopilados a través del sitio web. Puede contactarnos en [Tu Email].
+            Vivirmarruecos SARL (Vivir Marruecos), con domicilio en Ksar Hassi Labied, Taouz, Rissani (Marruecos), es responsable del tratamiento de los datos personales recopilados a través del sitio web. Puede contactarnos en <a href="mailto:info@vivirmarruecos.com">info@vivirmarruecos.com</a>.
           </p>
 
           <h2 className="text-2xl font-bold mt-8 mb-4">2. Finalidad del Tratamiento de Datos</h2>
@@ -42,13 +42,6 @@ export default function PrivacyPolicy() {
           <p className="mb-4">
             Usted tiene derecho a obtener confirmación sobre si estamos tratando sus datos personales, por tanto tiene derecho a acceder a sus datos personales, rectificar los datos inexactos o solicitar su supresión cuando los datos ya no sean necesarios.
           </p>
-
-          <div className="bg-brand-primary/5 p-6 rounded-xl mt-12 border border-brand-primary/10">
-            <h3 className="font-bold text-gray-900 mb-2">Nota Importante</h3>
-            <p className="text-sm">
-              Este es un texto orientativo. Recuerda actualizarlo con los datos fiscales reales de tu empresa, el correo de contacto oficial y los plazos estipulados por tu asesoría legal.
-            </p>
-          </div>
         </div>
       </div>
     </>

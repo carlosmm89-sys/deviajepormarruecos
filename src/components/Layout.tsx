@@ -348,6 +348,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <li><Link to="/" className="hover:text-brand-accent transition-colors">Inicio</Link></li>
                 <li><Link to="/destinations" className="hover:text-brand-accent transition-colors">Destinos</Link></li>
                 <li><Link to="/tours" className="hover:text-brand-accent transition-colors">Experiencias y Rutas</Link></li>
+                <li><Link to="/viaje-a-marruecos" className="hover:text-brand-accent transition-colors">Guía: viaje a Marruecos</Link></li>
                 <li><Link to="/blog" className="hover:text-brand-accent transition-colors">Blog y Consejos</Link></li>
               </ul>
             </div>

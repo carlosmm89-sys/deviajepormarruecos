@@ -4,6 +4,7 @@ import path from 'path';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import { optImg, optSrcSet } from './src/lib/image.js';
+import { GUIDE, GUIDE_PATH } from './src/data/guiaViaje.js';
 import { fitTitle, HOME_TITLE } from './src/data/seoContent.js';
 import { tourPath, tourMetaDescription, destinationHeadings, collectionContent, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME, ACTIVITIES_EXTRA } from './src/data/seoContent.js';
 
@@ -204,7 +205,7 @@ async function prerender() {
     baseHtml = baseHtml.replace('</head>', `    ${bizScript}\n  </head>`);
     fs.writeFileSync(path.join(DIST_DIR, 'spa-shell.html'), baseHtml, 'utf-8');
   }
-  const navHtml = `<nav aria-label="Navegación principal"><a href="/">Inicio</a> | <a href="/destinations">Destinos</a> | <a href="/tours">Tours en Marruecos</a> | <a href="/actividades">Actividades</a> | <a href="/blog">Blog</a> | <a href="/galeria">Galería</a></nav>`;
+  const navHtml = `<nav aria-label="Navegación principal"><a href="/">Inicio</a> | <a href="/destinations">Destinos</a> | <a href="/tours">Tours en Marruecos</a> | <a href="/actividades">Actividades</a> | <a href="/viaje-a-marruecos">Viaje a Marruecos</a> | <a href="/blog">Blog</a> | <a href="/galeria">Galería</a></nav>`;
 
   let count = 0;
 
@@ -278,6 +279,31 @@ async function prerender() {
     canonicalPath: '/blog',
     schema: [itemListLd('Blog de viajes a Marruecos', '/blog', posts.filter(p => p.slug).map(p => ({ name: p.title, path: `/blog/${p.slug}` }))), breadcrumbLd([{ name: 'Blog', path: '/blog' }])],
     bodyHtml: blogBody
+  }));
+  count++;
+
+  // 5b. Guía pilar "Viaje a Marruecos"
+  const guideBody = `<main>${navHtml}<article><h1>${escapeHtml(GUIDE.title)}</h1>${GUIDE.intro.map(p => `<p>${escapeHtml(p)}</p>`).join('')}${GUIDE.sections.map(s => `<section id="${s.id}"><h2>${escapeHtml(s.h2)}</h2>${s.html}</section>`).join('')}<section><h2>Preguntas frecuentes</h2>${GUIDE.faqs.map(f => `<h3>${escapeHtml(f.q)}</h3><p>${escapeHtml(f.a)}</p>`).join('')}</section></article></main>`;
+  writeRouteHtml(GUIDE_PATH, injectPageSeo(baseHtml, {
+    title: GUIDE.metaTitle,
+    description: GUIDE.description,
+    canonicalPath: GUIDE_PATH,
+    type: 'article',
+    schema: [{
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: GUIDE.title,
+      description: GUIDE.description,
+      dateModified: GUIDE.updated,
+      author: { '@type': 'Organization', name: siteName, url: DOMAIN },
+      publisher: { '@type': 'Organization', name: siteName, url: DOMAIN },
+      mainEntityOfPage: `${DOMAIN}${GUIDE_PATH}`
+    }, {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: GUIDE.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+    }, breadcrumbLd([{ name: 'Viaje a Marruecos', path: GUIDE_PATH }])],
+    bodyHtml: guideBody
   }));
   count++;
 

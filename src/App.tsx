@@ -43,6 +43,7 @@ const AdminTourEdit = lazy(() => import('./pages/AdminTourEdit'));
 const AdminGallery = lazy(() => import('./pages/AdminGallery'));
 const Gallery = lazy(() => import('./pages/Gallery'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const TravelGuide = lazy(() => import('./pages/TravelGuide'));
 
 // Minimal loading fallback for lazy routes
 const PageLoader = () => (
@@ -77,6 +78,7 @@ export default function App() {
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:slug" element={<BlogPostDetail />} />
                   <Route path="/galeria" element={<Gallery />} />
+                  <Route path="/viaje-a-marruecos" element={<TravelGuide />} />
                   
                   {/* Legal Routes */}
                   <Route path="/privacidad" element={<PrivacyPolicy />} />
