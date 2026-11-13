@@ -96,3 +96,10 @@
 - (2ª tanda) Fuentes de Google cargadas sin bloquear el renderizado (`display=optional`, sin saltos de diseño); `srcset`/`sizes` en las fotos de destinos, tours y galería de la portada para no descargar fotos más grandes de lo que se ven; caché de 30 días en Vercel para `/images/*`, iconos PWA y favicon.
 - (3ª tanda) `Layout.tsx`: `AnimatePresence initial={false}` — la primera página ya no aparece desde opacidad 0 (retrasaba el LCP); la transición entre páginas se mantiene. `prerender-seo.mjs`: `modulepreload` del código de la portada (`Home-*.js`) en `/`.
 - (4ª tanda) Supabase (~190 KB de JS) se carga en diferido (`src/lib/supabaseLazy.ts`, usado por `dbService` y `AuthContext`): ya no está en la ruta crítica de la primera pintura. `AdminLogin` sigue importándolo directamente (página de admin, carga diferida).
+
+---
+
+### Galería de tours: fotos grises (13/11/2026)
+- `src/pages/TourDetail.tsx`: la galería de 5 fotos usaba `loremflickr.com` como relleno cuando el tour tenía menos de 5 fotos; ese servicio ya no sirve fotos y salían cuadros grises («Gallery 1…4»).
+- Ahora la galería = foto principal + fotos propias del tour (sin repetir; antes `gallery[0]` nunca se mostraba si había foto principal) y, si faltan, se rellena con fotos reales de otros tours activos.
+- Si la versión optimizada de una foto falla, se carga la original; si también falla, se oculta en lugar de mostrar el icono roto.

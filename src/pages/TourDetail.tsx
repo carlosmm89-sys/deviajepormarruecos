@@ -46,6 +46,8 @@ export default function TourDetail() {
   const navigate = useNavigate();
   const [tour, setTour] = useState<Tour | null>(null);
   const [relatedTours, setRelatedTours] = useState<Tour[]>([]);
+  // Fotos de otros tours para rellenar la galería si este tour tiene menos de 5 fotos propias
+  const [fillerImages, setFillerImages] = useState<string[]>([]);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('descripcion');
@@ -96,6 +98,12 @@ export default function TourDetail() {
           const allTours = await dbService.getTours();
           const rt = allTours.filter(x => x.id !== t.id && x.is_active && x.category === t.category);
           setRelatedTours(rt.sort(() => 0.5 - Math.random()).slice(0, 3));
+          setFillerImages(
+            allTours
+              .filter(x => x.id !== t.id && x.is_active)
+              .flatMap(x => [x.featured_image, ...(x.gallery || [])])
+              .filter((u): u is string => !!u && !u.includes('loremflickr'))
+          );
           
           const posts = await dbService.getBlogPosts();
           const rel = posts.filter(p => p.category !== 'Actividades').sort(() => 0.5 - Math.random());
@@ -115,13 +123,29 @@ export default function TourDetail() {
     ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const fullGallery = tour ? [
-    tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/1200/800/morocco,sahara?lock=200',
-    tour.gallery?.[1] || 'https://loremflickr.com/1200/800/morocco,riad?lock=201',
-    tour.gallery?.[2] || 'https://loremflickr.com/1200/800/morocco,fez?lock=202',
-    tour.gallery?.[3] || 'https://loremflickr.com/1200/800/morocco,kasbah?lock=203',
-    tour.gallery?.[4] || 'https://loremflickr.com/1200/800/morocco,atlas?lock=204'
-  ] : [];
+  // Galería: foto principal + fotos propias del tour (sin repetir); si faltan, se rellenan con fotos reales de otros tours.
+  // (Antes se usaba loremflickr.com como relleno, pero ese servicio ya no sirve fotos y salían cuadros grises.)
+  const fullGallery: string[] = (() => {
+    if (!tour) return [];
+    const own = [tour.featured_image, ...(tour.gallery || [])].filter((u): u is string => !!u && !u.includes('loremflickr'));
+    const unique = Array.from(new Set(own));
+    for (const u of fillerImages) {
+      if (unique.length >= 5) break;
+      if (!unique.includes(u)) unique.push(u);
+    }
+    return unique;
+  })();
+
+  // Si la versión optimizada de una foto falla, se carga la original; si también falla, se oculta.
+  const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>, original?: string) => {
+    const img = e.currentTarget;
+    if (original && img.dataset.fallback !== '1' && img.src !== original) {
+      img.dataset.fallback = '1';
+      img.src = original;
+    } else {
+      img.style.visibility = 'hidden';
+    }
+  };
 
   const openGallery = (idx: number) => {
     setGalleryIndex(idx);
@@ -230,13 +254,7 @@ export default function TourDetail() {
       <ReviewsModal isOpen={isReviewsOpen} onClose={() => setIsReviewsOpen(false)} />
       <ImageGalleryModal 
         isOpen={isGalleryOpen}
-        images={[
-          tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/1200/800/morocco,sahara?lock=200',
-          tour.gallery?.[1] || 'https://loremflickr.com/1200/800/morocco,riad?lock=201',
-          tour.gallery?.[2] || 'https://loremflickr.com/1200/800/morocco,fez?lock=202',
-          tour.gallery?.[3] || 'https://loremflickr.com/1200/800/morocco,kasbah?lock=203',
-          tour.gallery?.[4] || 'https://loremflickr.com/1200/800/morocco,atlas?lock=204'
-        ]}
+        images={fullGallery}
         initialIndex={galleryIndex}
         onClose={() => setIsGalleryOpen(false)}
       />
@@ -244,27 +262,27 @@ export default function TourDetail() {
       <section className="max-w-[1600px] mx-auto p-2 md:p-4 mt-4">
         <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-2 md:gap-3 h-[40vh] md:h-[65vh] rounded-3xl overflow-hidden relative group">
           <div className="md:col-span-2 row-span-2 relative cursor-pointer overflow-hidden" onClick={() => openGallery(0)}>
-            <img src={optImg(fullGallery[0], 1400)} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Principal" referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[0], 1400)} onError={(e) => handleImgError(e, fullGallery[0])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Principal" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
           
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(1)}>
-            <img src={optImg(fullGallery[1], 800)} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 1" referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[1], 800)} onError={(e) => handleImgError(e, fullGallery[1])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 1" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(2)}>
-            <img src={optImg(fullGallery[2], 800)} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 2" referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[2], 800)} onError={(e) => handleImgError(e, fullGallery[2])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 2" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(3)}>
-            <img src={optImg(fullGallery[3], 800)} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 3" referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[3], 800)} onError={(e) => handleImgError(e, fullGallery[3])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 3" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(4)}>
-            <img src={optImg(fullGallery[4], 800)} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 4" referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[4], 800)} onError={(e) => handleImgError(e, fullGallery[4])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Gallery 4" referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
