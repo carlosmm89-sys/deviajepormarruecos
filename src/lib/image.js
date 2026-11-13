@@ -43,7 +43,7 @@ export function optImg(url, width = 800, quality = 80) {
  * @param {number} [quality]
  * @returns {string | undefined}
  */
-export function optSrcSet(url, widths = [480, 768, 1024, 1600], quality = 80) {
+export function optSrcSet(url, widths = [640, 960, 1600], quality = 70) {
   if (!url) return undefined;
   if (!/\.supabase\.co\/storage\/v1\/object\/public\/|images\.unsplash\.com\//.test(url)) return undefined;
   return widths.map(w => `${optImg(url, w, quality)} ${w}w`).join(', ');
