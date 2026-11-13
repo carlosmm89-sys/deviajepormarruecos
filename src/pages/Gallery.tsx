@@ -6,7 +6,9 @@ import SEO from '../components/SEO';
 import { Maximize2, X } from 'lucide-react';
 import { optImg } from '../lib/image';
 
+import { useTranslation } from '../hooks/useTranslation';
 export default function Gallery() {
+  const { tr, currentLanguage } = useTranslation();
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
@@ -37,17 +39,17 @@ export default function Gallery() {
   return (
     <div className="min-h-screen bg-white pb-24">
       <SEO 
-        title="Marruecos en imágenes: fotos de nuestros viajes"
-        description="Explora las maravillas de Marruecos a través de nuestra galería de fotografías exclusivas de viajes: desierto, medinas, montañas y cultura."
+        title={tr({ es: 'Marruecos en imágenes: fotos de nuestros viajes', en: 'Morocco in pictures: photos from our trips', fr: 'Le Maroc en images : photos de nos voyages' })}
+        description={tr({ es: 'Explora las maravillas de Marruecos a través de nuestra galería de fotografías exclusivas de viajes: desierto, medinas, montañas y cultura.', en: 'Explore the wonders of Morocco through our gallery of exclusive travel photos: desert, medinas, mountains and culture.', fr: 'Explorez les merveilles du Maroc à travers notre galerie de photos de voyage : désert, médinas, montagnes et culture.' })}
         url="/galeria"
       />
 
       {/* Header */}
       <section className="bg-brand-blue/5 py-24 px-4">
         <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900 leading-tight">Marruecos en<br/>Imágenes</h1>
+          <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900 leading-tight">{tr({ es: 'Marruecos en', en: 'Morocco in', fr: 'Le Maroc en' })}<br/>{tr({ es: 'Imágenes', en: 'pictures', fr: 'images' })}</h1>
           <p className="text-xl text-gray-600 font-light max-w-2xl mx-auto">
-            Fotos de nuestros viajes por Marruecos: rincones ocultos, colores vibrantes y la majestuosidad de un país que cautiva el alma.
+            {tr({ es: 'Fotos de nuestros viajes por Marruecos: rincones ocultos, colores vibrantes y la majestuosidad de un país que cautiva el alma.', en: 'Photos from our trips around Morocco: hidden corners, vibrant colours and the majesty of a country that captivates the soul.', fr: 'Photos de nos voyages au Maroc : recoins cachés, couleurs vibrantes et la majesté d’un pays qui captive l’âme.' })}
           </p>
         </div>
       </section>
@@ -56,7 +58,7 @@ export default function Gallery() {
       <section className="max-w-[1600px] mx-auto px-4 mt-16">
         {images.length === 0 ? (
           <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
-            <p className="text-gray-500 font-medium">La galería se está actualizando. Vuelve pronto para ver nuevas fotos.</p>
+            <p className="text-gray-500 font-medium">{tr({ es: 'La galería se está actualizando. Vuelve pronto para ver nuevas fotos.', en: 'The gallery is being updated. Come back soon to see new photos.', fr: 'La galerie est en cours de mise à jour. Revenez bientôt pour voir de nouvelles photos.' })}</p>
           </div>
         ) : (
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
@@ -72,7 +74,7 @@ export default function Gallery() {
               >
                 <img 
                   src={optImg(img.image_url, 800)} 
-                  alt={img.title || 'Marruecos Paisaje'} 
+                  alt={img.title || tr({ es: 'Marruecos Paisaje', en: 'Moroccan landscape', fr: 'Paysage marocain' })} 
                   className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
                 />
@@ -109,7 +111,7 @@ export default function Gallery() {
           
           <img 
             src={optImg(selectedImage.image_url, 1600)} 
-            alt={selectedImage.title || 'Marruecos Expanded'}
+            alt={selectedImage.title || tr({ es: 'Marruecos Expanded', en: 'Morocco', fr: 'Maroc' })}
             className="max-w-full max-h-full object-contain rounded-lg"
             onClick={(e) => e.stopPropagation()} 
           />

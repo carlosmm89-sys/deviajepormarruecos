@@ -1,3 +1,4 @@
+import { useTranslation } from '../hooks/useTranslation';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { dbService } from '../services/dbService';
@@ -6,6 +7,7 @@ import { MapPin, Calendar, Clock, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function HeroSearch() {
+  const { tr } = useTranslation();
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [selectedDest, setSelectedDest] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -48,9 +50,9 @@ export default function HeroSearch() {
   };
 
   const getDestLabel = () => {
-    if (!selectedDest) return '¿A dónde vamos?';
-    if (selectedDest === 'all') return 'Cualquier destino';
-    return destinations.find(d => d.id === selectedDest)?.name || '¿A dónde vamos?';
+    if (!selectedDest) return tr({ es: '¿A dónde vamos?', en: 'Where are we going?', fr: 'Où allons-nous ?' });
+    if (selectedDest === 'all') return tr({ es: 'Cualquier destino', en: 'Any destination', fr: 'N’importe quelle destination' });
+    return destinations.find(d => d.id === selectedDest)?.name || tr({ es: '¿A dónde vamos?', en: 'Where are we going?', fr: 'Où allons-nous ?' });
   };
 
   return (
@@ -60,7 +62,7 @@ export default function HeroSearch() {
         {/* DESTINO */}
         <div className="flex-1 w-full p-4 relative group cursor-pointer" onClick={() => setActiveDropdown(activeDropdown === 'dest' ? null : 'dest')}>
           <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 cursor-pointer">
-            Destino
+            {tr({ es: 'Destino', en: 'Destination', fr: 'Destination' })}
           </label>
           <div className="flex items-center gap-2">
             <div className={`w-full bg-transparent font-semibold text-lg truncate ${selectedDest ? 'text-gray-900' : 'text-gray-400'}`}>
@@ -81,7 +83,7 @@ export default function HeroSearch() {
                   className="px-6 py-3 hover:bg-brand-primary/5 cursor-pointer text-gray-700 hover:text-brand-primary font-medium transition-colors"
                   onClick={() => setSelectedDest('all')}
                 >
-                  Cualquier destino
+                  {tr({ es: 'Cualquier destino', en: 'Any destination', fr: 'N’importe quelle destination' })}
                 </div>
                 {destinations.map(d => (
                   <div
@@ -101,7 +103,7 @@ export default function HeroSearch() {
         <div className="flex-[1.5] w-full p-4 relative group flex items-center justify-between gap-4">
           <div className="flex-1">
             <label htmlFor="hero-fecha-ida" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">
-              Ida
+              {tr({ es: 'Ida', en: 'Departure', fr: 'Aller' })}
             </label>
             <input
               id="hero-fecha-ida"
@@ -115,7 +117,7 @@ export default function HeroSearch() {
           <div className="w-px h-8 bg-gray-200" />
           <div className="flex-1">
             <label htmlFor="hero-fecha-vuelta" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">
-              Vuelta
+              {tr({ es: 'Vuelta', en: 'Return', fr: 'Retour' })}
             </label>
             <input
               id="hero-fecha-vuelta"
@@ -135,7 +137,7 @@ export default function HeroSearch() {
             className="w-full md:w-auto bg-[#8C4A2D] hover:bg-[#703B24] text-white font-bold tracking-widest uppercase text-sm px-8 py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
           >
             <MapPin className="w-4 h-4" />
-            Explorar
+            {tr({ es: 'Explorar', en: 'Explore', fr: 'Explorer' })}
           </button>
         </div>
 

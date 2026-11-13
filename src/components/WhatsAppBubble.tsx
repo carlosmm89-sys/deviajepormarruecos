@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MessageCircle, X } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { dbService } from '../services/dbService';
+import { useTranslation } from '../hooks/useTranslation';
 
 // Número por defecto mientras llegan los ajustes (o si fallan), para que el botón salga siempre desde el primer momento.
 const DEFAULT_NUMBER = '+34 604 48 82 23';
@@ -14,6 +15,7 @@ function wasDismissed() {
 }
 
 export default function WhatsAppBubble() {
+  const { tr, currentLanguage } = useTranslation();
   const boot = typeof window !== 'undefined' ? (window as any).__BIZ__ : null;
   const [phoneNumber, setPhoneNumber] = useState<string>(boot?.whatsapp_number || DEFAULT_NUMBER);
   const [welcomeMessage, setWelcomeMessage] = useState<string>(boot?.whatsapp_welcome_message || DEFAULT_MESSAGE);
@@ -56,7 +58,9 @@ export default function WhatsAppBubble() {
   };
 
   const cleanNumber = phoneNumber.replace(/[^0-9]/g, '');
-  const waUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(welcomeMessage)}`;
+  // En inglés y francés el mensaje que se envía por WhatsApp va en ese idioma
+  const message = currentLanguage === 'es' ? welcomeMessage : tr({ es: '', en: 'Hello! I would like information to plan a trip to Morocco.', fr: 'Bonjour ! J’aimerais recevoir des informations pour organiser un voyage au Maroc.' });
+  const waUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
   // En la ficha de un tour (móvil) hay una barra fija de reserva abajo: el botón se coloca encima de ella.
   const aboveBookingBar = /^\/tours\/[^/]+/.test(pathname);
 
@@ -67,19 +71,19 @@ export default function WhatsAppBubble() {
       {showInvite && (
         <div
           role="dialog"
-          aria-label="Mensaje de Vivir Marruecos"
+          aria-label={tr({ es: 'Mensaje de Vivir Marruecos', en: 'Message from Vivir Marruecos', fr: 'Message de Vivir Marruecos' })}
           className="relative w-[280px] sm:w-[320px] bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.18)] border border-gray-100 overflow-hidden animate-fade-in-up"
         >
           <div className="flex items-center gap-3 bg-[#075E54] px-4 py-3 text-white">
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 font-serif font-bold text-sm">VM</span>
             <div className="leading-tight">
               <p className="font-semibold text-sm">Vivir Marruecos</p>
-              <p className="text-[11px] text-white/80">Te respondemos lo antes posible</p>
+              <p className="text-[11px] text-white/80">{tr({ es: 'Te respondemos lo antes posible', en: 'We reply as soon as possible', fr: 'Nous répondons dès que possible' })}</p>
             </div>
             <button
               type="button"
               onClick={closeInvite}
-              aria-label="Cerrar mensaje"
+              aria-label={tr({ es: 'Cerrar mensaje', en: 'Close message', fr: 'Fermer le message' })}
               className="ml-auto rounded-full p-1 text-white/80 hover:bg-white/15 hover:text-white transition-colors"
             >
               <X className="h-4 w-4" />
@@ -87,8 +91,8 @@ export default function WhatsAppBubble() {
           </div>
           <div className="bg-[#ECE5DD] px-4 py-4">
             <div className="relative max-w-[92%] rounded-xl rounded-tl-none bg-white px-3.5 py-2.5 text-sm text-gray-800 shadow-sm">
-              <p className="font-semibold">¡Hola! 😊</p>
-              <p className="mt-1">Cuéntanos más y te ayudamos a planificar tu viaje.</p>
+              <p className="font-semibold">{tr({ es: '¡Hola! 😊', en: 'Hello! 😊', fr: 'Bonjour ! 😊' })}</p>
+              <p className="mt-1">{tr({ es: 'Cuéntanos más y te ayudamos a planificar tu viaje.', en: 'Tell us more and we will help you plan your trip.', fr: 'Dites-nous en plus et nous vous aiderons à organiser votre voyage.' })}</p>
             </div>
           </div>
           <div className="px-4 py-3">
@@ -100,7 +104,7 @@ export default function WhatsAppBubble() {
               className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#1ebe5a] transition-colors"
             >
               <MessageCircle className="h-4 w-4" strokeWidth={2.5} />
-              Escribir por WhatsApp
+              {tr({ es: 'Escribir por WhatsApp', en: 'Write on WhatsApp', fr: 'Écrire sur WhatsApp' })}
             </a>
           </div>
         </div>
@@ -110,7 +114,7 @@ export default function WhatsAppBubble() {
         href={waUrl}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Escríbenos por WhatsApp"
+        aria-label={tr({ es: 'Escríbenos por WhatsApp', en: 'Message us on WhatsApp', fr: 'Écrivez-nous sur WhatsApp' })}
         className="relative flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_6px_24px_rgba(37,211,102,0.45)] hover:bg-[#1ebe5a] hover:scale-105 transition-all duration-300"
       >
         <MessageCircle className="h-7 w-7 md:h-8 md:w-8" strokeWidth={2.25} />

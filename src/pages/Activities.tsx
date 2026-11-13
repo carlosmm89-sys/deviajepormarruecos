@@ -8,7 +8,9 @@ import SEO from '../components/SEO';
 import { ACTIVITIES_EXTRA } from '../data/seoContent';
 import { optImg } from '../lib/image';
 
+import { useTranslation } from '../hooks/useTranslation';
 export default function Activities() {
+  const { tr, currentLanguage } = useTranslation();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,17 +41,17 @@ export default function Activities() {
   return (
     <div className="bg-gray-50/50 min-h-screen pb-24">
       <SEO 
-        title="Actividades en Marruecos | Vivir Marruecos"
-        description="Complementa tu viaje con actividades únicas: paseos en globo, quads en el desierto, rutas en camello y mucho más."
+        title={tr({ es: 'Actividades en Marruecos | Vivir Marruecos', en: 'Activities in Morocco | Vivir Marruecos', fr: 'Activités au Maroc | Vivir Marruecos' })}
+        description={tr({ es: 'Complementa tu viaje con actividades únicas: paseos en globo, quads en el desierto, rutas en camello y mucho más.', en: 'Complete your trip with unique activities: balloon rides, desert quads, camel rides and much more.', fr: 'Complétez votre voyage avec des activités uniques : montgolfière, quads dans le désert, balades à dromadaire et bien plus.' })}
         url="/actividades"
       />
       {/* Header */}
       <section className="bg-white border-b border-gray-100 py-20 px-4">
         <div className="max-w-7xl mx-auto text-center space-y-4">
-          <p className="text-brand-accent font-bold uppercase tracking-widest text-sm">Experiencias Únicas</p>
-          <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900">Actividades en Marruecos</h1>
-          <p className="text-gray-500 max-w-2xl mx-auto text-lg pt-4">Descubre y añade actividades exclusivas a tu aventura. Desde un increíble vuelo en globo hasta recorrer las dunas en quad o dormir bajo las estrellas del Sahara.</p>
-          <p className="text-gray-500 max-w-2xl mx-auto text-base">{ACTIVITIES_EXTRA}</p>
+          <p className="text-brand-accent font-bold uppercase tracking-widest text-sm">{tr({ es: 'Experiencias Únicas', en: 'Unique experiences', fr: 'Expériences uniques' })}</p>
+          <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900">{tr({ es: 'Actividades en Marruecos', en: 'Activities in Morocco', fr: 'Activités au Maroc' })}</h1>
+          <p className="text-gray-500 max-w-2xl mx-auto text-lg pt-4">{tr({ es: 'Descubre y añade actividades exclusivas a tu aventura. Desde un increíble vuelo en globo hasta recorrer las dunas en quad o dormir bajo las estrellas del Sahara.', en: 'Discover and add exclusive activities to your adventure, from an amazing balloon flight to riding the dunes on a quad or sleeping under the Sahara stars.', fr: 'Découvrez et ajoutez des activités exclusives à votre aventure : d’un incroyable vol en montgolfière à une virée en quad dans les dunes ou une nuit sous les étoiles du Sahara.' })}</p>
+          <p className="text-gray-500 max-w-2xl mx-auto text-base">{tr({ es: ACTIVITIES_EXTRA, en: 'All activities are organised with trusted local guides and companies in Merzouga and Marrakech. You can book them on their own or add them to any of our private tours: we help you fit them into your itinerary to make the most of every day.', fr: 'Toutes les activités sont organisées avec des guides et des entreprises locales de confiance à Merzouga et Marrakech. Vous pouvez les réserver seules ou les ajouter à l’un de nos circuits privés : nous vous aidons à les intégrer à votre itinéraire pour profiter pleinement de chaque journée.' })}</p>
         </div>
       </section>
 
@@ -73,14 +75,14 @@ export default function Activities() {
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute top-4 left-4 bg-brand-accent text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-                  Actividad Extra
+                  {tr({ es: 'Actividad Extra', en: 'Extra activity', fr: 'Activité en option' })}
                 </div>
               </Link>
               <div className="p-8 flex flex-col flex-1">
                 <div className="flex items-center gap-4 text-xs font-semibold text-gray-400 mb-4 h-5">
-                  <div className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> Marruecos</div>
+                  <div className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> {tr({ es: 'Marruecos', en: 'Morocco', fr: 'Maroc' })}</div>
                   <div className="w-1 h-1 bg-gray-200 rounded-full" />
-                  <div className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> Disponible Todo el Año</div>
+                  <div className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> {tr({ es: 'Disponible Todo el Año', en: 'Available all year', fr: 'Disponible toute l’année' })}</div>
                 </div>
                 
                 <Link to={`/blog/${post.slug}`}>
@@ -106,7 +108,7 @@ export default function Activities() {
 
           {posts.length === 0 && (
             <div className="col-span-full py-20 text-center">
-              <h3 className="text-xl font-medium text-gray-500">Aún no hay actividades publicadas.</h3>
+              <h3 className="text-xl font-medium text-gray-500">{tr({ es: 'Aún no hay actividades publicadas.', en: 'No activities published yet.', fr: 'Aucune activité publiée pour le moment.' })}</h3>
             </div>
           )}
         </div>

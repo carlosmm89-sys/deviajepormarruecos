@@ -1,3 +1,4 @@
+import { useTranslation } from '../hooks/useTranslation';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Destination } from '../types';
@@ -8,6 +9,7 @@ import SEO from '../components/SEO';
 import { optImg } from '../lib/image';
 
 export default function Destinations() {
+  const { tr } = useTranslation();
   const [destinations, setDestinations] = useState<Destination[]>([]);
 
   useEffect(() => {
@@ -25,14 +27,14 @@ export default function Destinations() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-24 space-y-16">
       <SEO 
-        title="Destinos en Marruecos | Vivir Marruecos"
-        description="Descubre la esencia de Marruecos a través de nuestras ciudades más emblemáticas. Un viaje a través del desierto, la costa y atlas."
+        title={tr({ es: 'Destinos en Marruecos | Vivir Marruecos', en: 'Destinations in Morocco | Vivir Marruecos', fr: 'Destinations au Maroc | Vivir Marruecos' })}
+        description={tr({ es: 'Descubre la esencia de Marruecos a través de nuestras ciudades más emblemáticas. Un viaje a través del desierto, la costa y atlas.', en: 'Discover the essence of Morocco through its most iconic places: the desert, the coast and the Atlas.', fr: 'Découvrez l’essence du Maroc à travers ses lieux les plus emblématiques : le désert, la côte et l’Atlas.' })}
         url="/destinations"
       />
       <div className="text-center space-y-4">
-        <h1 className="text-5xl md:text-7xl font-serif font-bold">Destinos en Marruecos</h1>
+        <h1 className="text-5xl md:text-7xl font-serif font-bold">{tr({ es: 'Destinos en Marruecos', en: 'Destinations in Morocco', fr: 'Destinations au Maroc' })}</h1>
         <p className="text-xl text-gray-500 max-w-2xl mx-auto">
-          Descubre la esencia de Marruecos a través de nuestras ciudades más emblemáticas.
+          {tr({ es: 'Descubre la esencia de Marruecos a través de nuestras ciudades más emblemáticas.', en: 'Discover the essence of Morocco through its most iconic places.', fr: 'Découvrez l’essence du Maroc à travers ses lieux les plus emblématiques.' })}
         </p>
       </div>
 
@@ -72,7 +74,7 @@ export default function Destinations() {
         ))}
         {destinations.length === 0 && (
           <div className="col-span-full py-20 text-center text-gray-400 border-2 border-dashed border-gray-100 rounded-3xl">
-            No hay destinos disponibles aún.
+            {tr({ es: 'No hay destinos disponibles aún.', en: 'No destinations available yet.', fr: 'Aucune destination disponible pour le moment.' })}
           </div>
         )}
       </div>

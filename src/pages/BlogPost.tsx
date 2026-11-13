@@ -9,7 +9,9 @@ import SEO from '../components/SEO';
 import { tourPath } from '../data/seoContent';
 import { optImg } from '../lib/image';
 
+import { useTranslation } from '../hooks/useTranslation';
 export default function BlogPostDetail() {
+  const { tr, currentLanguage } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [toc, setToc] = useState<{ id: string, text: string, level: number }[]>([]);
@@ -66,8 +68,8 @@ export default function BlogPostDetail() {
   if (!post) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center space-y-4 bg-gray-50/50">
-        <h2 className="text-2xl font-bold">Artículo no encontrado</h2>
-        <Link to="/blog" className="btn-primary">Volver al blog</Link>
+        <h2 className="text-2xl font-bold">{tr({ es: 'Artículo no encontrado', en: 'Article not found', fr: 'Article introuvable' })}</h2>
+        <Link to="/blog" className="btn-primary">{tr({ es: 'Volver al blog', en: 'Back to the blog', fr: 'Retour au blog' })}</Link>
       </div>
     );
   }
@@ -117,7 +119,7 @@ export default function BlogPostDetail() {
       <section className="relative pt-24 pb-32 px-4 overflow-hidden bg-white border-b border-gray-100">
         <div className="max-w-4xl mx-auto relative z-10 text-center space-y-8">
           <Link to="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-brand-accent transition-colors text-sm font-bold uppercase tracking-wider mb-4 group justify-center">
-            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" /> Volver al Blog
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" /> {tr({ es: 'Volver al Blog', en: 'Back to the blog', fr: 'Retour au blog' })}
           </Link>
           <h1 className="text-4xl md:text-6xl font-serif font-bold text-gray-900 leading-tight">
             {post.title}
@@ -128,7 +130,7 @@ export default function BlogPostDetail() {
               <User className="w-4 h-4" /> {post.author}
             </div>
             <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full">
-              <Calendar className="w-4 h-4" /> {new Date(post.published_at).toLocaleDateString('es-ES', { month: 'long', day: 'numeric', year: 'numeric' })}
+              <Calendar className="w-4 h-4" /> {new Date(post.published_at).toLocaleDateString(currentLanguage === 'en' ? 'en-GB' : currentLanguage === 'fr' ? 'fr-FR' : 'es-ES', { month: 'long', day: 'numeric', year: 'numeric' })}
             </div>
           </div>
         </div>
@@ -149,7 +151,7 @@ export default function BlogPostDetail() {
           
           {toc.length > 0 && (
             <div className="mb-12 bg-gray-50/50 p-8 rounded-3xl border border-gray-100">
-              <h3 className="text-xl font-bold font-serif text-gray-900 mb-6">Índice de contenido</h3>
+              <h3 className="text-xl font-bold font-serif text-gray-900 mb-6">{tr({ es: 'Índice de contenido', en: 'Contents', fr: 'Sommaire' })}</h3>
               <ul className="space-y-3">
                 {toc.map((item, idx) => (
                   <li key={idx} className={item.level === 3 ? 'ml-6' : ''}>
@@ -183,7 +185,7 @@ export default function BlogPostDetail() {
               className="px-6 py-3 bg-gray-50 hover:bg-gray-100 text-gray-900 font-bold rounded-xl transition-colors flex items-center gap-2"
             >
               <Share2 className="w-4 h-4" /> 
-              <span className="hidden sm:inline">Compartir Artículo</span>
+              <span className="hidden sm:inline">{tr({ es: 'Compartir Artículo', en: 'Share article', fr: 'Partager l’article' })}</span>
             </button>
           </div>
         </div>
@@ -192,8 +194,8 @@ export default function BlogPostDetail() {
       {relatedTours.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 mt-24 mb-12">
           <div className="flex items-center justify-between mb-12">
-            <h2 className="text-3xl font-serif font-bold text-gray-900">Tours Recomendados</h2>
-            <Link to="/tours" className="text-brand-accent font-bold hover:text-[#d36631] transition-colors">Ver todos →</Link>
+            <h2 className="text-3xl font-serif font-bold text-gray-900">{tr({ es: 'Tours Recomendados', en: 'Recommended tours', fr: 'Circuits recommandés' })}</h2>
+            <Link to="/tours" className="text-brand-accent font-bold hover:text-[#d36631] transition-colors">{tr({ es: 'Ver todos →', en: 'View all →', fr: 'Tout voir →' })}</Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {relatedTours.map((tour, idx) => (
@@ -218,11 +220,11 @@ export default function BlogPostDetail() {
                       <div className="flex items-center gap-6 text-gray-500 text-sm flex-wrap">
                       <div className="flex items-center gap-2">
                           <MapPin className="w-4 h-4" />
-                          <span className="truncate">{tour.departure_city || 'Varios destinos'}</span>
+                          <span className="truncate">{tour.departure_city || tr({ es: 'Varios destinos', en: 'Several destinations', fr: 'Plusieurs destinations' })}</span>
                       </div>
                       <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
-                          <span>{tour.itinerary_summary || 'Varios días'}</span>
+                          <span>{tour.itinerary_summary || tr({ es: 'Varios días', en: 'Several days', fr: 'Plusieurs jours' })}</span>
                       </div>
                       </div>
                   </div>
@@ -237,8 +239,8 @@ export default function BlogPostDetail() {
       {relatedPosts.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 mt-24 mb-12">
           <div className="flex items-center justify-between mb-12">
-            <h2 className="text-3xl font-serif font-bold text-gray-900">Noticias Relevantes</h2>
-            <Link to="/blog" className="text-brand-accent font-bold hover:text-[#d36631] transition-colors">Ver todas →</Link>
+            <h2 className="text-3xl font-serif font-bold text-gray-900">{tr({ es: 'Noticias Relevantes', en: 'Related articles', fr: 'Articles liés' })}</h2>
+            <Link to="/blog" className="text-brand-accent font-bold hover:text-[#d36631] transition-colors">{tr({ es: 'Ver todas →', en: 'View all →', fr: 'Tout voir →' })}</Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {relatedPosts.map(related => (
@@ -264,8 +266,8 @@ export default function BlogPostDetail() {
                     {related.excerpt}
                   </p>
                   <div className="mt-auto pt-4 border-t border-gray-50 flex justify-between items-center text-xs font-bold text-gray-400">
-                    <span>{new Date(related.published_at).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                    <span className="text-gray-900 group-hover:text-brand-accent transition-colors">Leer Artículo &rarr;</span>
+                    <span>{new Date(related.published_at).toLocaleDateString(currentLanguage === 'en' ? 'en-GB' : currentLanguage === 'fr' ? 'fr-FR' : 'es-ES', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    <span className="text-gray-900 group-hover:text-brand-accent transition-colors">{tr({ es: 'Leer Artículo →', en: 'Read article →', fr: 'Lire l’article →' })}</span>
                   </div>
                 </div>
               </Link>

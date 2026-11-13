@@ -7,6 +7,23 @@ import {
   X, MapPin, Calendar, Users, Mail, ArrowRight, ArrowLeft, Send, Sparkles
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from '../hooks/useTranslation';
+
+// Opciones del formulario: el valor se guarda en español (lo lee el equipo); se muestran traducidas.
+const OPTION_LABELS: Record<string, { en: string; fr: string }> = {
+  'Desierto del Sahara': { en: 'Sahara Desert', fr: 'Désert du Sahara' },
+  'Norte de Marruecos': { en: 'Northern Morocco', fr: 'Nord du Maroc' },
+  'Ciudades Imperiales': { en: 'Imperial cities', fr: 'Villes impériales' },
+  'Costa Atlántica': { en: 'Atlantic coast', fr: 'Côte atlantique' },
+  'Gran Tour de Marruecos': { en: 'Grand tour of Morocco', fr: 'Grand tour du Maroc' },
+  'Mixto / Aún no lo sé': { en: 'Mixed / Not sure yet', fr: 'Mixte / Je ne sais pas encore' },
+  'Paseo en Camello / Noche en jaima': { en: 'Camel ride / Night in a tent', fr: 'Balade à dromadaire / Nuit sous la tente' },
+  'Quad o Buggy': { en: 'Quad or buggy', fr: 'Quad ou buggy' },
+  'Vuelo en Globo Aerostático': { en: 'Hot-air balloon flight', fr: 'Vol en montgolfière' },
+  'Trekking guiado': { en: 'Guided trekking', fr: 'Trekking guidé' },
+  'Hammám Spa Tradicional': { en: 'Traditional hammam spa', fr: 'Hammam traditionnel' },
+  'Guía Histórico / Cultural': { en: 'Historical / cultural guide', fr: 'Guide historique / culturel' },
+};
 
 interface QuoteWizardProps {
   isOpen: boolean;
@@ -15,6 +32,8 @@ interface QuoteWizardProps {
 }
 
 export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardProps) {
+  const { tr, currentLanguage } = useTranslation();
+  const optLabel = (v: string) => currentLanguage === 'es' ? v : ((OPTION_LABELS[v] as any)?.[currentLanguage] || v);
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -86,7 +105,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
       setIsSuccess(true);
     } catch (error) {
        console.error(error);
-       toast.error('Ocurrió un error. Inténtalo de nuevo.');
+       toast.error(tr({ es: 'Ocurrió un error. Inténtalo de nuevo.', en: 'Something went wrong. Please try again.', fr: 'Une erreur est survenue. Réessayez.' }));
     } finally {
       setIsSubmitting(false);
     }
@@ -103,8 +122,8 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
         {/* Header */}
         <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between z-10 bg-white">
           <div>
-            <h2 className="text-xl font-bold font-serif text-gray-900 leading-tight">Diseña tu Viaje a Medida</h2>
-            {!isSuccess && <p className="text-sm text-gray-500 font-medium mt-1">Paso {step} de 5</p>}
+            <h2 className="text-xl font-bold font-serif text-gray-900 leading-tight">{tr({ es: 'Diseña tu Viaje a Medida', en: 'Design your tailor-made trip', fr: 'Créez votre voyage sur mesure' })}</h2>
+            {!isSuccess && <p className="text-sm text-gray-500 font-medium mt-1">{tr({ es: 'Paso', en: 'Step', fr: 'Étape' })} {step} {tr({ es: 'de', en: 'of', fr: 'sur' })} 5</p>}
           </div>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <X className="w-5 h-5 text-gray-500" />
@@ -135,11 +154,11 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                     <Send className="w-10 h-10 text-green-500" />
                 </div>
                 <div>
-                  <h3 className="text-3xl font-bold font-serif text-gray-900 mb-2">¡Solicitud Enviada!</h3>
-                  <p className="text-gray-500">Nuestro equipo experto en Marruecos revisará tus preferencias y te contactará en menos de 24 horas con una propuesta a medida.</p>
+                  <h3 className="text-3xl font-bold font-serif text-gray-900 mb-2">{tr({ es: '¡Solicitud Enviada!', en: 'Request sent!', fr: 'Demande envoyée !' })}</h3>
+                  <p className="text-gray-500">{tr({ es: 'Nuestro equipo experto en Marruecos revisará tus preferencias y te contactará en menos de 24 horas con una propuesta a medida.', en: 'Our Morocco experts will review your preferences and contact you within 24 hours with a tailor-made proposal.', fr: 'Nos experts du Maroc étudieront vos préférences et vous contacteront sous 24 heures avec une proposition sur mesure.' })}</p>
                 </div>
                 <button onClick={onClose} className="mt-8 btn-primary px-8 relative z-50">
-                  Volver a la Web
+                  {tr({ es: 'Volver a la Web', en: 'Back to the website', fr: 'Retour au site' })}
                 </button>
               </motion.div>
             ) : (
@@ -155,7 +174,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 text-brand-primary mb-6">
                       <MapPin className="w-6 h-6" />
-                      <h3 className="text-2xl font-bold">¿Qué zona te gustaría explorar?</h3>
+                      <h3 className="text-2xl font-bold">{tr({ es: '¿Qué zona te gustaría explorar?', en: 'Which area would you like to explore?', fr: 'Quelle région aimeriez-vous explorer ?' })}</h3>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {destinations.map(d => (
@@ -168,7 +187,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                             : 'border-gray-200 bg-white hover:border-gray-300 text-gray-700 hover:shadow-sm'
                           }`}
                         >
-                          {d}
+                          {optLabel(d)}
                         </button>
                       ))}
                     </div>
@@ -179,12 +198,12 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 text-brand-primary mb-6">
                       <Calendar className="w-6 h-6" />
-                      <h3 className="text-2xl font-bold">¿Cuándo tienes pensado viajar?</h3>
+                      <h3 className="text-2xl font-bold">{tr({ es: '¿Cuándo tienes pensado viajar?', en: 'When are you planning to travel?', fr: 'Quand pensez-vous voyager ?' })}</h3>
                     </div>
                     
                     <div className="space-y-5">
                       <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2">Fecha aproximada de llegada</label>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">{tr({ es: 'Fecha aproximada de llegada', en: 'Approximate arrival date', fr: 'Date d’arrivée approximative' })}</label>
                         <input 
                           type="date" 
                           name="travelDate"
@@ -195,18 +214,18 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-2">¿Cuántos días te gustaría estar?</label>
+                        <label className="block text-sm font-bold text-gray-700 mb-2">{tr({ es: '¿Cuántos días te gustaría estar?', en: 'How many days would you like to stay?', fr: 'Combien de jours aimeriez-vous rester ?' })}</label>
                         <select 
                           name="duration"
                           value={formData.duration}
                           onChange={handleChange}
                           className="w-full p-4 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent text-gray-700"
                         >
-                          <option value="">Selecciona la duración</option>
-                          <option value="1-3 días">Escapada (1-3 días)</option>
-                          <option value="4-7 días">Media (4-7 días)</option>
-                          <option value="8-12 días">Viaje Completo (8-12 días)</option>
-                          <option value="+12 días">Gran Aventura (+12 días)</option>
+                          <option value="">{tr({ es: 'Selecciona la duración', en: 'Choose the duration', fr: 'Choisissez la durée' })}</option>
+                          <option value="1-3 días">{tr({ es: 'Escapada (1-3 días)', en: 'Short break (1-3 days)', fr: 'Escapade (1-3 jours)' })}</option>
+                          <option value="4-7 días">{tr({ es: 'Media (4-7 días)', en: 'Medium (4-7 days)', fr: 'Moyen (4-7 jours)' })}</option>
+                          <option value="8-12 días">{tr({ es: 'Viaje Completo (8-12 días)', en: 'Full trip (8-12 days)', fr: 'Voyage complet (8-12 jours)' })}</option>
+                          <option value="+12 días">{tr({ es: 'Gran Aventura (+12 días)', en: 'Big adventure (12+ days)', fr: 'Grande aventure (+12 jours)' })}</option>
                         </select>
                       </div>
                     </div>
@@ -217,12 +236,12 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 text-brand-primary mb-6">
                       <Users className="w-6 h-6" />
-                      <h3 className="text-2xl font-bold">¿Quiénes viajan?</h3>
+                      <h3 className="text-2xl font-bold">{tr({ es: '¿Quiénes viajan?', en: 'Who is travelling?', fr: 'Qui voyage ?' })}</h3>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="block text-sm font-bold text-gray-700">Adultos (+12 años)</label>
+                        <label className="block text-sm font-bold text-gray-700">{tr({ es: 'Adultos (+12 años)', en: 'Adults (12+ years)', fr: 'Adultes (+12 ans)' })}</label>
                         <div className="flex items-center">
                           <button onClick={() => setFormData(p => ({...p, adults: Math.max(1, p.adults - 1)}))} className="w-12 h-12 bg-white border border-gray-200 rounded-l-xl font-bold hover:bg-gray-50">-</button>
                           <div className="flex-1 h-12 bg-white border-y border-gray-200 flex items-center justify-center font-bold">{formData.adults}</div>
@@ -231,7 +250,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                       </div>
 
                       <div className="space-y-2">
-                        <label className="block text-sm font-bold text-gray-700">Niños (0-11 años)</label>
+                        <label className="block text-sm font-bold text-gray-700">{tr({ es: 'Niños (0-11 años)', en: 'Children (0-11 years)', fr: 'Enfants (0-11 ans)' })}</label>
                         <div className="flex items-center">
                           <button onClick={() => setFormData(p => ({...p, children: Math.max(0, p.children - 1)}))} className="w-12 h-12 bg-white border border-gray-200 rounded-l-xl font-bold hover:bg-gray-50">-</button>
                           <div className="flex-1 h-12 bg-white border-y border-gray-200 flex items-center justify-center font-bold">{formData.children}</div>
@@ -246,9 +265,9 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 text-brand-primary mb-6">
                       <Sparkles className="w-6 h-6" />
-                      <h3 className="text-2xl font-bold">¿Te gustaría añadir alguna actividad al viaje?</h3>
+                      <h3 className="text-2xl font-bold">{tr({ es: '¿Te gustaría añadir alguna actividad al viaje?', en: 'Would you like to add any activities?', fr: 'Souhaitez-vous ajouter des activités ?' })}</h3>
                     </div>
-                    <p className="text-gray-500 mb-4">Selecciona las experiencias extras que te interesen (opcional):</p>
+                    <p className="text-gray-500 mb-4">{tr({ es: 'Selecciona las experiencias extras que te interesen (opcional):', en: 'Choose any extra experiences you are interested in (optional):', fr: 'Choisissez les expériences supplémentaires qui vous intéressent (facultatif) :' })}</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {possibleExtras.map(extra => (
                         <button
@@ -260,7 +279,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                             : 'border-gray-200 bg-white hover:border-gray-300 text-gray-700 hover:shadow-sm'
                           }`}
                         >
-                          <span className="text-sm">{extra}</span>
+                          <span className="text-sm">{optLabel(extra)}</span>
                           <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${formData.extras.includes(extra) ? 'border-brand-accent' : 'border-gray-300'}`}>
                             {formData.extras.includes(extra) && <div className="w-2.5 h-2.5 bg-brand-accent rounded-full" />}
                           </div>
@@ -274,20 +293,20 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 text-brand-primary mb-6">
                       <Mail className="w-6 h-6" />
-                      <h3 className="text-2xl font-bold">Tus datos de contacto</h3>
+                      <h3 className="text-2xl font-bold">{tr({ es: 'Tus datos de contacto', en: 'Your contact details', fr: 'Vos coordonnées' })}</h3>
                     </div>
                     
                     <form id="wizard-form" onSubmit={handleSubmit} className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input required type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="Nombre completo" className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent" />
-                        <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Teléfono / WhatsApp" className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent" />
+                        <input required type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder={tr({ es: 'Nombre completo', en: 'Full name', fr: 'Nom complet' })} className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent" />
+                        <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder={tr({ es: 'Teléfono / WhatsApp', en: 'Phone / WhatsApp', fr: 'Téléphone / WhatsApp' })} className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent" />
                       </div>
-                      <input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Correo electrónico" className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent" />
-                      <textarea name="message" value={formData.message} onChange={handleChange} placeholder="¿Algún detalle o petición especial? (Opcional)" className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent min-h-[100px] resize-none" />
+                      <input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder={tr({ es: 'Correo electrónico', en: 'Email', fr: 'E-mail' })} className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent" />
+                      <textarea name="message" value={formData.message} onChange={handleChange} placeholder={tr({ es: '¿Algún detalle o petición especial? (Opcional)', en: 'Any details or special requests? (Optional)', fr: 'Des détails ou des demandes particulières ? (Facultatif)' })} className="w-full p-3.5 rounded-xl border border-gray-200 bg-white shadow-sm outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent min-h-[100px] resize-none" />
                       <div className="flex gap-3 pt-2">
                          <input required type="checkbox" className="mt-1 flex-shrink-0 w-4 h-4 text-brand-accent border-gray-300 rounded focus:ring-brand-accent cursor-pointer" />
                         <span className="text-xs text-gray-500">
-                          He leído y acepto la <Link to="/privacidad" className="underline hover:text-brand-primary transition-colors">Política de Privacidad</Link>.
+                          {tr({ es: 'He leído y acepto la', en: 'I have read and accept the', fr: 'J’ai lu et j’accepte la' })} <Link to="/privacidad" className="underline hover:text-brand-primary transition-colors">{tr({ es: 'Política de Privacidad', en: 'Privacy Policy', fr: 'Politique de confidentialité' })}</Link>.
                         </span>
                       </div>
                     </form>
@@ -303,7 +322,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
           <div className="px-6 py-4 bg-white border-t border-gray-100 flex justify-between items-center z-10">
             {step > 1 ? (
               <button onClick={handleBack} className="text-gray-500 hover:text-gray-900 font-bold flex items-center gap-2 transition-colors">
-                 <ArrowLeft className="w-4 h-4" /> Atrás
+                 <ArrowLeft className="w-4 h-4" /> {tr({ es: 'Atrás', en: 'Back', fr: 'Retour' })}
               </button>
             ) : <div />}
             
@@ -313,7 +332,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                 disabled={step === 1 && !formData.destination} 
                 className="bg-gray-900 hover:bg-black text-white px-6 py-2.5 rounded-full font-bold flex items-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Siguiente <ArrowRight className="w-4 h-4" />
+                {tr({ es: 'Siguiente', en: 'Next', fr: 'Suivant' })} <ArrowRight className="w-4 h-4" />
               </button>
             ) : (
               <button 
@@ -322,7 +341,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
                 disabled={isSubmitting} 
                 className="bg-[#D97D3A] hover:bg-[#c66c2d] text-white px-8 py-2.5 rounded-full font-bold flex items-center gap-2 shadow-lg shadow-[#D97D3A]/30 transition-all disabled:opacity-50"
               >
-                {isSubmitting ? 'Enviando...' : 'Pedir Presupuesto'}
+                {isSubmitting ? tr({ es: 'Enviando...', en: 'Sending...', fr: 'Envoi...' }) : tr({ es: 'Pedir Presupuesto', en: 'Get a quote', fr: 'Demander un devis' })}
               </button>
             )}
           </div>

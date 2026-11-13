@@ -18,7 +18,23 @@ export default function DestinationDetail() {
   const [allTours, setAllTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
   const { formatPrice } = useCurrency();
-  const { td } = useTranslation();
+  const { td, tr, currentLanguage } = useTranslation();
+  // Título y H1 del destino en el idioma actual
+  const headings = (dest: any) => {
+    if (currentLanguage === 'es') return destinationHeadings(dest);
+    const name = String(dest?.name || '').trim();
+    const slug = String(dest?.slug || '');
+    let h1;
+    if (slug.startsWith('rutas-desde-')) {
+      const city = name.replace(/^(rutas\s+desde|routes\s+from|itin[ée]raires\s+depuis|circuits\s+depuis)\s+/i, '').trim();
+      h1 = currentLanguage === 'en' ? `Tours from ${city} to the Merzouga desert` : `Circuits de ${city} au désert de Merzouga`;
+    } else if (slug === 'excursiones-cortas') {
+      h1 = currentLanguage === 'en' ? 'Day trips in Morocco' : 'Excursions d’une journée au Maroc';
+    } else {
+      h1 = currentLanguage === 'en' ? `${name}: tours and excursions` : `${name} : circuits et excursions`;
+    }
+    return { h1, title: `${h1} | Vivir Marruecos` };
+  };
 
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -83,7 +99,7 @@ export default function DestinationDetail() {
   }, [destination]);
 
   const durations = useMemo(() => {
-    const unique = new Set(allTours.map(t => t.itinerary_summary || 'Varios días'));
+    const unique = new Set(allTours.map(t => t.itinerary_summary || tr({ es: 'Varios días', en: 'Several days', fr: 'Plusieurs jours' })));
     return Array.from(unique);
   }, [allTours]);
 
@@ -93,7 +109,7 @@ export default function DestinationDetail() {
         const matchesSearch = tour.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                             tour.description_includes?.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesPrice = (tour.price || 0) <= maxPrice;
-        const matchesDuration = durationFilter === 'all' || (tour.itinerary_summary || 'Varios días') === durationFilter;
+        const matchesDuration = durationFilter === 'all' || (tour.itinerary_summary || tr({ es: 'Varios días', en: 'Several days', fr: 'Plusieurs jours' })) === durationFilter;
         
         return matchesSearch && matchesPrice && matchesDuration;
       })
@@ -125,8 +141,8 @@ export default function DestinationDetail() {
   if (!destination) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center space-y-4">
-        <h2 className="text-2xl font-bold">Destino no encontrado</h2>
-        <Link to="/" className="btn-primary">Volver al inicio</Link>
+        <h2 className="text-2xl font-bold">{tr({ es: 'Destino no encontrado', en: 'Destination not found', fr: 'Destination introuvable' })}</h2>
+        <Link to="/" className="btn-primary">{tr({ es: 'Volver al inicio', en: 'Back to home', fr: 'Retour à l’accueil' })}</Link>
       </div>
     );
   }
@@ -142,8 +158,8 @@ export default function DestinationDetail() {
   return (
     <div className="pb-24 bg-gray-50/50">
       <SEO 
-        title={destinationHeadings(destination).title}
-        description={(destination.description || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 160) || `Descubre los mejores tours y excursiones en ${destination.name}.`}
+        title={headings(destination).title}
+        description={(destination.description || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 160) || tr({ es: `Descubre los mejores tours y excursiones en ${destination.name}.`, en: `Discover the best tours and excursions in ${destination.name}.`, fr: `Découvrez les meilleurs circuits et excursions à ${destination.name}.` })}
         image={destination.image_url}
         url={`/destinations/${destination.slug || destination.id}`}
         schema={destinationSchema}
@@ -162,11 +178,11 @@ export default function DestinationDetail() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 pb-12 w-full">
           <Breadcrumbs items={[
-            { label: 'Destinos', url: '/destinations' },
+            { label: tr({ es: 'Destinos', en: 'Destinations', fr: 'Destinations' }), url: '/destinations' },
             { label: destination.name }
           ]} />
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight mt-4">{destinationHeadings(destination).h1}</h1>
+            <h1 className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight mt-4">{headings(destination).h1}</h1>
           </div>
         </div>
       </section>
@@ -179,13 +195,13 @@ export default function DestinationDetail() {
               {/* Reset Button */}
               <div className="flex justify-between items-center hidden">
                  <button onClick={resetFilters} className="text-sm font-bold text-red-500 hover:text-red-700 flex items-center gap-1">
-                   <RotateCcw className="w-4 h-4" /> Reset
+                   <RotateCcw className="w-4 h-4" /> {tr({ es: 'Borrar', en: 'Reset', fr: 'Réinitialiser' })}
                  </button>
               </div>
 
               {/* Buscar */}
               <div className="space-y-3">
-                <label className="text-gray-900 font-bold">Buscar</label>
+                <label className="text-gray-900 font-bold">{tr({ es: 'Buscar', en: 'Search', fr: 'Rechercher' })}</label>
                 <input 
                   type="text" 
                   value={searchQuery}
@@ -197,7 +213,7 @@ export default function DestinationDetail() {
               {/* Precio */}
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <label className="text-gray-900 font-bold">Precio</label>
+                  <label className="text-gray-900 font-bold">{tr({ es: 'Precio', en: 'Price', fr: 'Prix' })}</label>
                 </div>
                 <input 
                   type="range" 
@@ -215,14 +231,14 @@ export default function DestinationDetail() {
 
               {/* Días */}
               <div className="space-y-3">
-                <label className="text-gray-900 font-bold">Filtrar por días</label>
+                <label className="text-gray-900 font-bold">{tr({ es: 'Filtrar por días', en: 'Filter by days', fr: 'Filtrer par jours' })}</label>
                 <div className="relative">
                   <select 
                     value={durationFilter}
                     onChange={(e) => setDurationFilter(e.target.value)}
                     className="w-full px-4 py-3 rounded-md border border-gray-200 appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-brand-accent text-sm text-gray-600"
                   >
-                    <option value="all">todas las opciones</option>
+                    <option value="all">{tr({ es: 'todas las opciones', en: 'all options', fr: 'toutes les options' })}</option>
                     {durations.map(d => (
                       <option key={d} value={d}>{d}</option>
                     ))}
@@ -235,7 +251,7 @@ export default function DestinationDetail() {
                 onClick={resetFilters} 
                 className="w-full py-3 bg-black text-white rounded-full font-bold hover:bg-gray-800 transition-colors mt-2"
               >
-                Resetear
+                {tr({ es: 'Borrar filtros', en: 'Reset filters', fr: 'Réinitialiser les filtres' })}
               </button>
             </div>
           </aside>
@@ -246,7 +262,7 @@ export default function DestinationDetail() {
             <div className="space-y-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-3xl font-bold text-[#1e293b]">Tours y excursiones en {String(destination.name).trim()}</h2>
+                  <h2 className="text-3xl font-bold text-[#1e293b]">{tr({ es: 'Tours y excursiones en', en: 'Tours and excursions in', fr: 'Circuits et excursions à' })} {String(destination.name).trim()}</h2>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="relative">
@@ -255,10 +271,10 @@ export default function DestinationDetail() {
                       onChange={(e) => setSortBy(e.target.value)}
                       className="pl-4 pr-10 py-2.5 rounded-full border border-gray-200 bg-white appearance-none text-sm font-medium text-gray-600 outline-none focus:border-brand-accent"
                     >
-                      <option value="featured">Ordenar por</option>
-                      <option value="price-asc">Precio: menor a mayor</option>
-                      <option value="price-desc">Precio: mayor a menor</option>
-                      <option value="name">Nombre: A-Z</option>
+                      <option value="featured">{tr({ es: 'Ordenar por', en: 'Sort by', fr: 'Trier par' })}</option>
+                      <option value="price-asc">{tr({ es: 'Precio: menor a mayor', en: 'Price: low to high', fr: 'Prix : croissant' })}</option>
+                      <option value="price-desc">{tr({ es: 'Precio: mayor a menor', en: 'Price: high to low', fr: 'Prix : décroissant' })}</option>
+                      <option value="name">{tr({ es: 'Nombre: A-Z', en: 'Name: A-Z', fr: 'Nom : A-Z' })}</option>
                     </select>
                     <ChevronRight className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 rotate-90 pointer-events-none" />
                   </div>
@@ -292,16 +308,16 @@ export default function DestinationDetail() {
                             {tour.title}
                           </h3>
                           <p className="text-gray-500 text-sm line-clamp-4 leading-relaxed flex-1">
-                            {tour.itinerary_details?.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&') || 'Descubre esta increíble aventura en Marruecos.'}
+                            {tour.itinerary_details?.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&') || tr({ es: 'Descubre esta increíble aventura en Marruecos.', en: 'Discover this amazing adventure in Morocco.', fr: 'Découvrez cette incroyable aventure au Maroc.' })}
                           </p>
                         </div>
 
                         <div className="p-6 pt-0 mt-auto flex items-center justify-between w-full">
                           <div className="font-bold text-base text-[#1e293b]">
-                            A partir de {formatPrice(tour.price)}
+                            {tr({ es: 'A partir de', en: 'From', fr: 'À partir de' })} {formatPrice(tour.price)}
                           </div>
                           <div className="px-6 py-2.5 bg-black text-white text-sm font-bold rounded-full hover:bg-gray-800 transition-colors">
-                            Información
+                            {tr({ es: 'Información', en: 'Details', fr: 'Détails' })}
                           </div>
                         </div>
                       </Link>
@@ -319,8 +335,8 @@ export default function DestinationDetail() {
                       <Search className="w-8 h-8 text-gray-300" />
                     </div>
                     <div className="space-y-2">
-                      <h3 className="text-xl font-bold text-gray-900">No encontramos tours con estos filtros</h3>
-                      <p className="text-gray-500 max-w-xs mx-auto">Intenta ajustar tu búsqueda o filtros para encontrar lo que buscas.</p>
+                      <h3 className="text-xl font-bold text-gray-900">{tr({ es: 'No encontramos tours con estos filtros', en: 'No tours match these filters', fr: 'Aucun circuit ne correspond à ces filtres' })}</h3>
+                      <p className="text-gray-500 max-w-xs mx-auto">{tr({ es: 'Intenta ajustar tu búsqueda o filtros para encontrar lo que buscas.', en: 'Try adjusting your search or filters.', fr: 'Essayez de modifier votre recherche ou vos filtres.' })}</p>
                     </div>
                   </motion.div>
                 )}
@@ -331,7 +347,7 @@ export default function DestinationDetail() {
               {toc.length > 0 && (
                 <aside className="w-full lg:w-1/3">
                   <div className="sticky top-32 bg-gray-50/50 p-8 rounded-3xl border border-gray-100">
-                    <h3 className="font-serif font-bold text-xl text-gray-900 mb-6 flex items-center gap-2">Índice</h3>
+                    <h3 className="font-serif font-bold text-xl text-gray-900 mb-6 flex items-center gap-2">{tr({ es: 'Índice', en: 'Contents', fr: 'Sommaire' })}</h3>
                     <ul className="space-y-3">
                       {toc.map((item) => (
                         <li key={item.id} className={`${item.level === 3 ? 'ml-4' : ''}`}>
@@ -355,7 +371,7 @@ export default function DestinationDetail() {
               <div className={`w-full ${toc.length > 0 ? 'lg:w-2/3' : 'max-w-3xl'}`}>
                 {!toc.length && (
                   <>
-                    <h2 className="text-4xl font-serif font-bold text-brand-primary">Descubre la magia de {destination.name}</h2>
+                    <h2 className="text-4xl font-serif font-bold text-brand-primary">{tr({ es: 'Descubre la magia de', en: 'Discover the magic of', fr: 'Découvrez la magie de' })} {destination.name}</h2>
                     <div className="w-20 h-1.5 bg-brand-accent rounded-full mt-6 mb-8" />
                   </>
                 )}

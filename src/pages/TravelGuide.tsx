@@ -2,9 +2,11 @@ import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { GUIDE, GUIDE_PATH } from '../data/guiaViaje';
 
+import { useTranslation } from '../hooks/useTranslation';
 const DOMAIN = 'https://www.vivirmarruecos.com';
 
 export default function TravelGuide() {
+  const { tr, currentLanguage } = useTranslation();
   const schema = [
     {
       '@context': 'https://schema.org',
@@ -31,21 +33,21 @@ export default function TravelGuide() {
     <>
       <SEO title={GUIDE.metaTitle} description={GUIDE.description} url={GUIDE_PATH} type="article" schema={schema} />
       <article className="max-w-4xl mx-auto px-4 py-16 md:py-20">
-        <nav className="text-sm text-gray-500 mb-6" aria-label="Migas de pan">
-          <Link to="/" className="hover:text-brand-primary">Inicio</Link> <span className="mx-1">/</span> <span>Viaje a Marruecos</span>
+        <nav className="text-sm text-gray-500 mb-6" aria-label={tr({ es: 'Migas de pan', en: 'Breadcrumb', fr: 'Fil d’Ariane' })}>
+          <Link to="/" className="hover:text-brand-primary">{tr({ es: 'Inicio', en: 'Home', fr: 'Accueil' })}</Link> <span className="mx-1">/</span> <span>{tr({ es: 'Viaje a Marruecos', en: 'Travelling to Morocco', fr: 'Voyager au Maroc' })}</span>
         </nav>
         <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-6">{GUIDE.title}</h1>
         {GUIDE.intro.map((p, i) => (
           <p key={i} className="text-lg text-gray-700 mb-4 leading-relaxed">{p}</p>
         ))}
 
-        <nav className="bg-brand-primary/5 border border-brand-primary/10 rounded-2xl p-6 my-10" aria-label="Contenido de la guía">
-          <p className="font-bold text-gray-900 mb-3">En esta guía</p>
+        <nav className="bg-brand-primary/5 border border-brand-primary/10 rounded-2xl p-6 my-10" aria-label={tr({ es: 'Contenido de la guía', en: 'Guide contents', fr: 'Contenu du guide' })}>
+          <p className="font-bold text-gray-900 mb-3">{tr({ es: 'En esta guía', en: 'In this guide', fr: 'Dans ce guide' })}</p>
           <ol className="list-decimal pl-5 space-y-1 text-gray-700">
             {GUIDE.sections.map(s => (
               <li key={s.id}><a href={`#${s.id}`} className="hover:text-brand-primary">{s.h2}</a></li>
             ))}
-            <li><a href="#preguntas" className="hover:text-brand-primary">Preguntas frecuentes</a></li>
+            <li><a href="#preguntas" className="hover:text-brand-primary">{tr({ es: 'Preguntas frecuentes', en: 'FAQ', fr: 'Questions fréquentes' })}</a></li>
           </ol>
         </nav>
 
@@ -60,7 +62,7 @@ export default function TravelGuide() {
         ))}
 
         <section id="preguntas" className="mb-12 scroll-mt-28">
-          <h2 className="text-2xl md:text-3xl font-serif font-bold text-gray-900 mb-6">Preguntas frecuentes</h2>
+          <h2 className="text-2xl md:text-3xl font-serif font-bold text-gray-900 mb-6">{tr({ es: 'Preguntas frecuentes', en: 'FAQ', fr: 'Questions fréquentes' })}</h2>
           <div className="space-y-4">
             {GUIDE.faqs.map(f => (
               <details key={f.q} className="bg-white rounded-xl border border-gray-200 p-5">
@@ -72,9 +74,9 @@ export default function TravelGuide() {
         </section>
 
         <div className="bg-brand-primary text-white rounded-2xl p-8 text-center">
-          <p className="text-2xl font-serif font-bold mb-3">¿Preparamos tu viaje a Marruecos?</p>
-          <p className="mb-6 opacity-90">Cuéntanos fechas y número de viajeros y te enviamos un presupuesto a medida.</p>
-          <Link to="/tours" className="inline-block bg-white text-brand-primary font-semibold px-6 py-3 rounded-full">Ver tours por Marruecos</Link>
+          <p className="text-2xl font-serif font-bold mb-3">{tr({ es: '¿Preparamos tu viaje a Marruecos?', en: 'Shall we plan your trip to Morocco?', fr: 'On prépare votre voyage au Maroc ?' })}</p>
+          <p className="mb-6 opacity-90">{tr({ es: 'Cuéntanos fechas y número de viajeros y te enviamos un presupuesto a medida.', en: 'Tell us your dates and number of travellers and we will send you a tailor-made quote.', fr: 'Indiquez-nous vos dates et le nombre de voyageurs et nous vous enverrons un devis sur mesure.' })}</p>
+          <Link to="/tours" className="inline-block bg-white text-brand-primary font-semibold px-6 py-3 rounded-full">{tr({ es: 'Ver tours por Marruecos', en: 'See tours in Morocco', fr: 'Voir les circuits au Maroc' })}</Link>
         </div>
       </article>
     </>

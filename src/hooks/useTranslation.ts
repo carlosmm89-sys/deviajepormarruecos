@@ -18,5 +18,10 @@ export function useTranslation() {
     return record[field];
   }, [language]);
 
-  return { t, td, currentLanguage: language };
+  /** Texto en el idioma actual: tr({ es: 'Hola', en: 'Hello', fr: 'Bonjour' }). Si falta, usa el español. */
+  const tr = useCallback(<T>(texts: { es: T; en?: T; fr?: T }): T => {
+    return (texts as any)[language] ?? texts.es;
+  }, [language]);
+
+  return { t, td, tr, currentLanguage: language };
 }

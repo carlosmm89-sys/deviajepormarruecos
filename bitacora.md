@@ -124,3 +124,10 @@
 
 ### Página /tours: foto de fondo en la cabecera (13/11/2026)
 - `src/pages/Tours.tsx`: la cabecera «Tours y circuitos por Marruecos» lleva de fondo una foto de Unsplash (caravana de camellos en las dunas, de Carlos Leret), con degradado oscuro y texto en blanco.
+
+### Traducción completa al inglés y francés (13/11/2026)
+- `useTranslation()` tiene ahora `tr({ es, en, fr })` para textos sueltos; usado en Layout (menú y pie), portada, buscador, /tours, ficha de tour, formulario de presupuesto, burbuja de WhatsApp, aviso de cookies, destinos, colecciones, actividades, galería, blog, favoritos, guía y 404.
+- `src/data/homeContent.js` → `getHomeContent(lang)` y `localizeReviewMeta()`; `src/data/collectionsI18n.js` con las colecciones en EN/FR; `src/i18n/labels.ts` con categorías y duraciones.
+- Al cambiar de idioma se recarga la página (`LanguageContext`) para que tours y destinos lleguen ya traducidos; `dbService` aplica también la traducción del destino incluido en cada tour e ignora campos de traducción vacíos.
+- `ReviewsModal`: quitadas las 4 opiniones inventadas y las notas por categoría; ahora muestra las opiniones reales de `homeContent.js` y el total de Tripadvisor. La ficha de tour enseña el total real (105) en vez de «14 evaluaciones».
+- Siguen en español: artículos del blog, guía «Viaje a Marruecos» (pensada para búsquedas en España) y páginas legales.

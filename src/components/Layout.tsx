@@ -19,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const isAdminLoggedIn = user?.role === 'admin';
 
-  const { t } = useTranslation();
+  const { t, tr } = useTranslation();
   const { language, setLanguage } = useLanguage();
   const { currencyCode, setCurrencyCode } = useCurrency();
   const [isI18nOpen, setIsI18nOpen] = React.useState(false);
@@ -75,8 +75,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const navLinks: NavItem[] = [
     { name: t('nav_destinations') || 'Destinos', path: '/destinations', icon: Map },
     { name: t('nav_tours') || 'Tours', path: '/tours', icon: MapPin },
-    { name: 'Actividades', path: '/actividades', icon: MapPin },
-    { name: 'Galería', path: '/galeria', icon: MapPin },
+    { name: tr({ es: 'Actividades', en: 'Activities', fr: 'Activités' }), path: '/actividades', icon: MapPin },
+    { name: tr({ es: 'Galería', en: 'Gallery', fr: 'Galerie' }), path: '/galeria', icon: MapPin },
     { name: t('nav_blog') || 'Blog', path: '/blog', icon: BookOpen },
   ];
 
@@ -201,7 +201,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
 
                 <button onClick={() => setIsWizardOpen(true)} className="btn-primary text-sm flex items-center justify-center gap-2">
-                  <Sparkles className="w-4 h-4" /> Diseña tu viaje
+                  <Sparkles className="w-4 h-4" /> {tr({ es: 'Diseña tu viaje', en: 'Plan your trip', fr: 'Créez votre voyage' })}
                 </button>
               </div>
             </nav>
@@ -301,7 +301,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   onClick={() => setIsMenuOpen(false)}
                   className="btn-primary w-full text-center mt-4"
                 >
-                  Contacto
+                  {tr({ es: 'Contacto', en: 'Contact', fr: 'Contact' })}
                 </a>
               </div>
             </motion.div>
@@ -344,36 +344,36 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 )}
               </Link>
               <p className="text-gray-400 leading-relaxed text-sm">
-                Especialistas en viajes a medida por Marruecos. Descubre la magia del Magreb con expertos locales, durmiendo bajo las estrellas y cruzando el Atlas.
+                {tr({ es: 'Especialistas en viajes a medida por Marruecos. Descubre la magia del Magreb con expertos locales, durmiendo bajo las estrellas y cruzando el Atlas.', en: 'Specialists in tailor-made trips to Morocco. Discover the magic of the Maghreb with local experts, sleeping under the stars and crossing the Atlas.', fr: 'Spécialistes des voyages sur mesure au Maroc. Découvrez la magie du Maghreb avec des experts locaux, en dormant sous les étoiles et en traversant l\'Atlas.' })}
               </p>
             </div>
 
             {/* Column 2: Enlaces Rápidos */}
             <div>
-              <h3 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Navegación</h3>
+              <h3 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">{tr({ es: 'Navegación', en: 'Navigation', fr: 'Navigation' })}</h3>
               <ul className="space-y-3 text-sm">
-                <li><Link to="/" className="hover:text-brand-accent transition-colors">Inicio</Link></li>
-                <li><Link to="/destinations" className="hover:text-brand-accent transition-colors">Destinos</Link></li>
-                <li><Link to="/tours" className="hover:text-brand-accent transition-colors">Experiencias y Rutas</Link></li>
-                <li><Link to="/viaje-a-marruecos" className="hover:text-brand-accent transition-colors">Guía: viaje a Marruecos</Link></li>
-                <li><Link to="/blog" className="hover:text-brand-accent transition-colors">Blog y Consejos</Link></li>
+                <li><Link to="/" className="hover:text-brand-accent transition-colors">{tr({ es: 'Inicio', en: 'Home', fr: 'Accueil' })}</Link></li>
+                <li><Link to="/destinations" className="hover:text-brand-accent transition-colors">{tr({ es: 'Destinos', en: 'Destinations', fr: 'Destinations' })}</Link></li>
+                <li><Link to="/tours" className="hover:text-brand-accent transition-colors">{tr({ es: 'Experiencias y Rutas', en: 'Tours and Routes', fr: 'Circuits et itinéraires' })}</Link></li>
+                <li><Link to="/viaje-a-marruecos" className="hover:text-brand-accent transition-colors">{tr({ es: 'Guía: viaje a Marruecos', en: 'Guide: travelling to Morocco', fr: 'Guide : voyager au Maroc' })}</Link></li>
+                <li><Link to="/blog" className="hover:text-brand-accent transition-colors">{tr({ es: 'Blog y Consejos', en: 'Blog and Tips', fr: 'Blog et conseils' })}</Link></li>
               </ul>
             </div>
 
             {/* Column 3: Legal */}
             <div>
-              <h3 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Información Legal</h3>
+              <h3 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">{tr({ es: 'Información Legal', en: 'Legal information', fr: 'Informations légales' })}</h3>
               <ul className="space-y-3 text-sm">
-                <li><Link to="/aviso-legal" className="hover:text-brand-accent transition-colors">Aviso Legal</Link></li>
-                <li><Link to="/privacidad" className="hover:text-brand-accent transition-colors">Política de Privacidad</Link></li>
-                <li><Link to="/cookies" className="hover:text-brand-accent transition-colors">Política de Cookies</Link></li>
-                <li><Link to="/condiciones" className="hover:text-brand-accent transition-colors">Términos y Condiciones</Link></li>
+                <li><Link to="/aviso-legal" className="hover:text-brand-accent transition-colors">{tr({ es: 'Aviso Legal', en: 'Legal notice', fr: 'Mentions légales' })}</Link></li>
+                <li><Link to="/privacidad" className="hover:text-brand-accent transition-colors">{tr({ es: 'Política de Privacidad', en: 'Privacy policy', fr: 'Politique de confidentialité' })}</Link></li>
+                <li><Link to="/cookies" className="hover:text-brand-accent transition-colors">{tr({ es: 'Política de Cookies', en: 'Cookie policy', fr: 'Politique de cookies' })}</Link></li>
+                <li><Link to="/condiciones" className="hover:text-brand-accent transition-colors">{tr({ es: 'Términos y Condiciones', en: 'Terms and conditions', fr: 'Conditions générales' })}</Link></li>
               </ul>
             </div>
 
             {/* Column 4: Contacto */}
             <div>
-              <h3 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Contacto Rápido</h3>
+              <h3 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">{tr({ es: 'Contacto Rápido', en: 'Quick contact', fr: 'Contact rapide' })}</h3>
               <ul className="space-y-4 text-sm">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-brand-accent flex-shrink-0" />
@@ -395,7 +395,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     href={settings?.tripadvisor_url || 'https://www.tripadvisor.es/Attraction_Review-g293737-d27433997-Reviews-De_Viaje_Por_Marruecos-Tangier_Tanger_Tetouan_Al_Hoceima.html'}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Lee nuestras opiniones en Tripadvisor"
+                    aria-label={tr({ es: 'Lee nuestras opiniones en Tripadvisor', en: 'Read our reviews on Tripadvisor', fr: 'Lisez nos avis sur Tripadvisor' })}
                     className="inline-flex flex-col items-start gap-1 bg-white rounded-xl px-4 py-3 hover:shadow-lg hover:-translate-y-0.5 transition-all"
                   >
                     <img
@@ -406,7 +406,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                       loading="lazy"
                       className="h-7 w-auto"
                     />
-                    <span className="text-xs font-semibold text-gray-700">Lee nuestras opiniones</span>
+                    <span className="text-xs font-semibold text-gray-700">{tr({ es: 'Lee nuestras opiniones', en: 'Read our reviews', fr: 'Lisez nos avis' })}</span>
                   </a>
                 </li>
               </ul>
@@ -416,7 +416,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Footer Bottom */}
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
-            <p>© {new Date().getFullYear()} Vivir Marruecos. Todos los derechos reservados.</p>
+            <p>© {new Date().getFullYear()} Vivir Marruecos. {t('footer_rights')}</p>
             
             <div className="flex items-center gap-6">
               {isAdminLoggedIn ? (
@@ -445,7 +445,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         className={`fixed bottom-6 lg:bottom-10 left-6 lg:left-10 z-[60] bg-[#D97D3A] text-white p-4 rounded-full shadow-[0_4px_24px_rgba(217,125,58,0.4)] hover:scale-110 transition-transform justify-center group ${location.pathname.includes('/tours/') ? 'hidden md:flex' : 'flex items-center'}`}
       >
         <span className="absolute left-full ml-4 bg-white text-gray-800 text-sm font-bold py-2 px-4 rounded-xl shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap">
-          Diseña tu viaje a medida
+          {tr({ es: 'Diseña tu viaje a medida', en: 'Design your tailor-made trip', fr: 'Créez votre voyage sur mesure' })}
         </span>
         <Map className="w-8 h-8" />
       </button>

@@ -7,7 +7,9 @@ import { Calendar, User, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-re
 import SEO from '../components/SEO';
 import { optImg } from '../lib/image';
 
+import { useTranslation } from '../hooks/useTranslation';
 export default function Blog() {
+  const { tr, currentLanguage } = useTranslation();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,16 +40,16 @@ export default function Blog() {
   return (
     <div className="bg-gray-50/50 min-h-screen pb-24">
       <SEO 
-        title="Blog de viajes a Marruecos: guías y consejos"
-        description="Descubre Marruecos a través de nuestras guías prácticas, historias y consejos de expertos locales para preparar tu próxima aventura."
+        title={tr({ es: 'Blog de viajes a Marruecos: guías y consejos', en: 'Morocco travel blog: guides and tips', fr: 'Blog de voyage au Maroc : guides et conseils' })}
+        description={tr({ es: 'Descubre Marruecos a través de nuestras guías prácticas, historias y consejos de expertos locales para preparar tu próxima aventura.', en: 'Discover Morocco through our practical guides, stories and tips from local experts to prepare your next adventure.', fr: 'Découvrez le Maroc à travers nos guides pratiques, nos récits et les conseils d’experts locaux pour préparer votre prochaine aventure.' })}
         url="/blog"
       />
       {/* Header */}
       <section className="bg-white border-b border-gray-100 py-20 px-4">
         <div className="max-w-7xl mx-auto text-center space-y-4">
-          <p className="text-brand-accent font-bold uppercase tracking-widest text-sm">Consejos y Guías</p>
-          <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900">Blog de viajes a Marruecos</h1>
-          <p className="text-gray-500 max-w-2xl mx-auto text-lg pt-4">Descubre Marruecos a través de nuestras guías prácticas, historias y consejos de expertos locales para preparar tu próxima aventura.</p>
+          <p className="text-brand-accent font-bold uppercase tracking-widest text-sm">{tr({ es: 'Consejos y Guías', en: 'Tips and guides', fr: 'Conseils et guides' })}</p>
+          <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900">{tr({ es: 'Blog de viajes a Marruecos', en: 'Morocco travel blog', fr: 'Blog de voyage au Maroc' })}</h1>
+          <p className="text-gray-500 max-w-2xl mx-auto text-lg pt-4">{tr({ es: 'Descubre Marruecos a través de nuestras guías prácticas, historias y consejos de expertos locales para preparar tu próxima aventura.', en: 'Discover Morocco through our practical guides, stories and tips from local experts to prepare your next adventure.', fr: 'Découvrez le Maroc à travers nos guides pratiques, nos récits et les conseils d’experts locaux pour préparer votre prochaine aventure.' })}</p>
         </div>
       </section>
 
@@ -73,7 +75,7 @@ export default function Blog() {
               </Link>
               <div className="p-8 flex flex-col flex-1">
                 <div className="flex items-center gap-4 text-xs font-semibold text-gray-400 mb-4 h-5">
-                  <div className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> {new Date(post.published_at).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                  <div className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> {new Date(post.published_at).toLocaleDateString(currentLanguage === 'en' ? 'en-GB' : currentLanguage === 'fr' ? 'fr-FR' : 'es-ES', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
                   <div className="w-1 h-1 bg-gray-200 rounded-full" />
                   <div className="flex items-center gap-1.5"><User className="w-4 h-4" /> {post.author}</div>
                 </div>
@@ -92,7 +94,7 @@ export default function Blog() {
                     to={`/blog/${post.slug}`}
                     className="inline-flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-brand-accent transition-colors group/link"
                   >
-                    Leer artículo completo <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+                    {tr({ es: 'Leer artículo completo', en: 'Read full article', fr: 'Lire l’article complet' })} <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
                   </Link>
                 </div>
               </div>
@@ -101,7 +103,7 @@ export default function Blog() {
 
           {posts.length === 0 && (
             <div className="col-span-full py-20 text-center">
-              <h3 className="text-xl font-medium text-gray-500">Aún no hay artículos publicados.</h3>
+              <h3 className="text-xl font-medium text-gray-500">{tr({ es: 'Aún no hay artículos publicados.', en: 'No articles published yet.', fr: 'Aucun article publié pour le moment.' })}</h3>
             </div>
           )}
         </div>

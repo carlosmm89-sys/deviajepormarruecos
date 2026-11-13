@@ -1,48 +1,18 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Star, Search } from 'lucide-react';
+import { X, Star, ArrowRight } from 'lucide-react';
+import { useTranslation } from '../hooks/useTranslation';
+import { REVIEWS, REVIEW_TOTALS, TRIPADVISOR_URL, GOOGLE_REVIEWS_URL, localizeReviewMeta } from '../data/homeContent';
 
 interface ReviewsModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const REVIEWS = [
-  {
-    id: 1,
-    name: 'Carlos',
-    origin: 'Madrid, España',
-    date: 'octubre de 2025',
-    text: 'Una experiencia inolvidable. La organización fue perfecta desde el primer momento, los guías muy atentos y los paisajes del desierto son algo que hay que ver al menos una vez en la vida. Totalmente recomendado.',
-    avatar: 'https://i.pravatar.cc/150?u=carlos'
-  },
-  {
-    id: 2,
-    name: 'Laura',
-    origin: 'Buenos Aires, Argentina',
-    date: 'septiembre de 2025',
-    text: 'Todo superó nuestras expectativas. Los riads elegidos eran mágicos y la excursión en camello al atardecer fue espectacular. El conductor Youssef se aseguró de que estuviéramos cómodos en todo momento.',
-    avatar: 'https://i.pravatar.cc/150?u=laura'
-  },
-  {
-    id: 3,
-    name: 'Javier',
-    origin: 'Valencia, España',
-    date: 'agosto de 2025',
-    text: 'El viaje estuvo muy bien estructurado. Tuvimos tiempo para explorar los zocos, descansar y disfrutar de la gastronomía local. Destaco especialmente la noche en las dunas bajo las estrellas.',
-    avatar: 'https://i.pravatar.cc/150?u=javier'
-  },
-  {
-    id: 4,
-    name: 'Elena',
-    origin: 'Santiago, Chile',
-    date: 'julio de 2025',
-    text: 'Marruecos es un país fascinante y hacerlo con esta agencia fue la mejor decisión. Nos sentimos seguras, aprendimos muchísimo sobre la cultura bereber y los alojamientos fueron de primer nivel.',
-    avatar: 'https://i.pravatar.cc/150?u=elena'
-  }
-];
-
+// Opiniones reales de Tripadvisor y Google (las mismas de la portada, en src/data/homeContent.js).
 export default function ReviewsModal({ isOpen, onClose }: ReviewsModalProps) {
+  const { tr, currentLanguage } = useTranslation();
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -74,58 +44,63 @@ export default function ReviewsModal({ isOpen, onClose }: ReviewsModalProps) {
         >
           {/* Header */}
           <div className="p-6 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10">
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Star className="w-6 h-6 fill-current" /> 5,0 <span className="text-gray-500 text-lg font-normal">· 14 evaluaciones</span>
+            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2 flex-wrap">
+              <Star className="w-6 h-6 fill-current" /> {REVIEW_TOTALS.tripadvisor.rating}
+              <span className="text-gray-500 text-lg font-normal">
+                · {REVIEW_TOTALS.tripadvisor.count} {tr({ es: 'opiniones en Tripadvisor', en: 'reviews on Tripadvisor', fr: 'avis sur Tripadvisor' })}
+              </span>
             </h2>
             <button
               onClick={onClose}
+              aria-label={tr({ es: 'Cerrar', en: 'Close', fr: 'Fermer' })}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
               <X className="w-6 h-6 text-gray-900" />
             </button>
           </div>
 
-          <div className="overflow-y-auto p-6 md:p-8 flex-1">
-            {/* Categories */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 border-b border-gray-100 pb-12">
-              {[
-                { label: 'Limpieza', score: '5,0' },
-                { label: 'Veracidad', score: '4,9' },
-                { label: 'Organización', score: '5,0' },
-                { label: 'Comunicación', score: '5,0' },
-                { label: 'Ubicación', score: '4,8' },
-                { label: 'Calidad-precio', score: '4,9' },
-              ].map((cat) => (
-                <div key={cat.label} className="flex flex-col">
-                  <span className="text-gray-900 font-medium mb-1">{cat.label}</span>
-                  <span className="text-lg font-semibold">{cat.score}</span>
-                </div>
-              ))}
-            </div>
+          <div className="overflow-y-auto p-6 md:p-8 flex-1 space-y-10">
+            <p className="text-sm text-gray-500">
+              {tr({
+                es: 'Opiniones reales de viajeros en Tripadvisor y Google. Se muestran en su idioma original.',
+                en: 'Real reviews from travellers on Tripadvisor and Google, shown in their original language.',
+                fr: 'Avis réels de voyageurs sur Tripadvisor et Google, affichés dans leur langue d’origine.'
+              })}
+            </p>
 
             {/* Reviews List */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-              {REVIEWS.map((review) => (
-                <div key={review.id} className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <img src={review.avatar} alt={review.name} className="w-12 h-12 rounded-full object-cover bg-gray-100" />
-                    <div>
-                      <h4 className="font-bold text-gray-900">{review.name}</h4>
-                      <p className="text-sm text-gray-500">{review.origin}</p>
+              {REVIEWS.map((review, idx) => {
+                const meta = localizeReviewMeta(review, currentLanguage);
+                return (
+                  <div key={idx} className="space-y-3">
+                    <div className="flex items-center gap-4">
+                      <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-brand-primary/10 text-brand-primary font-bold uppercase">
+                        {review.author.charAt(0)}
+                      </span>
+                      <div>
+                        <h4 className="font-bold text-gray-900">{review.author}</h4>
+                        <p className="text-sm text-gray-500">
+                          {meta.date}{meta.trip ? ` · ${meta.trip}` : ''} · {review.source === 'tripadvisor' ? 'Tripadvisor' : 'Google'}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-900">
                     <div className="flex text-black">
                       {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
                     </div>
-                    <span className="text-gray-300">·</span>
-                    <span className="text-gray-500 font-medium">{review.date}</span>
+                    <p className="text-gray-700 leading-relaxed text-sm">“{review.text}”</p>
                   </div>
-                  <p className="text-gray-700 leading-relaxed text-sm">
-                    {review.text}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
+            </div>
+
+            <div className="flex flex-wrap gap-6 pt-6 border-t border-gray-100 text-sm font-bold">
+              <a href={TRIPADVISOR_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-brand-primary hover:text-brand-accent">
+                {tr({ es: 'Ver todas en Tripadvisor', en: 'See all on Tripadvisor', fr: 'Tout voir sur Tripadvisor' })} <ArrowRight className="w-4 h-4" />
+              </a>
+              <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-gray-600 hover:text-brand-accent">
+                {tr({ es: 'Ver en Google', en: 'See on Google', fr: 'Voir sur Google' })} <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
           </div>
         </motion.div>

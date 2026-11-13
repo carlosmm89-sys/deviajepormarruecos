@@ -11,12 +11,19 @@ const applyTranslations = <T extends any>(data: T): T => {
   // Spanish is the base language, no merge needed
   if (lang === 'es') return data;
 
-  const mergeItem = (item: any) => {
-    if (item && typeof item === 'object' && item.translations && item.translations[lang]) {
-      // Overwrite base fields with the translated fields
-      return { ...item, ...item.translations[lang] };
+  const mergeItem = (item: any): any => {
+    if (!item || typeof item !== 'object') return item;
+    let out = item;
+    if (item.translations && item.translations[lang]) {
+      // Overwrite base fields with the translated fields (solo los que tienen texto)
+      const tr = Object.fromEntries(Object.entries(item.translations[lang]).filter(([, v]) => typeof v === 'string' ? v.trim() !== '' : v != null));
+      out = { ...item, ...tr };
     }
-    return item;
+    // Destino incluido dentro de un tour (tour.destinations)
+    if (out.destinations && typeof out.destinations === 'object' && !Array.isArray(out.destinations)) {
+      out = { ...out, destinations: mergeItem(out.destinations) };
+    }
+    return out;
   };
 
   if (Array.isArray(data)) {

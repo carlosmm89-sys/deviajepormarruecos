@@ -9,6 +9,7 @@ import { useTranslation } from '../hooks/useTranslation';
 import SEO from '../components/SEO';
 import { tourPath } from '../data/seoContent';
 import { optImg, optSrcSet } from '../lib/image';
+import { categoryLabel, durationLabel } from '../i18n/labels';
 
 // Foto de cabecera: caravana de camellos en las dunas (Unsplash, foto de Carlos Leret, licencia Unsplash gratuita).
 const TOURS_HERO_IMAGE = 'https://images.unsplash.com/photo-1559586616-361e18714958';
@@ -40,7 +41,7 @@ export default function Tours() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const { formatPrice, rate } = useCurrency();
-  const { t } = useTranslation();
+  const { t, tr, currentLanguage } = useTranslation();
 
   useEffect(() => {
     const loadData = async () => {
@@ -160,8 +161,8 @@ export default function Tours() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-24 space-y-16">
       <SEO 
-        title="Tours y circuitos por Marruecos | Vivir Marruecos"
-        description={`Explora nuestros ${filteredTours.length > 0 ? filteredTours.length : ''} tours y descubre la aventura perfecta en Marruecos. Desde el desierto hasta la costa.`}
+        title={tr({ es: 'Tours y circuitos por Marruecos | Vivir Marruecos', en: 'Tours and trips in Morocco | Vivir Marruecos', fr: 'Circuits et voyages au Maroc | Vivir Marruecos' })}
+        description={tr({ es: `Explora nuestros ${filteredTours.length > 0 ? filteredTours.length : ''} tours y descubre la aventura perfecta en Marruecos. Desde el desierto hasta la costa.`, en: `Explore our ${filteredTours.length > 0 ? filteredTours.length : ''} tours and find the perfect adventure in Morocco, from the desert to the coast.`, fr: `Découvrez nos ${filteredTours.length > 0 ? filteredTours.length : ''} circuits et trouvez l’aventure idéale au Maroc, du désert à la côte.` })}
         url="/tours"
       />
       
@@ -170,15 +171,15 @@ export default function Tours() {
           src={optImg(TOURS_HERO_IMAGE, 1600)}
           srcSet={optSrcSet(TOURS_HERO_IMAGE, [640, 960, 1600])}
           sizes="(min-width: 1280px) 1280px, 100vw"
-          alt="Caravana de camellos en las dunas del desierto de Marruecos"
+          alt={tr({ es: 'Caravana de camellos en las dunas del desierto de Marruecos', en: 'Camel caravan in the dunes of the Moroccan desert', fr: 'Caravane de dromadaires dans les dunes du désert marocain' })}
           loading="eager"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
         <div className="relative text-center space-y-4 px-6 py-20 md:py-28">
-          <h1 className="text-5xl md:text-7xl font-serif font-bold text-white drop-shadow-lg">Tours y circuitos por Marruecos</h1>
+          <h1 className="text-5xl md:text-7xl font-serif font-bold text-white drop-shadow-lg">{tr({ es: 'Tours y circuitos por Marruecos', en: 'Tours and trips in Morocco', fr: 'Circuits et voyages au Maroc' })}</h1>
           <p className="text-xl text-white/90 max-w-2xl mx-auto drop-shadow">
-            Todos nuestros tours y circuitos privados por Marruecos, diseñados a tu medida.
+            {tr({ es: 'Todos nuestros tours y circuitos privados por Marruecos, diseñados a tu medida.', en: 'All our private tours and trips in Morocco, tailored to you.', fr: 'Tous nos circuits et voyages privés au Maroc, sur mesure.' })}
           </p>
         </div>
       </div>
@@ -191,26 +192,26 @@ export default function Tours() {
                onClick={() => setShowMobileFilters(!showMobileFilters)}
                className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg font-bold"
              >
-               <Filter className="w-4 h-4" /> Filtros
+               <Filter className="w-4 h-4" /> {tr({ es: 'Filtros', en: 'Filters', fr: 'Filtres' })}
              </button>
           </div>
 
           <div className={`bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex-col gap-8 ${showMobileFilters ? 'flex' : 'hidden md:flex'}`}>
             <div className="flex justify-between items-center">
-              <h3 className="font-bold text-gray-900 text-lg">Filtros</h3>
+              <h3 className="font-bold text-gray-900 text-lg">{tr({ es: 'Filtros', en: 'Filters', fr: 'Filtres' })}</h3>
               <button onClick={resetFilters} className="text-sm font-bold text-red-500 hover:text-red-700 flex items-center gap-1">
-                <RotateCcw className="w-4 h-4" /> Reset
+                <RotateCcw className="w-4 h-4" /> {tr({ es: 'Borrar', en: 'Reset', fr: 'Réinitialiser' })}
               </button>
             </div>
 
             {/* Buscar */}
             <div className="space-y-3">
-              <label className="text-gray-900 font-bold">Buscar</label>
+              <label className="text-gray-900 font-bold">{tr({ es: 'Buscar', en: 'Search', fr: 'Rechercher' })}</label>
               <input 
                 type="text" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Ej. Marrakech, Fez..."
+                placeholder={tr({ es: 'Ej. Marrakech, Fez...', en: 'E.g. Marrakech, Fez...', fr: 'Ex. Marrakech, Fès...' })}
                 className="w-full px-4 py-3 rounded-full border border-gray-200 focus:ring-2 focus:ring-brand-accent focus:border-transparent outline-none"
               />
             </div>
@@ -218,7 +219,7 @@ export default function Tours() {
             {/* Precio */}
             <div className="space-y-3">
               <div className="flex justify-between">
-                <label className="text-gray-900 font-bold">Precio Máximo</label>
+                <label className="text-gray-900 font-bold">{tr({ es: 'Precio Máximo', en: 'Maximum price', fr: 'Prix maximum' })}</label>
               </div>
               <input 
                 type="range" 
@@ -230,22 +231,22 @@ export default function Tours() {
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-brand-primary"
               />
               <div className="text-sm font-medium text-gray-500">
-                Hasta {formatPrice(maxPrice)}
+                {tr({ es: 'Hasta', en: 'Up to', fr: 'Jusqu’à' })} {formatPrice(maxPrice)}
               </div>
             </div>
 
             {/* Días */}
             <div className="space-y-3">
-              <label className="text-gray-900 font-bold">Duración</label>
+              <label className="text-gray-900 font-bold">{tr({ es: 'Duración', en: 'Duration', fr: 'Durée' })}</label>
               <div className="relative">
                 <select 
                   value={durationFilter}
                   onChange={(e) => setDurationFilter(e.target.value)}
                   className="w-full px-4 py-3 rounded-md border border-gray-200 appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-brand-accent text-sm text-gray-600 font-bold"
                 >
-                  <option value="all">Todas las opciones</option>
+                  <option value="all">{tr({ es: 'Todas las opciones', en: 'All options', fr: 'Toutes les options' })}</option>
                   {DURATIONS.map(d => (
-                    <option key={d} value={d}>{d}</option>
+                    <option key={d} value={d}>{durationLabel(d, currentLanguage)}</option>
                   ))}
                 </select>
                 <ChevronRight className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 rotate-90 pointer-events-none" />
@@ -256,7 +257,7 @@ export default function Tours() {
               onClick={resetFilters} 
               className="w-full py-3 bg-black text-white rounded-full font-bold hover:bg-gray-800 transition-colors mt-2"
             >
-              Aplicar y Cerrar
+              {tr({ es: 'Aplicar y Cerrar', en: 'Apply and close', fr: 'Appliquer et fermer' })}
             </button>
           </div>
         </aside>
@@ -267,7 +268,7 @@ export default function Tours() {
           {/* Header Controls */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
              <div className="text-gray-500 font-medium">
-               Mostrando <strong className="text-gray-900">{filteredTours.length}</strong> {filteredTours.length === 1 ? 'resultado' : 'resultados'}
+               {tr({ es: 'Mostrando', en: 'Showing', fr: 'Affichage de' })} <strong className="text-gray-900">{filteredTours.length}</strong> {filteredTours.length === 1 ? tr({ es: 'resultado', en: 'result', fr: 'résultat' }) : tr({ es: 'resultados', en: 'results', fr: 'résultats' })}
              </div>
              
              <div className="relative">
@@ -276,10 +277,10 @@ export default function Tours() {
                   onChange={(e) => setSortBy(e.target.value)}
                   className="pl-4 pr-10 py-2.5 rounded-full border border-gray-200 bg-white appearance-none text-sm font-bold text-gray-600 outline-none focus:border-brand-accent"
                 >
-                  <option value="featured">Ordenar por</option>
-                  <option value="price-asc">Precio: menor a mayor</option>
-                  <option value="price-desc">Precio: mayor a menor</option>
-                  <option value="name">Nombre: A-Z</option>
+                  <option value="featured">{tr({ es: 'Ordenar por', en: 'Sort by', fr: 'Trier par' })}</option>
+                  <option value="price-asc">{tr({ es: 'Precio: menor a mayor', en: 'Price: low to high', fr: 'Prix : croissant' })}</option>
+                  <option value="price-desc">{tr({ es: 'Precio: mayor a menor', en: 'Price: high to low', fr: 'Prix : décroissant' })}</option>
+                  <option value="name">{tr({ es: 'Nombre: A-Z', en: 'Name: A-Z', fr: 'Nom : A-Z' })}</option>
                 </select>
                 <ChevronRight className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 rotate-90 pointer-events-none" />
              </div>
@@ -298,7 +299,7 @@ export default function Tours() {
                       : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-100 hover:text-brand-primary hover:border-brand-primary/30'}
                   `}
                 >
-                  {cat}
+                  {categoryLabel(cat, currentLanguage)}
                 </button>
               ))}
             </div>
@@ -307,7 +308,7 @@ export default function Tours() {
           {/* Grid de Tours */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {isLoading ? (
-                <div className="col-span-full py-20 text-center text-gray-500 font-bold">Cargando tours...</div>
+                <div className="col-span-full py-20 text-center text-gray-500 font-bold">{tr({ es: 'Cargando tours...', en: 'Loading tours...', fr: 'Chargement des circuits...' })}</div>
             ) : filteredTours.length > 0 ? (
                 filteredTours.map((tour, idx) => (
                 <motion.div
@@ -339,11 +340,11 @@ export default function Tours() {
                         <div className="flex items-center gap-6 text-gray-500 text-sm flex-wrap">
                         <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4" />
-                            <span>{tour.itinerary_summary || tour.duration || 'Varios días'}</span>
+                            <span>{tour.itinerary_summary || tour.duration || tr({ es: 'Varios días', en: 'Several days', fr: 'Plusieurs jours' })}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4" />
-                            <span className="line-clamp-1">{tour.date_text || 'Salidas regulares'}</span>
+                            <span className="line-clamp-1">{tour.date_text || tr({ es: 'Salidas regulares', en: 'Regular departures', fr: 'Départs réguliers' })}</span>
                         </div>
                         </div>
                     </div>
@@ -352,7 +353,7 @@ export default function Tours() {
                 ))
             ) : (
                 <div className="col-span-full py-20 text-center text-gray-500 border-2 border-dashed border-gray-200 rounded-3xl font-bold">
-                    No se encontraron tours que coincidan con tu búsqueda. Intenta modificar los filtros.
+                    {tr({ es: 'No se encontraron tours que coincidan con tu búsqueda. Intenta modificar los filtros.', en: 'No tours match your search. Try changing the filters.', fr: 'Aucun circuit ne correspond à votre recherche. Essayez de modifier les filtres.' })}
                 </div>
             )}
           </div>

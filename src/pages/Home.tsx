@@ -13,7 +13,7 @@ import { useTranslation } from '../hooks/useTranslation';
 import { useCurrency } from '../context/CurrencyContext';
 import { tourPath, HOME_META_DESCRIPTION, HOME_TITLE } from '../data/seoContent';
 import { optImg, optSrcSet } from '../lib/image';
-import { HOW_IT_WORKS, TRIP_TYPES, HOME_FAQS, PRICE_NOTE, REVIEWS, REVIEW_TOTALS, TRIPADVISOR_URL, GOOGLE_REVIEWS_URL, GOOGLE_WRITE_REVIEW_URL } from '../data/homeContent';
+import { getHomeContent, localizeReviewMeta, REVIEWS, REVIEW_TOTALS, TRIPADVISOR_URL, GOOGLE_REVIEWS_URL, GOOGLE_WRITE_REVIEW_URL } from '../data/homeContent';
 
 const TRIP_ICONS: Record<string, React.ElementType> = { heart: Heart, family: Users, gem: Gem, compass: Compass, users: Users, sparkles: Sparkles };
 
@@ -26,7 +26,14 @@ export default function Home() {
   const [settings, setSettings] = useState<BusinessSettings | null>(() => ((typeof window !== 'undefined' && (window as any).__BIZ__) || null) as BusinessSettings | null);
   const [isLoading, setIsLoading] = useState(true);
   
-  const { t } = useTranslation();
+  const { t, tr, currentLanguage } = useTranslation();
+  const { howItWorks: HOW_IT_WORKS, tripTypes: TRIP_TYPES, faqs: HOME_FAQS, priceNote: PRICE_NOTE } = getHomeContent(currentLanguage);
+  // Textos de portada guardados en Ajustes (en español); en inglés y francés se usan estos.
+  const heroTexts = currentLanguage === 'en'
+    ? { subtitle: 'Tailor-made routes from Marrakech, Fez, Tangier and Casablanca, with a night in a tent in the Erg Chebbi dunes. Local agency based in Merzouga.', title: 'Private tours of Morocco and the Merzouga desert' }
+    : currentLanguage === 'fr'
+      ? { subtitle: 'Itinéraires sur mesure depuis Marrakech, Fès, Tanger et Casablanca, avec une nuit sous la tente dans les dunes de l’Erg Chebbi. Agence locale basée à Merzouga.', title: 'Circuits privés au Maroc et dans le désert de Merzouga' }
+      : null;
   const { formatPrice } = useCurrency();
 
   usePageViews('home');
@@ -71,7 +78,7 @@ export default function Home() {
             src={heroLocal ? heroLocal.hero_local_src : optImg(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800", 1600)}
             srcSet={heroLocal ? heroLocal.hero_local_srcset : optSrcSet(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800")}
             sizes="100vw"
-            alt="Desierto de Merzouga al atardecer"
+            alt={tr({ es: 'Desierto de Merzouga al atardecer', en: 'Merzouga desert at sunset', fr: 'Désert de Merzouga au coucher du soleil' })}
             className="w-full h-full object-cover scale-105"
             fetchPriority="high"
             loading="eager"
@@ -86,12 +93,12 @@ export default function Home() {
           <div
             className="text-xs sm:text-sm md:text-base font-bold tracking-wider md:tracking-[0.15em] uppercase text-white/90 drop-shadow-md max-w-3xl mx-auto"
           >
-            {settings?.hero_subtitle || 'EXCLUSIVIDAD EN EL MAGREB'}
+            {heroTexts?.subtitle || settings?.hero_subtitle || 'EXCLUSIVIDAD EN EL MAGREB'}
           </div>
           <h1
             className="text-3xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-serif font-bold leading-tight text-white drop-shadow-lg"
           >
-            {settings?.hero_title ? (
+            {heroTexts ? heroTexts.title : settings?.hero_title ? (
               <span dangerouslySetInnerHTML={{ __html: settings.hero_title.replace(/\n/g, '<br/>') }} />
             ) : (
               <>El Arte del<br/>Viaje Lento</>
@@ -123,7 +130,7 @@ export default function Home() {
           ) : destinations.length === 0 ? (
             <div className="col-span-full py-20 text-center space-y-6 border-2 border-dashed border-gray-100 rounded-3xl">
               <div className="space-y-2">
-                <p className="text-gray-400">No hay destinos disponibles aún.</p>
+                <p className="text-gray-400">{tr({ es: 'No hay destinos disponibles aún.', en: 'No destinations available yet.', fr: 'Aucune destination disponible pour le moment.' })}</p>
               </div>
             </div>
           ) : (
@@ -179,7 +186,7 @@ export default function Home() {
             ))
           ) : featuredTours.length === 0 ? (
             <div className="col-span-full py-20 text-center space-y-6 border-2 border-dashed border-gray-100 rounded-3xl">
-              <p className="text-gray-400">No hay tours destacados aún.</p>
+              <p className="text-gray-400">{tr({ es: 'No hay tours destacados aún.', en: 'No featured tours yet.', fr: 'Aucun circuit mis en avant pour le moment.' })}</p>
             </div>
           ) : (
             featuredTours.map((tour, idx) => (
@@ -209,13 +216,13 @@ export default function Home() {
                   <div className="p-8 space-y-4">
                     <div className="flex items-center gap-2 text-brand-accent text-sm font-bold uppercase tracking-widest">
                       <MapPin className="w-4 h-4" />
-                      <span>{(tour as any).destinations?.name || 'Destino'}</span>
+                      <span>{(tour as any).destinations?.name || tr({ es: 'Destino', en: 'Destination', fr: 'Destination' })}</span>
                     </div>
                     <h3 className="text-2xl font-serif font-bold group-hover:text-brand-primary transition-colors">{tour.title}</h3>
                     <div className="flex items-center gap-6 text-gray-500 text-sm flex-wrap">
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4" />
-                        <span>{tour.itinerary_summary || tour.duration || 'Varios días'}</span>
+                        <span>{tour.itinerary_summary || tour.duration || tr({ es: 'Varios días', en: 'Several days', fr: 'Plusieurs jours' })}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Star className="w-4 h-4 text-[#F6B100] fill-[#F6B100]" />
@@ -234,8 +241,8 @@ export default function Home() {
       {/* Cómo funciona */}
       <section className="max-w-7xl mx-auto px-4 space-y-12">
         <div className="text-center space-y-2">
-          <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">Cómo funciona</p>
-          <h2 className="text-4xl font-serif font-bold">Tu viaje en 4 pasos</h2>
+          <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">{tr({ es: 'Cómo funciona', en: 'How it works', fr: 'Comment ça marche' })}</p>
+          <h2 className="text-4xl font-serif font-bold">{tr({ es: 'Tu viaje en 4 pasos', en: 'Your trip in 4 steps', fr: 'Votre voyage en 4 étapes' })}</h2>
         </div>
         <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {HOW_IT_WORKS.map((step, idx) => (
@@ -251,8 +258,8 @@ export default function Home() {
       {/* Viajes para cada ocasión */}
       <section className="max-w-7xl mx-auto px-4 space-y-12">
         <div className="text-center space-y-2">
-          <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">Experiencias a tu medida</p>
-          <h2 className="text-4xl font-serif font-bold">Viajes para cada ocasión</h2>
+          <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">{tr({ es: 'Experiencias a tu medida', en: 'Tailor-made experiences', fr: 'Expériences sur mesure' })}</p>
+          <h2 className="text-4xl font-serif font-bold">{tr({ es: 'Viajes para cada ocasión', en: 'Trips for every occasion', fr: 'Des voyages pour chaque occasion' })}</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {TRIP_TYPES.map(type => {
@@ -270,7 +277,7 @@ export default function Home() {
         </div>
         <div className="text-center">
           <button onClick={openQuoteWizard} className="inline-flex items-center gap-2 btn-primary">
-            Diseña tu viaje a medida <ArrowRight className="w-4 h-4" />
+            {tr({ es: 'Diseña tu viaje a medida', en: 'Design your tailor-made trip', fr: 'Créez votre voyage sur mesure' })} <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </section>
@@ -279,11 +286,11 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex justify-between items-end mb-10">
           <div>
-            <h2 className="text-4xl text-brand-secondary font-serif font-bold">Marruecos en Imágenes</h2>
-            <p className="text-gray-600 mt-2">La esencia de nuestro país capturada en cada viaje</p>
+            <h2 className="text-4xl text-brand-secondary font-serif font-bold">{tr({ es: 'Marruecos en Imágenes', en: 'Morocco in pictures', fr: 'Le Maroc en images' })}</h2>
+            <p className="text-gray-600 mt-2">{tr({ es: 'La esencia de nuestro país capturada en cada viaje', en: 'The essence of our country captured on every trip', fr: 'L’essence de notre pays capturée à chaque voyage' })}</p>
           </div>
           <Link to="/galeria" className="hidden md:flex items-center gap-2 text-brand-primary font-bold hover:text-brand-accent transition-colors pb-2">
-            Ver todas <ArrowRight className="w-4 h-4" />
+            {tr({ es: 'Ver todas', en: 'View all', fr: 'Tout voir' })} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
@@ -305,7 +312,7 @@ export default function Home() {
                   src={optImg(img.image_url, 600)}
                   srcSet={optSrcSet(img.image_url, idx === 0 ? [480, 800, 1200] : [320, 480, 600])}
                   sizes={idx === 0 ? '(min-width: 768px) 50vw, 100vw' : '(min-width: 768px) 25vw, 50vw'}
-                  alt={img.title || 'Galería de Marruecos'} 
+                  alt={img.title || tr({ es: 'Galería de Marruecos', en: 'Morocco gallery', fr: 'Galerie du Maroc' })} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
                 />
@@ -318,13 +325,13 @@ export default function Home() {
           </div>
         ) : (
           <div className="w-full h-[400px] border-2 border-dashed border-gray-200 rounded-3xl flex items-center justify-center">
-             <p className="text-gray-500 font-medium">Próximamente nuestra gran galería fotográfica.</p>
+             <p className="text-gray-500 font-medium">{tr({ es: 'Próximamente nuestra gran galería fotográfica.', en: 'Our photo gallery is coming soon.', fr: 'Notre galerie photo arrive bientôt.' })}</p>
           </div>
         )}
 
         <div className="mt-8 text-center md:hidden">
           <Link to="/galeria" className="inline-flex items-center gap-2 text-[#9a4d1c] font-bold">
-            Ver todas las fotos <ArrowRight className="w-4 h-4" />
+            {tr({ es: 'Ver todas las fotos', en: 'View all photos', fr: 'Voir toutes les photos' })} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>
@@ -340,7 +347,7 @@ export default function Home() {
       {settings?.instagram_widget && (
         <section className="max-w-7xl mx-auto px-4 py-12">
           <div className="text-center mb-12">
-             <h2 className="text-4xl font-serif font-bold">Síguenos en Instagram</h2>
+             <h2 className="text-4xl font-serif font-bold">{tr({ es: 'Síguenos en Instagram', en: 'Follow us on Instagram', fr: 'Suivez-nous sur Instagram' })}</h2>
           </div>
           <WidgetRenderer html={settings.instagram_widget} />
         </section>
@@ -350,18 +357,18 @@ export default function Home() {
       {REVIEWS.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 space-y-10">
           <div className="text-center space-y-4">
-            <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">Opiniones</p>
-            <h2 className="text-4xl font-serif font-bold">Lo que dicen nuestros viajeros</h2>
+            <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">{tr({ es: 'Opiniones', en: 'Reviews', fr: 'Avis' })}</p>
+            <h2 className="text-4xl font-serif font-bold">{tr({ es: 'Lo que dicen nuestros viajeros', en: 'What our travellers say', fr: 'Ce que disent nos voyageurs' })}</h2>
             <div className="flex flex-wrap justify-center gap-4">
               <a href={TRIPADVISOR_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm rounded-full px-5 py-3 hover:shadow-md transition-shadow">
                 <span className="flex">{Array(5).fill(0).map((_, i) => <span key={i} className="w-3.5 h-3.5 rounded-full bg-[#00AA6C] mr-0.5" />)}</span>
                 <span className="font-bold text-gray-900">{REVIEW_TOTALS.tripadvisor.rating}</span>
-                <span className="text-gray-600">· {REVIEW_TOTALS.tripadvisor.count} opiniones en Tripadvisor</span>
+                <span className="text-gray-600">· {REVIEW_TOTALS.tripadvisor.count} {tr({ es: 'opiniones en Tripadvisor', en: 'reviews on Tripadvisor', fr: 'avis sur Tripadvisor' })}</span>
               </a>
               <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 bg-white border border-gray-100 shadow-sm rounded-full px-5 py-3 hover:shadow-md transition-shadow">
                 <span className="flex">{Array(5).fill(0).map((_, i) => <Star key={i} className="w-4 h-4 text-[#F6B100] fill-[#F6B100]" />)}</span>
                 <span className="font-bold text-gray-900">{REVIEW_TOTALS.google.rating}</span>
-                <span className="text-gray-600">· {REVIEW_TOTALS.google.count} en Google</span>
+                <span className="text-gray-600">· {REVIEW_TOTALS.google.count} {tr({ es: 'en Google', en: 'on Google', fr: 'sur Google' })}</span>
               </a>
             </div>
             <p className="text-sm font-bold text-[#00AA6C]">🏆 Tripadvisor {REVIEW_TOTALS.tripadvisor.award}</p>
@@ -369,7 +376,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {REVIEWS.map((review, idx) => (
               <figure key={idx} className="bg-white rounded-[2rem] border border-gray-100 shadow-sm p-7 flex flex-col gap-4">
-                <div className="flex" aria-label="5 de 5">
+                <div className="flex" aria-label={tr({ es: '5 de 5', en: '5 out of 5', fr: '5 sur 5' })}>
                   {review.source === 'tripadvisor'
                     ? Array(5).fill(0).map((_, i) => <span key={i} className="w-3.5 h-3.5 rounded-full bg-[#00AA6C] mr-0.5" />)
                     : Array(5).fill(0).map((_, i) => <Star key={i} className="w-4 h-4 text-[#F6B100] fill-[#F6B100]" />)}
@@ -380,7 +387,7 @@ export default function Home() {
                   <span>
                     <span className="block font-bold text-gray-900">{review.author}</span>
                     <span className="block text-sm text-gray-500">
-                      {review.date}{review.trip ? ` · ${review.trip}` : ''} · {review.source === 'tripadvisor' ? 'Tripadvisor' : 'Google'}
+                      {localizeReviewMeta(review, currentLanguage).date}{review.trip ? ` · ${localizeReviewMeta(review, currentLanguage).trip}` : ''} · {review.source === 'tripadvisor' ? 'Tripadvisor' : 'Google'}
                     </span>
                   </span>
                 </figcaption>
@@ -389,10 +396,10 @@ export default function Home() {
           </div>
           <div className="flex flex-wrap justify-center gap-6 text-sm font-bold">
             <a href={TRIPADVISOR_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-brand-primary hover:text-brand-accent">
-              Ver las {REVIEW_TOTALS.tripadvisor.count} opiniones en Tripadvisor <ArrowRight className="w-4 h-4" />
+              {tr({ es: 'Ver las', en: 'See all', fr: 'Voir les' })} {REVIEW_TOTALS.tripadvisor.count} {tr({ es: 'opiniones en Tripadvisor', en: 'reviews on Tripadvisor', fr: 'avis sur Tripadvisor' })} <ArrowRight className="w-4 h-4" />
             </a>
             <a href={GOOGLE_WRITE_REVIEW_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-gray-600 hover:text-brand-accent">
-              ¿Viajaste con nosotros? Deja tu opinión en Google
+              {tr({ es: '¿Viajaste con nosotros? Deja tu opinión en Google', en: 'Travelled with us? Leave your review on Google', fr: 'Vous avez voyagé avec nous ? Laissez votre avis sur Google' })}
             </a>
           </div>
         </section>
@@ -401,8 +408,8 @@ export default function Home() {
       {/* Preguntas frecuentes */}
       <section className="max-w-4xl mx-auto px-4 space-y-10">
         <div className="text-center space-y-2">
-          <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">Preguntas frecuentes</p>
-          <h2 className="text-4xl font-serif font-bold">Lo que más nos preguntan</h2>
+          <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">{tr({ es: 'Preguntas frecuentes', en: 'FAQ', fr: 'Questions fréquentes' })}</p>
+          <h2 className="text-4xl font-serif font-bold">{tr({ es: 'Lo que más nos preguntan', en: 'What people ask us most', fr: 'Ce que l’on nous demande le plus' })}</h2>
         </div>
         <div className="space-y-4">
           {HOME_FAQS.map(faq => (
@@ -425,7 +432,7 @@ export default function Home() {
               src={optImg("https://images.unsplash.com/photo-1539020140153-e479b8c22e70", 1200, 55)}
               srcSet={optSrcSet("https://images.unsplash.com/photo-1539020140153-e479b8c22e70", [640, 960, 1200], 55)}
               sizes="100vw"
-              alt="Desierto de Marruecos" 
+              alt={tr({ es: 'Desierto de Marruecos', en: 'Moroccan desert', fr: 'Désert marocain' })} 
               loading="lazy"
               decoding="async"
               className="w-full h-full object-cover"
@@ -435,23 +442,23 @@ export default function Home() {
           
           <div className="relative z-10 max-w-3xl mx-auto space-y-8">
             <h2 className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight">
-              ¿Listo para tu próxima aventura?
+              {tr({ es: '¿Listo para tu próxima aventura?', en: 'Ready for your next adventure?', fr: 'Prêt pour votre prochaine aventure ?' })}
             </h2>
             <p className="text-xl md:text-2xl text-gray-200 font-light mx-auto">
-              Cuéntanos tu idea y te enviamos una propuesta personalizada sin compromiso.
+              {tr({ es: 'Cuéntanos tu idea y te enviamos una propuesta personalizada sin compromiso.', en: 'Tell us your idea and we will send you a personalised, no-obligation proposal.', fr: 'Racontez-nous votre idée et nous vous enverrons une proposition personnalisée sans engagement.' })}
             </p>
             <div className="pt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
               <Link 
                 to="/tours" 
                 className="inline-flex items-center gap-3 bg-brand-accent hover:bg-white text-white hover:text-brand-accent px-10 py-5 rounded-full text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-[0_0_40px_rgba(235,102,43,0.4)]"
               >
-                Ver tours <ArrowRight className="w-6 h-6" />
+                {tr({ es: 'Ver tours', en: 'See tours', fr: 'Voir les circuits' })} <ArrowRight className="w-6 h-6" />
               </Link>
               <button
                 onClick={openQuoteWizard}
                 className="inline-flex items-center gap-3 bg-white/10 hover:bg-white backdrop-blur-md border border-white/40 text-white hover:text-brand-accent px-8 py-5 rounded-full text-lg font-bold transition-all duration-300"
               >
-                <MapIcon className="w-5 h-5" /> Pedir presupuesto
+                <MapIcon className="w-5 h-5" /> {tr({ es: 'Pedir presupuesto', en: 'Get a quote', fr: 'Demander un devis' })}
               </button>
               {settings?.whatsapp_number && (
                 <a

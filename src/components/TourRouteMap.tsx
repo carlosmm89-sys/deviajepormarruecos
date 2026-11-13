@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MapPin } from 'lucide-react';
 import { buildRoute } from '../lib/routeStops';
+import { useTranslation } from '../hooks/useTranslation';
 
 const ROUTE_COLOR = '#2563eb'; // azul
 
@@ -32,6 +33,8 @@ function numberedIcon(n: number, isEnd: boolean) {
 }
 
 export default function TourRouteMap({ itineraryHtml, departureCity, returnCity }: Props) {
+  const { tr } = useTranslation();
+  const dayWord = tr({ es: 'Día', en: 'Day', fr: 'Jour' });
   const { days, stops } = useMemo(
     () => buildRoute(itineraryHtml || '', departureCity, returnCity) as { days: { day: number; title: string; stops: Stop[] }[]; stops: Stop[] },
     [itineraryHtml, departureCity, returnCity]
@@ -68,7 +71,7 @@ export default function TourRouteMap({ itineraryHtml, departureCity, returnCity 
                 <div className="text-center">
                   <p className="font-bold text-gray-900">{m.stop.name}</p>
                   {m.visits.length > 0 && (
-                    <p className="text-xs text-gray-500">Día {[...new Set(m.visits)].join(', ')}</p>
+                    <p className="text-xs text-gray-500">{dayWord} {[...new Set(m.visits)].join(', ')}</p>
                   )}
                 </div>
               </Popup>
@@ -78,12 +81,12 @@ export default function TourRouteMap({ itineraryHtml, departureCity, returnCity 
 
         <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-xl shadow-lg border border-gray-100 z-[1000] text-sm flex items-center gap-2">
           <MapPin className="w-4 h-4" style={{ color: ROUTE_COLOR }} />
-          <span className="font-semibold text-gray-900">{markers.length} paradas</span>
+          <span className="font-semibold text-gray-900">{markers.length} {tr({ es: 'paradas', en: 'stops', fr: 'étapes' })}</span>
         </div>
       </div>
 
       <p className="text-gray-600 leading-relaxed">
-        <span className="font-semibold text-gray-900">Ruta: </span>
+        <span className="font-semibold text-gray-900">{tr({ es: 'Ruta', en: 'Route', fr: 'Itinéraire' })}: </span>
         {routeNames}
       </p>
 
@@ -91,7 +94,7 @@ export default function TourRouteMap({ itineraryHtml, departureCity, returnCity 
         <ol className="space-y-2">
           {days.filter((d) => d.stops.length).map((d) => (
             <li key={d.day} className="flex gap-3 text-gray-700">
-              <span className="shrink-0 font-bold" style={{ color: ROUTE_COLOR }}>Día {d.day}</span>
+              <span className="shrink-0 font-bold" style={{ color: ROUTE_COLOR }}>{dayWord} {d.day}</span>
               <span>{d.stops.map((s) => s.name).join(' → ')}</span>
             </li>
           ))}

@@ -19,6 +19,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     const saved = localStorage.getItem('app_language') as Language;
     if (saved && ['es', 'en', 'fr'].includes(saved)) {
       setLanguageState(saved);
+      document.documentElement.lang = saved;
     } else {
       // Auto-detect browser language if none saved
       const browserLang = navigator.language.split('-')[0];
@@ -31,8 +32,11 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
+    if (lang === language) return;
     localStorage.setItem('app_language', lang);
     document.documentElement.lang = lang; // Accessibility update
+    // Recarga la página para que tours, destinos y textos de la base de datos se carguen en el nuevo idioma
+    window.location.reload();
   };
 
   return (

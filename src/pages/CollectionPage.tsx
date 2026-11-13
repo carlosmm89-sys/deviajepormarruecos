@@ -6,9 +6,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import SEO from '../components/SEO';
-import { tourPath, collectionContent } from '../data/seoContent';
+import { tourPath } from '../data/seoContent';
+import { collectionContentI18n } from '../data/collectionsI18n';
+import { categoryLabel } from '../i18n/labels';
 import { optImg } from '../lib/image';
 
+import { useTranslation } from '../hooks/useTranslation';
 const CATEGORY_MAP: Record<string, string> = {
   'actividades': 'Actividades',
   'student-trip': 'Student Trip',
@@ -32,6 +35,7 @@ const CATEGORY_MAP: Record<string, string> = {
 };
 
 export default function CollectionPage() {
+  const { tr, currentLanguage } = useTranslation();
   const { categorySlug } = useParams<{ categorySlug: string }>();
   const [tours, setTours] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,7 +44,8 @@ export default function CollectionPage() {
   const [submitted, setSubmitted] = useState(false);
 
   const categoryName = CATEGORY_MAP[categorySlug || ''] || 'Colección';
-  const collection = collectionContent(categorySlug || '', categoryName);
+  const collection = collectionContentI18n(categorySlug || '', categoryName, currentLanguage);
+  const categoryLabelText = categoryLabel(categoryName, currentLanguage);
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -104,12 +109,12 @@ export default function CollectionPage() {
         }).catch(err => console.error('SMTP fetch fail:', err));
       }
 
-      toast.success('¡Consulta enviada! Nos pondremos en contacto contigo pronto.');
+      toast.success(tr({ es: '¡Consulta enviada! Nos pondremos en contacto contigo pronto.', en: 'Request sent! We will get back to you soon.', fr: 'Demande envoyée ! Nous vous contacterons bientôt.' }));
       form.reset();
       setSubmitted(true);
     } catch (error) {
       console.error(error);
-      toast.error('Hubo un problema. Inténtalo de nuevo.');
+      toast.error(tr({ es: 'Hubo un problema. Inténtalo de nuevo.', en: 'Something went wrong. Please try again.', fr: 'Un problème est survenu. Réessayez.' }));
     } finally {
       setSubmitting(false);
     }
@@ -140,7 +145,7 @@ export default function CollectionPage() {
       <Toaster position="top-right" />
       {/* Dynamic Hero based on category */}
       <div className="relative h-[60vh] flex items-center justify-center overflow-hidden">
-        <img src={optImg(heroImage, 1600)} alt={categoryName} className="absolute inset-0 w-full h-full object-cover scale-105" />
+        <img src={optImg(heroImage, 1600)} alt={categoryLabelText} className="absolute inset-0 w-full h-full object-cover scale-105" />
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white to-transparent" />
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
@@ -163,16 +168,16 @@ export default function CollectionPage() {
         </div>
         {tours.length === 0 ? (
           <div className="text-center text-gray-500 py-20">
-            <p className="text-2xl font-bold mb-4">Aún no hay publicaciones en {categoryName}</p>
-            <p className="mb-8">Estamos preparando experiencias increíbles para ti.</p>
-            <Link to="/tours" className="btn-primary">Explorar Todos los Tours</Link>
+            <p className="text-2xl font-bold mb-4">{tr({ es: 'Aún no hay publicaciones en', en: 'Nothing published yet in', fr: 'Rien de publié pour le moment dans' })} {categoryLabelText}</p>
+            <p className="mb-8">{tr({ es: 'Estamos preparando experiencias increíbles para ti.', en: 'We are preparing amazing experiences for you.', fr: 'Nous préparons des expériences incroyables pour vous.' })}</p>
+            <Link to="/tours" className="btn-primary">{tr({ es: 'Explorar Todos los Tours', en: 'Explore all tours', fr: 'Voir tous les circuits' })}</Link>
           </div>
         ) : (
           tours.map((tour) => (
             <div key={tour.id} className="grid grid-cols-1 md:grid-cols-2 gap-0 overflow-hidden rounded-2xl md:rounded-[2rem] shadow-sm transform transition-all hover:shadow-xl hover:-translate-y-1 border border-gray-100/50">
               {/* Text Layout (Always Left Side on Desktop) */}
               <div className="bg-[#EBEAE5] p-10 md:p-16 flex flex-col justify-center order-2 md:order-1">
-                <p className="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-4">Exclusivo en Marruecos</p>
+                <p className="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-4">{tr({ es: 'Exclusivo en Marruecos', en: 'Exclusive in Morocco', fr: 'Exclusif au Maroc' })}</p>
                 <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 uppercase leading-none mb-6">
                   {tour.title}
                 </h2>
@@ -186,13 +191,13 @@ export default function CollectionPage() {
                     to={tourPath(tour)}
                     className="px-8 py-3 w-max bg-transparent border-2 border-gray-900 hover:bg-gray-900 hover:text-white text-gray-900 rounded-full font-bold uppercase tracking-wide text-xs transition-colors"
                   >
-                    Ver Itinerario
+                    {tr({ es: 'Ver Itinerario', en: 'See itinerary', fr: 'Voir l’itinéraire' })}
                   </Link>
                   <button 
                     onClick={scrollToContact}
                     className="px-6 py-3 w-max text-[#D97D3A] font-bold uppercase tracking-wide text-xs transition-colors border-b-2 border-transparent hover:border-[#D97D3A]"
                   >
-                    Consultar
+                    {tr({ es: 'Consultar', en: 'Enquire', fr: 'Se renseigner' })}
                   </button>
                 </div>
               </div>
@@ -213,7 +218,7 @@ export default function CollectionPage() {
       {/* Bottom Contact Form Section */}
       <div id="contacto-form" className="max-w-4xl mx-auto px-4 mt-24">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-2">Contáctanos</h2>
+          <h2 className="text-4xl font-bold text-gray-900 mb-2">{tr({ es: 'Contáctanos', en: 'Contact us', fr: 'Contactez-nous' })}</h2>
           <div className="w-12 h-1 bg-gray-300 mx-auto rounded-full"></div>
         </div>
 
@@ -226,12 +231,12 @@ export default function CollectionPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, x: -20 }}
               >
-                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-6">Para reservas o consultas</h3>
+                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-6">{tr({ es: 'Para reservas o consultas', en: 'For bookings or enquiries', fr: 'Pour réservations ou demandes' })}</h3>
                 
                 <form className="space-y-6" onSubmit={handleLeadSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre Completo *</label>
+                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{tr({ es: 'Nombre Completo *', en: 'Full name *', fr: 'Nom complet *' })}</label>
                       <input name="first_name" type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" required />
                     </div>
                     <div>
@@ -242,24 +247,24 @@ export default function CollectionPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Teléfono *</label>
+                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{tr({ es: 'Teléfono *', en: 'Phone *', fr: 'Téléphone *' })}</label>
                       <div className="flex bg-white rounded-xl overflow-hidden shadow-sm">
                         <span className="flex items-center justify-center px-4 bg-gray-50 text-gray-600 border-r border-gray-100 font-medium">🇪🇸</span>
                         <input name="phone" type="tel" className="w-full px-4 py-3 border-none outline-none text-gray-900 bg-transparent" placeholder="+34..." required />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">País</label>
-                      <input name="country" type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" placeholder="Ej: España" />
+                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{tr({ es: 'País', en: 'Country', fr: 'Pays' })}</label>
+                      <input name="country" type="text" className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 shadow-sm" placeholder={tr({ es: 'Ej: España', en: 'E.g. United Kingdom', fr: 'Ex. : France' })} />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Mensaje o Detalle del Viaje *</label>
+                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{tr({ es: 'Mensaje o Detalle del Viaje *', en: 'Message or trip details *', fr: 'Message ou détails du voyage *' })}</label>
                     <textarea 
                       name="message"
                       className="w-full px-4 py-3 bg-white rounded-xl border-none outline-none text-gray-900 min-h-[120px] resize-none shadow-sm" 
-                      placeholder={`Me gustaría saber más sobre ${categoryName}...`}
+                      placeholder={tr({ es: `Me gustaría saber más sobre ${categoryLabelText}...`, en: `I would like to know more about ${categoryLabelText}...`, fr: `J’aimerais en savoir plus sur ${categoryLabelText}...` })}
                       required 
                     />
                   </div>
@@ -267,13 +272,13 @@ export default function CollectionPage() {
                   <div className="flex gap-3 pt-2">
                     <input type="checkbox" className="mt-1 flex-shrink-0 w-4 h-4 rounded border-gray-300 text-[#D97D3A] focus:ring-[#D97D3A] cursor-pointer" required />
                     <p className="text-xs text-gray-500 leading-tight pt-0.5">
-                      He leído y acepto la <Link to="/privacidad" className="underline hover:text-[#D97D3A] transition-colors">Política de Privacidad</Link> referida al almacenamiento de mi consulta.
+                      {tr({ es: 'He leído y acepto la', en: 'I have read and accept the', fr: 'J’ai lu et j’accepte la' })} <Link to="/privacidad" className="underline hover:text-[#D97D3A] transition-colors">{tr({ es: 'Política de Privacidad', en: 'Privacy Policy', fr: 'Politique de confidentialité' })}</Link> {tr({ es: 'referida al almacenamiento de mi consulta.', en: 'regarding the storage of my request.', fr: 'concernant la conservation de ma demande.' })}
                     </p>
                   </div>
 
                   <div className="flex justify-center pt-4">
                     <button type="submit" disabled={submitting} className={`bg-[#D97D3A] hover:bg-[#c66c2d] text-white px-12 py-3.5 rounded-full font-bold uppercase tracking-wide text-sm transition-colors shadow-lg shadow-[#D97D3A]/30 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                      {submitting ? 'ENVIANDO...' : 'ENVIAR MENSAJE'}
+                      {submitting ? tr({ es: 'ENVIANDO...', en: 'SENDING...', fr: 'ENVOI...' }) : tr({ es: 'ENVIAR MENSAJE', en: 'SEND MESSAGE', fr: 'ENVOYER LE MESSAGE' })}
                     </button>
                   </div>
                 </form>
@@ -294,15 +299,15 @@ export default function CollectionPage() {
                     <CheckCircle2 className="w-12 h-12 text-green-500" />
                   </motion.div>
                 </div>
-                <h3 className="text-3xl font-bold text-gray-900 leading-tight">¡Tu Aventura Está en Marcha!</h3>
+                <h3 className="text-3xl font-bold text-gray-900 leading-tight">{tr({ es: '¡Tu Aventura Está en Marcha!', en: 'Your adventure is on its way!', fr: 'Votre aventure est en route !' })}</h3>
                 <p className="text-gray-500 leading-relaxed max-w-sm mx-auto">
-                  Hemos recibido tu solicitud correctamente. Nuestro equipo en Marruecos ya está revisando los detalles y <strong>te contactaremos lo antes posible</strong> con una propuesta inolvidable.
+                  {tr({ es: 'Hemos recibido tu solicitud correctamente. Nuestro equipo en Marruecos ya está revisando los detalles y', en: 'We have received your request. Our team in Morocco is already reviewing the details and', fr: 'Nous avons bien reçu votre demande. Notre équipe au Maroc étudie déjà les détails et' })} <strong>{tr({ es: 'te contactaremos lo antes posible', en: 'we will contact you as soon as possible', fr: 'nous vous contacterons dès que possible' })}</strong> {tr({ es: 'con una propuesta inolvidable.', en: 'with an unforgettable proposal.', fr: 'avec une proposition inoubliable.' })}
                 </p>
                 <button 
                   onClick={() => setSubmitted(false)}
                   className="mt-6 text-[#D97D3A] font-bold tracking-wide uppercase text-xs border-b border-transparent hover:border-[#D97D3A] transition-all pt-4"
                 >
-                  Enviar otra consulta
+                  {tr({ es: 'Enviar otra consulta', en: 'Send another request', fr: 'Envoyer une autre demande' })}
                 </button>
               </motion.div>
             )}

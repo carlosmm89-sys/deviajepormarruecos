@@ -8,7 +8,9 @@ import { Heart, Clock, MapPin, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { optImg } from '../lib/image';
 
+import { useTranslation } from '../hooks/useTranslation';
 export default function Wishlist() {
+  const { tr, currentLanguage } = useTranslation();
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
   const { favorites, toggleFavorite } = useWishlist();
@@ -43,15 +45,15 @@ export default function Wishlist() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 mb-12">
           <Heart className="w-10 h-10 text-brand-primary fill-brand-primary" />
-          <h1 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900">Mis Favoritos</h1>
+          <h1 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900">{tr({ es: 'Mis Favoritos', en: 'My favourites', fr: 'Mes favoris' })}</h1>
         </div>
 
         {favoriteTours.length === 0 ? (
           <div className="bg-white rounded-3xl p-12 text-center shadow-sm border border-gray-100 flex flex-col items-center">
             <Heart className="w-16 h-16 text-gray-200 mb-6" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">No tienes tours guardados</h2>
-            <p className="text-gray-500 mb-8 max-w-md mx-auto">Explora nuestros increíbles destinos y guarda los tours que más te gusten para tenerlos siempre a mano.</p>
-            <Link to="/destinations" className="btn-primary">Explorar Tours</Link>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">{tr({ es: 'No tienes tours guardados', en: 'You have no saved tours', fr: 'Vous n’avez aucun circuit enregistré' })}</h2>
+            <p className="text-gray-500 mb-8 max-w-md mx-auto">{tr({ es: 'Explora nuestros increíbles destinos y guarda los tours que más te gusten para tenerlos siempre a mano.', en: 'Explore our amazing destinations and save the tours you like most to keep them handy.', fr: 'Explorez nos incroyables destinations et enregistrez les circuits qui vous plaisent pour les garder sous la main.' })}</p>
+            <Link to="/destinations" className="btn-primary">{tr({ es: 'Explorar Tours', en: 'Explore tours', fr: 'Explorer les circuits' })}</Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -104,13 +106,13 @@ export default function Wishlist() {
                   <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between">
                     <div>
                       <span className="text-brand-primary font-bold text-2xl">{formatPrice(tour.price)}</span>
-                      <span className="text-gray-500 text-sm ml-1">/ pers</span>
+                      <span className="text-gray-500 text-sm ml-1">/ {tr({ es: 'pers', en: 'pers.', fr: 'pers.' })}</span>
                     </div>
                     <Link
                       to={`/tours/${tour.slug || tour.id}`}
                       className="flex items-center text-brand-accent font-semibold hover:gap-2 transition-all gap-1"
                     >
-                      Ver Tour <ArrowRight className="w-4 h-4" />
+                      {tr({ es: 'Ver Tour', en: 'See tour', fr: 'Voir le circuit' })} <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
                 </div>

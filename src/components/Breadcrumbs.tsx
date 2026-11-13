@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from '../hooks/useTranslation';
 
 export interface BreadcrumbItem {
   label: string;
@@ -13,6 +14,7 @@ interface BreadcrumbsProps {
 }
 
 export default function Breadcrumbs({ items }: BreadcrumbsProps) {
+  const { tr } = useTranslation();
   const schema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -44,7 +46,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         <li>
           <Link to="/" className="text-gray-400 hover:text-brand-primary transition-colors flex items-center">
             <Home className="w-4 h-4" />
-            <span className="sr-only">Inicio</span>
+            <span className="sr-only">{tr({ es: 'Inicio', en: 'Home', fr: 'Accueil' })}</span>
           </Link>
         </li>
         
