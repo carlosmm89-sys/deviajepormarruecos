@@ -253,13 +253,13 @@ export default function AdminTourEdit() {
               {activeTab === 'es' ? (
                 <div className="space-y-1">
                   <label className="text-sm font-semibold text-gray-700">Título del Tour (Español)</label>
-                  <input {...register('title')} className="input-field" placeholder="Ej: Aventura en el Desierto" />
+                  <input key={`title-es`} {...register('title')} className="input-field" placeholder="Ej: Aventura en el Desierto" />
                   {errors.title && <p className="text-xs text-red-500">{errors.title.message}</p>}
                 </div>
               ) : (
                 <div className="space-y-1">
                   <label className="text-sm font-semibold text-gray-700">Título ({activeTab.toUpperCase()})</label>
-                  <input {...register(`translations.${activeTab}.title` as any)} className="input-field" placeholder="Traducción opcional..." />
+                  <input key={`title-${activeTab}`} {...register(`translations.${activeTab}.title` as any)} className="input-field" placeholder="Traducción opcional..." />
                 </div>
               )}
 
@@ -322,25 +322,25 @@ export default function AdminTourEdit() {
                 <>
                   <div className="space-y-1">
                     <label className="text-sm font-semibold text-gray-700">Resumen Itinerario (Español)</label>
-                    <input {...register('itinerary_summary')} className="input-field" placeholder="Ej: 3 Días / 2 Noches" />
+                    <input key={`itinerary_summary-es`} {...register('itinerary_summary')} className="input-field" placeholder="Ej: 3 Días / 2 Noches" />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="space-y-1">
                       <label className="text-sm font-semibold text-gray-700">Ciudad de Salida</label>
-                      <input {...register('departure_city')} className="input-field" placeholder="Ej: Marrakech" />
+                      <input key={`departure_city-es`} {...register('departure_city')} className="input-field" placeholder="Ej: Marrakech" />
                     </div>
                     <div className="space-y-1">
                       <label className="text-sm font-semibold text-gray-700">Hora de Salida</label>
-                      <input {...register('departure_time')} className="input-field" placeholder="Ej: 08:00 AM" />
+                      <input key={`departure_time-es`} {...register('departure_time')} className="input-field" placeholder="Ej: 08:00 AM" />
                     </div>
                     <div className="space-y-1">
                       <label className="text-sm font-semibold text-gray-700">Ciudad de Regreso</label>
-                      <input {...register('return_city')} className="input-field" placeholder="Ej: Fez" />
+                      <input key={`return_city-es`} {...register('return_city')} className="input-field" placeholder="Ej: Fez" />
                     </div>
                     <div className="space-y-1">
                       <label className="text-sm font-semibold text-gray-700">Hora Llegada</label>
-                      <input {...register('return_time')} className="input-field" placeholder="Ej: 19:00 PM" />
+                      <input key={`return_time-es`} {...register('return_time')} className="input-field" placeholder="Ej: 19:00 PM" />
                     </div>
                   </div>
                 </>
@@ -348,25 +348,25 @@ export default function AdminTourEdit() {
                 <>
                   <div className="space-y-1">
                     <label className="text-sm font-semibold text-gray-700">Resumen Itinerario ({activeTab.toUpperCase()})</label>
-                    <input {...register(`translations.${activeTab}.itinerary_summary` as any)} className="input-field" placeholder="Traducción opcional..." />
+                    <input key={`itinerary_summary-${activeTab}`} {...register(`translations.${activeTab}.itinerary_summary` as any)} className="input-field" placeholder="Traducción opcional..." />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="space-y-1">
                       <label className="text-sm font-semibold text-gray-700">Ciudad Salida ({activeTab.toUpperCase()})</label>
-                      <input {...register(`translations.${activeTab}.departure_city` as any)} className="input-field" placeholder="Opcional..." />
+                      <input key={`departure_city-${activeTab}`} {...register(`translations.${activeTab}.departure_city` as any)} className="input-field" placeholder="Opcional..." />
                     </div>
                     <div className="space-y-1">
                       <label className="text-sm font-semibold text-gray-700">Hora Salida ({activeTab.toUpperCase()})</label>
-                      <input {...register(`translations.${activeTab}.departure_time` as any)} className="input-field" placeholder="Opcional..." />
+                      <input key={`departure_time-${activeTab}`} {...register(`translations.${activeTab}.departure_time` as any)} className="input-field" placeholder="Opcional..." />
                     </div>
                     <div className="space-y-1">
                       <label className="text-sm font-semibold text-gray-700">Ciudad Regreso ({activeTab.toUpperCase()})</label>
-                      <input {...register(`translations.${activeTab}.return_city` as any)} className="input-field" placeholder="Opcional..." />
+                      <input key={`return_city-${activeTab}`} {...register(`translations.${activeTab}.return_city` as any)} className="input-field" placeholder="Opcional..." />
                     </div>
                     <div className="space-y-1">
                       <label className="text-sm font-semibold text-gray-700">Hora Llegada ({activeTab.toUpperCase()})</label>
-                      <input {...register(`translations.${activeTab}.return_time` as any)} className="input-field" placeholder="Opcional..." />
+                      <input key={`return_time-${activeTab}`} {...register(`translations.${activeTab}.return_time` as any)} className="input-field" placeholder="Opcional..." />
                     </div>
                   </div>
                 </>
@@ -456,7 +456,7 @@ export default function AdminTourEdit() {
                   <CheckCircle className="w-4 h-4 text-green-500" /> Qué Incluye
                 </label>
                 <div className="h-64 mb-14">
-                  <ReactQuill 
+                  <ReactQuill key={`editor1-${activeTab}`} 
                       theme="snow"
                       modules={quillModules}
                       value={activeTab === 'es' ? watch('description_includes') : watch(`translations.${activeTab}.description_includes` as any)}
@@ -472,7 +472,7 @@ export default function AdminTourEdit() {
                   <AlertCircle className="w-4 h-4 text-red-500" /> Qué NO Incluye
                 </label>
                 <div className="h-64 mb-14">
-                  <ReactQuill 
+                  <ReactQuill key={`editor2-${activeTab}`} 
                       theme="snow"
                       modules={quillModules}
                       value={activeTab === 'es' ? watch('description_excludes') : watch(`translations.${activeTab}.description_excludes` as any)}
@@ -489,7 +489,7 @@ export default function AdminTourEdit() {
                   <List className="w-5 h-5 text-brand-accent" /> Descripción Detallada e Itinerario
                 </label>
                 <div className="h-96 mb-14">
-                  <ReactQuill 
+                  <ReactQuill key={`editor3-${activeTab}`} 
                       theme="snow"
                       modules={quillModules}
                       value={activeTab === 'es' ? watch('itinerary_details') : watch(`translations.${activeTab}.itinerary_details` as any)}
@@ -505,7 +505,7 @@ export default function AdminTourEdit() {
                   <Backpack className="w-5 h-5 text-yellow-500" /> Recomendaciones
                 </label>
                 <div className="h-48 mb-14">
-                  <ReactQuill 
+                  <ReactQuill key={`editor4-${activeTab}`} 
                       theme="snow"
                       modules={quillModules}
                       value={activeTab === 'es' ? watch('recommendations') : watch(`translations.${activeTab}.recommendations` as any)}

@@ -131,3 +131,4 @@
 - Al cambiar de idioma se recarga la página (`LanguageContext`) para que tours y destinos lleguen ya traducidos; `dbService` aplica también la traducción del destino incluido en cada tour e ignora campos de traducción vacíos.
 - `ReviewsModal`: quitadas las 4 opiniones inventadas y las notas por categoría; ahora muestra las opiniones reales de `homeContent.js` y el total de Tripadvisor. La ficha de tour enseña el total real (105) en vez de «14 evaluaciones».
 - Siguen en español: artículos del blog, guía «Viaje a Marruecos» (pensada para búsquedas en España) y páginas legales.
+- Panel → editar tour: arreglado el cambio de pestaña ES/EN/FR. Los campos y editores se reutilizaban entre idiomas y el texto de una pestaña podía copiarse en otra; ahora cada idioma tiene sus propios campos (`key` por idioma en inputs y ReactQuill).
