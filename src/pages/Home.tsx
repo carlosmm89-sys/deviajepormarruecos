@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Destination, Tour, GalleryImage } from '../types';
-import { MapPin, Clock, ArrowRight, Star, Sparkles } from 'lucide-react';
+import { MapPin, Clock, ArrowRight, Star, Sparkles, Heart, Users, Gem, Compass, ChevronDown, MessageCircle, Mail, Map as MapIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { dbService } from '../services/dbService';
 import { BusinessSettings } from '../types';
@@ -13,6 +13,11 @@ import { useTranslation } from '../hooks/useTranslation';
 import { useCurrency } from '../context/CurrencyContext';
 import { tourPath, HOME_META_DESCRIPTION, HOME_TITLE } from '../data/seoContent';
 import { optImg, optSrcSet } from '../lib/image';
+import { HOW_IT_WORKS, TRIP_TYPES, HOME_FAQS, PRICE_NOTE } from '../data/homeContent';
+
+const TRIP_ICONS: Record<string, React.ElementType> = { heart: Heart, family: Users, gem: Gem, compass: Compass, users: Users, sparkles: Sparkles };
+
+const openQuoteWizard = () => window.dispatchEvent(new Event('open-quote-wizard'));
 
 export default function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -223,6 +228,51 @@ export default function Home() {
             ))
           )}
         </div>
+        <p className="text-sm text-gray-500 text-center">{PRICE_NOTE}</p>
+      </section>
+
+      {/* Cómo funciona */}
+      <section className="max-w-7xl mx-auto px-4 space-y-12">
+        <div className="text-center space-y-2">
+          <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">Cómo funciona</p>
+          <h2 className="text-4xl font-serif font-bold">Tu viaje en 4 pasos</h2>
+        </div>
+        <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {HOW_IT_WORKS.map((step, idx) => (
+            <li key={step.title} className="bg-white rounded-[2rem] border border-gray-100 shadow-sm p-8 space-y-3">
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-brand-primary text-white font-bold">{idx + 1}</span>
+              <h3 className="text-xl font-serif font-bold">{step.title}</h3>
+              <p className="text-gray-600">{step.text}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Viajes para cada ocasión */}
+      <section className="max-w-7xl mx-auto px-4 space-y-12">
+        <div className="text-center space-y-2">
+          <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">Experiencias a tu medida</p>
+          <h2 className="text-4xl font-serif font-bold">Viajes para cada ocasión</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {TRIP_TYPES.map(type => {
+            const Icon = TRIP_ICONS[type.icon] || Sparkles;
+            return (
+              <Link key={type.slug} to={`/coleccion/${type.slug}`} className="group flex gap-5 bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all p-8">
+                <Icon className="w-8 h-8 shrink-0 text-brand-accent" />
+                <div className="space-y-2">
+                  <h3 className="text-xl font-serif font-bold group-hover:text-brand-primary transition-colors">{type.title}</h3>
+                  <p className="text-gray-600">{type.text}</p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+        <div className="text-center">
+          <button onClick={openQuoteWizard} className="inline-flex items-center gap-2 btn-primary">
+            Diseña tu viaje a medida <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
       </section>
 
       {/* Gallery Mini Section */}
@@ -296,6 +346,25 @@ export default function Home() {
         </section>
       )}
 
+      {/* Preguntas frecuentes */}
+      <section className="max-w-4xl mx-auto px-4 space-y-10">
+        <div className="text-center space-y-2">
+          <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">Preguntas frecuentes</p>
+          <h2 className="text-4xl font-serif font-bold">Lo que más nos preguntan</h2>
+        </div>
+        <div className="space-y-4">
+          {HOME_FAQS.map(faq => (
+            <details key={faq.q} className="group bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+              <summary className="flex justify-between items-center gap-4 cursor-pointer list-none font-bold text-lg">
+                {faq.q}
+                <ChevronDown className="w-5 h-5 shrink-0 transition-transform group-open:rotate-180" />
+              </summary>
+              <p className="mt-4 text-gray-600 leading-relaxed">{faq.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-4">
         <div className="relative rounded-[3rem] p-12 md:p-24 text-center overflow-hidden shadow-2xl">
@@ -317,15 +386,37 @@ export default function Home() {
               ¿Listo para tu próxima aventura?
             </h2>
             <p className="text-xl md:text-2xl text-gray-200 font-light mx-auto">
-              Únete a miles de viajeros descubriendo la auténtica esencia de Marruecos a su ritmo y a medida.
+              Cuéntanos tu idea y te enviamos una propuesta personalizada sin compromiso.
             </p>
-            <div className="pt-8">
+            <div className="pt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4">
               <Link 
                 to="/tours" 
                 className="inline-flex items-center gap-3 bg-brand-accent hover:bg-white text-white hover:text-brand-accent px-10 py-5 rounded-full text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-[0_0_40px_rgba(235,102,43,0.4)]"
               >
-                Empezar Ahora <ArrowRight className="w-6 h-6" />
+                Ver tours <ArrowRight className="w-6 h-6" />
               </Link>
+              <button
+                onClick={openQuoteWizard}
+                className="inline-flex items-center gap-3 bg-white/10 hover:bg-white backdrop-blur-md border border-white/40 text-white hover:text-brand-accent px-8 py-5 rounded-full text-lg font-bold transition-all duration-300"
+              >
+                <MapIcon className="w-5 h-5" /> Pedir presupuesto
+              </button>
+              {settings?.whatsapp_number && (
+                <a
+                  href={`https://wa.me/${settings.whatsapp_number.replace(/\D/g, '')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-white text-white hover:text-[#128C7E] px-8 py-5 rounded-full text-lg font-bold transition-all duration-300"
+                >
+                  <MessageCircle className="w-5 h-5" /> WhatsApp
+                </a>
+              )}
+              <a
+                href="mailto:info@vivirmarruecos.com"
+                className="inline-flex items-center gap-3 text-white/90 hover:text-white underline-offset-4 hover:underline text-lg font-bold"
+              >
+                <Mail className="w-5 h-5" /> info@vivirmarruecos.com
+              </a>
             </div>
           </div>
         </div>

@@ -110,3 +110,9 @@
 
 ### Search Console: redirecciones 301 de URLs antiguas (13/11/2026)
 - `vercel.json` → `redirects`: las URLs antiguas que Google tenía como «Rastreada: actualmente sin indexar» (destinos y tour con UUID, `/destino/:slug`, `/destinos`, la colección con comas y el post `consejos-compras-marruecos-regateo`) redirigen con 301 a su URL actual.
+
+### Portada: cómo funciona, tipos de viaje, preguntas frecuentes y contacto (13/11/2026)
+- Nuevo `src/data/homeContent.js` con los textos de «Tu viaje en 4 pasos», «Viajes para cada ocasión» (enlazan a `/coleccion/<slug>`), las preguntas frecuentes y la nota de precios.
+- `src/pages/Home.tsx`: nota bajo los tours destacados (precios para grupo de 4), sección «Cómo funciona», tipos de viaje, preguntas frecuentes (desplegables) y botones de presupuesto, WhatsApp y email en el bloque final.
+- `src/components/Layout.tsx`: el formulario de presupuesto (`QuoteWizard`) se abre también con el evento `open-quote-wizard` (lo usan los botones de la portada).
+- `prerender-seo.mjs`: el HTML estático de `/` incluye los 4 pasos y las preguntas frecuentes, y datos estructurados `FAQPage` para Google (solo en el HTML estático, para no duplicarlos).

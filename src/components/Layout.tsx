@@ -35,6 +35,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
+  // Permite abrir el formulario de presupuesto desde cualquier página (p. ej. botones de la portada).
+  React.useEffect(() => {
+    const openWizard = () => setIsWizardOpen(true);
+    window.addEventListener('open-quote-wizard', openWizard);
+    return () => window.removeEventListener('open-quote-wizard', openWizard);
+  }, []);
+
   React.useEffect(() => {
     dbService.getBusinessSettings().then(data => {
       if (data) {
