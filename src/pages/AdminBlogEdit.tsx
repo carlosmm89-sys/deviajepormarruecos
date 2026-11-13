@@ -249,6 +249,7 @@ export default function AdminBlogEdit() {
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Título ({activeTab.toUpperCase()})</label>
                 <input
+                  key={`title-${activeTab}`}
                   {...register(`translations.${activeTab}.title`)}
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors"
                   placeholder="Traducción opcional..."
@@ -258,6 +259,7 @@ export default function AdminBlogEdit() {
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Extracto ({activeTab.toUpperCase()})</label>
                 <textarea
+                  key={`excerpt-${activeTab}`}
                   {...register(`translations.${activeTab}.excerpt`)}
                   rows={3}
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-colors resize-none"
@@ -327,6 +329,7 @@ export default function AdminBlogEdit() {
           ) : (
              <div className="prose-edit-container">
               <Controller
+                key={`content-${activeTab}`}
                 name={`translations.${activeTab}.content` as "content"}
                 control={control}
                 render={({ field }) => (
