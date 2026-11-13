@@ -30,7 +30,7 @@ export default function BlogPostDetail() {
             if (data.content) {
               const extractedToc: { id: string, text: string, level: number }[] = [];
               const newContent = data.content.replace(/<(h[23])>(.*?)<\/\1>/gi, (match, tag, text) => {
-                const plainText = text.replace(/<[^>]+>/g, '').trim();
+                const plainText = text.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
                 const id = plainText.toLowerCase().replace(/[\s\W-]+/g, '-').replace(/^-|-$/g, '');
                 extractedToc.push({ id, text: plainText, level: parseInt(tag[1]) });
                 return `<${tag} id="${id}" class="scroll-mt-24">${text}</${tag}>`;
