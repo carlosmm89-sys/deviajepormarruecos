@@ -140,3 +140,5 @@
 - Panel → editar artículo del blog: mismo arreglo de pestañas EN/FR (`key` por idioma en título, extracto y editor).
 - Panel → editar artículo: el contenido en español no se cargaba en el editor (faltaba `setValue('content', …)`), así que el editor salía vacío y no se podía guardar ningún cambio. Arreglado.
 - Blog: traducidos al inglés y francés (desde el panel) los 5 artículos publicados más leídos: mejor época, regatear en los zocos, imazighen, qué llevar al desierto y Ait Ben Haddou. El aviso de /blog dice ahora que «algunos» artículos solo están en español.
+- Blog → pestaña «Actividades y colecciones»: traducidos al inglés y francés los 13 artículos publicados (luna de miel, niños, rutas desde Tánger, consejos primer viaje, Chefchaouen, riad, Merzouga o Zagora, Marrakech en 3 días, gastronomía y las 4 actividades). Quitado el aviso de /actividades (ya están traducidas).
+- Borradores sin publicar a propósito: están casi vacíos y repiten artículos ya publicados (regateo, gastronomía ×2, Chefchaouen, Zagora vs Merzouga, Marrakech 3 días).
