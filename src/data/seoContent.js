@@ -44,14 +44,18 @@ export function tourPath(tour) {
   return `/tours/${tour?.slug || tour?.id}`;
 }
 
-/** Meta descripción de un tour: usa el resumen si es útil; si es demasiado corto, la compone con los datos del tour. */
+/** Meta descripción de un tour: usa el resumen si es útil; si es demasiado corto, la compone con los datos del tour
+ *  (sin repetir el título, que Google ya muestra encima). */
 export function tourMetaDescription(tour) {
   const strip = (s = '') => String(s).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   const summary = strip(tour?.itinerary_summary);
   if (summary.length >= 90) return clip(summary);
-  const from = tour?.departure_city ? ` con salida desde ${tour.departure_city}` : '';
-  const price = tour?.price ? `, desde ${tour.price} € por persona (grupo de 4)` : '';
-  return clip(`${strip(tour?.title)}. Tour privado${from}${price}. Presupuesto a medida.`);
+  const text = `${strip(tour?.title)} ${strip(tour?.description)}`.toLowerCase();
+  const days = String(tour?.duration || '').match(/\d+/)?.[0];
+  const from = tour?.departure_city ? ` desde ${tour.departure_city}` : '';
+  const desert = /merzouga|desierto|sahara|erg chebbi/.test(text) ? ', noche en jaima en Erg Chebbi' : '';
+  const price = tour?.price ? ` Desde ${tour.price} €/persona.` : '';
+  return clip(`Tour privado${days ? ` de ${days} días` : ''}${from}: conductor en español${desert} y agencia local de Merzouga.${price}`);
 }
 
 /** Título y H1 de un destino. Las páginas "rutas-desde-X" se presentan como "Tours desde X". */

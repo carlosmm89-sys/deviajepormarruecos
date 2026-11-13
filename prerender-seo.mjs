@@ -303,7 +303,10 @@ async function prerender() {
   for (const tour of tours) {
     const canonicalPath = tourPath(tour);
     const descText = tourMetaDescription(tour);
-    const tourHtml = `<main>${navHtml}<article><h1>${escapeHtml(tour.title)}</h1><p>${escapeHtml(descText)}</p><p><strong>Precio desde:</strong> ${tour.price || 0}€ | <strong>Duración:</strong> ${escapeHtml(tour.duration || '')} | <strong>Salida:</strong> ${escapeHtml(tour.departure_city || '')}</p><div>${tour.description || ''}</div></article></main>`;
+    // Contenido completo para Google: descripción, itinerario día a día, qué incluye y otros tours relacionados
+    const section = (h, html) => (stripHtml(html || '') ? `<section><h2>${h}</h2><div>${html}</div></section>` : '');
+    const related = tours.filter(t => t.id !== tour.id).slice(0, 6);
+    const tourHtml = `<main>${navHtml}<article><h1>${escapeHtml(tour.title)}</h1><p>${escapeHtml(descText)}</p><p><strong>Precio desde:</strong> ${tour.price || 0}€ por persona (grupo de 4) | <strong>Duración:</strong> ${escapeHtml(tour.duration || '')} | <strong>Salida:</strong> ${escapeHtml(tour.departure_city || '')}${tour.return_city ? ` | <strong>Llegada:</strong> ${escapeHtml(tour.return_city)}` : ''}</p><div>${tour.description || ''}</div>${section('Itinerario día a día', tour.itinerary_details)}${section('Qué incluye', tour.description_includes)}${section('Qué no incluye', tour.description_excludes)}${section('Recomendaciones', tour.recommendations)}<section><h2>Un tour privado con una agencia local</h2><p>Vivir Marruecos es una agencia con base en Hassi Labied, a los pies de las dunas de Erg Chebbi (Merzouga). Organizamos el viaje nosotros mismos: vehículo privado, conductor de habla española y campamento en el desierto, con presupuesto a medida según el número de viajeros.</p></section>${related.length ? `<section><h2>Otros tours por Marruecos</h2><ul>${related.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul></section>` : ''}</article></main>`;
     const seoPayload = {
       title: `${tour.title} | ${siteName}`,
       description: descText,
