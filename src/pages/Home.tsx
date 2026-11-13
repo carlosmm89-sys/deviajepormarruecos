@@ -67,8 +67,8 @@ export default function Home() {
   return (
     <div className="space-y-24 pb-24">
       <SEO 
-        title={HOME_TITLE}
-        description={settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION}
+        title={tr({ es: HOME_TITLE, en: 'Private tours of Morocco and Merzouga | Vivir Marruecos', fr: 'Circuits privés au Maroc et à Merzouga | Vivir Marruecos' })}
+        description={currentLanguage === 'es' ? (settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION) : heroTexts!.subtitle}
         url="/"
       />
       {/* Hero Section */}
