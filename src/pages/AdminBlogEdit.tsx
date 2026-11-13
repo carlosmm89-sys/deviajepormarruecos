@@ -83,6 +83,7 @@ export default function AdminBlogEdit() {
             setValue('slug', post.slug);
             setValue('category', post.category || 'Blog');
             setValue('excerpt', post.excerpt || '');
+            setValue('content', post.content || '');
             setValue('cover_image', post.cover_image);
             setValue('author', post.author);
             setValue('is_published', post.is_published);
