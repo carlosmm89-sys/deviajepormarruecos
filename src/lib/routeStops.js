@@ -4,11 +4,11 @@
 /** Lugares conocidos: [nombre que se muestra, lat, lng, alias (sin tildes, en minúsculas)] */
 const PLACES = [
   ['Marrakech', 31.6295, -7.9811, ['marrakech', 'marrakesh', 'menara']],
-  ['Alto Atlas (Tizi n\'Tichka)', 31.2867, -7.3803, ['alto atlas', 'tizi n']],
+  ['Alto Atlas (Tizi n\'Tichka)', 31.2867, -7.3803, ['alto atlas', 'high atlas', 'haut atlas', 'tizi n']],
   ['Aït Ben Haddou', 31.0470, -7.1318, ['ait ben haddou', 'ait benhaddou']],
   ['Ouarzazate', 30.9189, -6.8934, ['ouarzazate']],
   ['Skoura', 31.0592, -6.5600, ['skoura']],
-  ['Valle de las Rosas', 31.2400, -6.1280, ['valle de las rosas', 'kelaat']],
+  ['Valle de las Rosas', 31.2400, -6.1280, ['valle de las rosas', 'valley of roses', 'vallee des roses', 'kelaat']],
   ['Valle del Dades', 31.4500, -5.9500, ['dades']],
   ['Gargantas del Todra', 31.5880, -5.5910, ['todra', 'todgha', 'tinghir']],
   ['Alnif', 31.1150, -5.1700, ['alnif']],
@@ -19,7 +19,7 @@ const PLACES = [
   ['Errachidia', 31.9314, -4.4246, ['errachidia']],
   ['Valle del Ziz', 32.2500, -4.4000, ['ziz']],
   ['Midelt', 32.6852, -4.7451, ['midelt']],
-  ['Bosque de cedros (Azrou)', 33.4300, -5.1800, ['cedros', 'azrou']],
+  ['Bosque de cedros (Azrou)', 33.4300, -5.1800, ['cedros', 'cedar', 'cedres', 'azrou']],
   ['Ifrane', 33.5228, -5.1100, ['ifrane']],
   ['Fez', 34.0331, -5.0003, ['fez', 'fes']],
   ['Meknes', 33.8935, -5.5473, ['meknes']],
@@ -57,7 +57,7 @@ export function parseItineraryDays(html) {
   const seen = new Set();
   for (const raw of text.split('\n')) {
     const line = raw.trim();
-    const m = line.match(/^d[ií]a\s*(\d+)\s*[:.\-–]\s*(.+)$/i);
+    const m = line.match(/^(?:d[ií]a|day|jour)\s*(\d+)\s*[:.\-–]\s*(.+)$/i);
     if (!m || seen.has(m[1])) continue;
     seen.add(m[1]);
     days.push({ day: Number(m[1]), title: m[2].trim() });
