@@ -247,7 +247,7 @@ async function prerender() {
 
   // 3. Catálogo de Destinos (/destinations y /destinos)
   const destsBody = `<main>${navHtml}<h1>Destinos en Marruecos</h1><p>Nuestros destinos en Marruecos: rutas desde Marrakech, Fez, Tánger y Casablanca, Chefchaouen y el desierto de Merzouga.</p><ul>${destinations.map(d => `<li><article><h2><a href="/destinations/${d.slug || d.id}">${escapeHtml(d.name)}</a></h2><p>${escapeHtml(stripHtml(d.description || '').slice(0, 220))}</p></article></li>`).join('')}</ul></main>`;
-  for (const r of ['/destinations', '/destinos']) {
+  for (const r of ['/destinations']) {
     writeRouteHtml(r, injectPageSeo(baseHtml, {
       title: `Destinos en Marruecos | ${siteName}`,
       description: 'Guía de destinos en Marruecos: Marrakech, Fez, Desierto de Merzouga, Chefchaouen, Tánger y Casablanca.',
@@ -329,13 +329,7 @@ async function prerender() {
     };
     writeRouteHtml(canonicalPath, injectPageSeo(baseHtml, seoPayload));
     count++;
-    if (tour.slug && tour.slug !== tour.id) {
-      // Página ligera de redirección para las URLs antiguas con ID que Google ya conoce
-      const target = `${DOMAIN}${canonicalPath}`;
-      const redirectHtml = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>${escapeHtml(tour.title)}</title><link rel="canonical" href="${target}"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0; url=${target}"></head><body><a href="${target}">${escapeHtml(tour.title)}</a></body></html>`;
-      writeRouteHtml(`/tours/${tour.id}`, redirectHtml);
-      count++;
-    }
+    // Las URLs antiguas con ID (/tours/<id>) las redirige con 301 api/page-fallback.ts
   }
 
   // 8. Cada Destino individual (/destinations/:slug, /destinations/:id y /destino/:slug)
@@ -360,13 +354,9 @@ async function prerender() {
       }, breadcrumbLd([{ name: 'Destinos', path: '/destinations' }, { name: String(dest.name).trim(), path: canonical }])],
       bodyHtml: destHtml
     };
-    writeRouteHtml(`/destinations/${dest.id}`, injectPageSeo(baseHtml, seoPayload));
+    // Solo la URL con nombre; /destinations/<id> y /destino/<slug> redirigen con 301 (api/page-fallback.ts y vercel.json)
+    writeRouteHtml(canonical, injectPageSeo(baseHtml, seoPayload));
     count++;
-    if (dest.slug) {
-      writeRouteHtml(`/destinations/${dest.slug}`, injectPageSeo(baseHtml, seoPayload));
-      writeRouteHtml(`/destino/${dest.slug}`, injectPageSeo(baseHtml, seoPayload));
-      count += 2;
-    }
   }
 
   // 9. Cada Post del Blog (/blog/:slug)

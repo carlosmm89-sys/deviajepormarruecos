@@ -131,7 +131,7 @@ export default function Home() {
                 transition={{ delay: idx * 0.1, duration: 0.6 }}
                 className="group relative h-96 rounded-3xl overflow-hidden cursor-pointer bg-gray-100"
               >
-                <Link to={`/destinations/${dest.id}`}>
+                <Link to={`/destinations/${dest.slug || dest.id}`}>
                   <img
                     src={optImg(dest.image_url, 800)}
                     srcSet={optSrcSet(dest.image_url, [400, 640, 800])}

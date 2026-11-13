@@ -108,7 +108,10 @@ export const dbService = {
     const { data, error } = await (await getSupabase()).from('tours').select('*, destinations(*)').order('created_at', { ascending: false });
     if (error) throw error;
     if (!adminView && data) {
-      toursCache = { data, ts: Date.now() };
+      // En la web pública solo se muestran los tours activos (los desactivados no tienen página)
+      const active = data.filter((t: any) => t.is_active !== false);
+      toursCache = { data: active, ts: Date.now() };
+      return applyTranslations(active);
     }
     return adminView ? data : applyTranslations(data);
   },
@@ -124,12 +127,13 @@ export const dbService = {
 
     const { data, error } = await query.single();
     if (error) return null;
+    if (!adminView && data && data.is_active === false) return null;
     return adminView ? data : applyTranslations(data);
   },
   getToursByDestination: async (destinationId: string, adminView = false): Promise<Tour[]> => {
     const { data, error } = await (await getSupabase()).from('tours').select('*');
     if (error) throw error;
-    const filtered = data.filter(t => t.destination_id === destinationId || (t.destination_ids && t.destination_ids.includes(destinationId)));
+    const filtered = data.filter(t => (adminView || t.is_active !== false) && (t.destination_id === destinationId || (t.destination_ids && t.destination_ids.includes(destinationId))));
     return adminView ? filtered : applyTranslations(filtered);
   },
   saveTour: async (tour: Partial<Tour>): Promise<Tour> => {

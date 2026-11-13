@@ -45,7 +45,7 @@ export default function Destinations() {
             transition={{ delay: idx * 0.1 }}
             className="group space-y-6"
           >
-            <Link to={`/destinations/${dest.id}`} className="block space-y-6">
+            <Link to={`/destinations/${dest.slug || dest.id}`} className="block space-y-6">
               <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden relative">
                 <img
                   src={optImg(dest.image_url, 800)}

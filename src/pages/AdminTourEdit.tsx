@@ -137,6 +137,16 @@ export default function AdminTourEdit() {
         data.destination_id = data.destination_ids[0];
       }
       
+      // URL limpia: sin tildes, sin espacios ni símbolos (una "í" en la URL impide que Google lea la página)
+      data.slug = data.slug
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/ñ/g, 'n')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
       // Remove empty gallery strings
       data.gallery = data.gallery.filter(g => g.trim() !== '');
 
