@@ -42,6 +42,7 @@ const AdminLogin = lazy(() => import('./pages/AdminLogin'));
 const AdminTourEdit = lazy(() => import('./pages/AdminTourEdit'));
 const AdminGallery = lazy(() => import('./pages/AdminGallery'));
 const Gallery = lazy(() => import('./pages/Gallery'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Minimal loading fallback for lazy routes
 const PageLoader = () => (
@@ -98,6 +99,7 @@ export default function App() {
                     <Route path="settings" element={<AdminSettings />} />
                     <Route path="leads" element={<AdminLeads />} />
                   </Route>
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
             </Layout>
