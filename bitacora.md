@@ -103,3 +103,7 @@
 - `src/pages/TourDetail.tsx`: la galería de 5 fotos usaba `loremflickr.com` como relleno cuando el tour tenía menos de 5 fotos; ese servicio ya no sirve fotos y salían cuadros grises («Gallery 1…4»).
 - Ahora la galería = foto principal + fotos propias del tour (sin repetir; antes `gallery[0]` nunca se mostraba si había foto principal) y, si faltan, se rellena con fotos reales de otros tours activos.
 - Si la versión optimizada de una foto falla, se carga la original; si también falla, se oculta en lugar de mostrar el icono roto.
+
+### Google Search Console: verificación con archivo HTML (13/11/2026)
+- Propiedad `https://www.vivirmarruecos.com/` verificada con la cuenta de Google del propietario (método «Archivo HTML»).
+- `/google8246ce4ddafaea89.html` se sirve desde `api/google-verification.ts` (rewrite en `vercel.json`) para evitar la redirección de `cleanUrls`. **No borrar.**

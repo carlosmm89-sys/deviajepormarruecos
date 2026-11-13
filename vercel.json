@@ -48,6 +48,10 @@
   ],
   "rewrites": [
     {
+      "source": "/google8246ce4ddafaea89.html",
+      "destination": "/api/google-verification"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap.xml"
     },
