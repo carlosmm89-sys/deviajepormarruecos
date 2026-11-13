@@ -46,7 +46,12 @@ async function resolve(pathname: string): Promise<Result> {
 
   if (section === 'tours') {
     const q = supabase.from('tours').select('id, slug, is_active');
-    const { data } = await (UUID.test(key) ? q.eq('id', key) : q.eq('slug', key)).maybeSingle();
+    let { data } = await (UUID.test(key) ? q.eq('id', key) : q.eq('slug', key)).maybeSingle();
+    if (!data && !UUID.test(key)) {
+      // URL con tildes o codificada de otra forma: se compara sin tildes ni símbolos
+      const { data: all } = await supabase.from('tours').select('id, slug, is_active');
+      data = (all || []).find((t: any) => t.slug && slugify(t.slug) === slugify(key)) || null;
+    }
     // Tour desactivado: se lleva a la página equivalente (si la hay) o al catálogo, en vez de dar 404
     if (data && data.is_active === false) return { status: 301, location: INACTIVE_TOUR_TARGET[data.id] || '/tours' };
     if (!data) return { status: 404 };
