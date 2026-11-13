@@ -43,7 +43,7 @@ export default function AdminBlogEdit() {
   
   const isNew = !id;
 
-  const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm<BlogFormData>({
+  const { register, control, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<BlogFormData>({
     resolver: zodResolver(blogSchema),
     defaultValues: {
       title: '',
@@ -79,15 +79,18 @@ export default function AdminBlogEdit() {
         try {
           const post = await dbService.getBlogPost(id, true);
           if (post) {
-            setValue('title', post.title);
-            setValue('slug', post.slug);
-            setValue('category', post.category || 'Blog');
-            setValue('excerpt', post.excerpt || '');
-            setValue('content', post.content || '');
-            setValue('cover_image', post.cover_image);
-            setValue('author', post.author);
-            setValue('is_published', post.is_published);
-            setValue('translations', post.translations || {});
+            // reset() carga todos los valores a la vez, también el contenido del editor (con setValue el editor salía vacío)
+            reset({
+              title: post.title,
+              slug: post.slug,
+              category: post.category || 'Blog',
+              excerpt: post.excerpt || '',
+              content: post.content || '',
+              cover_image: post.cover_image,
+              author: post.author,
+              is_published: post.is_published,
+              translations: post.translations || {},
+            });
           } else {
             navigate('/admin/blog');
           }
