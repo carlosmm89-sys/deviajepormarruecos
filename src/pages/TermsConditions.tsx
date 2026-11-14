@@ -35,20 +35,13 @@ export default function TermsConditions() {
 
           <h2 className={h2}>3. Políticas de Cancelación y Reembolso</h2>
           <p className={p}>
-            Las cancelaciones solicitadas con anterioridad a plazos específicos tendrán una recuperación parcial o total del anticipo en función del aviso (Ej. aviso &gt;30 días, etc.), excluyendo en todo caso los costes de transferencias bancarias internacionales u operacionales que ya hayan sido incurridos.
+            Las condiciones de cancelación y reembolso varían según la temporada, por eso se indican por escrito en el presupuesto de cada viaje antes de confirmar la reserva. En todo caso, no se reembolsan los gastos de transferencias bancarias internacionales ni los costes operativos en los que ya se haya incurrido.
           </p>
 
           <h2 className={h2}>4. Obligaciones y Comportamiento del Cliente</h2>
           <p className={p}>
             Los clientes se comprometen a respetar las normas cívicas, acatar las instrucciones de los guías y cumplir con las normativas migratorias propias de acceso a Marruecos (pasaportes en vigor con &gt;6 meses de caducidad).
           </p>
-
-          <div className="bg-brand-primary/5 p-6 rounded-xl mt-12 border border-brand-primary/10">
-            <h3 className="font-bold text-gray-900 mb-2">Nota Importante</h3>
-            <p className="text-sm">
-              Estos términos y condiciones son un modelo básico. Deben revisarlo y ajustarlos para que contengan sus plazos de reembolso exactos y coberturas de seguro en base a su modelo de operaciones o franquicia.
-            </p>
-          </div>
         </div>
       </>
     ),
@@ -72,20 +65,13 @@ export default function TermsConditions() {
 
           <h2 className={h2}>3. Cancellation and refund policy</h2>
           <p className={p}>
-            Cancellations requested before specific deadlines will receive a partial or full refund of the deposit depending on the notice given (e.g. more than 30 days' notice, etc.), excluding in all cases international bank transfer costs or operating costs already incurred.
+            Cancellation and refund conditions vary depending on the season, so they are set out in writing in the quote for each trip before the booking is confirmed. In all cases, international bank transfer fees and operating costs already incurred are non-refundable.
           </p>
 
           <h2 className={h2}>4. Customer obligations and conduct</h2>
           <p className={p}>
             Customers undertake to respect civic rules, follow the instructions of the guides and comply with Morocco's entry requirements (a valid passport with more than 6 months' validity).
           </p>
-
-          <div className="bg-brand-primary/5 p-6 rounded-xl mt-12 border border-brand-primary/10">
-            <h3 className="font-bold text-gray-900 mb-2">Important note</h3>
-            <p className="text-sm">
-              These terms and conditions are a basic template. They should be reviewed and adjusted to include the exact refund deadlines and insurance cover according to the operating model or franchise.
-            </p>
-          </div>
         </div>
       </>
     ),
@@ -109,20 +95,13 @@ export default function TermsConditions() {
 
           <h2 className={h2}>3. Conditions d’annulation et de remboursement</h2>
           <p className={p}>
-            Les annulations demandées avant certains délais donnent droit à un remboursement partiel ou total de l’acompte selon le préavis (ex. préavis de plus de 30 jours, etc.), à l’exclusion dans tous les cas des frais de virement bancaire international ou des frais opérationnels déjà engagés.
+            Les conditions d’annulation et de remboursement varient selon la saison : elles sont donc indiquées par écrit dans le devis de chaque voyage, avant la confirmation de la réservation. Dans tous les cas, les frais de virement bancaire international et les frais opérationnels déjà engagés ne sont pas remboursables.
           </p>
 
           <h2 className={h2}>4. Obligations et comportement du client</h2>
           <p className={p}>
             Les clients s’engagent à respecter les règles de civisme, à suivre les instructions des guides et à respecter les conditions d’entrée au Maroc (passeport en cours de validité, valable plus de 6 mois).
           </p>
-
-          <div className="bg-brand-primary/5 p-6 rounded-xl mt-12 border border-brand-primary/10">
-            <h3 className="font-bold text-gray-900 mb-2">Note importante</h3>
-            <p className="text-sm">
-              Ces conditions générales sont un modèle de base. Elles doivent être vérifiées et adaptées afin d’indiquer les délais de remboursement exacts et les garanties d’assurance selon le mode de fonctionnement ou la franchise.
-            </p>
-          </div>
         </div>
       </>
     ),
