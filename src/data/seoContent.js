@@ -55,6 +55,11 @@ export function tourMetaDescription(tour) {
   const from = tour?.departure_city ? ` desde ${tour.departure_city}` : '';
   const desert = /merzouga|desierto|sahara|erg chebbi/.test(text) ? ', noche en jaima en Erg Chebbi' : '';
   const price = tour?.price ? ` Desde ${tour.price} €/persona.` : '';
+  // Excursiones de un día: cada una con su propia descripción (si no, todas saldrían iguales en Google)
+  if (days === '1') {
+    const desc = strip(tour?.description);
+    return clip(`Excursión privada de un día${from}.${price} ${desc}`);
+  }
   return clip(`Tour privado${days ? ` de ${days} días` : ''}${from}: conductor en español${desert} y agencia local de Merzouga.${price}`);
 }
 
