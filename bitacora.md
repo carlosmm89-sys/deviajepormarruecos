@@ -151,3 +151,4 @@
 - (14/11/2026) Nuevo tour «Ruta de 3 días de Fez a Marrakech por el desierto de Merzouga» (ES/EN/FR, desde 200 €, solo privado), en «Tours desde Fez», Fez, Merzouga y Erg Chebbi. Foto del valle del Ziz de Pexels (uso libre); `optImg` admite ahora fotos de Pexels.
 - (14/11/2026) Tres excursiones de un día desde Marrakech (Ouzoud, Ourika, Essaouira), desde 30 €, solo incluyen transporte privado con chófer; en «Excursiones de un día». Fotos de Pexels.
 - (14/11/2026) Colección «Viajes en grupo»: ahora con la excursión de 3 días y el viaje de 5 días al desierto (quitados la ruta de 9 días y la de 5 días Marrakech–Fez, solo privadas). Artículo «Excursiones de un día desde Marrakech» enlaza a las excursiones de Ourika, Ouzoud y Essaouira (ES/EN/FR).
+- (14/11/2026) Tour de Errachidia: foto principal cambiada (antes el quad, repetido en otras páginas) por sombras de una caravana de dromedarios en las dunas de Merzouga (Pexels).
