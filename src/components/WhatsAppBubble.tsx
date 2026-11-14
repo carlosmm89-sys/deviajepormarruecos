@@ -75,7 +75,7 @@ export default function WhatsAppBubble() {
           className="relative w-[280px] sm:w-[320px] bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.18)] border border-gray-100 overflow-hidden animate-fade-in-up"
         >
           <div className="flex items-center gap-3 bg-[#075E54] px-4 py-3 text-white">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 font-serif font-bold text-sm">VM</span>
+            <img src="/pwa-192x192.png" alt="Vivir Marruecos" width="40" height="40" className="h-10 w-10 shrink-0 rounded-full bg-white object-contain p-0.5" />
             <div className="leading-tight">
               <p className="font-semibold text-sm">Vivir Marruecos</p>
               <p className="text-[11px] text-white/80">{tr({ es: 'Te respondemos lo antes posible', en: 'We reply as soon as possible', fr: 'Nous répondons dès que possible' })}</p>
