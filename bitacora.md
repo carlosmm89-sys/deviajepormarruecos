@@ -147,3 +147,4 @@
 - (14/11/2026) Revisión general: «&nbsp;» del editor cambiados por espacios al mostrar los textos (dbService y prerender) — en el móvil el texto de 18 artículos salía cortado; etiquetas de categoría del blog traducidas en fichas de tour y artículos.
 - (14/11/2026) Tours: descripción propia de la ruta de 8 días (antes copiada del tour de 4 días); tour de Errachidia con duración, descripción corta en ES/EN/FR y título más corto. Quitados 5 enlaces a Bing en la excursión de 3 días y enlaces del blog a tours con UUID cambiados por el slug.
 - (14/11/2026) Ruta de 8 días: precio corregido a 500 € (antes 200 €).
+- (14/11/2026) Privado o en grupo: solo la excursión de 3 días y el viaje de 5 días al desierto se pueden hacer en grupo; el resto, siempre en privado. Actualizado el campo de cada tour y los artículos «tours desde Marrakech» y «tour privado o en grupo» (ES/EN/FR).
