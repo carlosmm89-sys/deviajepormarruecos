@@ -148,7 +148,7 @@ export default function Home() {
                     src={optImg(dest.image_url, 800)}
                     srcSet={optSrcSet(dest.image_url, [400, 640, 800])}
                     sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-                    alt={dest.name}
+                    alt={`${dest.name}, ${tr({ es: 'Marruecos', en: 'Morocco', fr: 'Maroc' })}`}
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
@@ -235,7 +235,7 @@ export default function Home() {
             ))
           )}
         </div>
-        <p className="text-sm text-gray-500 text-center">{PRICE_NOTE}</p>
+        <p className="text-sm text-gray-600 text-center">{PRICE_NOTE}</p>
       </section>
 
       {/* Cómo funciona */}
@@ -371,13 +371,13 @@ export default function Home() {
                 <span className="text-gray-600">· {REVIEW_TOTALS.google.count} {tr({ es: 'en Google', en: 'on Google', fr: 'sur Google' })}</span>
               </a>
             </div>
-            <p className="text-sm font-bold text-[#00AA6C]">🏆 Tripadvisor {REVIEW_TOTALS.tripadvisor.award}</p>
-            {currentLanguage !== 'es' && <p className="text-xs text-gray-500">{tr({ es: '', en: 'Reviews are shown in their original language.', fr: 'Les avis sont affichés dans leur langue d’origine.' })}</p>}
+            <p className="text-sm font-bold text-[#00704A]">🏆 Tripadvisor {REVIEW_TOTALS.tripadvisor.award}</p>
+            {currentLanguage !== 'es' && <p className="text-xs text-gray-600">{tr({ es: '', en: 'Reviews are shown in their original language.', fr: 'Les avis sont affichés dans leur langue d’origine.' })}</p>}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {REVIEWS.map((review, idx) => (
               <figure key={idx} className="bg-white rounded-[2rem] border border-gray-100 shadow-sm p-7 flex flex-col gap-4">
-                <div className="flex" aria-label={tr({ es: '5 de 5', en: '5 out of 5', fr: '5 sur 5' })}>
+                <div className="flex" role="img" aria-label={tr({ es: '5 de 5', en: '5 out of 5', fr: '5 sur 5' })}>
                   {review.source === 'tripadvisor'
                     ? Array(5).fill(0).map((_, i) => <span key={i} className="w-3.5 h-3.5 rounded-full bg-[#00AA6C] mr-0.5" />)
                     : Array(5).fill(0).map((_, i) => <Star key={i} className="w-4 h-4 text-[#F6B100] fill-[#F6B100]" />)}
@@ -387,7 +387,7 @@ export default function Home() {
                   <span className="inline-flex items-center justify-center w-10 h-10 shrink-0 rounded-full bg-brand-primary/10 text-brand-primary font-bold uppercase">{review.author.charAt(0)}</span>
                   <span>
                     <span className="block font-bold text-gray-900">{review.author}</span>
-                    <span className="block text-sm text-gray-500">
+                    <span className="block text-sm text-gray-600">
                       {localizeReviewMeta(review, currentLanguage).date}{review.trip ? ` · ${localizeReviewMeta(review, currentLanguage).trip}` : ''} · {review.source === 'tripadvisor' ? 'Tripadvisor' : 'Google'}
                     </span>
                   </span>
@@ -396,7 +396,7 @@ export default function Home() {
             ))}
           </div>
           <div className="flex flex-wrap justify-center gap-6 text-sm font-bold">
-            <a href={TRIPADVISOR_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-brand-primary hover:text-brand-accent">
+            <a href={TRIPADVISOR_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-brand-accent hover:text-brand-primary">
               {tr({ es: 'Ver las', en: 'See all', fr: 'Voir les' })} {REVIEW_TOTALS.tripadvisor.count} {tr({ es: 'opiniones en Tripadvisor', en: 'reviews on Tripadvisor', fr: 'avis sur Tripadvisor' })} <ArrowRight className="w-4 h-4" />
             </a>
             <a href={GOOGLE_WRITE_REVIEW_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-gray-600 hover:text-brand-accent">
