@@ -11,7 +11,7 @@ export default function LegalNotice() {
   const { tr } = useTranslation();
 
   const seo = tr({
-    es: { title: 'Aviso Legal | Vivir Marruecos', desc: 'Aviso Legal y de cumplimiento normativo de la plataforma web.' },
+    es: { title: 'Aviso Legal | Vivir Marruecos', desc: 'Aviso legal de Vivir Marruecos: datos de Vivirmarruecos SARL (ICE y Registro de Comercio), domicilio en Hassi Labied, propiedad intelectual y responsabilidad.' },
     en: { title: 'Legal Notice | Vivir Marruecos', desc: 'Legal notice and regulatory information for this website.' },
     fr: { title: 'Mentions légales | Vivir Marruecos', desc: 'Mentions légales et informations réglementaires de ce site web.' },
   });

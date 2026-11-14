@@ -318,8 +318,8 @@ async function prerender() {
   // 6. Galería (/galeria) y Legales
   const staticPages = [
     { path: '/galeria', title: `Marruecos en imágenes: fotos de nuestros viajes | ${siteName}`, desc: 'Fotos de nuestros viajes por Marruecos: el desierto de Merzouga, Marrakech, Chefchaouen y mucho más, Marruecos en imágenes.' },
-    { path: '/privacidad', title: `Política de Privacidad | ${siteName}`, desc: 'Política de privacidad y protección de datos de Vivir Marruecos.' },
-    { path: '/aviso-legal', title: `Aviso Legal | ${siteName}`, desc: 'Aviso legal e información general de Vivir Marruecos.' },
+    { path: '/privacidad', title: `Política de Privacidad | ${siteName}`, desc: 'Cómo trata Vivirmarruecos SARL (Vivir Marruecos) tus datos personales: responsable, finalidad, proveedores, conservación y tus derechos.' },
+    { path: '/aviso-legal', title: `Aviso Legal | ${siteName}`, desc: 'Aviso legal de Vivir Marruecos: datos de Vivirmarruecos SARL (ICE y Registro de Comercio), domicilio en Hassi Labied, propiedad intelectual y responsabilidad.' },
     { path: '/cookies', title: `Política de Cookies | ${siteName}`, desc: 'Política de cookies: información sobre el uso de cookies en vivirmarruecos.com.' },
     { path: '/condiciones', title: `Condiciones Generales de Contratación | ${siteName}`, desc: 'Condiciones generales de contratación de nuestros viajes y rutas por Marruecos.' }
   ];

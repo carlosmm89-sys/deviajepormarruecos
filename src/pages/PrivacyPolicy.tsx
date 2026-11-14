@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
   const { tr } = useTranslation();
 
   const seo = tr({
-    es: { title: 'Política de Privacidad | Vivir Marruecos', desc: 'Nuestra Política de Privacidad describe cómo recopilamos, usamos y protegemos sus datos personales.' },
+    es: { title: 'Política de Privacidad | Vivir Marruecos', desc: 'Cómo trata Vivirmarruecos SARL (Vivir Marruecos) tus datos personales: responsable, finalidad, proveedores, conservación y tus derechos.' },
     en: { title: 'Privacy Policy | Vivir Marruecos', desc: 'Our Privacy Policy describes how we collect, use and protect your personal data.' },
     fr: { title: 'Politique de confidentialité | Vivir Marruecos', desc: 'Notre politique de confidentialité explique comment nous collectons, utilisons et protégeons vos données personnelles.' },
   });
