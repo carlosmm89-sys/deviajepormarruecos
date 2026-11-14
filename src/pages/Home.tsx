@@ -148,7 +148,7 @@ export default function Home() {
                     src={optImg(dest.image_url, 800)}
                     srcSet={optSrcSet(dest.image_url, [400, 640, 800])}
                     sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-                    alt=""
+                    alt={dest.name}
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"

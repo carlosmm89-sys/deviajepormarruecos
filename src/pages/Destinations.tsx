@@ -51,7 +51,7 @@ export default function Destinations() {
               <div className="aspect-[4/5] rounded-[2.5rem] overflow-hidden relative">
                 <img
                   src={optImg(dest.image_url, 800)}
-                  alt=""
+                  alt={dest.name}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   referrerPolicy="no-referrer"
@@ -59,7 +59,7 @@ export default function Destinations() {
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
                 <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end text-white opacity-0 group-hover:opacity-100 transition-opacity">
                   <span className="text-sm font-bold flex items-center gap-2">
-                    Explorar <ArrowRight className="w-4 h-4" />
+                    {tr({ es: 'Explorar', en: 'Explore', fr: 'Explorer' })} <ArrowRight className="w-4 h-4" />
                   </span>
                 </div>
               </div>

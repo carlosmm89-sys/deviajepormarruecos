@@ -168,7 +168,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         className="absolute top-full right-0 mt-4 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 p-2"
                       >
                         <div className="p-2">
-                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-2">Idioma</p>
+                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-2">{tr({ es: 'Idioma', en: 'Language', fr: 'Langue' })}</p>
                           <div className="grid grid-cols-1 gap-1">
                             {(['es', 'en', 'fr'] as Language[]).map((l) => (
                               <button
@@ -182,7 +182,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                           </div>
                         </div>
                         <div className="p-2 border-t border-gray-50 mt-1 pt-3">
-                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-2">Moneda</p>
+                          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-2">{tr({ es: 'Moneda', en: 'Currency', fr: 'Devise' })}</p>
                           <div className="grid grid-cols-2 gap-1">
                             {(['EUR', 'USD', 'GBP', 'MAD'] as CurrencyCode[]).map((c) => (
                               <button
@@ -267,7 +267,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
                 <div className="grid grid-cols-2 gap-4 py-4 border-y border-gray-100">
                   <div>
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Idioma</p>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{tr({ es: 'Idioma', en: 'Language', fr: 'Langue' })}</p>
                     <div className="flex flex-wrap gap-2">
                       {(['es', 'en', 'fr'] as Language[]).map((l) => (
                         <button
@@ -281,7 +281,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Divisa</p>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{tr({ es: 'Divisa', en: 'Currency', fr: 'Devise' })}</p>
                     <div className="flex flex-wrap gap-2">
                        {(['EUR', 'USD', 'GBP', 'MAD'] as CurrencyCode[]).map((c) => (
                         <button
