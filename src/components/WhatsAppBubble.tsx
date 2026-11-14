@@ -101,7 +101,7 @@ export default function WhatsAppBubble() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={closeInvite}
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#1ebe5a] transition-colors"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-[#15803D] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#166534] transition-colors"
             >
               <MessageCircle className="h-4 w-4" strokeWidth={2.5} />
               {tr({ es: 'Escribir por WhatsApp', en: 'Write on WhatsApp', fr: 'Écrire sur WhatsApp' })}

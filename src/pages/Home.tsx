@@ -466,7 +466,7 @@ export default function Home() {
                   href={`https://wa.me/${settings.whatsapp_number.replace(/\D/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-white text-white hover:text-[#128C7E] px-8 py-5 rounded-full text-lg font-bold transition-all duration-300"
+                  className="inline-flex items-center gap-3 bg-[#15803D] hover:bg-white text-white hover:text-[#15803D] px-8 py-5 rounded-full text-lg font-bold transition-all duration-300"
                 >
                   <MessageCircle className="w-5 h-5" /> WhatsApp
                 </a>
