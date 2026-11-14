@@ -308,7 +308,7 @@ export default function DestinationDetail() {
                             {tour.title}
                           </h3>
                           <p className="text-gray-500 text-sm line-clamp-4 leading-relaxed flex-1">
-                            {tour.itinerary_details?.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&') || tr({ es: 'Descubre esta increíble aventura en Marruecos.', en: 'Discover this amazing adventure in Morocco.', fr: 'Découvrez cette incroyable aventure au Maroc.' })}
+                            {(tour.description || tour.itinerary_details)?.replace(/<[^>]*>?/gm, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim() || tr({ es: 'Descubre esta increíble aventura en Marruecos.', en: 'Discover this amazing adventure in Morocco.', fr: 'Découvrez cette incroyable aventure au Maroc.' })}
                           </p>
                         </div>
 

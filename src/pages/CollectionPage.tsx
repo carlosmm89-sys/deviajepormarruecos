@@ -183,7 +183,7 @@ export default function CollectionPage() {
                 </h2>
                 
                 <p className="text-gray-600 leading-relaxed mb-8 max-w-none text-left md:text-justify line-clamp-4">
-                  {tour.description?.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&')}
+                  {tour.description?.replace(/<[^>]*>?/gm, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim()}
                 </p>
                 
                 <div className="flex items-center gap-4">
