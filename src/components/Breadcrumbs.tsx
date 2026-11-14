@@ -11,9 +11,11 @@ export interface BreadcrumbItem {
 
 interface BreadcrumbsProps {
   items: BreadcrumbItem[];
+  /** Sobre una foto oscura: texto blanco y centrado */
+  onImage?: boolean;
 }
 
-export default function Breadcrumbs({ items }: BreadcrumbsProps) {
+export default function Breadcrumbs({ items, onImage = false }: BreadcrumbsProps) {
   const { tr } = useTranslation();
   const schema = {
     "@context": "https://schema.org",
@@ -35,16 +37,16 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
   };
 
   return (
-    <nav aria-label="Breadcrumb" className="mb-6 flex">
+    <nav aria-label="Breadcrumb" className={`mb-6 flex ${onImage ? 'justify-center' : ''}`}>
       <Helmet>
         <script type="application/ld+json">
           {JSON.stringify(schema)}
         </script>
       </Helmet>
       
-      <ol className="flex items-center space-x-2 text-sm text-gray-500 overflow-x-auto whitespace-nowrap pb-2 scrollbar-none">
+      <ol className={`flex items-center space-x-2 text-sm ${onImage ? 'text-white/80' : 'text-gray-500'} overflow-x-auto whitespace-nowrap pb-2 scrollbar-none`}>
         <li>
-          <Link to="/" className="text-gray-400 hover:text-brand-primary transition-colors flex items-center">
+          <Link to="/" className={`${onImage ? 'text-white/80' : 'text-gray-400'} hover:text-brand-primary transition-colors flex items-center`}>
             <Home className="w-4 h-4" />
             <span className="sr-only">{tr({ es: 'Inicio', en: 'Home', fr: 'Accueil' })}</span>
           </Link>
@@ -52,7 +54,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         
         {items.map((item, index) => (
           <li key={index} className="flex items-center">
-            <ChevronRight className="w-4 h-4 text-gray-300 mx-1 flex-shrink-0" />
+            <ChevronRight className={`w-4 h-4 ${onImage ? 'text-white/60' : 'text-gray-300'} mx-1 flex-shrink-0`} />
             
             {item.url ? (
               <Link 
@@ -62,7 +64,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
                 {item.label}
               </Link>
             ) : (
-              <span className="text-gray-900 font-medium" aria-current="page">
+              <span className={`${onImage ? 'text-white' : 'text-gray-900'} font-medium`} aria-current="page">
                 {item.label}
               </span>
             )}

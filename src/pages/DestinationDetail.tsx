@@ -165,7 +165,7 @@ export default function DestinationDetail() {
         schema={destinationSchema}
       />
       {/* Hero Section */}
-      <section className="relative h-[50vh] flex items-end overflow-hidden">
+      <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src={optImg(destination.image_url, 1600)}
@@ -173,16 +173,16 @@ export default function DestinationDetail() {
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-black/45" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 pb-12 w-full">
-          <Breadcrumbs items={[
+        <div className="relative z-10 max-w-7xl mx-auto px-4 w-full text-center">
+          <Breadcrumbs onImage items={[
             { label: tr({ es: 'Destinos', en: 'Destinations', fr: 'Destinations' }), url: '/destinations' },
             { label: destination.name }
           ]} />
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight mt-4">{headings(destination).h1}</h1>
+            <h1 className="text-4xl md:text-6xl font-serif font-bold text-white leading-tight mt-4 text-center drop-shadow-lg">{headings(destination).h1}</h1>
           </div>
         </div>
       </section>
