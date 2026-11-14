@@ -290,6 +290,7 @@ export default function TourDetail() {
 
           <button 
             onClick={() => openGallery(0)}
+            aria-label={tr({ es: 'Ver todas las fotos', en: 'View all photos', fr: 'Voir toutes les photos' })}
             className="absolute bottom-4 right-4 md:bottom-6 md:right-6 bg-white/95 backdrop-blur-sm border border-gray-200 text-gray-900 text-sm font-bold px-4 py-2.5 md:px-5 md:py-3 rounded-xl shadow-lg hover:bg-white hover:scale-105 transition-all flex items-center gap-2 z-10"
           >
             <ImageIcon className="w-4 h-4 md:w-5 md:h-5" />
@@ -570,32 +571,32 @@ export default function TourDetail() {
                     
                     <form className="space-y-6" onSubmit={handleLeadSubmit}>
                       <div className="space-y-4">
-                        <input name="first_name" type="text" placeholder={tr({ es: 'Nombre completo*', en: 'Full name*', fr: 'Nom complet*' })} className="input-field text-gray-900 placeholder:text-gray-900" required />
-                        <input name="contact_email" type="email" placeholder="Email*" className="input-field text-gray-900 placeholder:text-gray-900" required />
-                        <input name="phone" type="tel" placeholder={tr({ es: 'Teléfono', en: 'Phone', fr: 'Téléphone' })} className="input-field text-gray-900 placeholder:text-gray-900" />
+                        <input name="first_name" type="text" aria-label={tr({ es: 'Nombre completo', en: 'Full name', fr: 'Nom complet' })} placeholder={tr({ es: 'Nombre completo*', en: 'Full name*', fr: 'Nom complet*' })} className="input-field text-gray-900 placeholder:text-gray-900" required />
+                        <input name="contact_email" type="email" aria-label="Email" placeholder="Email*" className="input-field text-gray-900 placeholder:text-gray-900" required />
+                        <input name="phone" type="tel" aria-label={tr({ es: 'Teléfono', en: 'Phone', fr: 'Téléphone' })} placeholder={tr({ es: 'Teléfono', en: 'Phone', fr: 'Téléphone' })} className="input-field text-gray-900 placeholder:text-gray-900" />
                         
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">{tr({ es: 'Fecha de llegada*', en: 'Arrival date*', fr: 'Date d’arrivée*' })}</label>
-                            <input type="date" name="date_arrival" min={new Date().toISOString().split('T')[0]} className="input-field text-gray-600" required value={dateArrival} onChange={e => setDateArrival(e.target.value)} />
+                            <input type="date" name="date_arrival" aria-label={tr({ es: 'Fecha de llegada', en: 'Arrival date', fr: 'Date d’arrivée' })} min={new Date().toISOString().split('T')[0]} className="input-field text-gray-600" required value={dateArrival} onChange={e => setDateArrival(e.target.value)} />
                           </div>
                           <div>
                             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">{tr({ es: 'Fecha de salida*', en: 'Departure date*', fr: 'Date de départ*' })}</label>
-                            <input type="date" name="date_departure" min={dateArrival || new Date().toISOString().split('T')[0]} className="input-field text-gray-600" required value={dateDeparture} onChange={e => setDateDeparture(e.target.value)} />
+                            <input type="date" name="date_departure" aria-label={tr({ es: 'Fecha de salida', en: 'Departure date', fr: 'Date de départ' })} min={dateArrival || new Date().toISOString().split('T')[0]} className="input-field text-gray-600" required value={dateDeparture} onChange={e => setDateDeparture(e.target.value)} />
                           </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">{tr({ es: 'Adultos*', en: 'Adults*', fr: 'Adultes*' })}</label>
-                            <select name="adults" className="input-field text-gray-600 bg-white" required>
+                            <select name="adults" aria-label={tr({ es: 'Adultos', en: 'Adults', fr: 'Adultes' })} className="input-field text-gray-600 bg-white" required>
                               <option value="">-</option>
                               {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
                             </select>
                           </div>
                           <div>
                             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">{tr({ es: 'Niños (3 a 8 años)', en: 'Children (3 to 8 years)', fr: 'Enfants (3 à 8 ans)' })}</label>
-                            <select name="children" className="input-field text-gray-600 bg-white">
+                            <select name="children" aria-label={tr({ es: 'Niños (3 a 8 años)', en: 'Children (3 to 8 years)', fr: 'Enfants (3 à 8 ans)' })} className="input-field text-gray-600 bg-white">
                               <option value="">-</option>
                               {[1,2,3,4,5,6].map(n => <option key={n} value={n}>{n}</option>)}
                             </select>
@@ -604,13 +605,13 @@ export default function TourDetail() {
 
                         <div>
                           <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">{tr({ es: 'Bebés (0 a 2 años)', en: 'Babies (0 to 2 years)', fr: 'Bébés (0 à 2 ans)' })}</label>
-                          <select name="infants" className="input-field text-gray-900 bg-white">
+                          <select name="infants" aria-label={tr({ es: 'Bebés (0 a 2 años)', en: 'Babies (0 to 2 years)', fr: 'Bébés (0 à 2 ans)' })} className="input-field text-gray-900 bg-white">
                             <option value="">-</option>
                             {[1,2,3,4].map(n => <option key={n} value={n}>{n}</option>)}
                           </select>
                         </div>
 
-                        <textarea name="message" placeholder={tr({ es: 'Su consulta*', en: 'Your message*', fr: 'Votre message*' })} className="input-field min-h-[100px] resize-none text-gray-900 placeholder:text-gray-900" required />
+                        <textarea name="message" aria-label={tr({ es: 'Su consulta', en: 'Your message', fr: 'Votre message' })} placeholder={tr({ es: 'Su consulta*', en: 'Your message*', fr: 'Votre message*' })} className="input-field min-h-[100px] resize-none text-gray-900 placeholder:text-gray-900" required />
                       </div>
 
                       <div className="flex gap-3">
