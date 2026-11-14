@@ -1,8 +1,29 @@
 import { getSupabase } from '../lib/supabaseLazy';
 import { Destination, Tour, Lead, BusinessSettings, BlogPost, GalleryImage } from '../types';
 
+// Los textos pegados en el editor del panel guardan «&nbsp;» entre palabras: impiden que las líneas se corten
+// y en el móvil el texto salía cortado por los lados. En la web pública se cambian por espacios normales.
+const NBSP = /&nbsp;|\u00A0/g;
+const fixSpaces = (item: any): any => {
+  if (!item || typeof item !== 'object' || Array.isArray(item)) return item;
+  const out: any = { ...item };
+  for (const k of Object.keys(out)) {
+    const v = out[k];
+    if (typeof v === 'string' && NBSP.test(v)) out[k] = v.replace(NBSP, ' ');
+    else if (k === 'destinations' && v && typeof v === 'object' && !Array.isArray(v)) out[k] = fixSpaces(v);
+    NBSP.lastIndex = 0;
+  }
+  return out;
+};
+
 // Translation Interceptor
 const applyTranslations = <T extends any>(data: T): T => {
+  if (!data) return data;
+  const merged = mergeTranslations(data);
+  return (Array.isArray(merged) ? merged.map(fixSpaces) : fixSpaces(merged)) as T;
+};
+
+const mergeTranslations = <T extends any>(data: T): T => {
   if (!data) return data;
   
   // Get active language from localStorage (synced with LanguageContext)

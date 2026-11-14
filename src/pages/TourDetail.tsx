@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useTranslation } from '../hooks/useTranslation';
+import { categoryLabel } from '../i18n/labels';
 import { REVIEW_TOTALS } from '../data/homeContent';
 import { tourPath, tourMetaDescription } from '../data/seoContent';
 import { optImg } from '../lib/image';
@@ -744,7 +745,7 @@ export default function TourDetail() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-brand-accent">
-                    {post.category || 'Blog'}
+                    {categoryLabel(post.category || 'Blog', currentLanguage)}
                   </div>
                 </div>
                 <div className="p-6 md:p-8 flex flex-col flex-1">

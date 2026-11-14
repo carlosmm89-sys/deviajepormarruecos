@@ -10,6 +10,7 @@ import { tourPath } from '../data/seoContent';
 import { optImg } from '../lib/image';
 
 import { useTranslation } from '../hooks/useTranslation';
+import { categoryLabel } from '../i18n/labels';
 export default function BlogPostDetail() {
   const { tr, currentLanguage } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
@@ -253,7 +254,7 @@ export default function BlogPostDetail() {
                   />
                   {related.category && (
                     <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-brand-accent">
-                      {related.category}
+                      {categoryLabel(related.category, currentLanguage)}
                     </div>
                   )}
                 </div>

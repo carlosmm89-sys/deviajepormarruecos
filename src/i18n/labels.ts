@@ -18,6 +18,12 @@ export const CATEGORY_LABELS: Record<string, L> = {
   'Actividades': { es: 'Actividades', en: 'Activities', fr: 'Activités' },
   'Norte de Marruecos': { es: 'Norte de Marruecos', en: 'Northern Morocco', fr: 'Nord du Maroc' },
   'Ciudades Imperiales': { es: 'Ciudades Imperiales', en: 'Imperial cities', fr: 'Villes impériales' },
+  // Categorías del blog
+  'Blog': { es: 'Blog', en: 'Blog', fr: 'Blog' },
+  'Alojamiento': { es: 'Alojamiento', en: 'Accommodation', fr: 'Hébergement' },
+  'Cultura y Tradición': { es: 'Cultura y Tradición', en: 'Culture and tradition', fr: 'Culture et tradition' },
+  'Guías de Viaje': { es: 'Guías de Viaje', en: 'Travel guides', fr: 'Guides de voyage' },
+  'Consejos Locales': { es: 'Consejos Locales', en: 'Local tips', fr: 'Conseils locaux' },
 };
 
 export function categoryLabel(cat: string, lang: string): string {

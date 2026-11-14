@@ -9,6 +9,9 @@ import { HOW_IT_WORKS, HOME_FAQS, PRICE_NOTE, REVIEWS, REVIEW_TOTALS } from './s
 import { fitTitle, HOME_TITLE } from './src/data/seoContent.js';
 import { tourPath, tourMetaDescription, destinationHeadings, collectionContent, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME, ACTIVITIES_EXTRA } from './src/data/seoContent.js';
 
+// «&nbsp;» del editor del panel → espacio normal (si no, las líneas no se cortan en el móvil)
+const nb = (html) => String(html || '').replace(/&nbsp;|\u00A0/g, ' ');
+
 dotenv.config({ path: fs.existsSync('.env.local') ? '.env.local' : '.env' });
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
@@ -337,7 +340,7 @@ async function prerender() {
     // Contenido completo para Google: descripción, itinerario día a día, qué incluye y otros tours relacionados
     const section = (h, html) => (stripHtml(html || '') ? `<section><h2>${h}</h2><div>${html}</div></section>` : '');
     const related = tours.filter(t => t.id !== tour.id).slice(0, 6);
-    const tourHtml = `<main>${navHtml}<article><h1>${escapeHtml(tour.title)}</h1><p>${escapeHtml(descText)}</p><p><strong>Precio desde:</strong> ${tour.price || 0}€ por persona (grupo de 4) | <strong>Duración:</strong> ${escapeHtml(tour.duration || '')} | <strong>Salida:</strong> ${escapeHtml(tour.departure_city || '')}${tour.return_city ? ` | <strong>Llegada:</strong> ${escapeHtml(tour.return_city)}` : ''}</p><div>${tour.description || ''}</div>${section('Itinerario día a día', tour.itinerary_details)}${section('Qué incluye', tour.description_includes)}${section('Qué no incluye', tour.description_excludes)}${section('Recomendaciones', tour.recommendations)}<section><h2>Un tour privado con una agencia local</h2><p>Vivir Marruecos es una agencia con base en Hassi Labied, a los pies de las dunas de Erg Chebbi (Merzouga). Organizamos el viaje nosotros mismos: vehículo privado, conductor de habla española y campamento en el desierto, con presupuesto a medida según el número de viajeros.</p></section>${related.length ? `<section><h2>Otros tours por Marruecos</h2><ul>${related.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul></section>` : ''}</article></main>`;
+    const tourHtml = `<main>${navHtml}<article><h1>${escapeHtml(tour.title)}</h1><p>${escapeHtml(descText)}</p><p><strong>Precio desde:</strong> ${tour.price || 0}€ por persona (grupo de 4) | <strong>Duración:</strong> ${escapeHtml(tour.duration || '')} | <strong>Salida:</strong> ${escapeHtml(tour.departure_city || '')}${tour.return_city ? ` | <strong>Llegada:</strong> ${escapeHtml(tour.return_city)}` : ''}</p><div>${nb(tour.description)}</div>${section('Itinerario día a día', nb(tour.itinerary_details))}${section('Qué incluye', nb(tour.description_includes))}${section('Qué no incluye', nb(tour.description_excludes))}${section('Recomendaciones', nb(tour.recommendations))}<section><h2>Un tour privado con una agencia local</h2><p>Vivir Marruecos es una agencia con base en Hassi Labied, a los pies de las dunas de Erg Chebbi (Merzouga). Organizamos el viaje nosotros mismos: vehículo privado, conductor de habla española y campamento en el desierto, con presupuesto a medida según el número de viajeros.</p></section>${related.length ? `<section><h2>Otros tours por Marruecos</h2><ul>${related.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul></section>` : ''}</article></main>`;
     const seoPayload = {
       title: `${tour.title} | ${siteName}`,
       description: descText,
@@ -397,7 +400,7 @@ async function prerender() {
   for (const post of posts) {
     if (!post.slug) continue;
     const descText = stripHtml(post.meta_description || post.excerpt || post.content || post.title);
-    const postHtml = `<main>${navHtml}<article><h1>${escapeHtml(post.title)}</h1><p>${escapeHtml(post.excerpt || '')}</p><div>${post.content || ''}</div></article></main>`;
+    const postHtml = `<main>${navHtml}<article><h1>${escapeHtml(post.title)}</h1><p>${escapeHtml(post.excerpt || '')}</p><div>${nb(post.content)}</div></article></main>`;
     writeRouteHtml(`/blog/${post.slug}`, injectPageSeo(baseHtml, {
       title: `${post.meta_title || post.title} | ${siteName}`,
       description: descText.slice(0, 160),
