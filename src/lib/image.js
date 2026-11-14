@@ -32,6 +32,20 @@ export function optImg(url, width = 800, quality = 70) {
     }
   }
 
+  // Pexels: mismo sistema (w = ancho, auto=compress devuelve WebP si el navegador lo admite)
+  if (url.includes('images.pexels.com/')) {
+    try {
+      const u = new URL(url);
+      u.searchParams.set('w', String(width));
+      u.searchParams.set('auto', 'compress');
+      u.searchParams.set('cs', 'tinysrgb');
+      u.searchParams.delete('dpr');
+      return u.toString();
+    } catch {
+      return url;
+    }
+  }
+
   return url;
 }
 
@@ -45,6 +59,6 @@ export function optImg(url, width = 800, quality = 70) {
  */
 export function optSrcSet(url, widths = [640, 960, 1600], quality = 70) {
   if (!url) return undefined;
-  if (!/\.supabase\.co\/storage\/v1\/object\/public\/|images\.unsplash\.com\//.test(url)) return undefined;
+  if (!/\.supabase\.co\/storage\/v1\/object\/public\/|images\.unsplash\.com\/|images\.pexels\.com\//.test(url)) return undefined;
   return widths.map(w => `${optImg(url, w, quality)} ${w}w`).join(', ');
 }
