@@ -22,7 +22,6 @@ export default function AboutUs() {
     mainEntity: {
       '@type': 'TravelAgency',
       name: COMPANY.brand,
-      legalName: COMPANY.legalName,
       foundingDate: '2015-05',
       founder: { '@type': 'Person', name: 'Ali' },
       email: COMPANY.email,
@@ -112,17 +111,6 @@ export default function AboutUs() {
           </a>
         </div>
 
-        <section className="mb-12 bg-gray-50 border border-gray-100 rounded-2xl p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">{A.companyH2}</h2>
-          <dl className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm text-gray-700">
-            <dt className="font-semibold">{A.labels.legalName}</dt><dd>{COMPANY.legalName}</dd>
-            <dt className="font-semibold">{A.labels.ice}</dt><dd>{COMPANY.ice}</dd>
-            <dt className="font-semibold">{A.labels.rc}</dt><dd>{COMPANY.rc}</dd>
-            <dt className="font-semibold">{A.labels.address}</dt><dd>{COMPANY.address}</dd>
-            <dt className="font-semibold">{A.labels.email}</dt><dd><a href={`mailto:${COMPANY.email}`} className="text-brand-primary underline">{COMPANY.email}</a></dd>
-            <dt className="font-semibold">{A.labels.since}</dt><dd>{A.sinceValue}</dd>
-          </dl>
-        </section>
 
         <div className="bg-brand-primary text-white rounded-2xl p-8 text-center">
           <p className="text-2xl font-serif font-bold mb-3">{A.ctaTitle}</p>
