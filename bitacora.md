@@ -172,3 +172,4 @@
 - Móvil: el buscador de la portada (fechas), la barra de pestañas de la ficha de tour (`-mx-4` la sacaba del ancho) y los botones de la ficha (Comparte / Guarda / PDF, en francés) se salían de la pantalla; la paginación del blog también. Corregido (`min-w-0`, `flex-wrap`, botones más pequeños en móvil).
 - `/favoritos` con su propio título (antes salía el de la portada).
 - Pendiente: el contador de visitas de la portada da error 400 (`increment_home_views`), se arregla con `fix_home_views.sql` cuando haya acceso a Supabase.
+- (18/11/2026) Móvil: el botón de WhatsApp se oculta mientras hay un formulario de contacto en pantalla (reserva del tour, presupuesto, colecciones) y vuelve al seguir bajando (`WhatsAppBubble.tsx`, IntersectionObserver). El buscador de la portada no cuenta.

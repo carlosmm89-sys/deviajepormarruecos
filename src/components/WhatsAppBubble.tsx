@@ -20,7 +20,45 @@ export default function WhatsAppBubble() {
   const [phoneNumber, setPhoneNumber] = useState<string>(boot?.whatsapp_number || DEFAULT_NUMBER);
   const [welcomeMessage, setWelcomeMessage] = useState<string>(boot?.whatsapp_welcome_message || DEFAULT_MESSAGE);
   const [showInvite, setShowInvite] = useState(false);
+  const [formOnScreen, setFormOnScreen] = useState(false);
   const { pathname } = useLocation();
+
+  // En el móvil el botón se aparta mientras hay un formulario de contacto en pantalla (reserva, presupuesto...),
+  // para no tapar campos ni la casilla de privacidad. Vuelve a salir al seguir bajando.
+  useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') return;
+    const mobile = window.matchMedia('(max-width: 767px)');
+    const visible = new Set<Element>();
+    const update = () => {
+      visible.forEach(el => { if (!el.isConnected) visible.delete(el); });
+      setFormOnScreen(mobile.matches && visible.size > 0);
+    };
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
+      update();
+    }, { threshold: 0.05 });
+    // Solo formularios de contacto (con email o mensaje): el buscador de la portada no cuenta
+    const scan = () => {
+      document.querySelectorAll('form').forEach(f => {
+        if (f.querySelector('textarea, input[type="email"]')) io.observe(f);
+      });
+      update();
+    };
+    let raf = 0;
+    const mo = new MutationObserver(() => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(scan);
+    });
+    scan();
+    mo.observe(document.body, { childList: true, subtree: true });
+    mobile.addEventListener?.('change', update);
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+      cancelAnimationFrame(raf);
+      mobile.removeEventListener?.('change', update);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     dbService.getBusinessSettings().then(settings => {
@@ -66,7 +104,8 @@ export default function WhatsAppBubble() {
 
   return (
     <div
-      className={`fixed ${aboveBookingBar ? 'bottom-28' : 'bottom-5'} right-4 md:bottom-8 md:right-8 z-[60] flex flex-col items-end gap-3`}
+      className={`fixed ${aboveBookingBar ? 'bottom-28' : 'bottom-5'} right-4 md:bottom-8 md:right-8 z-[60] flex flex-col items-end gap-3 transition-all duration-300 ${formOnScreen ? 'opacity-0 translate-y-6 pointer-events-none' : ''}`}
+      aria-hidden={formOnScreen || undefined}
     >
       {showInvite && (
         <div
