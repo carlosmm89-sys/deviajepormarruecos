@@ -24,6 +24,15 @@ const ABOUT = {
     metaTitle: 'Quiénes somos: agencia local en Merzouga desde 2015 | Vivir Marruecos',
     description: 'Vivir Marruecos es una agencia local de Hassi Labied, a los pies de las dunas de Merzouga. Organizamos tours privados por Marruecos desde 2015.',
     h1: 'Quiénes somos',
+    founder: {
+      h2: 'Hola, soy Ali',
+      caption: 'Ali, fundador de Vivir Marruecos',
+      paragraphs: [
+        'Nací en el desierto, entre las dunas de Merzouga, y el turismo forma parte de mi vida desde que era un niño: crecí acompañando a viajeros, enseñándoles el desierto y aprendiendo de cada uno de ellos.',
+        'Después de muchos años trabajando en el turismo, decidí crear mi propia empresa familiar, Vivir Marruecos, para mejorar mi vida y la de mi familia y, sobre todo, para enseñar a quien nos visita lo bonito que es mi país y mi tierra.',
+        'Cada viaje que organizamos lo preparo como si fuera para un amigo: con cariño, con calma y con las ganas de que te lleves Marruecos en el corazón.'
+      ]
+    },
     intro: 'Vivir Marruecos es una agencia de viajes y transporte turístico con base en Hassi Labied, a los pies de las dunas de Erg Chebbi, en Merzouga. Desde 2015 organizamos viajes por Marruecos para viajeros de todo el mundo.',
     sections: [
       {
@@ -62,6 +71,15 @@ const ABOUT = {
     metaTitle: 'About us: local agency in Merzouga since 2015 | Vivir Marruecos',
     description: 'Vivir Marruecos is a local agency from Hassi Labied, at the foot of the Merzouga dunes. We have organised private tours of Morocco since 2015.',
     h1: 'About us',
+    founder: {
+      h2: 'Hello, I’m Ali',
+      caption: 'Ali, founder of Vivir Marruecos',
+      paragraphs: [
+        'I was born in the desert, among the dunes of Merzouga, and tourism has been part of my life since I was a child: I grew up accompanying travellers, showing them the desert and learning from each of them.',
+        'After many years working in tourism, I decided to create my own family business, Vivir Marruecos, to build a better life for my family and, above all, to show everyone who visits us how beautiful my country and my homeland are.',
+        'I plan every trip we organise as if it were for a friend: with care, without rushing, and hoping you take Morocco home in your heart.'
+      ]
+    },
     intro: 'Vivir Marruecos is a travel and tourist transport agency based in Hassi Labied, at the foot of the Erg Chebbi dunes in Merzouga. Since 2015 we have organised trips around Morocco for travellers from all over the world.',
     sections: [
       {
@@ -100,6 +118,15 @@ const ABOUT = {
     metaTitle: 'Qui sommes-nous : agence locale à Merzouga depuis 2015 | Vivir Marruecos',
     description: 'Vivir Marruecos est une agence locale de Hassi Labied, au pied des dunes de Merzouga. Nous organisons des circuits privés au Maroc depuis 2015.',
     h1: 'Qui sommes-nous',
+    founder: {
+      h2: 'Bonjour, je suis Ali',
+      caption: 'Ali, fondateur de Vivir Marruecos',
+      paragraphs: [
+        'Je suis né dans le désert, au milieu des dunes de Merzouga, et le tourisme fait partie de ma vie depuis que je suis enfant : j’ai grandi en accompagnant des voyageurs, en leur faisant découvrir le désert et en apprenant de chacun d’eux.',
+        'Après de nombreuses années dans le tourisme, j’ai décidé de créer ma propre entreprise familiale, Vivir Marruecos, pour améliorer ma vie et celle de ma famille et, surtout, pour montrer à ceux qui nous rendent visite à quel point mon pays et ma région sont beaux.',
+        'Je prépare chaque voyage comme s’il était pour un ami : avec attention, sans précipitation et avec l’envie que vous rentriez avec le Maroc dans le cœur.'
+      ]
+    },
     intro: 'Vivir Marruecos est une agence de voyages et de transport touristique basée à Hassi Labied, au pied des dunes de l’Erg Chebbi, à Merzouga. Depuis 2015, nous organisons des voyages au Maroc pour des voyageurs du monde entier.',
     sections: [
       {

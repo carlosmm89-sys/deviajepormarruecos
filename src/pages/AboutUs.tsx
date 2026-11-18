@@ -24,6 +24,7 @@ export default function AboutUs() {
       name: COMPANY.brand,
       legalName: COMPANY.legalName,
       foundingDate: '2015-05',
+      founder: { '@type': 'Person', name: 'Ali' },
       email: COMPANY.email,
       address: BUSINESS_ADDRESS,
       knowsLanguage: ['es', 'en', 'fr'],
@@ -65,20 +66,18 @@ export default function AboutUs() {
           <img src="/images/blog/desert.png" alt={tr({ es: 'Dunas de Erg Chebbi en Merzouga', en: 'Erg Chebbi dunes in Merzouga', fr: 'Dunes de l’Erg Chebbi à Merzouga' })} width="1200" height="675" loading="lazy" className="w-full h-64 md:h-80 object-cover" />
         </figure>
 
-        {A.sections.map((s, i) => (
-          <section key={s.h2} className="mb-10">
-            <h2 className="text-2xl md:text-3xl font-serif font-bold text-gray-900 mb-4">{s.h2}</h2>
-            {i === 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-[1fr_260px] gap-6 items-start">
-                <div>{s.paragraphs?.map(p => <p key={p} className="text-gray-700 leading-relaxed mb-4">{p}</p>)}</div>
-                <figure className="rounded-2xl overflow-hidden shadow-sm">
+        <section className="mb-12">
+          <h2 className="text-2xl md:text-3xl font-serif font-bold text-gray-900 mb-4">{A.founder.h2}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr_260px] gap-6 items-start">
+            <div>{A.founder.paragraphs.map(p => <p key={p} className="text-gray-700 leading-relaxed mb-4">{p}</p>)}</div>
+            <figure className="rounded-2xl overflow-hidden shadow-sm">
                   <picture>
                     <source type="image/webp" srcSet="/images/equipo/vivir-marruecos-equipo-480.webp 480w, /images/equipo/vivir-marruecos-equipo-800.webp 800w" sizes="(min-width: 640px) 260px, 100vw" />
                     <img
                       src="/images/equipo/vivir-marruecos-equipo-800.jpg"
                       srcSet="/images/equipo/vivir-marruecos-equipo-480.jpg 480w, /images/equipo/vivir-marruecos-equipo-800.jpg 800w"
                       sizes="(min-width: 640px) 260px, 100vw"
-                      alt={tr({ es: 'Fundador de Vivir Marruecos junto a alfombras bereberes', en: 'Founder of Vivir Marruecos next to Berber rugs', fr: 'Fondateur de Vivir Marruecos devant des tapis berbères' })}
+                      alt={A.founder.caption}
                       width="800"
                       height="1067"
                       loading="lazy"
@@ -86,11 +85,16 @@ export default function AboutUs() {
                     />
                   </picture>
                   <figcaption className="bg-white px-4 py-3 text-sm font-semibold text-gray-800 text-center border-t border-gray-100">
-                    {tr({ es: 'Fundador de Vivir Marruecos', en: 'Founder of Vivir Marruecos', fr: 'Fondateur de Vivir Marruecos' })}
+                    {A.founder.caption}
                   </figcaption>
                 </figure>
-              </div>
-            ) : s.paragraphs?.map(p => <p key={p} className="text-gray-700 leading-relaxed mb-4">{p}</p>)}
+          </div>
+        </section>
+
+        {A.sections.map(s => (
+          <section key={s.h2} className="mb-10">
+            <h2 className="text-2xl md:text-3xl font-serif font-bold text-gray-900 mb-4">{s.h2}</h2>
+            {s.paragraphs?.map(p => <p key={p} className="text-gray-700 leading-relaxed mb-4">{p}</p>)}
             {s.list && (
               <ul className="list-disc pl-6 space-y-2 text-gray-700">
                 {s.list.map(li => <li key={li}>{li}</li>)}

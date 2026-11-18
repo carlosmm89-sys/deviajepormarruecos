@@ -182,3 +182,4 @@
 - Títulos EN/FR de portada y /tours orientados a búsquedas (`HOME_I18N_SEO`, `TOURS_TITLE`). Datos estructurados de la portada con fecha de fundación y horario.
 - (18/11/2026) Contador de visitas de la portada arreglado: Carlos ejecutó `fix_home_views.sql` en Supabase; `increment_home_views` responde 204 (antes 400).
 - (18/11/2026) Quiénes somos: foto del equipo (enviada por el propietario) en `public/images/equipo/` (480 y 800 px, WebP y JPG). Solo se muestra en esa página (no como imagen al compartir).
+- (18/11/2026) Quiénes somos: apartado «Hola, soy Ali» (ES/EN/FR) con la historia del fundador junto a su foto; pie «Ali, fundador de Vivir Marruecos»; `founder` en los datos estructurados. Texto en `companyContent.js` (`founder`).
