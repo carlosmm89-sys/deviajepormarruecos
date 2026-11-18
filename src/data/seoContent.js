@@ -248,13 +248,20 @@ export const ACTIVITIES_EXTRA_I18N = {
 /** Título, descripción y H1 de la portada en inglés y francés (en español se usan HOME_TITLE, los Ajustes y HOME_H1_FALLBACK). */
 export const HOME_I18N_SEO = {
   en: {
-    title: 'Private tours of Morocco and Merzouga | Vivir Marruecos',
+    title: 'Morocco Private Tours & Sahara Desert Trips | Vivir Marruecos',
     h1: 'Private tours of Morocco and the Merzouga desert',
     description: 'Tailor-made routes from Marrakech, Fez, Tangier and Casablanca, with a night in a tent in the Erg Chebbi dunes. Local agency based in Merzouga.'
   },
   fr: {
-    title: 'Circuits privés au Maroc et à Merzouga | Vivir Marruecos',
+    title: 'Circuits privés au Maroc et désert de Merzouga | Vivir Marruecos',
     h1: 'Circuits privés au Maroc et dans le désert de Merzouga',
     description: 'Itinéraires sur mesure depuis Marrakech, Fès, Tanger et Casablanca, avec une nuit sous la tente dans les dunes de l’Erg Chebbi. Agence locale basée à Merzouga.'
   }
+};
+
+/** Título (pestaña y Google) de /tours en cada idioma; el H1 de la página no cambia. */
+export const TOURS_TITLE = {
+  es: 'Tours y circuitos por Marruecos | Vivir Marruecos',
+  en: 'Morocco Tours from Marrakech, Fes & Tangier | Vivir Marruecos',
+  fr: 'Circuits au Maroc depuis Marrakech, Fès et Tanger | Vivir Marruecos'
 };

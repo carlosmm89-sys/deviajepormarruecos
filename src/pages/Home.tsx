@@ -11,7 +11,7 @@ import SEO from '../components/SEO';
 import { usePageViews } from '../hooks/usePageViews';
 import { useTranslation } from '../hooks/useTranslation';
 import { useCurrency } from '../context/CurrencyContext';
-import { tourPath, HOME_META_DESCRIPTION, HOME_TITLE } from '../data/seoContent';
+import { tourPath, HOME_META_DESCRIPTION, HOME_TITLE, HOME_I18N_SEO } from '../data/seoContent';
 import { optImg, optSrcSet } from '../lib/image';
 import { getHomeContent, localizeReviewMeta, REVIEWS, REVIEW_TOTALS, TRIPADVISOR_URL, GOOGLE_REVIEWS_URL, GOOGLE_WRITE_REVIEW_URL } from '../data/homeContent';
 
@@ -67,7 +67,7 @@ export default function Home() {
   return (
     <div className="space-y-24 pb-24">
       <SEO 
-        title={tr({ es: HOME_TITLE, en: 'Private tours of Morocco and Merzouga | Vivir Marruecos', fr: 'Circuits privés au Maroc et à Merzouga | Vivir Marruecos' })}
+        title={currentLanguage === 'es' ? HOME_TITLE : HOME_I18N_SEO[currentLanguage].title}
         description={currentLanguage === 'es' ? (settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION) : heroTexts!.subtitle}
         url="/"
       />

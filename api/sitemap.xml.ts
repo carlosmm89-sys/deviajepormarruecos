@@ -29,6 +29,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       '/actividades',
       '/galeria',
       '/blog',
+      '/sobre-nosotros',
+      '/contacto',
       '/privacidad',
       '/aviso-legal',
       '/cookies',

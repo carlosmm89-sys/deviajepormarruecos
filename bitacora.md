@@ -173,3 +173,10 @@
 - `/favoritos` con su propio título (antes salía el de la portada).
 - Pendiente: el contador de visitas de la portada da error 400 (`increment_home_views`), se arregla con `fix_home_views.sql` cuando haya acceso a Supabase.
 - (18/11/2026) Móvil: el botón de WhatsApp se oculta mientras hay un formulario de contacto en pantalla (reserva del tour, presupuesto, colecciones) y vuelve al seguir bajando (`WhatsAppBubble.tsx`, IntersectionObserver). El buscador de la portada no cuenta.
+
+### Quiénes somos, Contacto y medición (18/11/2026)
+- Nuevas páginas `/sobre-nosotros` (`AboutUs.tsx`) y `/contacto` (`Contact.tsx`) en ES/EN/FR, con textos en `src/data/companyContent.js` (solo datos reales: desde 2015, Hassi Labied, conductores en 3 idiomas, vehículos con seguro, datos de la SARL, horario L–V 9:00–21:00). Contacto: WhatsApp, email, presupuesto (abre el formulario), horario, dirección, mapa de Google y enlaces para opinar en Google y Tripadvisor. En menú, pie, sitemap y pre-renderizado (AboutPage / ContactPage con TravelAgency, horario y contactPoint).
+- Menú móvil: el botón inferior abre el formulario de presupuesto (antes «Contacto» apuntaba a `#contacto`).
+- Pie: el WhatsApp de reserva, si no cargan los Ajustes, era un número inventado (+212 600 000 000); ahora +34 604 48 82 23.
+- Analytics (GA4): `generate_lead` al enviar el formulario de un tour, de una colección o el de presupuesto; `contact_click` (method whatsapp/email/phone) en cualquier enlace de WhatsApp, email o teléfono (`src/lib/track.ts`, `GoogleAnalytics.tsx`). Marcarlos como eventos clave en GA4.
+- Títulos EN/FR de portada y /tours orientados a búsquedas (`HOME_I18N_SEO`, `TOURS_TITLE`). Datos estructurados de la portada con fecha de fundación y horario.

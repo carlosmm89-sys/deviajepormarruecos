@@ -7,9 +7,10 @@ import { optImg, optSrcSet } from './src/lib/image.js';
 import { GUIDE_PATH, getGuide } from './src/data/guiaViaje.js';
 import { LANGS, localizePath, stripLangPrefix, alternateUrls, localizeHtmlLinks } from './src/i18n/urlLang.js';
 import { collectionContentI18n } from './src/data/collectionsI18n.js';
+import { getAbout, getContact, ABOUT_PATH, CONTACT_PATH, COMPANY, OPENING_HOURS } from './src/data/companyContent.js';
 import { getHomeContent, localizeReviewMeta, REVIEWS, REVIEW_TOTALS } from './src/data/homeContent.js';
 import { fitTitle, HOME_TITLE } from './src/data/seoContent.js';
-import { tourPath, tourMetaDescription, destinationHeadings, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME, ACTIVITIES_EXTRA_I18N, HOME_I18N_SEO } from './src/data/seoContent.js';
+import { tourPath, tourMetaDescription, destinationHeadings, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME, ACTIVITIES_EXTRA_I18N, HOME_I18N_SEO, TOURS_TITLE } from './src/data/seoContent.js';
 
 // «&nbsp;» del editor del panel → espacio normal (si no, las líneas no se cortan en el móvil)
 const nb = (html) => String(html || '').replace(/&nbsp;|\u00A0/g, ' ');
@@ -254,7 +255,7 @@ async function prerender() {
     const home = getHomeContent(lang);
     const GUIDE = getGuide(lang);
 
-    const navHtml = `<nav aria-label="${T({ es: 'Navegación principal', en: 'Main navigation', fr: 'Navigation principale' })}"><a href="${L('/')}">${HOME_NAME[lang]}</a> | <a href="${L('/destinations')}">${T({ es: 'Destinos', en: 'Destinations', fr: 'Destinations' })}</a> | <a href="${L('/tours')}">${T({ es: 'Tours en Marruecos', en: 'Tours in Morocco', fr: 'Circuits au Maroc' })}</a> | <a href="${L('/actividades')}">${T({ es: 'Actividades', en: 'Activities', fr: 'Activités' })}</a> | <a href="${L(GUIDE_PATH)}">${T({ es: 'Viaje a Marruecos', en: 'Travelling to Morocco', fr: 'Voyager au Maroc' })}</a> | <a href="${L('/blog')}">Blog</a> | <a href="${L('/galeria')}">${T({ es: 'Galería', en: 'Gallery', fr: 'Galerie' })}</a> | ${LANGS.filter(l => l !== lang).map(l => `<a href="${localizePath('/', l)}" hreflang="${l}">${{ es: 'Español', en: 'English', fr: 'Français' }[l]}</a>`).join(' | ')}</nav>`;
+    const navHtml = `<nav aria-label="${T({ es: 'Navegación principal', en: 'Main navigation', fr: 'Navigation principale' })}"><a href="${L('/')}">${HOME_NAME[lang]}</a> | <a href="${L('/destinations')}">${T({ es: 'Destinos', en: 'Destinations', fr: 'Destinations' })}</a> | <a href="${L('/tours')}">${T({ es: 'Tours en Marruecos', en: 'Tours in Morocco', fr: 'Circuits au Maroc' })}</a> | <a href="${L('/actividades')}">${T({ es: 'Actividades', en: 'Activities', fr: 'Activités' })}</a> | <a href="${L(GUIDE_PATH)}">${T({ es: 'Viaje a Marruecos', en: 'Travelling to Morocco', fr: 'Voyager au Maroc' })}</a> | <a href="${L('/blog')}">Blog</a> | <a href="${L('/galeria')}">${T({ es: 'Galería', en: 'Gallery', fr: 'Galerie' })}</a> | <a href="${L('/sobre-nosotros')}">${T({ es: 'Quiénes somos', en: 'About us', fr: 'Qui sommes-nous' })}</a> | <a href="${L('/contacto')}">${T({ es: 'Contacto', en: 'Contact', fr: 'Contact' })}</a> | ${LANGS.filter(l => l !== lang).map(l => `<a href="${localizePath('/', l)}" hreflang="${l}">${{ es: 'Español', en: 'English', fr: 'Français' }[l]}</a>`).join(' | ')}</nav>`;
 
     // 1. Portada
     const homeSeo = lang === 'es'
@@ -289,6 +290,8 @@ async function prerender() {
         address: BUSINESS_ADDRESS,
         image: settings?.logo_url || `${DOMAIN}/pwa-512x512.png`,
         knowsLanguage: ['es', 'en', 'fr'],
+        foundingDate: '2015-05',
+        openingHoursSpecification: OPENING_HOURS,
         sameAs: [settings?.instagram_url, settings?.facebook_url, settings?.tripadvisor_url].filter(Boolean)
       }, {
         '@context': 'https://schema.org',
@@ -307,7 +310,7 @@ async function prerender() {
       fr: 'Tous nos circuits privés au Maroc : le désert du Sahara, Marrakech, Fès, Tanger et les villes impériales.'
     })}</p><ul>${toursL.map(t => `<li><article><h2><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(stripHtml(t.itinerary_summary || t.description || '').slice(0, 220))}</p><p>${priceFromLabel}: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
     write('/tours', page({
-      title: `${toursTitle} | ${siteName}`,
+      title: TOURS_TITLE[lang],
       description: T({
         es: 'Explora todos nuestros tours por Marruecos: excursiones al desierto de Merzouga, rutas desde Marrakech, Fez, Tánger y viajes a medida.',
         en: 'Explore all our tours of Morocco: trips to the Merzouga desert, routes from Marrakech, Fez and Tangier, and tailor-made journeys.',
@@ -418,6 +421,40 @@ async function prerender() {
         bodyHtml: `<main>${navHtml}<h1>${escapeHtml(sp.title)}</h1><p>${escapeHtml(sp.desc)}</p></main>`
       }));
     }
+
+    // 6b. Quiénes somos y Contacto
+    const A = getAbout(lang);
+    const aboutBody = `<main>${navHtml}<article><h1>${escapeHtml(A.h1)}</h1><p>${escapeHtml(A.intro)}</p>${A.sections.map(sec => `<section><h2>${escapeHtml(sec.h2)}</h2>${(sec.paragraphs || []).map(p => `<p>${escapeHtml(p)}</p>`).join('')}${sec.list ? `<ul>${sec.list.map(li => `<li>${escapeHtml(li)}</li>`).join('')}</ul>` : ''}</section>`).join('')}<section><h2>${escapeHtml(A.companyH2)}</h2><ul><li>${A.labels.legalName}: ${COMPANY.legalName}</li><li>${A.labels.ice}: ${COMPANY.ice}</li><li>${A.labels.rc}: ${COMPANY.rc}</li><li>${A.labels.address}: ${escapeHtml(COMPANY.address)}</li><li>${A.labels.email}: <a href="mailto:${COMPANY.email}">${COMPANY.email}</a></li><li>${A.labels.since}: ${escapeHtml(A.sinceValue)}</li></ul></section><p><a href="${L('/tours')}">${escapeHtml(A.ctaTours)}</a> | <a href="${L(CONTACT_PATH)}">${escapeHtml(A.ctaContact)}</a></p></article></main>`;
+    const agencyLd = (extra = {}) => ({
+      '@type': 'TravelAgency',
+      name: siteName,
+      legalName: COMPANY.legalName,
+      email: COMPANY.email,
+      telephone: settings?.whatsapp_number || COMPANY.whatsapp,
+      address: BUSINESS_ADDRESS,
+      openingHoursSpecification: OPENING_HOURS,
+      knowsLanguage: ['es', 'en', 'fr'],
+      url: DOMAIN,
+      ...extra
+    });
+    write(ABOUT_PATH, page({
+      title: A.metaTitle,
+      description: A.description,
+      canonicalPath: L(ABOUT_PATH),
+      schema: [{ '@context': 'https://schema.org', '@type': 'AboutPage', name: A.h1, inLanguage: lang, url: `${DOMAIN}${L(ABOUT_PATH)}`, mainEntity: agencyLd({ foundingDate: '2015-05' }) }, crumbs([{ name: A.h1, path: ABOUT_PATH }])],
+      bodyHtml: aboutBody
+    }));
+
+    const C = getContact(lang);
+    const phone = settings?.whatsapp_number || COMPANY.whatsapp;
+    const contactBody = `<main>${navHtml}<h1>${escapeHtml(C.h1)}</h1><p>${escapeHtml(C.intro)}</p><section><h2>${C.whatsapp}</h2><p>${escapeHtml(C.whatsappText)} <a href="https://wa.me/${phone.replace(/\D/g, '')}">${escapeHtml(phone)}</a></p></section><section><h2>${C.email}</h2><p>${escapeHtml(C.emailText)} <a href="mailto:${COMPANY.email}">${COMPANY.email}</a></p></section><section><h2>${escapeHtml(C.quote)}</h2><p>${escapeHtml(C.quoteText)}</p></section><section><h2>${escapeHtml(C.hours)}</h2><p>${escapeHtml(C.hoursValue)}</p><h2>${escapeHtml(C.address)}</h2><p>${escapeHtml(C.addressValue)}</p><h2>${escapeHtml(C.languages)}</h2><p>${escapeHtml(C.languagesValue)}</p></section></main>`;
+    write(CONTACT_PATH, page({
+      title: C.metaTitle,
+      description: C.description,
+      canonicalPath: L(CONTACT_PATH),
+      schema: [{ '@context': 'https://schema.org', '@type': 'ContactPage', name: C.h1, inLanguage: lang, url: `${DOMAIN}${L(CONTACT_PATH)}`, mainEntity: agencyLd({ contactPoint: [{ '@type': 'ContactPoint', contactType: 'customer service', telephone: phone, email: COMPANY.email, availableLanguage: ['Spanish', 'English', 'French'] }] }) }, crumbs([{ name: C.h1, path: CONTACT_PATH }])],
+      bodyHtml: contactBody
+    }));
 
     // 7. Cada tour: URL principal /tours/:slug (las antiguas con ID redirigen desde api/page-fallback.ts)
     const lbl = {

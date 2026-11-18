@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { trackLead } from '../lib/track';
 import { motion, AnimatePresence } from 'framer-motion';
 import { dbService } from '../services/dbService';
 import { BusinessSettings } from '../types';
@@ -103,6 +104,7 @@ export default function QuoteWizard({ isOpen, onClose, settings }: QuoteWizardPr
       }
 
       setIsSuccess(true);
+      trackLead('presupuesto');
     } catch (error) {
        console.error(error);
        toast.error(tr({ es: 'Ocurrió un error. Inténtalo de nuevo.', en: 'Something went wrong. Please try again.', fr: 'Une erreur est survenue. Réessayez.' }));

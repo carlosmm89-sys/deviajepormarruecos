@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { dbService } from '../services/dbService';
+import { track } from '../lib/track';
 
 export default function GoogleAnalytics() {
   const [gaId, setGaId] = useState<string | null>(null);
@@ -44,6 +45,20 @@ export default function GoogleAnalytics() {
       });
     }
   }, [gaId, location.pathname, location.search]);
+
+  // Clics en WhatsApp, email y teléfono (en cualquier parte de la web)
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as Element)?.closest?.('a') as HTMLAnchorElement | null;
+      const href = a?.getAttribute('href') || '';
+      const method = /^https:\/\/(wa\.me|api\.whatsapp\.com)\//.test(href) ? 'whatsapp'
+        : href.startsWith('mailto:') ? 'email'
+        : href.startsWith('tel:') ? 'phone' : '';
+      if (method) track('contact_click', { method, link_text: (a?.innerText || '').trim().slice(0, 60) || undefined });
+    };
+    document.addEventListener('click', onClick, true);
+    return () => document.removeEventListener('click', onClick, true);
+  }, []);
 
   return null;
 }

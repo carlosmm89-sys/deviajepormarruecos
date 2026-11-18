@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { trackLead } from '../lib/track';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Tour, Destination, BlogPost, BusinessSettings } from '../types';
 import { 
@@ -196,6 +197,7 @@ export default function TourDetail() {
       toast.success(tr({ es: '¡Consulta enviada! Nos pondremos en contacto contigo pronto.', en: 'Request sent! We will get back to you soon.', fr: 'Demande envoyée ! Nous vous contacterons bientôt.' }));
       form.reset();
       setSubmitted(true);
+      trackLead('tour', tour.title);
     } catch (error) {
       console.error(error);
       toast.error(tr({ es: 'Hubo un problema. Inténtalo de nuevo.', en: 'Something went wrong. Please try again.', fr: 'Un problème est survenu. Réessayez.' }));

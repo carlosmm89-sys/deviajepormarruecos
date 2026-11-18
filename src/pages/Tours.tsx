@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { TOURS_TITLE } from '../data/seoContent';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Tour, Destination } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -161,7 +162,7 @@ export default function Tours() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-24 space-y-16">
       <SEO 
-        title={tr({ es: 'Tours y circuitos por Marruecos | Vivir Marruecos', en: 'Tours and trips in Morocco | Vivir Marruecos', fr: 'Circuits et voyages au Maroc | Vivir Marruecos' })}
+        title={TOURS_TITLE[currentLanguage] || TOURS_TITLE.es}
         description={tr({ es: `Explora nuestros ${filteredTours.length > 0 ? filteredTours.length : ''} tours y descubre la aventura perfecta en Marruecos. Desde el desierto hasta la costa.`, en: `Explore our ${filteredTours.length > 0 ? filteredTours.length : ''} tours and find the perfect adventure in Morocco, from the desert to the coast.`, fr: `Découvrez nos ${filteredTours.length > 0 ? filteredTours.length : ''} circuits et trouvez l’aventure idéale au Maroc, du désert à la côte.` })}
         url="/tours"
       />

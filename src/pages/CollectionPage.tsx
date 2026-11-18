@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { trackLead } from '../lib/track';
 import { useParams, Link } from 'react-router-dom';
 import { dbService } from '../services/dbService';
 import { BlogPost, BusinessSettings } from '../types';
@@ -112,6 +113,7 @@ export default function CollectionPage() {
       toast.success(tr({ es: '¡Consulta enviada! Nos pondremos en contacto contigo pronto.', en: 'Request sent! We will get back to you soon.', fr: 'Demande envoyée ! Nous vous contacterons bientôt.' }));
       form.reset();
       setSubmitted(true);
+      trackLead('coleccion', categoryName);
     } catch (error) {
       console.error(error);
       toast.error(tr({ es: 'Hubo un problema. Inténtalo de nuevo.', en: 'Something went wrong. Please try again.', fr: 'Un problème est survenu. Réessayez.' }));

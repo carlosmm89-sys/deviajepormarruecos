@@ -78,6 +78,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { name: tr({ es: 'Actividades', en: 'Activities', fr: 'Activités' }), path: '/actividades', icon: MapPin },
     { name: tr({ es: 'Galería', en: 'Gallery', fr: 'Galerie' }), path: '/galeria', icon: MapPin },
     { name: t('nav_blog') || 'Blog', path: '/blog', icon: BookOpen },
+    { name: tr({ es: 'Contacto', en: 'Contact', fr: 'Contact' }), path: '/contacto', icon: MapPin },
   ];
 
   const handleLogout = async () => {
@@ -296,13 +297,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </div>
                 </div>
                 
-                <a
-                  href="#contacto"
-                  onClick={() => setIsMenuOpen(false)}
+                <button
+                  type="button"
+                  onClick={() => { setIsMenuOpen(false); window.dispatchEvent(new Event('open-quote-wizard')); }}
                   className="btn-primary w-full text-center mt-4"
                 >
-                  {tr({ es: 'Contacto', en: 'Contact', fr: 'Contact' })}
-                </a>
+                  {tr({ es: 'Pedir presupuesto', en: 'Request a quote', fr: 'Demander un devis' })}
+                </button>
               </div>
             </motion.div>
           )}
@@ -357,6 +358,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <li><Link to="/tours" className="hover:text-brand-accent transition-colors">{tr({ es: 'Experiencias y Rutas', en: 'Tours and Routes', fr: 'Circuits et itinéraires' })}</Link></li>
                 <li><Link to="/viaje-a-marruecos" className="hover:text-brand-accent transition-colors">{tr({ es: 'Guía: viaje a Marruecos', en: 'Guide: travelling to Morocco', fr: 'Guide : voyager au Maroc' })}</Link></li>
                 <li><Link to="/blog" className="hover:text-brand-accent transition-colors">{tr({ es: 'Blog y Consejos', en: 'Blog and Tips', fr: 'Blog et conseils' })}</Link></li>
+                <li><Link to="/sobre-nosotros" className="hover:text-brand-accent transition-colors">{tr({ es: 'Quiénes somos', en: 'About us', fr: 'Qui sommes-nous' })}</Link></li>
+                <li><Link to="/contacto" className="hover:text-brand-accent transition-colors">{tr({ es: 'Contacto', en: 'Contact', fr: 'Contact' })}</Link></li>
               </ul>
             </div>
 
@@ -385,8 +388,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </li>
                 <li className="flex items-start gap-3 pt-2">
                   <span className="flex items-center justify-center w-5 h-5 text-brand-accent flex-shrink-0">📞</span>
-                  <a href={`https://wa.me/${settings?.whatsapp_number?.replace(/\D/g, '') || ''}`} target="_blank" rel="noreferrer" className="hover:text-white transition-colors font-bold text-lg text-white">
-                    {settings?.whatsapp_number || '+212 600 000 000'}
+                  <a href={`https://wa.me/${(settings?.whatsapp_number || '+34 604 48 82 23').replace(/\D/g, '')}`} target="_blank" rel="noreferrer" className="hover:text-white transition-colors font-bold text-lg text-white">
+                    {settings?.whatsapp_number || '+34 604 48 82 23'}
                   </a>
                 </li>
                 <li className="pt-4">
