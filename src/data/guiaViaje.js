@@ -41,7 +41,7 @@ export const GUIDE = {
 <li>Excursión de 3 días al desierto: desde 180 €.</li>
 <li>Tour de 4 días: desde 250 €.</li>
 <li>Viaje de 5 días: desde 300 €.</li>
-<li>Rutas de 8 días: desde 200 €.</li>
+<li>Rutas de 8 días: desde 400 €.</li>
 <li>Rutas de 9 a 13 días: desde 400 €.</li>
 </ul>
 <p>A eso hay que sumar los vuelos, las comidas que no estén incluidas y tus gastos personales. Lo desglosamos con más detalle en <a href="/blog/cuanto-cuesta-viaje-marruecos">cuánto cuesta un viaje a Marruecos</a>. Siempre te damos un presupuesto cerrado según fechas y número de personas.</p>`
@@ -176,7 +176,7 @@ const GUIDE_EN = {
 <li>3-day desert trip: from €180.</li>
 <li>4-day tour: from €250.</li>
 <li>5-day trip: from €300.</li>
-<li>8-day routes: from €200.</li>
+<li>8-day routes: from €400.</li>
 <li>9 to 13-day routes: from €400.</li>
 </ul>
 <p>On top of that come flights, meals that are not included and your personal expenses. We break it down in more detail in <a href="/blog/cuanto-cuesta-viaje-marruecos">how much a trip to Morocco costs</a>. We always give you a fixed quote based on your dates and number of travellers.</p>`
@@ -305,7 +305,7 @@ const GUIDE_FR = {
 <li>Excursion de 3 jours dans le désert : à partir de 180 €.</li>
 <li>Circuit de 4 jours : à partir de 250 €.</li>
 <li>Voyage de 5 jours : à partir de 300 €.</li>
-<li>Circuits de 8 jours : à partir de 200 €.</li>
+<li>Circuits de 8 jours : à partir de 400 €.</li>
 <li>Circuits de 9 à 13 jours : à partir de 400 €.</li>
 </ul>
 <p>Il faut y ajouter les vols, les repas non inclus et vos dépenses personnelles. Nous détaillons tout cela dans <a href="/blog/cuanto-cuesta-viaje-marruecos">combien coûte un voyage au Maroc</a>. Nous vous envoyons toujours un devis ferme selon vos dates et le nombre de voyageurs.</p>`
