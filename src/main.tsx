@@ -38,6 +38,10 @@ try {
   }
 } catch { /* sin almacenamiento */ }
 
+// Canonical y hreflang del HTML pre-renderizado: los sustituye el componente SEO de cada página.
+// (Si la página llega de la caché de la app instalable, ese HTML es el de la portada y sus etiquetas no valen.)
+if (!redirecting) document.querySelectorAll('[data-prerender]').forEach(el => { if (el.tagName !== 'DIV') el.remove(); });
+
 // Register Service Worker for PWA
 registerSW({ immediate: true });
 

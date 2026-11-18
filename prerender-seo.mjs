@@ -68,10 +68,10 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
     .replace(/<meta property="og:type" content=".*?"\s*\/?>/i, `<meta property="og:type" content="${type}" />`);
 
   const extraHead = [
-    `<link rel="canonical" href="${fullUrl}" />`,
+    `<link rel="canonical" href="${fullUrl}" data-prerender />`,
     // Las tres versiones de la página (español, inglés, francés) para que Google muestre la de cada idioma
-    ...alternateUrls(stripLangPrefix(new URL(fullUrl).pathname)).map(a => `<link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`),
-    `<meta property="og:locale" content="${OG_LOCALE[lang] || 'es_ES'}" />`,
+    ...alternateUrls(stripLangPrefix(new URL(fullUrl).pathname)).map(a => `<link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" data-prerender />`),
+    `<meta property="og:locale" content="${OG_LOCALE[lang] || 'es_ES'}" data-prerender />`,
     // Conexión anticipada con Supabase (datos de tours y fotos): ahorra tiempo en móvil antes de pintar la página.
     // Dos conexiones: sin crossorigin para las imágenes (peticiones no-CORS) y con crossorigin para la API de datos.
     SUPABASE_ORIGIN ? `<link rel="preconnect" href="${SUPABASE_ORIGIN}" /><link rel="preconnect" href="${SUPABASE_ORIGIN}" crossorigin />` : '',
