@@ -1,16 +1,18 @@
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
-import { GUIDE, GUIDE_PATH } from '../data/guiaViaje';
+import { getGuide, GUIDE_PATH } from '../data/guiaViaje';
 
 import { useTranslation } from '../hooks/useTranslation';
 const DOMAIN = 'https://www.vivirmarruecos.com';
 
 export default function TravelGuide() {
   const { tr, currentLanguage } = useTranslation();
+  const GUIDE = getGuide(currentLanguage);
   const schema = [
     {
       '@context': 'https://schema.org',
       '@type': 'Article',
+      inLanguage: currentLanguage,
       headline: GUIDE.title,
       description: GUIDE.description,
       dateModified: GUIDE.updated,
@@ -36,11 +38,6 @@ export default function TravelGuide() {
         <nav className="text-sm text-gray-500 mb-6" aria-label={tr({ es: 'Migas de pan', en: 'Breadcrumb', fr: 'Fil d’Ariane' })}>
           <Link to="/" className="hover:text-brand-primary">{tr({ es: 'Inicio', en: 'Home', fr: 'Accueil' })}</Link> <span className="mx-1">/</span> <span>{tr({ es: 'Viaje a Marruecos', en: 'Travelling to Morocco', fr: 'Voyager au Maroc' })}</span>
         </nav>
-        {currentLanguage !== 'es' && (
-          <p className="mb-6 rounded-xl bg-gray-50 border border-gray-100 p-4 text-sm text-gray-600">
-            {tr({ es: '', en: 'This guide is written for travellers from Spain and is currently only available in Spanish.', fr: 'Ce guide est écrit pour les voyageurs venant d’Espagne et n’est pour le moment disponible qu’en espagnol.' })}
-          </p>
-        )}
         <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-6">{GUIDE.title}</h1>
         {GUIDE.intro.map((p, i) => (
           <p key={i} className="text-lg text-gray-700 mb-4 leading-relaxed">{p}</p>
