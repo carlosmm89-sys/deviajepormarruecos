@@ -438,6 +438,7 @@ async function prerender() {
       ...extra
     });
     write(ABOUT_PATH, page({
+      image: `${DOMAIN}/images/equipo/vivir-marruecos-equipo-800.jpg`,
       title: A.metaTitle,
       description: A.description,
       canonicalPath: L(ABOUT_PATH),

@@ -181,3 +181,4 @@
 - Analytics (GA4): `generate_lead` al enviar el formulario de un tour, de una colección o el de presupuesto; `contact_click` (method whatsapp/email/phone) en cualquier enlace de WhatsApp, email o teléfono (`src/lib/track.ts`, `GoogleAnalytics.tsx`). Marcarlos como eventos clave en GA4.
 - Títulos EN/FR de portada y /tours orientados a búsquedas (`HOME_I18N_SEO`, `TOURS_TITLE`). Datos estructurados de la portada con fecha de fundación y horario.
 - (18/11/2026) Contador de visitas de la portada arreglado: Carlos ejecutó `fix_home_views.sql` en Supabase; `increment_home_views` responde 204 (antes 400).
+- (18/11/2026) Quiénes somos: foto del equipo (enviada por el propietario) en `public/images/equipo/` (480 y 800 px, WebP y JPG); también como imagen para compartir la página.
