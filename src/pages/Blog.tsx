@@ -110,21 +110,21 @@ export default function Blog() {
 
         {/* Pagination Controls */}
         {posts.length > postsPerPage && (
-          <div className="flex justify-center items-center mt-16 gap-2">
+          <div className="flex flex-wrap justify-center items-center mt-16 gap-1.5 sm:gap-2">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-3 rounded-full border border-gray-200 text-gray-500 hover:border-brand-accent hover:text-brand-accent disabled:opacity-30 disabled:hover:border-gray-200 disabled:hover:text-gray-500 transition-colors"
+              className="p-2 sm:p-3 rounded-full border border-gray-200 text-gray-500 hover:border-brand-accent hover:text-brand-accent disabled:opacity-30 disabled:hover:border-gray-200 disabled:hover:text-gray-500 transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             
-            <div className="flex gap-2">
+            <div className="flex gap-1.5 sm:gap-2">
               {Array.from({ length: Math.ceil(posts.length / postsPerPage) }).map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setCurrentPage(i + 1)}
-                  className={`w-12 h-12 rounded-full font-bold flex items-center justify-center transition-colors ${currentPage === i + 1 ? 'bg-brand-accent text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-brand-accent hover:text-brand-accent'}`}
+                  className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full font-bold flex items-center justify-center transition-colors ${currentPage === i + 1 ? 'bg-brand-accent text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-brand-accent hover:text-brand-accent'}`}
                 >
                   {i + 1}
                 </button>
@@ -134,7 +134,7 @@ export default function Blog() {
             <button
               onClick={() => setCurrentPage(p => Math.min(Math.ceil(posts.length / postsPerPage), p + 1))}
               disabled={currentPage === Math.ceil(posts.length / postsPerPage)}
-              className="p-3 rounded-full border border-gray-200 text-gray-500 hover:border-brand-accent hover:text-brand-accent disabled:opacity-30 disabled:hover:border-gray-200 disabled:hover:text-gray-500 transition-colors"
+              className="p-2 sm:p-3 rounded-full border border-gray-200 text-gray-500 hover:border-brand-accent hover:text-brand-accent disabled:opacity-30 disabled:hover:border-gray-200 disabled:hover:text-gray-500 transition-colors"
             >
               <ChevronRight className="w-5 h-5" />
             </button>

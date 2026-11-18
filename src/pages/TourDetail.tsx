@@ -300,7 +300,7 @@ export default function TourDetail() {
       </section>
 
       {/* Sticky Nav */}
-      <div className="sticky top-[88px] md:top-[96px] z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all -mx-4 px-4 md:mx-0 md:px-0">
+      <div className="sticky top-[88px] md:top-[96px] z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex gap-8 overflow-x-auto no-scrollbar py-4">
             {['Descripción', 'Itinerario', 'Mapa'].map((tab) => (
@@ -352,7 +352,7 @@ export default function TourDetail() {
                   <div className="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-1">{tr({ es: 'Precio desde', en: 'Price from', fr: 'Prix à partir de' })}</div>
                   <div className="text-4xl font-black text-brand-primary">{formatPrice(tour.price)}</div>
                 </div>
-                <div className="flex items-center gap-6 mt-2">
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-2">
                   <button 
                     onClick={() => {
                       if (navigator.share) {

@@ -166,3 +166,9 @@
 - `seoContent.js`: `tourMetaDescription(tour, lang)`, `destinationHeadings(dest, siteName, lang)`, `ACTIVITIES_EXTRA_I18N`, `HOME_I18N_SEO`; textos de la colección «Excursiones de un día» (ES/EN/FR).
 - `api/sitemap.xml.ts`: todas las URLs en los 3 idiomas con `xhtml:link` hreflang. `api/page-fallback.ts`: comprueba también `/en/...` y `/fr/...` y conserva el idioma en las redirecciones. `vercel.json`: redirecciones antiguas también con `/en` y `/fr`; `noindex` en `/en|fr/favoritos`.
 - Analytics registra la ruta con el prefijo de idioma.
+
+### Revisión general (18/11/2026)
+- Comprobadas las 243 URLs del sitemap y sus enlaces internos: todas 200, sin títulos ni descripciones duplicados, páginas EN/FR sin texto en español.
+- Móvil: el buscador de la portada (fechas), la barra de pestañas de la ficha de tour (`-mx-4` la sacaba del ancho) y los botones de la ficha (Comparte / Guarda / PDF, en francés) se salían de la pantalla; la paginación del blog también. Corregido (`min-w-0`, `flex-wrap`, botones más pequeños en móvil).
+- `/favoritos` con su propio título (antes salía el de la portada).
+- Pendiente: el contador de visitas de la portada da error 400 (`increment_home_views`), se arregla con `fix_home_views.sql` cuando haya acceso a Supabase.

@@ -7,6 +7,7 @@ import { useCurrency } from '../context/CurrencyContext';
 import { Heart, Clock, MapPin, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { optImg } from '../lib/image';
+import SEO from '../components/SEO';
 
 import { useTranslation } from '../hooks/useTranslation';
 export default function Wishlist() {
@@ -42,6 +43,11 @@ export default function Wishlist() {
 
   return (
     <div className="min-h-screen bg-gray-50/50 pt-16 pb-24">
+      <SEO
+        title={tr({ es: 'Mis favoritos | Vivir Marruecos', en: 'My favourites | Vivir Marruecos', fr: 'Mes favoris | Vivir Marruecos' })}
+        description={tr({ es: 'Los tours que has guardado como favoritos.', en: 'The tours you have saved as favourites.', fr: 'Les circuits que vous avez enregistrés en favoris.' })}
+        url="/favoritos"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 mb-12">
           <Heart className="w-10 h-10 text-brand-primary fill-brand-primary" />
