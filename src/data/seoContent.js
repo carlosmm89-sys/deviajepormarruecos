@@ -46,48 +46,58 @@ export function tourPath(tour) {
 
 /** Meta descripción de un tour: usa el resumen si es útil; si es demasiado corto, la compone con los datos del tour
  *  (sin repetir el título, que Google ya muestra encima). */
-export function tourMetaDescription(tour) {
-  const strip = (s = '') => String(s).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+export function tourMetaDescription(tour, lang = 'es') {
+  const strip = (s = '') => String(s).replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
   const summary = strip(tour?.itinerary_summary);
   if (summary.length >= 90) return clip(summary);
   const text = `${strip(tour?.title)} ${strip(tour?.description)}`.toLowerCase();
   const days = String(tour?.duration || '').match(/\d+/)?.[0];
-  const from = tour?.departure_city ? ` desde ${tour.departure_city}` : '';
-  const desert = /merzouga|desierto|sahara|erg chebbi/.test(text) ? ', noche en jaima en Erg Chebbi' : '';
+  const city = tour?.departure_city;
+  const isDesert = /merzouga|desierto|desert|désert|sahara|erg chebbi/.test(text);
+  const desc = strip(tour?.description);
+  if (lang === 'en') {
+    const from = city ? ` from ${city}` : '';
+    const price = tour?.price ? ` From €${tour.price} per person.` : '';
+    if (days === '1') return clip(`Private day trip${from}.${price} ${desc}`);
+    return clip(`Private${days ? ` ${days}-day` : ''} tour${from}: English-speaking driver${isDesert ? ', a night in a tent in Erg Chebbi' : ''} and a local agency from Merzouga.${price}`);
+  }
+  if (lang === 'fr') {
+    const from = city ? ` au départ de ${city}` : '';
+    const price = tour?.price ? ` À partir de ${tour.price} € par personne.` : '';
+    if (days === '1') return clip(`Excursion privée d’une journée${from}.${price} ${desc}`);
+    return clip(`Circuit privé${days ? ` de ${days} jours` : ''}${from} : chauffeur francophone${isDesert ? ', nuit sous la tente dans l’Erg Chebbi' : ''} et agence locale de Merzouga.${price}`);
+  }
+  const from = city ? ` desde ${city}` : '';
   const price = tour?.price ? ` Desde ${tour.price} €/persona.` : '';
   // Excursiones de un día: cada una con su propia descripción (si no, todas saldrían iguales en Google)
-  if (days === '1') {
-    const desc = strip(tour?.description);
-    return clip(`Excursión privada de un día${from}.${price} ${desc}`);
-  }
-  return clip(`Tour privado${days ? ` de ${days} días` : ''}${from}: conductor en español${desert} y agencia local de Merzouga.${price}`);
+  if (days === '1') return clip(`Excursión privada de un día${from}.${price} ${desc}`);
+  return clip(`Tour privado${days ? ` de ${days} días` : ''}${from}: conductor en español${isDesert ? ', noche en jaima en Erg Chebbi' : ''} y agencia local de Merzouga.${price}`);
 }
 
 /** Título y H1 de un destino. Las páginas "rutas-desde-X" se presentan como "Tours desde X". */
-export function destinationHeadings(dest, siteName = 'Vivir Marruecos') {
+export function destinationHeadings(dest, siteName = 'Vivir Marruecos', lang = 'es') {
   const name = String(dest?.name || '').trim();
   const slug = String(dest?.slug || '');
+  let h1;
   if (slug.startsWith('rutas-desde-')) {
-    const city = name.replace(/^rutas\s+desde\s+/i, '').trim();
-    return {
-      h1: `Tours desde ${city} al desierto de Merzouga`,
-      title: `Tours desde ${city} al desierto de Merzouga | ${siteName}`
-    };
+    const city = name.replace(/^(rutas\s+desde|routes\s+from|tours\s+from|itin[ée]raires\s+depuis|circuits\s+(depuis|au\s+départ\s+de))\s+/i, '').trim();
+    h1 = lang === 'en' ? `Tours from ${city} to the Merzouga desert`
+      : lang === 'fr' ? `Circuits de ${city} au désert de Merzouga`
+      : `Tours desde ${city} al desierto de Merzouga`;
+  } else if (slug === 'excursiones-cortas') {
+    h1 = lang === 'en' ? 'Day trips in Morocco' : lang === 'fr' ? 'Excursions d’une journée au Maroc' : 'Excursiones de un día por Marruecos';
+  } else {
+    h1 = lang === 'en' ? `${name}: tours and excursions` : lang === 'fr' ? `${name} : circuits et excursions` : `${name}: tours y excursiones`;
   }
-  if (slug === 'excursiones-cortas') {
-    return {
-      h1: 'Excursiones de un día por Marruecos',
-      title: `Excursiones de un día por Marruecos | ${siteName}`
-    };
-  }
-  return {
-    h1: `${name}: tours y excursiones`,
-    title: `${name}: tours y excursiones | ${siteName}`
-  };
+  return { h1, title: `${h1} | ${siteName}` };
 }
 
 /** Introducciones de las colecciones (/coleccion/:slug). */
 export const COLLECTION_INTROS = {
+  'excursiones-de-un-dia': {
+    title: 'Excursiones de un día por Marruecos',
+    intro: 'Excursiones privadas de un día desde Marrakech a las cascadas de Ouzoud, el valle de Ourika y Essaouira, con transporte privado y conductor solo para vuestro grupo. Perfectas si tienes pocos días o quieres completar tu estancia en Marrakech.'
+  },
   'desierto': {
     title: 'Viajes al desierto de Merzouga',
     intro: 'Viajes privados al desierto del Sáhara con noche en jaima en las dunas de Erg Chebbi, paseo en dromedario al atardecer y amanecer entre dunas. Salidas desde Marrakech, Fez, Tánger o Casablanca, con conductor y vehículo solo para vuestro grupo.'
@@ -228,3 +238,23 @@ export function collectionContent(slug, fallbackName = '') {
 
 /** Párrafo extra de la página /actividades. */
 export const ACTIVITIES_EXTRA = 'Todas las actividades se organizan con guías y empresas locales de confianza en Merzouga y Marrakech. Puedes reservarlas sueltas o añadirlas a cualquiera de nuestros tours privados: te ayudamos a encajarlas en tu itinerario para aprovechar al máximo cada día de viaje.';
+
+export const ACTIVITIES_EXTRA_I18N = {
+  es: ACTIVITIES_EXTRA,
+  en: 'All activities are organised with trusted local guides and companies in Merzouga and Marrakech. You can book them on their own or add them to any of our private tours: we help you fit them into your itinerary to make the most of every day of your trip.',
+  fr: 'Toutes les activités sont organisées avec des guides et des entreprises locales de confiance à Merzouga et à Marrakech. Vous pouvez les réserver seules ou les ajouter à n’importe lequel de nos circuits privés : nous vous aidons à les intégrer à votre itinéraire pour profiter de chaque jour de voyage.'
+};
+
+/** Título, descripción y H1 de la portada en inglés y francés (en español se usan HOME_TITLE, los Ajustes y HOME_H1_FALLBACK). */
+export const HOME_I18N_SEO = {
+  en: {
+    title: 'Private tours of Morocco and Merzouga | Vivir Marruecos',
+    h1: 'Private tours of Morocco and the Merzouga desert',
+    description: 'Tailor-made routes from Marrakech, Fez, Tangier and Casablanca, with a night in a tent in the Erg Chebbi dunes. Local agency based in Merzouga.'
+  },
+  fr: {
+    title: 'Circuits privés au Maroc et à Merzouga | Vivir Marruecos',
+    h1: 'Circuits privés au Maroc et dans le désert de Merzouga',
+    description: 'Itinéraires sur mesure depuis Marrakech, Fès, Tanger et Casablanca, avec une nuit sous la tente dans les dunes de l’Erg Chebbi. Agence locale basée à Merzouga.'
+  }
+};

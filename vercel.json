@@ -12,6 +12,15 @@
       ]
     },
     {
+      "source": "/(en|fr)/favoritos",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
       "source": "/assets/(.*)",
       "headers": [
         {
@@ -142,6 +151,86 @@
     {
       "source": "/destinos",
       "destination": "/destinations",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/destinations/0b3a68e0-d1cb-44c3-b65d-c90a5664e2a1",
+      "destination": "/:lang/destinations/chefchaouen",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/destinations/938ea398-81c7-482c-b4e3-23ffa13d13f7",
+      "destination": "/:lang/destinations/desierto-erg-chebbi",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/destinations/eb32e5f0-f00c-4be6-b90a-fd1092feb4bd",
+      "destination": "/:lang/destinations/rutas-desde-tanger",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/destinations/9904823f-3b8c-4106-8e31-992ab38b374e",
+      "destination": "/:lang/destinations/rutas-desde-fez",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/destinations/8385ba05-8a1e-4fa6-82c1-ad38f02101c9",
+      "destination": "/:lang/destinations/rutas-desde-marrakech",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/destinations/f939237a-0157-4aed-b4cd-5703f89b35f3",
+      "destination": "/:lang/destinations/rutas-desde-casablanca",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/tours/f34861fb-a177-4fe9-ab91-a57a5389df95",
+      "destination": "/:lang/tours/gran-tour-de-marruecos-de-13-dias",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/blog/consejos-compras-marruecos-regateo",
+      "destination": "/:lang/blog/secretos-del-zoco-marrakech-regateo",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/blog/magia-chefchaouen-pueblo-azul-marruecos",
+      "destination": "/:lang/blog/chefchaouen-el-pueblo-azul",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/blog/que-comer-marruecos-10-platos-estrella",
+      "destination": "/:lang/blog/gastronomia-marroqui-platos-tipicos",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/blog/zagora-vs-merzouga-que-desierto-elegir",
+      "destination": "/:lang/blog/desierto-merzouga-o-zagora",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/blog/que-ver-en-marrakech-3-dias-itinerario-seo",
+      "destination": "/:lang/blog/que-ver-en-marrakech-en-3-dias",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/tours/979c2415-6305-477f-b722-a453a99a75c5",
+      "destination": "/:lang/tours/ruta-de-9-dias-desde-marrakech-hacia-tanger",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/coleccion/:slug(.*,.*)",
+      "destination": "/:lang/tours",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/destino/:slug",
+      "destination": "/:lang/destinations/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/destinos",
+      "destination": "/:lang/destinations",
       "permanent": true
     }
   ],

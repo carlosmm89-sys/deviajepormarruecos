@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
+import { langFromPath, localizePath } from '../i18n/urlLang';
 
 export type Language = 'es' | 'en' | 'fr';
 
@@ -10,40 +11,25 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+/**
+ * El idioma lo marca la URL: /en/... inglés, /fr/... francés, sin prefijo español.
+ * Así cada idioma tiene sus propias páginas y Google las indexa por separado.
+ */
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>('es');
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Load persisted language from localStorage
-    const saved = localStorage.getItem('app_language') as Language;
-    if (saved && ['es', 'en', 'fr'].includes(saved)) {
-      setLanguageState(saved);
-      document.documentElement.lang = saved;
-    } else {
-      // Auto-detect browser language if none saved.
-      // Los buscadores (Googlebot renderiza con navegador en inglés) ven siempre la versión
-      // en español, que es la del HTML pre-renderizado y la de las URLs del sitemap.
-      const isBot = /bot|crawl|spider|slurp|google|bing|yandex|duckduck|baidu|lighthouse|headless/i.test(navigator.userAgent);
-      const browserLang = navigator.language.split('-')[0];
-      if (!isBot && ['es', 'en', 'fr'].includes(browserLang)) {
-        setLanguageState(browserLang as Language);
-      }
-    }
-    setIsLoading(false);
-  }, []);
+  const language = (typeof window !== 'undefined' ? langFromPath(window.location.pathname) : 'es') as Language;
+  if (typeof document !== 'undefined') document.documentElement.lang = language;
 
   const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
+    try { localStorage.setItem('app_language', lang); } catch { /* sin almacenamiento */ }
     if (lang === language) return;
-    localStorage.setItem('app_language', lang);
-    document.documentElement.lang = lang; // Accessibility update
-    // Recarga la página para que tours, destinos y textos de la base de datos se carguen en el nuevo idioma
-    window.location.reload();
+    // Misma página en el otro idioma; se carga entera para que tours, destinos y textos de la base de datos
+    // lleguen ya en el nuevo idioma.
+    const { pathname, search, hash } = window.location;
+    window.location.href = `${localizePath(pathname, lang)}${search}${hash}`;
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, isLoading }}>
+    <LanguageContext.Provider value={{ language, setLanguage, isLoading: false }}>
       {children}
     </LanguageContext.Provider>
   );

@@ -4,10 +4,12 @@ import path from 'path';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import { optImg, optSrcSet } from './src/lib/image.js';
-import { GUIDE, GUIDE_PATH } from './src/data/guiaViaje.js';
-import { HOW_IT_WORKS, HOME_FAQS, PRICE_NOTE, REVIEWS, REVIEW_TOTALS } from './src/data/homeContent.js';
+import { GUIDE_PATH, getGuide } from './src/data/guiaViaje.js';
+import { LANGS, localizePath, stripLangPrefix, alternateUrls, localizeHtmlLinks } from './src/i18n/urlLang.js';
+import { collectionContentI18n } from './src/data/collectionsI18n.js';
+import { getHomeContent, localizeReviewMeta, REVIEWS, REVIEW_TOTALS } from './src/data/homeContent.js';
 import { fitTitle, HOME_TITLE } from './src/data/seoContent.js';
-import { tourPath, tourMetaDescription, destinationHeadings, collectionContent, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME, ACTIVITIES_EXTRA } from './src/data/seoContent.js';
+import { tourPath, tourMetaDescription, destinationHeadings, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME, ACTIVITIES_EXTRA_I18N, HOME_I18N_SEO } from './src/data/seoContent.js';
 
 // «&nbsp;» del editor del panel → espacio normal (si no, las líneas no se cortan en el móvil)
 const nb = (html) => String(html || '').replace(/&nbsp;|\u00A0/g, ' ');
@@ -45,7 +47,9 @@ function slugifyCategory(str = '') {
     .replace(/[^a-z0-9-]/g, '');
 }
 
-function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml, preloadImage, modulePreload }) {
+const OG_LOCALE = { es: 'es_ES', en: 'en_GB', fr: 'fr_FR' };
+
+function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml, preloadImage, modulePreload, lang = 'es' }) {
   const safeTitle = escapeHtml(fitTitle(title || HOME_TITLE));
   const safeDesc = escapeHtml(
     (description || 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas a medida.').slice(0, 160)
@@ -54,6 +58,7 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
   const safeImage = escapeHtml(image || `${DOMAIN}/pwa-512x512.png`);
 
   let html = baseHtml
+    .replace(/<html lang="[^"]*"/i, `<html lang="${lang}"`)
     .replace(/<title>.*?<\/title>/i, `<title>${safeTitle}</title>`)
     .replace(/<meta name="description" content=".*?"\s*\/?>/i, `<meta name="description" content="${safeDesc}">`)
     .replace(/<meta property="og:title" content=".*?"\s*\/?>/i, `<meta property="og:title" content="${safeTitle}" />`)
@@ -64,6 +69,9 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
 
   const extraHead = [
     `<link rel="canonical" href="${fullUrl}" />`,
+    // Las tres versiones de la página (español, inglés, francés) para que Google muestre la de cada idioma
+    ...alternateUrls(stripLangPrefix(new URL(fullUrl).pathname)).map(a => `<link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`),
+    `<meta property="og:locale" content="${OG_LOCALE[lang] || 'es_ES'}" />`,
     // Conexión anticipada con Supabase (datos de tours y fotos): ahorra tiempo en móvil antes de pintar la página.
     // Dos conexiones: sin crossorigin para las imágenes (peticiones no-CORS) y con crossorigin para la API de datos.
     SUPABASE_ORIGIN ? `<link rel="preconnect" href="${SUPABASE_ORIGIN}" /><link rel="preconnect" href="${SUPABASE_ORIGIN}" crossorigin />` : '',
@@ -97,28 +105,45 @@ function writeRouteHtml(routePath, htmlContent) {
   fs.writeFileSync(path.join(targetDir, 'index.html'), htmlContent, 'utf-8');
 }
 
-function breadcrumbLd(items) {
+const HOME_NAME = { es: 'Inicio', en: 'Home', fr: 'Accueil' };
+
+function breadcrumbLd(items, lang = 'es') {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: [{ name: 'Inicio', path: '/' }, ...items].map((it, i) => ({
-      '@type': 'ListItem', position: i + 1, name: it.name, item: `${DOMAIN}${it.path}`
+    itemListElement: [{ name: HOME_NAME[lang], path: '/' }, ...items].map((it, i) => ({
+      '@type': 'ListItem', position: i + 1, name: it.name, item: `${DOMAIN}${localizePath(it.path, lang)}`
     }))
   };
 }
 
-function itemListLd(name, path, entries) {
+function itemListLd(name, path, entries, lang = 'es') {
   return {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name,
-    url: `${DOMAIN}${path}`,
+    inLanguage: lang,
+    url: `${DOMAIN}${localizePath(path, lang)}`,
     mainEntity: {
       '@type': 'ItemList',
       numberOfItems: entries.length,
-      itemListElement: entries.map((e, i) => ({ '@type': 'ListItem', position: i + 1, name: e.name, url: `${DOMAIN}${e.path}` }))
+      itemListElement: entries.map((e, i) => ({ '@type': 'ListItem', position: i + 1, name: e.name, url: `${DOMAIN}${localizePath(e.path, lang)}` }))
     }
   };
+}
+
+/** Registro de la base de datos con los campos traducidos al idioma pedido (como dbService en la web). */
+function tx(rec, lang) {
+  if (!rec || lang === 'es') return rec;
+  const t = rec.translations?.[lang];
+  let out = rec;
+  if (t && typeof t === 'object') {
+    out = { ...rec, ...Object.fromEntries(Object.entries(t).filter(([, v]) => (typeof v === 'string' ? v.trim() !== '' : v != null))) };
+  }
+  if (out.destinations && typeof out.destinations === 'object' && !Array.isArray(out.destinations)) {
+    out = { ...out, destinations: tx(out.destinations, lang) };
+  }
+  return out;
 }
 
 /**
@@ -209,244 +234,322 @@ async function prerender() {
     baseHtml = baseHtml.replace('</head>', `    ${bizScript}\n  </head>`);
     fs.writeFileSync(path.join(DIST_DIR, 'spa-shell.html'), baseHtml, 'utf-8');
   }
-  const navHtml = `<nav aria-label="Navegación principal"><a href="/">Inicio</a> | <a href="/destinations">Destinos</a> | <a href="/tours">Tours en Marruecos</a> | <a href="/actividades">Actividades</a> | <a href="/viaje-a-marruecos">Viaje a Marruecos</a> | <a href="/blog">Blog</a> | <a href="/galeria">Galería</a></nav>`;
-
+  // Cada página se genera en español (sin prefijo), inglés (/en/...) y francés (/fr/...)
   let count = 0;
+  const baseToursEs = tours;
 
-  // 1. Home (/)
-  const homeBody = `<main>${navHtml}<h1>${escapeHtml(stripHtml(settings?.hero_title || HOME_H1_FALLBACK))}</h1><p>${escapeHtml(settings?.hero_subtitle || 'Agencia especializada en tours privados, excursiones al desierto de Merzouga y rutas por Marruecos.')}</p><p>Vivir Marruecos organiza tours privados por Marruecos y el desierto de Merzouga, con conductor de habla española y salidas desde Marrakech, Fez, Tánger y Casablanca.</p><section><h2>Destinos Destacados en Marruecos</h2><ul>${destinations.map(d => `<li><a href="/destinations/${d.slug || d.id}">${escapeHtml(d.name)}</a></li>`).join('')}</ul></section><section><h2>Tours privados por Marruecos</h2><ul>${tours.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul><p>${escapeHtml(PRICE_NOTE)}</p></section><section><h2>Tu viaje en 4 pasos</h2><ol>${HOW_IT_WORKS.map(st => `<li><strong>${escapeHtml(st.title)}</strong>: ${escapeHtml(st.text)}</li>`).join('')}</ol></section><section><h2>Lo que dicen nuestros viajeros</h2><p>${REVIEW_TOTALS.tripadvisor.rating} de 5 en Tripadvisor (${REVIEW_TOTALS.tripadvisor.count} opiniones) y ${REVIEW_TOTALS.google.rating} de 5 en Google</p>${REVIEWS.map(r => `<blockquote><p>${escapeHtml(r.text)}</p><footer>${escapeHtml(r.author)}, ${escapeHtml(r.date)} (${r.source === 'tripadvisor' ? 'Tripadvisor' : 'Google'})</footer></blockquote>`).join('')}</section><section><h2>Preguntas frecuentes</h2>${HOME_FAQS.map(f => `<h3>${escapeHtml(f.q)}</h3><p>${escapeHtml(f.a)}</p>`).join('')}</section></main>`;
-  writeRouteHtml('/', injectPageSeo(baseHtml, {
-    title: HOME_TITLE,
-    description: settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION,
-    canonicalPath: '/',
-    image: settings?.hero_image_url,
-    preloadImage: heroLocal || settings?.hero_image_url,
-    // Descarga anticipada del código de la portada (si no, el navegador solo lo pide después de ejecutar el JS principal).
-    modulePreload: HOME_CHUNK,
-    schema: [{
-      '@context': 'https://schema.org',
-      '@type': 'TravelAgency',
-      name: siteName,
-      url: DOMAIN,
-      telephone: settings?.whatsapp_number || '+34 604 48 82 23',
-      email: 'info@vivirmarruecos.com',
-      legalName: BUSINESS_LEGAL_NAME,
-      address: BUSINESS_ADDRESS,
-      image: settings?.logo_url || `${DOMAIN}/pwa-512x512.png`,
-      sameAs: [settings?.instagram_url, settings?.facebook_url, settings?.tripadvisor_url].filter(Boolean)
-    }, {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: HOME_FAQS.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
-    }],
-    bodyHtml: homeBody
-  }));
-  count++;
+  for (const lang of LANGS) {
+    const T = (texts) => texts[lang] ?? texts.es;
+    const L = (p) => localizePath(p, lang);
+    const links = (html) => localizeHtmlLinks(nb(html), lang);
+    const page = (payload) => injectPageSeo(baseHtml, { ...payload, lang });
+    const write = (p, html) => { writeRouteHtml(L(p), html); count++; };
+    const crumbs = (items) => breadcrumbLd(items, lang);
+    const list = (name, p, entries) => itemListLd(name, p, entries, lang);
+    const from = (price) => T({ es: `Desde ${price || 0}€`, en: `From €${price || 0}`, fr: `À partir de ${price || 0} €` });
 
-  // 2. Catálogo de Tours (/tours)
-  const toursBody = `<main>${navHtml}<h1>Tours y circuitos por Marruecos</h1><p>Todos nuestros tours y circuitos privados por Marruecos: el desierto del Sáhara, Marrakech, Fez, Tánger y las ciudades imperiales.</p><ul>${tours.map(t => `<li><article><h2><a href="${tourPath(t)}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(stripHtml(t.itinerary_summary || t.description || '').slice(0, 220))}</p><p>Precio desde: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
-  writeRouteHtml('/tours', injectPageSeo(baseHtml, {
-    title: `Tours y circuitos por Marruecos | ${siteName}`,
-    description: 'Explora todos nuestros tours por Marruecos: excursiones al desierto de Merzouga, rutas desde Marrakech, Fez, Tánger y viajes a medida.',
-    canonicalPath: '/tours',
-    schema: [itemListLd('Tours y circuitos por Marruecos', '/tours', tours.map(t => ({ name: t.title, path: tourPath(t) }))), breadcrumbLd([{ name: 'Tours', path: '/tours' }])],
-    bodyHtml: toursBody
-  }));
-  count++;
+    const toursL = baseToursEs.map(t => tx(t, lang));
+    const destinationsL = destinations.map(d => tx(d, lang));
+    const postsL = posts.map(p => tx(p, lang));
+    const home = getHomeContent(lang);
+    const GUIDE = getGuide(lang);
 
-  // 3. Catálogo de Destinos (/destinations y /destinos)
-  const destsBody = `<main>${navHtml}<h1>Destinos en Marruecos</h1><p>Nuestros destinos en Marruecos: rutas desde Marrakech, Fez, Tánger y Casablanca, Chefchaouen y el desierto de Merzouga.</p><ul>${destinations.map(d => `<li><article><h2><a href="/destinations/${d.slug || d.id}">${escapeHtml(d.name)}</a></h2><p>${escapeHtml(stripHtml(d.description || '').slice(0, 220))}</p></article></li>`).join('')}</ul></main>`;
-  for (const r of ['/destinations']) {
-    writeRouteHtml(r, injectPageSeo(baseHtml, {
-      title: `Destinos en Marruecos | ${siteName}`,
-      description: 'Guía de destinos en Marruecos: Marrakech, Fez, Desierto de Merzouga, Chefchaouen, Tánger y Casablanca.',
-      canonicalPath: '/destinations',
-      schema: [itemListLd('Destinos en Marruecos', '/destinations', destinations.map(d => ({ name: d.name, path: `/destinations/${d.slug || d.id}` }))), breadcrumbLd([{ name: 'Destinos', path: '/destinations' }])],
+    const navHtml = `<nav aria-label="${T({ es: 'Navegación principal', en: 'Main navigation', fr: 'Navigation principale' })}"><a href="${L('/')}">${HOME_NAME[lang]}</a> | <a href="${L('/destinations')}">${T({ es: 'Destinos', en: 'Destinations', fr: 'Destinations' })}</a> | <a href="${L('/tours')}">${T({ es: 'Tours en Marruecos', en: 'Tours in Morocco', fr: 'Circuits au Maroc' })}</a> | <a href="${L('/actividades')}">${T({ es: 'Actividades', en: 'Activities', fr: 'Activités' })}</a> | <a href="${L(GUIDE_PATH)}">${T({ es: 'Viaje a Marruecos', en: 'Travelling to Morocco', fr: 'Voyager au Maroc' })}</a> | <a href="${L('/blog')}">Blog</a> | <a href="${L('/galeria')}">${T({ es: 'Galería', en: 'Gallery', fr: 'Galerie' })}</a> | ${LANGS.filter(l => l !== lang).map(l => `<a href="${localizePath('/', l)}" hreflang="${l}">${{ es: 'Español', en: 'English', fr: 'Français' }[l]}</a>`).join(' | ')}</nav>`;
+
+    // 1. Portada
+    const homeSeo = lang === 'es'
+      ? { title: HOME_TITLE, h1: stripHtml(settings?.hero_title || HOME_H1_FALLBACK), subtitle: settings?.hero_subtitle || 'Agencia especializada en tours privados, excursiones al desierto de Merzouga y rutas por Marruecos.', description: settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION }
+      : { ...HOME_I18N_SEO[lang], subtitle: HOME_I18N_SEO[lang].description };
+    const reviewsLine = T({
+      es: `${REVIEW_TOTALS.tripadvisor.rating} de 5 en Tripadvisor (${REVIEW_TOTALS.tripadvisor.count} opiniones) y ${REVIEW_TOTALS.google.rating} de 5 en Google`,
+      en: `${REVIEW_TOTALS.tripadvisor.rating} out of 5 on Tripadvisor (${REVIEW_TOTALS.tripadvisor.count} reviews) and ${REVIEW_TOTALS.google.rating} out of 5 on Google`,
+      fr: `${REVIEW_TOTALS.tripadvisor.rating} sur 5 sur Tripadvisor (${REVIEW_TOTALS.tripadvisor.count} avis) et ${REVIEW_TOTALS.google.rating} sur 5 sur Google`
+    });
+    const homeBody = `<main>${navHtml}<h1>${escapeHtml(homeSeo.h1)}</h1><p>${escapeHtml(homeSeo.subtitle)}</p><p>${T({
+      es: 'Vivir Marruecos organiza tours privados por Marruecos y el desierto de Merzouga, con conductor de habla española y salidas desde Marrakech, Fez, Tánger y Casablanca.',
+      en: 'Vivir Marruecos organises private tours of Morocco and the Merzouga desert, with English-speaking drivers and departures from Marrakech, Fez, Tangier and Casablanca.',
+      fr: 'Vivir Marruecos organise des circuits privés au Maroc et dans le désert de Merzouga, avec des chauffeurs francophones et des départs de Marrakech, Fès, Tanger et Casablanca.'
+    })}</p><section><h2>${T({ es: 'Destinos Destacados en Marruecos', en: 'Featured destinations in Morocco', fr: 'Destinations phares au Maroc' })}</h2><ul>${destinationsL.map(d => `<li><a href="${L(`/destinations/${d.slug || d.id}`)}">${escapeHtml(d.name)}</a></li>`).join('')}</ul></section><section><h2>${T({ es: 'Tours privados por Marruecos', en: 'Private tours of Morocco', fr: 'Circuits privés au Maroc' })}</h2><ul>${toursL.map(t => `<li><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a> - ${from(t.price)}</li>`).join('')}</ul><p>${escapeHtml(home.priceNote)}</p></section><section><h2>${T({ es: 'Tu viaje en 4 pasos', en: 'Your trip in 4 steps', fr: 'Votre voyage en 4 étapes' })}</h2><ol>${home.howItWorks.map(st => `<li><strong>${escapeHtml(st.title)}</strong>: ${escapeHtml(st.text)}</li>`).join('')}</ol></section><section><h2>${T({ es: 'Lo que dicen nuestros viajeros', en: 'What our travellers say', fr: 'Ce que disent nos voyageurs' })}</h2><p>${reviewsLine}</p>${REVIEWS.map(r => { const m = localizeReviewMeta(r, lang); return `<blockquote><p>${escapeHtml(r.text)}</p><footer>${escapeHtml(r.author)}, ${escapeHtml(m.date)} (${r.source === 'tripadvisor' ? 'Tripadvisor' : 'Google'})</footer></blockquote>`; }).join('')}</section><section><h2>${T({ es: 'Preguntas frecuentes', en: 'Frequently asked questions', fr: 'Questions fréquentes' })}</h2>${home.faqs.map(f => `<h3>${escapeHtml(f.q)}</h3><p>${escapeHtml(f.a)}</p>`).join('')}</section></main>`;
+    write('/', page({
+      title: homeSeo.title,
+      description: homeSeo.description,
+      canonicalPath: L('/'),
+      image: settings?.hero_image_url,
+      preloadImage: heroLocal || settings?.hero_image_url,
+      // Descarga anticipada del código de la portada (si no, el navegador solo lo pide después de ejecutar el JS principal).
+      modulePreload: HOME_CHUNK,
+      schema: [{
+        '@context': 'https://schema.org',
+        '@type': 'TravelAgency',
+        name: siteName,
+        url: `${DOMAIN}${L('/')}`,
+        telephone: settings?.whatsapp_number || '+34 604 48 82 23',
+        email: 'info@vivirmarruecos.com',
+        legalName: BUSINESS_LEGAL_NAME,
+        address: BUSINESS_ADDRESS,
+        image: settings?.logo_url || `${DOMAIN}/pwa-512x512.png`,
+        knowsLanguage: ['es', 'en', 'fr'],
+        sameAs: [settings?.instagram_url, settings?.facebook_url, settings?.tripadvisor_url].filter(Boolean)
+      }, {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: home.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+      }],
+      bodyHtml: homeBody
+    }));
+
+    // 2. Catálogo de tours
+    const toursTitle = T({ es: 'Tours y circuitos por Marruecos', en: 'Tours and trips in Morocco', fr: 'Circuits et voyages au Maroc' });
+    const priceFromLabel = T({ es: 'Precio desde', en: 'Price from', fr: 'Prix à partir de' });
+    const toursBody = `<main>${navHtml}<h1>${toursTitle}</h1><p>${T({
+      es: 'Todos nuestros tours y circuitos privados por Marruecos: el desierto del Sáhara, Marrakech, Fez, Tánger y las ciudades imperiales.',
+      en: 'All our private tours and trips in Morocco: the Sahara desert, Marrakech, Fez, Tangier and the imperial cities.',
+      fr: 'Tous nos circuits privés au Maroc : le désert du Sahara, Marrakech, Fès, Tanger et les villes impériales.'
+    })}</p><ul>${toursL.map(t => `<li><article><h2><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(stripHtml(t.itinerary_summary || t.description || '').slice(0, 220))}</p><p>${priceFromLabel}: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
+    write('/tours', page({
+      title: `${toursTitle} | ${siteName}`,
+      description: T({
+        es: 'Explora todos nuestros tours por Marruecos: excursiones al desierto de Merzouga, rutas desde Marrakech, Fez, Tánger y viajes a medida.',
+        en: 'Explore all our tours of Morocco: trips to the Merzouga desert, routes from Marrakech, Fez and Tangier, and tailor-made journeys.',
+        fr: 'Découvrez tous nos circuits au Maroc : excursions dans le désert de Merzouga, itinéraires depuis Marrakech, Fès, Tanger et voyages sur mesure.'
+      }),
+      canonicalPath: L('/tours'),
+      schema: [list(toursTitle, '/tours', toursL.map(t => ({ name: t.title, path: tourPath(t) }))), crumbs([{ name: 'Tours', path: '/tours' }])],
+      bodyHtml: toursBody
+    }));
+
+    // 3. Catálogo de destinos
+    const destsTitle = T({ es: 'Destinos en Marruecos', en: 'Destinations in Morocco', fr: 'Destinations au Maroc' });
+    const destsBody = `<main>${navHtml}<h1>${destsTitle}</h1><p>${T({
+      es: 'Nuestros destinos en Marruecos: rutas desde Marrakech, Fez, Tánger y Casablanca, Chefchaouen y el desierto de Merzouga.',
+      en: 'Our destinations in Morocco: routes from Marrakech, Fez, Tangier and Casablanca, Chefchaouen and the Merzouga desert.',
+      fr: 'Nos destinations au Maroc : circuits depuis Marrakech, Fès, Tanger et Casablanca, Chefchaouen et le désert de Merzouga.'
+    })}</p><ul>${destinationsL.map(d => `<li><article><h2><a href="${L(`/destinations/${d.slug || d.id}`)}">${escapeHtml(d.name)}</a></h2><p>${escapeHtml(stripHtml(d.description || '').slice(0, 220))}</p></article></li>`).join('')}</ul></main>`;
+    write('/destinations', page({
+      title: `${destsTitle} | ${siteName}`,
+      description: T({
+        es: 'Guía de destinos en Marruecos: Marrakech, Fez, Desierto de Merzouga, Chefchaouen, Tánger y Casablanca.',
+        en: 'Guide to destinations in Morocco: Marrakech, Fez, the Merzouga desert, Chefchaouen, Tangier and Casablanca.',
+        fr: 'Guide des destinations au Maroc : Marrakech, Fès, le désert de Merzouga, Chefchaouen, Tanger et Casablanca.'
+      }),
+      canonicalPath: L('/destinations'),
+      schema: [list(destsTitle, '/destinations', destinationsL.map(d => ({ name: d.name, path: `/destinations/${d.slug || d.id}` }))), crumbs([{ name: T({ es: 'Destinos', en: 'Destinations', fr: 'Destinations' }), path: '/destinations' }])],
       bodyHtml: destsBody
     }));
-    count++;
-  }
 
-  // 4. Actividades (/actividades)
-  const actPosts = posts.filter(p => p.category === 'Actividades');
-  const actBody = `<main>${navHtml}<h1>Actividades en Marruecos</h1><p>Las mejores actividades para completar tu viaje por Marruecos: paseos en globo, quads en el desierto, rutas en dromedario y noche en campamento.</p><p>${escapeHtml(ACTIVITIES_EXTRA)}</p><ul>${actPosts.map(p => `<li><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || '')}</p></li>`).join('')}</ul></main>`;
-  writeRouteHtml('/actividades', injectPageSeo(baseHtml, {
-    title: `Actividades en Marruecos | ${siteName}`,
-    description: 'Complementa tu viaje con actividades únicas: paseos en globo, quads en el desierto, rutas en camello y mucho más.',
-    canonicalPath: '/actividades',
-    schema: [itemListLd('Actividades en Marruecos', '/actividades', actPosts.map(p => ({ name: p.title, path: `/blog/${p.slug}` }))), breadcrumbLd([{ name: 'Actividades', path: '/actividades' }])],
-    bodyHtml: actBody
-  }));
-  count++;
-
-  // 5. Blog (/blog)
-  const blogBody = `<main>${navHtml}<h1>Blog de viajes a Marruecos</h1><p>Nuestro blog de viajes a Marruecos: consejos, guías prácticas, rutas y secretos para preparar tu viaje.</p><ul>${posts.map(p => `<li><article><h2><a href="/blog/${p.slug}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || stripHtml(p.content || '').slice(0, 200))}</p></article></li>`).join('')}</ul></main>`;
-  writeRouteHtml('/blog', injectPageSeo(baseHtml, {
-    title: `Blog de viajes a Marruecos: guías y consejos | ${siteName}`,
-    description: 'Artículos, consejos prácticos y guías completas para preparar tu viaje a Marruecos: qué ver, mejor época, gastronomía y desierto.',
-    canonicalPath: '/blog',
-    schema: [itemListLd('Blog de viajes a Marruecos', '/blog', posts.filter(p => p.slug).map(p => ({ name: p.title, path: `/blog/${p.slug}` }))), breadcrumbLd([{ name: 'Blog', path: '/blog' }])],
-    bodyHtml: blogBody
-  }));
-  count++;
-
-  // 5b. Guía pilar "Viaje a Marruecos"
-  const guideBody = `<main>${navHtml}<article><h1>${escapeHtml(GUIDE.title)}</h1>${GUIDE.intro.map(p => `<p>${escapeHtml(p)}</p>`).join('')}${GUIDE.sections.map(s => `<section id="${s.id}"><h2>${escapeHtml(s.h2)}</h2>${s.html}</section>`).join('')}<section><h2>Preguntas frecuentes</h2>${GUIDE.faqs.map(f => `<h3>${escapeHtml(f.q)}</h3><p>${escapeHtml(f.a)}</p>`).join('')}</section></article></main>`;
-  writeRouteHtml(GUIDE_PATH, injectPageSeo(baseHtml, {
-    title: GUIDE.metaTitle,
-    description: GUIDE.description,
-    canonicalPath: GUIDE_PATH,
-    type: 'article',
-    schema: [{
-      '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: GUIDE.title,
-      description: GUIDE.description,
-      dateModified: GUIDE.updated,
-      author: { '@type': 'Organization', name: siteName, url: DOMAIN },
-      publisher: { '@type': 'Organization', name: siteName, url: DOMAIN },
-      mainEntityOfPage: `${DOMAIN}${GUIDE_PATH}`
-    }, {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: GUIDE.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
-    }, breadcrumbLd([{ name: 'Viaje a Marruecos', path: GUIDE_PATH }])],
-    bodyHtml: guideBody
-  }));
-  count++;
-
-  // 6. Galería (/galeria) y Legales
-  const staticPages = [
-    { path: '/galeria', title: `Marruecos en imágenes: fotos de nuestros viajes | ${siteName}`, desc: 'Fotos de nuestros viajes por Marruecos: el desierto de Merzouga, Marrakech, Chefchaouen y mucho más, Marruecos en imágenes.' },
-    { path: '/privacidad', title: `Política de Privacidad | ${siteName}`, desc: 'Cómo trata Vivirmarruecos SARL (Vivir Marruecos) tus datos personales: responsable, finalidad, proveedores, conservación y tus derechos.' },
-    { path: '/aviso-legal', title: `Aviso Legal | ${siteName}`, desc: 'Aviso legal de Vivir Marruecos: datos de Vivirmarruecos SARL (ICE y Registro de Comercio), domicilio en Hassi Labied, propiedad intelectual y responsabilidad.' },
-    { path: '/cookies', title: `Política de Cookies | ${siteName}`, desc: 'Política de cookies: información sobre el uso de cookies en vivirmarruecos.com.' },
-    { path: '/condiciones', title: `Condiciones Generales de Contratación | ${siteName}`, desc: 'Condiciones generales de contratación de nuestros viajes y rutas por Marruecos.' }
-  ];
-  for (const sp of staticPages) {
-    writeRouteHtml(sp.path, injectPageSeo(baseHtml, {
-      title: sp.title,
-      description: sp.desc,
-      canonicalPath: sp.path,
-      bodyHtml: `<main>${navHtml}<h1>${escapeHtml(sp.title.split(' | ')[0])}</h1><p>${escapeHtml(sp.desc)}</p></main>`
+    // 4. Actividades
+    const actTitle = T({ es: 'Actividades en Marruecos', en: 'Activities in Morocco', fr: 'Activités au Maroc' });
+    const actPosts = postsL.filter((p, i) => posts[i].category === 'Actividades');
+    const actBody = `<main>${navHtml}<h1>${actTitle}</h1><p>${T({
+      es: 'Las mejores actividades para completar tu viaje por Marruecos: paseos en globo, quads en el desierto, rutas en dromedario y noche en campamento.',
+      en: 'The best activities to complete your trip to Morocco: balloon rides, quad bikes in the desert, camel rides and a night at a desert camp.',
+      fr: 'Les meilleures activités pour compléter votre voyage au Maroc : montgolfière, quad dans le désert, balades à dromadaire et nuit au campement.'
+    })}</p><p>${escapeHtml(ACTIVITIES_EXTRA_I18N[lang])}</p><ul>${actPosts.map(p => `<li><h2><a href="${L(`/blog/${p.slug}`)}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || '')}</p></li>`).join('')}</ul></main>`;
+    write('/actividades', page({
+      title: `${actTitle} | ${siteName}`,
+      description: T({
+        es: 'Complementa tu viaje con actividades únicas: paseos en globo, quads en el desierto, rutas en camello y mucho más.',
+        en: 'Complete your trip with unique activities: balloon rides, desert quads, camel rides and much more.',
+        fr: 'Complétez votre voyage avec des activités uniques : montgolfière, quads dans le désert, balades à dromadaire et bien plus.'
+      }),
+      canonicalPath: L('/actividades'),
+      schema: [list(actTitle, '/actividades', actPosts.map(p => ({ name: p.title, path: `/blog/${p.slug}` }))), crumbs([{ name: T({ es: 'Actividades', en: 'Activities', fr: 'Activités' }), path: '/actividades' }])],
+      bodyHtml: actBody
     }));
-    count++;
-  }
 
-  // 7. Cada Tour individual: URL principal /tours/:slug; /tours/:id redirige a la de slug
-  for (const tour of tours) {
-    const canonicalPath = tourPath(tour);
-    const descText = tourMetaDescription(tour);
-    // Contenido completo para Google: descripción, itinerario día a día, qué incluye y otros tours relacionados
-    const section = (h, html) => (stripHtml(html || '') ? `<section><h2>${h}</h2><div>${html}</div></section>` : '');
-    const related = tours.filter(t => t.id !== tour.id).slice(0, 6);
-    const tourHtml = `<main>${navHtml}<article><h1>${escapeHtml(tour.title)}</h1><p>${escapeHtml(descText)}</p><p><strong>Precio desde:</strong> ${tour.price || 0}€ por persona (grupo de 4) | <strong>Duración:</strong> ${escapeHtml(tour.duration || '')} | <strong>Salida:</strong> ${escapeHtml(tour.departure_city || '')}${tour.return_city ? ` | <strong>Llegada:</strong> ${escapeHtml(tour.return_city)}` : ''}</p><div>${nb(tour.description)}</div>${section('Itinerario día a día', nb(tour.itinerary_details))}${section('Qué incluye', nb(tour.description_includes))}${section('Qué no incluye', nb(tour.description_excludes))}${section('Recomendaciones', nb(tour.recommendations))}<section><h2>Un tour privado con una agencia local</h2><p>Vivir Marruecos es una agencia con base en Hassi Labied, a los pies de las dunas de Erg Chebbi (Merzouga). Organizamos el viaje nosotros mismos: vehículo privado, conductor de habla española y campamento en el desierto, con presupuesto a medida según el número de viajeros.</p></section>${related.length ? `<section><h2>Otros tours por Marruecos</h2><ul>${related.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul></section>` : ''}</article></main>`;
-    const seoPayload = {
-      title: `${tour.title} | ${siteName}`,
-      description: descText,
-      canonicalPath,
-      image: tour.featured_image || tour.gallery?.[0],
-      type: 'product',
-      schema: [{
-        '@context': 'https://schema.org',
-        '@type': 'TouristTrip',
-        name: tour.title,
-        description: descText,
-        image: tour.featured_image || tour.gallery?.[0],
-        provider: { '@type': 'TravelAgency', name: siteName, url: DOMAIN, address: BUSINESS_ADDRESS },
-        offers: {
-          '@type': 'Offer',
-          priceCurrency: 'EUR',
-          price: tour.price || 0,
-          availability: 'https://schema.org/InStock',
-          url: `${DOMAIN}${canonicalPath}`
-        }
-      }, breadcrumbLd([{ name: 'Tours', path: '/tours' }, { name: tour.title, path: canonicalPath }])],
-      bodyHtml: tourHtml
-    };
-    writeRouteHtml(canonicalPath, injectPageSeo(baseHtml, seoPayload));
-    count++;
-    // Las URLs antiguas con ID (/tours/<id>) las redirige con 301 api/page-fallback.ts
-  }
+    // 5. Blog
+    const blogTitle = T({ es: 'Blog de viajes a Marruecos', en: 'Morocco travel blog', fr: 'Blog de voyage au Maroc' });
+    const blogBody = `<main>${navHtml}<h1>${blogTitle}</h1><p>${T({
+      es: 'Nuestro blog de viajes a Marruecos: consejos, guías prácticas, rutas y secretos para preparar tu viaje.',
+      en: 'Our Morocco travel blog: tips, practical guides, routes and secrets to plan your trip.',
+      fr: 'Notre blog de voyage au Maroc : conseils, guides pratiques, itinéraires et secrets pour préparer votre voyage.'
+    })}</p><ul>${postsL.map(p => `<li><article><h2><a href="${L(`/blog/${p.slug}`)}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || stripHtml(p.content || '').slice(0, 200))}</p></article></li>`).join('')}</ul></main>`;
+    write('/blog', page({
+      title: T({ es: `Blog de viajes a Marruecos: guías y consejos | ${siteName}`, en: `Morocco travel blog: guides and tips | ${siteName}`, fr: `Blog de voyage au Maroc : guides et conseils | ${siteName}` }),
+      description: T({
+        es: 'Artículos, consejos prácticos y guías completas para preparar tu viaje a Marruecos: qué ver, mejor época, gastronomía y desierto.',
+        en: 'Articles, practical tips and complete guides to plan your trip to Morocco: what to see, the best time to go, food and the desert.',
+        fr: 'Articles, conseils pratiques et guides complets pour préparer votre voyage au Maroc : que voir, meilleure période, gastronomie et désert.'
+      }),
+      canonicalPath: L('/blog'),
+      schema: [list(blogTitle, '/blog', postsL.filter(p => p.slug).map(p => ({ name: p.title, path: `/blog/${p.slug}` }))), crumbs([{ name: 'Blog', path: '/blog' }])],
+      bodyHtml: blogBody
+    }));
 
-  // 8. Cada Destino individual (/destinations/:slug, /destinations/:id y /destino/:slug)
-  for (const dest of destinations) {
-    const descText = stripHtml(dest.description || `Descubre los mejores tours y excursiones en ${dest.name}.`);
-    const canonical = `/destinations/${dest.slug || dest.id}`;
-    const headings = destinationHeadings(dest, siteName);
-    const destTours = tours.filter(t => t.destination_id === dest.id || (t.destination_ids || []).includes(dest.id));
-    const destToursHtml = `<section><h2>Tours y excursiones en ${escapeHtml(String(dest.name).trim())}</h2>${destTours.length ? `<ul>${destTours.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul>` : `<p>Organizamos tours y excursiones privadas a medida. <a href="/tours">Ver todos los tours</a>.</p>`}</section>`;
-    const destHtml = `<main>${navHtml}<article><h1>${escapeHtml(headings.h1)}</h1><div>${dest.description || `<p>${escapeHtml(descText)}</p>`}</div>${destToursHtml}</article></main>`;
-    const seoPayload = {
-      title: headings.title,
-      description: descText.slice(0, 160),
-      canonicalPath: canonical,
-      image: dest.image_url,
-      schema: [{
-        '@context': 'https://schema.org',
-        '@type': 'TouristDestination',
-        name: dest.name,
-        description: descText.slice(0, 300),
-        image: dest.image_url
-      }, breadcrumbLd([{ name: 'Destinos', path: '/destinations' }, { name: String(dest.name).trim(), path: canonical }])],
-      bodyHtml: destHtml
-    };
-    // Solo la URL con nombre; /destinations/<id> y /destino/<slug> redirigen con 301 (api/page-fallback.ts y vercel.json)
-    writeRouteHtml(canonical, injectPageSeo(baseHtml, seoPayload));
-    count++;
-  }
-
-  // 9. Cada Post del Blog (/blog/:slug)
-  for (const post of posts) {
-    if (!post.slug) continue;
-    const descText = stripHtml(post.meta_description || post.excerpt || post.content || post.title);
-    const postHtml = `<main>${navHtml}<article><h1>${escapeHtml(post.title)}</h1><p>${escapeHtml(post.excerpt || '')}</p><div>${nb(post.content)}</div></article></main>`;
-    writeRouteHtml(`/blog/${post.slug}`, injectPageSeo(baseHtml, {
-      title: `${post.meta_title || post.title} | ${siteName}`,
-      description: descText.slice(0, 160),
-      canonicalPath: `/blog/${post.slug}`,
-      image: post.cover_image,
+    // 5b. Guía pilar "Viaje a Marruecos"
+    const faqTitle = T({ es: 'Preguntas frecuentes', en: 'Frequently asked questions', fr: 'Questions fréquentes' });
+    const guideBody = `<main>${navHtml}<article><h1>${escapeHtml(GUIDE.title)}</h1>${GUIDE.intro.map(p => `<p>${escapeHtml(p)}</p>`).join('')}${GUIDE.sections.map(s => `<section id="${s.id}"><h2>${escapeHtml(s.h2)}</h2>${links(s.html)}</section>`).join('')}<section><h2>${faqTitle}</h2>${GUIDE.faqs.map(f => `<h3>${escapeHtml(f.q)}</h3><p>${escapeHtml(f.a)}</p>`).join('')}</section></article></main>`;
+    write(GUIDE_PATH, page({
+      title: GUIDE.metaTitle,
+      description: GUIDE.description,
+      canonicalPath: L(GUIDE_PATH),
       type: 'article',
       schema: [{
         '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: post.title,
-        description: descText.slice(0, 250),
+        '@type': 'Article',
+        inLanguage: lang,
+        headline: GUIDE.title,
+        description: GUIDE.description,
+        dateModified: GUIDE.updated,
+        author: { '@type': 'Organization', name: siteName, url: DOMAIN },
+        publisher: { '@type': 'Organization', name: siteName, url: DOMAIN },
+        mainEntityOfPage: `${DOMAIN}${L(GUIDE_PATH)}`
+      }, {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: GUIDE.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+      }, crumbs([{ name: T({ es: 'Viaje a Marruecos', en: 'Travelling to Morocco', fr: 'Voyager au Maroc' }), path: GUIDE_PATH }])],
+      bodyHtml: guideBody
+    }));
+
+    // 6. Galería y páginas legales
+    const staticPages = [
+      { path: '/galeria', title: T({ es: 'Marruecos en imágenes: fotos de nuestros viajes', en: 'Morocco in pictures: photos from our trips', fr: 'Le Maroc en images : photos de nos voyages' }), desc: T({ es: 'Fotos de nuestros viajes por Marruecos: el desierto de Merzouga, Marrakech, Chefchaouen y mucho más, Marruecos en imágenes.', en: 'Photos from our trips around Morocco: the Merzouga desert, Marrakech, Chefchaouen and much more, Morocco in pictures.', fr: 'Photos de nos voyages au Maroc : le désert de Merzouga, Marrakech, Chefchaouen et bien plus, le Maroc en images.' }) },
+      { path: '/privacidad', title: T({ es: 'Política de Privacidad', en: 'Privacy Policy', fr: 'Politique de confidentialité' }), desc: T({ es: 'Cómo trata Vivirmarruecos SARL (Vivir Marruecos) tus datos personales: responsable, finalidad, proveedores, conservación y tus derechos.', en: 'How Vivirmarruecos SARL (Vivir Marruecos) handles your personal data: controller, purpose, providers, retention and your rights.', fr: 'Comment Vivirmarruecos SARL (Vivir Marruecos) traite vos données personnelles : responsable, finalité, prestataires, conservation et vos droits.' }) },
+      { path: '/aviso-legal', title: T({ es: 'Aviso Legal', en: 'Legal Notice', fr: 'Mentions légales' }), desc: T({ es: 'Aviso legal de Vivir Marruecos: datos de Vivirmarruecos SARL (ICE y Registro de Comercio), domicilio en Hassi Labied, propiedad intelectual y responsabilidad.', en: 'Legal notice of Vivir Marruecos: details of Vivirmarruecos SARL (ICE and Trade Register), registered office in Hassi Labied, intellectual property and liability.', fr: 'Mentions légales de Vivir Marruecos : informations sur Vivirmarruecos SARL (ICE et Registre du commerce), siège à Hassi Labied, propriété intellectuelle et responsabilité.' }) },
+      { path: '/cookies', title: T({ es: 'Política de Cookies', en: 'Cookie Policy', fr: 'Politique de cookies' }), desc: T({ es: 'Política de cookies: información sobre el uso de cookies en vivirmarruecos.com.', en: 'Cookie policy: information about the use of cookies on vivirmarruecos.com.', fr: 'Politique de cookies : informations sur l’utilisation des cookies sur vivirmarruecos.com.' }) },
+      { path: '/condiciones', title: T({ es: 'Condiciones Generales de Contratación', en: 'Terms and Conditions', fr: 'Conditions générales' }), desc: T({ es: 'Condiciones generales de contratación de nuestros viajes y rutas por Marruecos.', en: 'General terms and booking conditions for our trips and tours in Morocco.', fr: 'Conditions générales de réservation de nos voyages et circuits au Maroc.' }) }
+    ];
+    for (const sp of staticPages) {
+      write(sp.path, page({
+        title: `${sp.title} | ${siteName}`,
+        description: sp.desc,
+        canonicalPath: L(sp.path),
+        bodyHtml: `<main>${navHtml}<h1>${escapeHtml(sp.title)}</h1><p>${escapeHtml(sp.desc)}</p></main>`
+      }));
+    }
+
+    // 7. Cada tour: URL principal /tours/:slug (las antiguas con ID redirigen desde api/page-fallback.ts)
+    const lbl = {
+      duration: T({ es: 'Duración', en: 'Duration', fr: 'Durée' }),
+      departure: T({ es: 'Salida', en: 'Departure', fr: 'Départ' }),
+      arrival: T({ es: 'Llegada', en: 'Arrival', fr: 'Arrivée' }),
+      perPerson: T({ es: 'por persona (grupo de 4)', en: 'per person (group of 4)', fr: 'par personne (groupe de 4)' }),
+      itinerary: T({ es: 'Itinerario día a día', en: 'Day-by-day itinerary', fr: 'Itinéraire jour par jour' }),
+      includes: T({ es: 'Qué incluye', en: 'What’s included', fr: 'Ce qui est inclus' }),
+      excludes: T({ es: 'Qué no incluye', en: 'Not included', fr: 'Ce qui n’est pas inclus' }),
+      tips: T({ es: 'Recomendaciones', en: 'Recommendations', fr: 'Recommandations' }),
+      agencyH: T({ es: 'Un tour privado con una agencia local', en: 'A private tour with a local agency', fr: 'Un circuit privé avec une agence locale' }),
+      agencyP: T({
+        es: 'Vivir Marruecos es una agencia con base en Hassi Labied, a los pies de las dunas de Erg Chebbi (Merzouga). Organizamos el viaje nosotros mismos: vehículo privado, conductor de habla española y campamento en el desierto, con presupuesto a medida según el número de viajeros.',
+        en: 'Vivir Marruecos is an agency based in Hassi Labied, at the foot of the Erg Chebbi dunes (Merzouga). We organise the trip ourselves: private vehicle, English-speaking driver and desert camp, with a tailor-made quote for your number of travellers.',
+        fr: 'Vivir Marruecos est une agence basée à Hassi Labied, au pied des dunes de l’Erg Chebbi (Merzouga). Nous organisons le voyage nous-mêmes : véhicule privé, chauffeur francophone et campement dans le désert, avec un devis sur mesure selon le nombre de voyageurs.'
+      }),
+      others: T({ es: 'Otros tours por Marruecos', en: 'Other tours in Morocco', fr: 'Autres circuits au Maroc' })
+    };
+    for (const tour of toursL) {
+      const canonicalPath = tourPath(tour);
+      const descText = tourMetaDescription(tour, lang);
+      // Contenido completo para Google: descripción, itinerario día a día, qué incluye y otros tours relacionados
+      const section = (h, html) => (stripHtml(html || '') ? `<section><h2>${h}</h2><div>${links(html)}</div></section>` : '');
+      const related = toursL.filter(t => t.id !== tour.id).slice(0, 6);
+      const tourHtml = `<main>${navHtml}<article><h1>${escapeHtml(tour.title)}</h1><p>${escapeHtml(descText)}</p><p><strong>${priceFromLabel}:</strong> ${tour.price || 0}€ ${lbl.perPerson} | <strong>${lbl.duration}:</strong> ${escapeHtml(tour.duration || '')} | <strong>${lbl.departure}:</strong> ${escapeHtml(tour.departure_city || '')}${tour.return_city ? ` | <strong>${lbl.arrival}:</strong> ${escapeHtml(tour.return_city)}` : ''}</p><div>${links(tour.description)}</div>${section(lbl.itinerary, tour.itinerary_details)}${section(lbl.includes, tour.description_includes)}${section(lbl.excludes, tour.description_excludes)}${section(lbl.tips, tour.recommendations)}<section><h2>${lbl.agencyH}</h2><p>${lbl.agencyP}</p></section>${related.length ? `<section><h2>${lbl.others}</h2><ul>${related.map(t => `<li><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a> - ${from(t.price)}</li>`).join('')}</ul></section>` : ''}</article></main>`;
+      write(canonicalPath, page({
+        title: `${tour.title} | ${siteName}`,
+        description: descText,
+        canonicalPath: L(canonicalPath),
+        image: tour.featured_image || tour.gallery?.[0],
+        type: 'product',
+        schema: [{
+          '@context': 'https://schema.org',
+          '@type': 'TouristTrip',
+          name: tour.title,
+          description: descText,
+          inLanguage: lang,
+          image: tour.featured_image || tour.gallery?.[0],
+          provider: { '@type': 'TravelAgency', name: siteName, url: DOMAIN, address: BUSINESS_ADDRESS },
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'EUR',
+            price: tour.price || 0,
+            availability: 'https://schema.org/InStock',
+            url: `${DOMAIN}${L(canonicalPath)}`
+          }
+        }, crumbs([{ name: 'Tours', path: '/tours' }, { name: tour.title, path: canonicalPath }])],
+        bodyHtml: tourHtml
+      }));
+    }
+
+    // 8. Cada destino (/destinations/:slug; /destinations/<id> y /destino/<slug> redirigen con 301)
+    for (const dest of destinationsL) {
+      const descText = stripHtml(dest.description || T({ es: `Descubre los mejores tours y excursiones en ${dest.name}.`, en: `Discover the best tours and excursions in ${dest.name}.`, fr: `Découvrez les meilleurs circuits et excursions à ${dest.name}.` }));
+      const canonical = `/destinations/${dest.slug || dest.id}`;
+      const headings = destinationHeadings(dest, siteName, lang);
+      const destTours = toursL.filter(t => t.destination_id === dest.id || (t.destination_ids || []).includes(dest.id));
+      const destName = escapeHtml(String(dest.name).trim());
+      const destToursHtml = `<section><h2>${T({ es: `Tours y excursiones en ${destName}`, en: `Tours and excursions in ${destName}`, fr: `Circuits et excursions à ${destName}` })}</h2>${destTours.length ? `<ul>${destTours.map(t => `<li><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a> - ${from(t.price)}</li>`).join('')}</ul>` : `<p>${T({ es: 'Organizamos tours y excursiones privadas a medida.', en: 'We organise tailor-made private tours and excursions.', fr: 'Nous organisons des circuits et excursions privés sur mesure.' })} <a href="${L('/tours')}">${T({ es: 'Ver todos los tours', en: 'See all tours', fr: 'Voir tous les circuits' })}</a>.</p>`}</section>`;
+      const destHtml = `<main>${navHtml}<article><h1>${escapeHtml(headings.h1)}</h1><div>${dest.description ? links(dest.description) : `<p>${escapeHtml(descText)}</p>`}</div>${destToursHtml}</article></main>`;
+      write(canonical, page({
+        title: headings.title,
+        description: descText.slice(0, 160),
+        canonicalPath: L(canonical),
+        image: dest.image_url,
+        schema: [{
+          '@context': 'https://schema.org',
+          '@type': 'TouristDestination',
+          name: dest.name,
+          description: descText.slice(0, 300),
+          image: dest.image_url
+        }, crumbs([{ name: T({ es: 'Destinos', en: 'Destinations', fr: 'Destinations' }), path: '/destinations' }, { name: String(dest.name).trim(), path: canonical }])],
+        bodyHtml: destHtml
+      }));
+    }
+
+    // 9. Cada artículo del blog
+    for (let i = 0; i < postsL.length; i++) {
+      const post = postsL[i];
+      if (!post.slug) continue;
+      // La meta descripción y el meta título del panel solo existen en español: en inglés/francés se usan el título y el extracto traducidos
+      const metaDesc = lang === 'es' ? post.meta_description : post.translations?.[lang]?.meta_description;
+      const metaTitle = lang === 'es' ? post.meta_title : post.translations?.[lang]?.meta_title;
+      const descText = stripHtml(metaDesc || post.excerpt || post.content || post.title);
+      const postHtml = `<main>${navHtml}<article><h1>${escapeHtml(post.title)}</h1><p>${escapeHtml(post.excerpt || '')}</p><div>${links(post.content)}</div></article></main>`;
+      write(`/blog/${post.slug}`, page({
+        title: `${metaTitle || post.title} | ${siteName}`,
+        description: descText.slice(0, 160),
+        canonicalPath: L(`/blog/${post.slug}`),
         image: post.cover_image,
-        datePublished: post.published_at || post.created_at,
-        author: { '@type': 'Organization', name: siteName }
-      }, breadcrumbLd([{ name: 'Blog', path: '/blog' }, { name: post.title, path: `/blog/${post.slug}` }])],
-      bodyHtml: postHtml
-    }));
-    count++;
-  }
+        type: 'article',
+        schema: [{
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          inLanguage: lang,
+          headline: post.title,
+          description: descText.slice(0, 250),
+          image: post.cover_image,
+          datePublished: post.published_at || post.created_at,
+          author: { '@type': 'Organization', name: siteName }
+        }, crumbs([{ name: 'Blog', path: '/blog' }, { name: post.title, path: `/blog/${post.slug}` }])],
+        bodyHtml: postHtml
+      }));
+    }
 
-  // 10. Colecciones (/coleccion/:slug)
-  const collectionSlugs = new Set([
-    'desierto', 'norte-de-marruecos', 'ciudades-imperiales', 'aventura',
-    'cultura', 'viajes-exclusivos', 'viajes-de-lujo', 'luna-de-miel',
-    'viajes-en-familia', 'viajes-en-grupo', 'paquetes', 'actividades'
-  ]);
-  tours.forEach(t => {
-    if (!t.category) return;
-    t.category.split(',').forEach(part => {
-      const s = slugifyCategory(part);
-      if (s) collectionSlugs.add(s);
+    // 10. Colecciones (/coleccion/:slug)
+    const collectionSlugs = new Set([
+      'desierto', 'norte-de-marruecos', 'ciudades-imperiales', 'aventura',
+      'cultura', 'viajes-exclusivos', 'viajes-de-lujo', 'luna-de-miel',
+      'viajes-en-familia', 'viajes-en-grupo', 'paquetes', 'actividades'
+    ]);
+    baseToursEs.forEach(t => {
+      if (!t.category) return;
+      t.category.split(',').forEach(part => {
+        const s = slugifyCategory(part);
+        if (s) collectionSlugs.add(s);
+      });
     });
-  });
-
-  for (const slug of collectionSlugs) {
-    const col = collectionContent(slug);
-    const colTours = tours.filter(t => (t.category || '').split(',').some(part => slugifyCategory(part) === slug));
-    const colHtml = `<main>${navHtml}<h1>${escapeHtml(col.title)}</h1><p>${escapeHtml(col.intro)}</p>${(col.body || []).map(b => `<p>${escapeHtml(b)}</p>`).join('')}${colTours.length ? `<ul>${colTours.map(t => `<li><a href="${tourPath(t)}">${escapeHtml(t.title)}</a> - Desde ${t.price || 0}€</li>`).join('')}</ul>` : ''}</main>`;
-    writeRouteHtml(`/coleccion/${slug}`, injectPageSeo(baseHtml, {
-      title: `${col.title} | ${siteName}`,
-      description: col.intro,
-      canonicalPath: `/coleccion/${slug}`,
-      schema: [itemListLd(col.title, `/coleccion/${slug}`, colTours.map(t => ({ name: t.title, path: tourPath(t) }))), breadcrumbLd([{ name: col.title, path: `/coleccion/${slug}` }])],
-      bodyHtml: colHtml
-    }));
-    count++;
+    for (const slug of collectionSlugs) {
+      const col = collectionContentI18n(slug, '', lang);
+      // La categoría se guarda en español: se filtra con el tour original
+      const colTours = toursL.filter((t, i) => (baseToursEs[i].category || '').split(',').some(part => slugifyCategory(part) === slug));
+      const colHtml = `<main>${navHtml}<h1>${escapeHtml(col.title)}</h1><p>${escapeHtml(col.intro)}</p>${(col.body || []).map(b => `<p>${escapeHtml(b)}</p>`).join('')}${colTours.length ? `<ul>${colTours.map(t => `<li><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a> - ${from(t.price)}</li>`).join('')}</ul>` : ''}</main>`;
+      write(`/coleccion/${slug}`, page({
+        title: `${col.title} | ${siteName}`,
+        description: col.intro,
+        canonicalPath: L(`/coleccion/${slug}`),
+        schema: [list(col.title, `/coleccion/${slug}`, colTours.map(t => ({ name: t.title, path: tourPath(t) }))), crumbs([{ name: col.title, path: `/coleccion/${slug}` }])],
+        bodyHtml: colHtml
+      }));
+    }
   }
 
   console.log(`✅ Pre-renderizado completado: ${count} páginas HTML estáticas generadas con metadatos, JSON-LD y contenido legible.`);

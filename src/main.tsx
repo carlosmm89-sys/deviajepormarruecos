@@ -2,6 +2,7 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App.tsx';
+import { langFromPath, localizePath, isLocalizablePath } from './i18n/urlLang';
 import './index.css';
 import { registerSW } from 'virtual:pwa-register';
 
@@ -24,10 +25,23 @@ document.addEventListener(
   true,
 );
 
+// Quien eligió inglés o francés en otra visita y entra desde fuera (Google, un enlace...) a una página en
+// español va a la misma página en su idioma. Los buscadores no guardan preferencia, así que siempre ven la URL pedida.
+let redirecting = false;
+try {
+  const saved = localStorage.getItem('app_language');
+  const { pathname, search, hash } = window.location;
+  const fromOutside = !document.referrer || new URL(document.referrer).host !== window.location.host;
+  if ((saved === 'en' || saved === 'fr') && fromOutside && langFromPath(pathname) === 'es' && isLocalizablePath(pathname)) {
+    redirecting = true;
+    window.location.replace(`${localizePath(pathname, saved)}${search}${hash}`);
+  }
+} catch { /* sin almacenamiento */ }
+
 // Register Service Worker for PWA
 registerSW({ immediate: true });
 
-createRoot(document.getElementById('root')!).render(
+if (!redirecting) createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
       <App />

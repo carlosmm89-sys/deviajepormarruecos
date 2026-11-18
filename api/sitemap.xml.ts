@@ -101,17 +101,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     });
 
+    // Cada página en español, inglés (/en) y francés (/fr), con enlaces hreflang entre las tres versiones
+    const LANGS = ['es', 'en', 'fr'];
+    const localize = (loc: string, lang: string) => {
+      if (lang === 'es') return loc;
+      const p = loc.slice(SITE_URL.length) || '/';
+      return `${SITE_URL}/${lang}${p === '/' ? '' : p}`;
+    };
+    const alternates = (loc: string) =>
+      [...LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${localize(loc, l)}" />`),
+        `    <xhtml:link rel="alternate" hreflang="x-default" href="${loc}" />`].join('\n');
+
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls
-  .map(
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${LANGS.flatMap((lang) => urls.map(
     (u) => `  <url>
-    <loc>${u.loc}</loc>
+    <loc>${localize(u.loc, lang)}</loc>
+${alternates(u.loc)}
     <lastmod>${u.lastmod}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`
-  )
+  ))
   .join('\n')}
 </urlset>`;
 

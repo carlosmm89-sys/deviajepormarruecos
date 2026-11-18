@@ -246,7 +246,7 @@ export default function TourDetail() {
     <div className="pb-24 bg-gray-50/30">
       <SEO 
         title={`${td(tour, 'title')} | Vivir Marruecos`}
-        description={tourMetaDescription({ ...tour, title: td(tour, 'title'), itinerary_summary: td(tour, 'itinerary_summary') })}
+        description={tourMetaDescription({ ...tour, title: td(tour, 'title'), itinerary_summary: td(tour, 'itinerary_summary') }, currentLanguage)}
         image={tour.featured_image || tour.gallery?.[0]}
         url={tourPath(tour)}
         type="product"

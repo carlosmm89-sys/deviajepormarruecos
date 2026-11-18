@@ -39,7 +39,8 @@ export default function GoogleAnalytics() {
   useEffect(() => {
     if (gaId && typeof (window as any).gtag === 'function') {
       (window as any).gtag('config', gaId, {
-        page_path: location.pathname + location.search,
+        // Con el prefijo de idioma (/en, /fr) para ver en Analytics las visitas de cada idioma
+        page_path: window.location.pathname + location.search,
       });
     }
   }, [gaId, location.pathname, location.search]);

@@ -20,21 +20,7 @@ export default function DestinationDetail() {
   const { formatPrice } = useCurrency();
   const { td, tr, currentLanguage } = useTranslation();
   // Título y H1 del destino en el idioma actual
-  const headings = (dest: any) => {
-    if (currentLanguage === 'es') return destinationHeadings(dest);
-    const name = String(dest?.name || '').trim();
-    const slug = String(dest?.slug || '');
-    let h1;
-    if (slug.startsWith('rutas-desde-')) {
-      const city = name.replace(/^(rutas\s+desde|routes\s+from|itin[ée]raires\s+depuis|circuits\s+depuis)\s+/i, '').trim();
-      h1 = currentLanguage === 'en' ? `Tours from ${city} to the Merzouga desert` : `Circuits de ${city} au désert de Merzouga`;
-    } else if (slug === 'excursiones-cortas') {
-      h1 = currentLanguage === 'en' ? 'Day trips in Morocco' : 'Excursions d’une journée au Maroc';
-    } else {
-      h1 = currentLanguage === 'en' ? `${name}: tours and excursions` : `${name} : circuits et excursions`;
-    }
-    return { h1, title: `${h1} | Vivir Marruecos` };
-  };
+  const headings = (dest: any) => destinationHeadings(dest, 'Vivir Marruecos', currentLanguage);
 
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');

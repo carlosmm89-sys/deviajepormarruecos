@@ -155,3 +155,14 @@
 - (18/11/2026) Guía «Viaje a Marruecos» (`/viaje-a-marruecos`) traducida al inglés y francés: `getGuide(lang)` en `src/data/guiaViaje.js`. Adaptadas para viajeros de cualquier país la documentación (visado según nacionalidad), cómo llegar (vuelos desde Europa; en FR, ferry desde Sète) y el idioma del conductor (inglés, español y francés). Quitado el aviso «solo en español». El HTML pre-renderizado sigue en español. Ya está toda la web en los tres idiomas.
 - (18/11/2026) Guía: precio de las rutas de 8 días corregido a «desde 400 €» (ES/EN/FR), el más bajo publicado en /tours.
 - (18/11/2026) SEO: los buscadores ya no reciben la web en inglés por la detección automática del idioma del navegador (Googlebot renderiza en inglés); siempre ven la versión en español. Descripciones del pre-renderizado sin espacios antes de comas o dos puntos (`stripHtml`).
+
+### Inglés y francés con direcciones propias para Google (18/11/2026)
+- El idioma lo marca la URL: sin prefijo español, `/en/...` inglés, `/fr/...` francés (mismos slugs). `src/i18n/urlLang.js` con las funciones comunes (web y pre-renderizado).
+- `LanguageContext`: idioma según la URL (ya no por `localStorage` ni por el idioma del navegador); el selector lleva a la misma página en el otro idioma. `dbService` traduce según la URL.
+- `App.tsx`: `basename` del router = prefijo del idioma, así todos los `<Link>` lo llevan. `LocalizedLinks.tsx` cambia al idioma de la página los enlaces internos escritos en HTML (blog, guía, tours) y los abre sin recargar.
+- `main.tsx`: quien eligió inglés o francés en otra visita y entra desde fuera a una página en español va a la versión de su idioma (los buscadores no, porque no guardan preferencia).
+- `SEO.tsx`: canonical de cada idioma, `hreflang` (es, en, fr, x-default), `og:locale` y `<html lang>`. Las páginas legales ya no tienen la portada como canonical.
+- `prerender-seo.mjs`: genera las 3 versiones de cada página con título, descripción, contenido y datos estructurados en su idioma (traducciones de la base de datos, `getHomeContent`, `getGuide`, `collectionContentI18n`), `hreflang` y enlaces internos en el mismo idioma.
+- `seoContent.js`: `tourMetaDescription(tour, lang)`, `destinationHeadings(dest, siteName, lang)`, `ACTIVITIES_EXTRA_I18N`, `HOME_I18N_SEO`; textos de la colección «Excursiones de un día» (ES/EN/FR).
+- `api/sitemap.xml.ts`: todas las URLs en los 3 idiomas con `xhtml:link` hreflang. `api/page-fallback.ts`: comprueba también `/en/...` y `/fr/...` y conserva el idioma en las redirecciones. `vercel.json`: redirecciones antiguas también con `/en` y `/fr`; `noindex` en `/en|fr/favoritos`.
+- Analytics registra la ruta con el prefijo de idioma.

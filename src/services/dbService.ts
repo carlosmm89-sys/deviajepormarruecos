@@ -1,3 +1,4 @@
+import { currentLang } from '../i18n/urlLang';
 import { getSupabase } from '../lib/supabaseLazy';
 import { Destination, Tour, Lead, BusinessSettings, BlogPost, GalleryImage } from '../types';
 
@@ -27,7 +28,7 @@ const mergeTranslations = <T extends any>(data: T): T => {
   if (!data) return data;
   
   // Get active language from localStorage (synced with LanguageContext)
-  const lang = typeof window !== 'undefined' ? (localStorage.getItem('app_language') || 'es') : 'es';
+  const lang = currentLang();
   
   // Spanish is the base language, no merge needed
   if (lang === 'es') return data;

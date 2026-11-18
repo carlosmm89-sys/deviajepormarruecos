@@ -7,6 +7,8 @@ import Layout from './components/Layout';
 import AdminRoute from './components/AdminRoute';
 
 import ScrollToTop from './components/ScrollToTop';
+import LocalizedLinks from './components/LocalizedLinks';
+import { currentLang, langPrefix, stripLangPrefix } from './i18n/urlLang';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import WhatsAppBubble from './components/WhatsAppBubble';
 import CookieBanner from './components/CookieBanner';
@@ -14,7 +16,7 @@ import CookieBanner from './components/CookieBanner';
 // --- Lazy Loading (Code Splitting) ---
 // La portada se empieza a descargar en cuanto arranca la app (en paralelo, sin esperar al primer render),
 // para que el título y la foto de portada se pinten antes en móvil (LCP).
-const homeChunk = typeof window !== 'undefined' && window.location.pathname === '/' ? import('./pages/Home') : null;
+const homeChunk = typeof window !== 'undefined' && stripLangPrefix(window.location.pathname) === '/' ? import('./pages/Home') : null;
 const Home = lazy(() => homeChunk ?? import('./pages/Home'));
 const Destinations = lazy(() => import('./pages/Destinations'));
 const DestinationDetail = lazy(() => import('./pages/DestinationDetail'));
@@ -52,13 +54,17 @@ const PageLoader = () => (
   </div>
 );
 
+// /en/... y /fr/...: las mismas rutas con el prefijo del idioma (todos los <Link> lo añaden solos)
+const ROUTER_BASENAME = typeof window !== 'undefined' ? langPrefix(currentLang()) || undefined : undefined;
+
 export default function App() {
   return (
     <AuthProvider>
       <LanguageProvider>
         <CurrencyProvider>
-          <Router>
+          <Router basename={ROUTER_BASENAME}>
             <ScrollToTop />
+            <LocalizedLinks />
             <GoogleAnalytics />
             <WhatsAppBubble />
             <CookieBanner />

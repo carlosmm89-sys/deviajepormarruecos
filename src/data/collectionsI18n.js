@@ -4,6 +4,10 @@ import { collectionContent } from './seoContent.js';
 
 const COLLECTIONS_I18N = {
   en: {
+    'excursiones-de-un-dia': {
+      title: 'Day trips in Morocco',
+      intro: 'Private day trips from Marrakech to the Ouzoud waterfalls, the Ourika Valley and Essaouira, with private transport and a driver just for your group. Perfect if you only have a few days or want to make the most of your stay in Marrakech.'
+    },
     'desierto': {
       title: 'Trips to the Merzouga desert',
       intro: 'Private trips to the Sahara with a night in a tent in the Erg Chebbi dunes, a camel ride at sunset and sunrise over the dunes. Departures from Marrakech, Fez, Tangier or Casablanca, with a driver and vehicle just for your group.',
@@ -126,6 +130,10 @@ const COLLECTIONS_I18N = {
     }
   },
   fr: {
+    'excursiones-de-un-dia': {
+      title: 'Excursions d’une journée au Maroc',
+      intro: 'Excursions privées d’une journée depuis Marrakech vers les cascades d’Ouzoud, la vallée de l’Ourika et Essaouira, avec transport privé et chauffeur rien que pour votre groupe. Idéal si vous avez peu de jours ou pour compléter votre séjour à Marrakech.'
+    },
     'desierto': {
       title: 'Voyages dans le désert de Merzouga',
       intro: 'Voyages privés dans le Sahara avec une nuit sous la tente dans les dunes de l’Erg Chebbi, une balade à dromadaire au coucher du soleil et le lever du soleil sur les dunes. Départs de Marrakech, Fès, Tanger ou Casablanca, avec chauffeur et véhicule rien que pour votre groupe.',

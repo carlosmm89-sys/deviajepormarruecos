@@ -40,7 +40,16 @@ function slugify(str = '') {
 
 type Result = { status: 200 } | { status: 404 } | { status: 301; location: string };
 
-async function resolve(pathname: string): Promise<Result> {
+// /en/... y /fr/...: misma comprobación que la página en español; las redirecciones conservan el idioma
+async function resolve(fullPath: string): Promise<Result> {
+  const m = /^\/(en|fr)(?=\/|$)/.exec(fullPath);
+  const prefix = m ? `/${m[1]}` : '';
+  const result = await resolveBase(fullPath.slice(prefix.length) || '/');
+  if (prefix && result.status === 301) return { status: 301, location: `${prefix}${result.location === '/' ? '' : result.location}` };
+  return result;
+}
+
+async function resolveBase(pathname: string): Promise<Result> {
   const parts = pathname.replace(/\/+$/, '').split('/').filter(Boolean);
   const [section, key] = parts;
 
