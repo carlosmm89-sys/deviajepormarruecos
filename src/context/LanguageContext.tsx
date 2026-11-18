@@ -21,9 +21,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       setLanguageState(saved);
       document.documentElement.lang = saved;
     } else {
-      // Auto-detect browser language if none saved
+      // Auto-detect browser language if none saved.
+      // Los buscadores (Googlebot renderiza con navegador en inglés) ven siempre la versión
+      // en español, que es la del HTML pre-renderizado y la de las URLs del sitemap.
+      const isBot = /bot|crawl|spider|slurp|google|bing|yandex|duckduck|baidu|lighthouse|headless/i.test(navigator.userAgent);
       const browserLang = navigator.language.split('-')[0];
-      if (['es', 'en', 'fr'].includes(browserLang)) {
+      if (!isBot && ['es', 'en', 'fr'].includes(browserLang)) {
         setLanguageState(browserLang as Language);
       }
     }

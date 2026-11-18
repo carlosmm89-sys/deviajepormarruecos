@@ -32,7 +32,7 @@ function escapeHtml(str = '') {
 }
 
 function stripHtml(html = '') {
-  return String(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  return String(html).replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').replace(/\s+([,.;:!?)])/g, '$1').trim();
 }
 
 function slugifyCategory(str = '') {
