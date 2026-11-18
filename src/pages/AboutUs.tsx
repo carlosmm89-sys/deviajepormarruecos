@@ -78,13 +78,16 @@ export default function AboutUs() {
                       src="/images/equipo/vivir-marruecos-equipo-800.jpg"
                       srcSet="/images/equipo/vivir-marruecos-equipo-480.jpg 480w, /images/equipo/vivir-marruecos-equipo-800.jpg 800w"
                       sizes="(min-width: 640px) 260px, 100vw"
-                      alt={tr({ es: 'Vivir Marruecos, agencia local de Merzouga, junto a alfombras bereberes', en: 'Vivir Marruecos, a local agency from Merzouga, next to Berber rugs', fr: 'Vivir Marruecos, agence locale de Merzouga, devant des tapis berbères' })}
+                      alt={tr({ es: 'Fundador de Vivir Marruecos junto a alfombras bereberes', en: 'Founder of Vivir Marruecos next to Berber rugs', fr: 'Fondateur de Vivir Marruecos devant des tapis berbères' })}
                       width="800"
                       height="1067"
                       loading="lazy"
                       className="w-full h-auto object-cover"
                     />
                   </picture>
+                  <figcaption className="bg-white px-4 py-3 text-sm font-semibold text-gray-800 text-center border-t border-gray-100">
+                    {tr({ es: 'Fundador de Vivir Marruecos', en: 'Founder of Vivir Marruecos', fr: 'Fondateur de Vivir Marruecos' })}
+                  </figcaption>
                 </figure>
               </div>
             ) : s.paragraphs?.map(p => <p key={p} className="text-gray-700 leading-relaxed mb-4">{p}</p>)}
