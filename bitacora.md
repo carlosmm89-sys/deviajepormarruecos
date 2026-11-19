@@ -190,3 +190,4 @@
   - Imagen de relleno cuando un tour, destino o artículo no tiene foto: era loremflickr.com (ya no sirve fotos, salía un cuadro gris); ahora `/images/blog/desert.png` de la propia web.
   - `public/llms.txt`: tenía el nombre antiguo «De Viaje por Marruecos» y ningún dato del negocio; ahora describe Vivir Marruecos, páginas principales y contacto (se mantienen los créditos de Tonwy).
   - Título y descripción por defecto (`index.html`, `SEO.tsx`): «Tours privados por Marruecos…» en vez de «Tu agencia de viajes en Marruecos».
+- (19/11/2026) Quiénes somos: Vivir Marruecos se presenta como «agencia de viajes a medida por todo Marruecos» (ES/EN/FR), por decisión del propietario.

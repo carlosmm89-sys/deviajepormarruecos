@@ -33,7 +33,7 @@ const ABOUT = {
         'Cada viaje que organizamos lo preparo como si fuera para un amigo: con cariño, con calma y con las ganas de que te lleves Marruecos en el corazón.'
       ]
     },
-    intro: 'Vivir Marruecos es una agencia de viajes y transporte turístico con base en Hassi Labied, a los pies de las dunas de Erg Chebbi, en Merzouga. Desde 2015 organizamos viajes por Marruecos para viajeros de todo el mundo.',
+    intro: 'Vivir Marruecos es una agencia de viajes a medida por todo Marruecos, con base en Hassi Labied, a los pies de las dunas de Erg Chebbi, en Merzouga. Desde 2015 organizamos viajes por Marruecos para viajeros de todo el mundo.',
     sections: [
       {
         h2: 'Una agencia local, en el desierto',
@@ -80,7 +80,7 @@ const ABOUT = {
         'I plan every trip we organise as if it were for a friend: with care, without rushing, and hoping you take Morocco home in your heart.'
       ]
     },
-    intro: 'Vivir Marruecos is a travel and tourist transport agency based in Hassi Labied, at the foot of the Erg Chebbi dunes in Merzouga. Since 2015 we have organised trips around Morocco for travellers from all over the world.',
+    intro: 'Vivir Marruecos is a tailor-made travel agency for trips all over Morocco, based in Hassi Labied, at the foot of the Erg Chebbi dunes in Merzouga. Since 2015 we have organised trips around Morocco for travellers from all over the world.',
     sections: [
       {
         h2: 'A local agency, in the desert',
@@ -127,7 +127,7 @@ const ABOUT = {
         'Je prépare chaque voyage comme s’il était pour un ami : avec attention, sans précipitation et avec l’envie que vous rentriez avec le Maroc dans le cœur.'
       ]
     },
-    intro: 'Vivir Marruecos est une agence de voyages et de transport touristique basée à Hassi Labied, au pied des dunes de l’Erg Chebbi, à Merzouga. Depuis 2015, nous organisons des voyages au Maroc pour des voyageurs du monde entier.',
+    intro: 'Vivir Marruecos est une agence de voyages sur mesure dans tout le Maroc, basée à Hassi Labied, au pied des dunes de l’Erg Chebbi, à Merzouga. Depuis 2015, nous organisons des voyages au Maroc pour des voyageurs du monde entier.',
     sections: [
       {
         h2: 'Une agence locale, dans le désert',
