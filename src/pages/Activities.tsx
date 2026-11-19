@@ -68,7 +68,7 @@ export default function Activities() {
             >
               <Link to={`/blog/${post.slug}`} className="block relative aspect-[4/3] overflow-hidden">
                 <img 
-                  src={optImg(post.cover_image || 'https://loremflickr.com/800/600/morocco', 800)} 
+                  src={optImg(post.cover_image || '/images/blog/desert.png', 800)} 
                   alt={post.title}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

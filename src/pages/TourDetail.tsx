@@ -743,7 +743,7 @@ export default function TourDetail() {
               >
                 <div className="aspect-[4/3] overflow-hidden relative">
                   <img 
-                    src={optImg(post.cover_image || 'https://loremflickr.com/800/600/morocco', 800)} 
+                    src={optImg(post.cover_image || '/images/blog/desert.png', 800)} 
                     alt={post.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />

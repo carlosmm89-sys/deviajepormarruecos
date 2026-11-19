@@ -14,7 +14,7 @@ interface SEOProps {
 }
 
 export default function SEO({
-  title = 'Vivir Marruecos - Tu Agencia de Viajes en Marruecos',
+  title = 'Vivir Marruecos | Tours privados por Marruecos',
   description = 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas desde España y Marruecos. Experiencias únicas en el desierto, ciudades imperiales y más.',
   image = 'https://www.vivirmarruecos.com/pwa-512x512.png',
   url,

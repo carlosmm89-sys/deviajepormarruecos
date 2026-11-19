@@ -141,7 +141,7 @@ export default function BlogPostDetail() {
       <section className="max-w-4xl mx-auto px-4 -mt-16 relative z-20">
         <div className="w-full aspect-video md:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl mb-16 bg-white shrink-0">
           <img 
-            src={optImg(post.cover_image || 'https://loremflickr.com/1200/600/morocco', 1400)} 
+            src={optImg(post.cover_image || '/images/blog/desert.png', 1400)} 
             alt={post.title}
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
@@ -210,7 +210,7 @@ export default function BlogPostDetail() {
                   <Link to={tourPath(tour)}>
                   <div className="relative h-64 overflow-hidden">
                       <img
-                      src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/600/morocco,sahara', 800)}
+                      src={optImg(tour.featured_image || tour.gallery?.[0] || '/images/blog/desert.png', 800)}
                       alt={tour.title}
                       loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

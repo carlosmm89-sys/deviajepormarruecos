@@ -282,7 +282,7 @@ export default function DestinationDetail() {
                       <Link to={`/tours/${tour.slug || tour.id}`} className="flex-1 flex flex-col h-full">
                         <div className="relative h-64 overflow-hidden">
                           <img
-                            src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/600/morocco?lock=1', 800)}
+                            src={optImg(tour.featured_image || tour.gallery?.[0] || '/images/blog/desert.png', 800)}
                             alt={tour.title}
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             referrerPolicy="no-referrer"

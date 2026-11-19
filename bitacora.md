@@ -184,3 +184,9 @@
 - (18/11/2026) Quiénes somos: foto del equipo (enviada por el propietario) en `public/images/equipo/` (480 y 800 px, WebP y JPG). Solo se muestra en esa página (no como imagen al compartir).
 - (18/11/2026) Quiénes somos: apartado «Hola, soy Ali» (ES/EN/FR) con la historia del fundador junto a su foto; pie «Ali, fundador de Vivir Marruecos»; `founder` en los datos estructurados. Texto en `companyContent.js` (`founder`).
 - (18/11/2026) Quiénes somos: quitado el recuadro «Datos de la empresa» (razón social, ICE, RC, domicilio). Por decisión del propietario, esos datos solo se muestran en el Aviso legal (y la razón social y el domicilio, en la Política de privacidad como responsable del tratamiento).
+- (19/11/2026) Revisión general: las 249 URLs del sitemap responden 200, sin títulos ni descripciones duplicados, canonical correcto en todas, un solo H1 por página, sin enlaces internos rotos ni imágenes rotas; las páginas inexistentes dan 404. Arreglado:
+  - Pre-renderizado EN/FR de las fichas de tour: la duración salía en español («Duration: 3 Días»); ahora «3 days» / «3 jours» (`localizeDuration`).
+  - Pre-renderizado: los extractos de /tours, /destinations y /blog y la meta descripción se cortaban a mitad de palabra; ahora se cortan en un espacio y terminan en «…» (`excerpt`).
+  - Imagen de relleno cuando un tour, destino o artículo no tiene foto: era loremflickr.com (ya no sirve fotos, salía un cuadro gris); ahora `/images/blog/desert.png` de la propia web.
+  - `public/llms.txt`: tenía el nombre antiguo «De Viaje por Marruecos» y ningún dato del negocio; ahora describe Vivir Marruecos, páginas principales y contacto (se mantienen los créditos de Tonwy).
+  - Título y descripción por defecto (`index.html`, `SEO.tsx`): «Tours privados por Marruecos…» en vez de «Tu agencia de viajes en Marruecos».

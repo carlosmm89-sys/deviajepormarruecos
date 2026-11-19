@@ -53,7 +53,7 @@ const OG_LOCALE = { es: 'es_ES', en: 'en_GB', fr: 'fr_FR' };
 function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml, preloadImage, modulePreload, lang = 'es' }) {
   const safeTitle = escapeHtml(fitTitle(title || HOME_TITLE));
   const safeDesc = escapeHtml(
-    (description || 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas a medida.').slice(0, 160)
+    excerpt(description || 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas a medida.', 160)
   );
   const fullUrl = canonicalPath.startsWith('http') ? canonicalPath : `${DOMAIN}${canonicalPath}`;
   const safeImage = escapeHtml(image || `${DOMAIN}/pwa-512x512.png`);
@@ -131,6 +131,23 @@ function itemListLd(name, path, entries, lang = 'es') {
       itemListElement: entries.map((e, i) => ({ '@type': 'ListItem', position: i + 1, name: e.name, url: `${DOMAIN}${localizePath(e.path, lang)}` }))
     }
   };
+}
+
+/** Recorta un texto sin partir palabras y añade «…» si se ha cortado. */
+function excerpt(text, max) {
+  const t = String(text || '').trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max - 1);
+  const sp = cut.lastIndexOf(' ');
+  return (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s,;:.\-–—«"(]+$/, '') + '…';
+}
+
+/** «3 Días» → «3 days» / «3 jours» (la duración no siempre está traducida en la base de datos). */
+function localizeDuration(d, lang) {
+  if (!d || lang === 'es') return d;
+  const word = { en: ['day', 'days'], fr: ['jour', 'jours'] }[lang];
+  if (!word) return d;
+  return d.replace(/\bd[ií]as\b/gi, word[1]).replace(/\bd[ií]a\b/gi, word[0]);
 }
 
 /** Registro de la base de datos con los campos traducidos al idioma pedido (como dbService en la web). */
@@ -308,7 +325,7 @@ async function prerender() {
       es: 'Todos nuestros tours y circuitos privados por Marruecos: el desierto del Sáhara, Marrakech, Fez, Tánger y las ciudades imperiales.',
       en: 'All our private tours and trips in Morocco: the Sahara desert, Marrakech, Fez, Tangier and the imperial cities.',
       fr: 'Tous nos circuits privés au Maroc : le désert du Sahara, Marrakech, Fès, Tanger et les villes impériales.'
-    })}</p><ul>${toursL.map(t => `<li><article><h2><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(stripHtml(t.itinerary_summary || t.description || '').slice(0, 220))}</p><p>${priceFromLabel}: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
+    })}</p><ul>${toursL.map(t => `<li><article><h2><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(excerpt(stripHtml(t.itinerary_summary || t.description || ''), 220))}</p><p>${priceFromLabel}: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
     write('/tours', page({
       title: TOURS_TITLE[lang],
       description: T({
@@ -327,7 +344,7 @@ async function prerender() {
       es: 'Nuestros destinos en Marruecos: rutas desde Marrakech, Fez, Tánger y Casablanca, Chefchaouen y el desierto de Merzouga.',
       en: 'Our destinations in Morocco: routes from Marrakech, Fez, Tangier and Casablanca, Chefchaouen and the Merzouga desert.',
       fr: 'Nos destinations au Maroc : circuits depuis Marrakech, Fès, Tanger et Casablanca, Chefchaouen et le désert de Merzouga.'
-    })}</p><ul>${destinationsL.map(d => `<li><article><h2><a href="${L(`/destinations/${d.slug || d.id}`)}">${escapeHtml(d.name)}</a></h2><p>${escapeHtml(stripHtml(d.description || '').slice(0, 220))}</p></article></li>`).join('')}</ul></main>`;
+    })}</p><ul>${destinationsL.map(d => `<li><article><h2><a href="${L(`/destinations/${d.slug || d.id}`)}">${escapeHtml(d.name)}</a></h2><p>${escapeHtml(excerpt(stripHtml(d.description || ''), 220))}</p></article></li>`).join('')}</ul></main>`;
     write('/destinations', page({
       title: `${destsTitle} | ${siteName}`,
       description: T({
@@ -366,7 +383,7 @@ async function prerender() {
       es: 'Nuestro blog de viajes a Marruecos: consejos, guías prácticas, rutas y secretos para preparar tu viaje.',
       en: 'Our Morocco travel blog: tips, practical guides, routes and secrets to plan your trip.',
       fr: 'Notre blog de voyage au Maroc : conseils, guides pratiques, itinéraires et secrets pour préparer votre voyage.'
-    })}</p><ul>${postsL.map(p => `<li><article><h2><a href="${L(`/blog/${p.slug}`)}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || stripHtml(p.content || '').slice(0, 200))}</p></article></li>`).join('')}</ul></main>`;
+    })}</p><ul>${postsL.map(p => `<li><article><h2><a href="${L(`/blog/${p.slug}`)}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || excerpt(stripHtml(p.content || ''), 200))}</p></article></li>`).join('')}</ul></main>`;
     write('/blog', page({
       title: T({ es: `Blog de viajes a Marruecos: guías y consejos | ${siteName}`, en: `Morocco travel blog: guides and tips | ${siteName}`, fr: `Blog de voyage au Maroc : guides et conseils | ${siteName}` }),
       description: T({
@@ -480,7 +497,7 @@ async function prerender() {
       // Contenido completo para Google: descripción, itinerario día a día, qué incluye y otros tours relacionados
       const section = (h, html) => (stripHtml(html || '') ? `<section><h2>${h}</h2><div>${links(html)}</div></section>` : '');
       const related = toursL.filter(t => t.id !== tour.id).slice(0, 6);
-      const tourHtml = `<main>${navHtml}<article><h1>${escapeHtml(tour.title)}</h1><p>${escapeHtml(descText)}</p><p><strong>${priceFromLabel}:</strong> ${tour.price || 0}€ ${lbl.perPerson} | <strong>${lbl.duration}:</strong> ${escapeHtml(tour.duration || '')} | <strong>${lbl.departure}:</strong> ${escapeHtml(tour.departure_city || '')}${tour.return_city ? ` | <strong>${lbl.arrival}:</strong> ${escapeHtml(tour.return_city)}` : ''}</p><div>${links(tour.description)}</div>${section(lbl.itinerary, tour.itinerary_details)}${section(lbl.includes, tour.description_includes)}${section(lbl.excludes, tour.description_excludes)}${section(lbl.tips, tour.recommendations)}<section><h2>${lbl.agencyH}</h2><p>${lbl.agencyP}</p></section>${related.length ? `<section><h2>${lbl.others}</h2><ul>${related.map(t => `<li><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a> - ${from(t.price)}</li>`).join('')}</ul></section>` : ''}</article></main>`;
+      const tourHtml = `<main>${navHtml}<article><h1>${escapeHtml(tour.title)}</h1><p>${escapeHtml(descText)}</p><p><strong>${priceFromLabel}:</strong> ${tour.price || 0}€ ${lbl.perPerson} | <strong>${lbl.duration}:</strong> ${escapeHtml(localizeDuration(tour.duration || '', lang))} | <strong>${lbl.departure}:</strong> ${escapeHtml(tour.departure_city || '')}${tour.return_city ? ` | <strong>${lbl.arrival}:</strong> ${escapeHtml(tour.return_city)}` : ''}</p><div>${links(tour.description)}</div>${section(lbl.itinerary, tour.itinerary_details)}${section(lbl.includes, tour.description_includes)}${section(lbl.excludes, tour.description_excludes)}${section(lbl.tips, tour.recommendations)}<section><h2>${lbl.agencyH}</h2><p>${lbl.agencyP}</p></section>${related.length ? `<section><h2>${lbl.others}</h2><ul>${related.map(t => `<li><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a> - ${from(t.price)}</li>`).join('')}</ul></section>` : ''}</article></main>`;
       write(canonicalPath, page({
         title: `${tour.title} | ${siteName}`,
         description: descText,

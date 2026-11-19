@@ -207,7 +207,7 @@ export default function CollectionPage() {
               {/* Image Layout (Always Right Side on Desktop) */}
               <div className="h-64 md:h-auto order-1 md:order-2 overflow-hidden bg-gray-200">
                 <img 
-                  src={optImg(tour.featured_image || tour.gallery?.[0] || 'https://loremflickr.com/800/800/morocco,sahara', 800)} 
+                  src={optImg(tour.featured_image || tour.gallery?.[0] || '/images/blog/desert.png', 800)} 
                   alt={tour.title} 
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
                 />
