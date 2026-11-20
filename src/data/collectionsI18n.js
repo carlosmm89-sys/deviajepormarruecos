@@ -61,7 +61,10 @@ const COLLECTIONS_I18N = {
       intro: 'Trips to Essaouira, the Atlantic coast and the Mediterranean north to combine beaches, fresh fish and quiet medinas with the rest of your route.',
       body: [
         'The Moroccan coast combines the Atlantic and the Mediterranean. Essaouira, with its fishing port and walled medina, is the favourite getaway from Marrakech; Asilah and Tangier stand out in the north.',
-        'Adding a few days on the coast to your route is a great way to relax after the desert or the imperial cities.'
+        'Adding a few days on the coast to your route is a great way to relax after the desert or the imperial cities.',
+        'The medina of Essaouira is a UNESCO World Heritage Site, and the steady Atlantic wind has made it a kitesurfing and windsurfing destination. It is about three hours by road from Marrakech, so you can visit it on a day trip or stay overnight in a riad in the medina. On the way you pass the argan forests, the tree that gives argan oil.',
+        'Further south, Agadir and the beaches of Taghazout are known for surfing and a mild climate all year round. In the north, Asilah is a white seaside town with murals on its streets, and the Mediterranean coast between Tetouan and Al Hoceima has coves with calm water.',
+        'As all our trips are private and tailor-made, we can add one or more days on the coast to any route: for example, ending in Essaouira after the Merzouga desert and Marrakech, or starting in Tangier and Asilah if you arrive by ferry from Spain. Tell us your dates and we will plan the route for you.'
       ]
     },
     'luna-de-miel': {
@@ -187,7 +190,10 @@ const COLLECTIONS_I18N = {
       intro: 'Voyages à Essaouira, sur la côte atlantique et dans le nord méditerranéen pour combiner plage, poisson frais et médinas tranquilles avec le reste de votre itinéraire.',
       body: [
         'La côte marocaine associe l’Atlantique et la Méditerranée. Essaouira, avec son port de pêche et sa médina fortifiée, est l’escapade préférée depuis Marrakech ; Asilah et Tanger se distinguent au nord.',
-        'Ajouter quelques jours de côte à votre itinéraire est une bonne façon de vous reposer après le désert ou les villes impériales.'
+        'Ajouter quelques jours de côte à votre itinéraire est une bonne façon de vous reposer après le désert ou les villes impériales.',
+        'La médina d’Essaouira est inscrite au patrimoine mondial de l’UNESCO et le vent constant de l’Atlantique en a fait une destination de kitesurf et de planche à voile. Elle se trouve à environ trois heures de route de Marrakech : on peut la visiter en excursion d’une journée ou y dormir dans un riad de la médina. En chemin, on traverse les forêts d’arganiers, l’arbre qui donne l’huile d’argan.',
+        'Plus au sud, Agadir et les plages de Taghazout sont connues pour le surf et leur climat doux toute l’année. Au nord, Asilah est une petite ville blanche au bord de la mer aux murs couverts de fresques, et la côte méditerranéenne entre Tétouan et Al Hoceïma offre des criques aux eaux calmes.',
+        'Comme tous nos voyages sont privés et sur mesure, nous pouvons ajouter un ou plusieurs jours de côte à n’importe quel itinéraire : par exemple, terminer à Essaouira après le désert de Merzouga et Marrakech, ou commencer par Tanger et Asilah si vous arrivez en ferry depuis l’Espagne. Indiquez-nous vos dates et nous préparons l’itinéraire.'
       ]
     },
     'luna-de-miel': {

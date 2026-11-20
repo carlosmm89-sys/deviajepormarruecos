@@ -189,7 +189,10 @@ export const COLLECTION_BODIES = {
   ],
   'costa': [
     'La costa marroquí combina el Atlántico y el Mediterráneo. Essaouira, con su puerto pesquero y su medina amurallada, es la escapada favorita desde Marrakech; Asilah y Tánger destacan en el norte.',
-    'Añadir unos días de costa a tu ruta es una buena forma de descansar después del desierto o de las ciudades imperiales.'
+    'Añadir unos días de costa a tu ruta es una buena forma de descansar después del desierto o de las ciudades imperiales.',
+    'La medina de Essaouira es Patrimonio de la Humanidad por la UNESCO y el viento constante del Atlántico la ha convertido en un destino de kitesurf y windsurf. Está a unas tres horas de Marrakech por carretera, así que se puede visitar en una excursión de un día o quedarse a dormir en un riad de la medina. Por el camino se pasa junto a los bosques de argán, el árbol del que se obtiene el aceite de argán.',
+    'Más al sur, Agadir y las playas de Taghazout son conocidas por el surf y por su clima suave durante todo el año. En el norte, Asilah es un pueblo blanco junto al mar con murales en sus calles, y la costa mediterránea entre Tetuán y Alhucemas tiene calas de aguas tranquilas.',
+    'Como todos nuestros viajes son privados y a medida, podemos añadir uno o varios días de costa a cualquier ruta: por ejemplo, terminar en Essaouira después del desierto de Merzouga y Marrakech, o empezar en Tánger y Asilah si llegas en ferry desde España. Cuéntanos tus fechas y te preparamos la ruta.'
   ],
   'luna-de-miel': [
     'Diseñamos lunas de miel privadas por Marruecos: riads con encanto en Marrakech y Fez, una noche especial en un campamento del desierto de Merzouga y el ritmo que la pareja prefiera.',

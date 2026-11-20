@@ -191,3 +191,4 @@
   - `public/llms.txt`: tenía el nombre antiguo «De Viaje por Marruecos» y ningún dato del negocio; ahora describe Vivir Marruecos, páginas principales y contacto (se mantienen los créditos de Tonwy).
   - Título y descripción por defecto (`index.html`, `SEO.tsx`): «Tours privados por Marruecos…» en vez de «Tu agencia de viajes en Marruecos».
 - (19/11/2026) Quiénes somos: Vivir Marruecos se presenta como «agencia de viajes a medida por todo Marruecos» (ES/EN/FR), por decisión del propietario.
+- (20/11/2026) SEO: `/coleccion/costa` estaba en «Rastreada: actualmente sin indexar» por poco contenido. Añadidos tres párrafos (Essaouira, sur y norte, cómo añadir costa a una ruta) en ES/EN/FR (`COLLECTION_BODIES`, `collectionsI18n.js`).
