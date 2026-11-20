@@ -192,3 +192,4 @@
   - Título y descripción por defecto (`index.html`, `SEO.tsx`): «Tours privados por Marruecos…» en vez de «Tu agencia de viajes en Marruecos».
 - (19/11/2026) Quiénes somos: Vivir Marruecos se presenta como «agencia de viajes a medida por todo Marruecos» (ES/EN/FR), por decisión del propietario.
 - (20/11/2026) SEO: `/coleccion/costa` estaba en «Rastreada: actualmente sin indexar» por poco contenido. Añadidos tres párrafos (Essaouira, sur y norte, cómo añadir costa a una ruta) en ES/EN/FR (`COLLECTION_BODIES`, `collectionsI18n.js`).
+- (20/11/2026) SEO: artículo `/blog/gastronomia-marroqui-platos-tipicos` («Rastreada: actualmente sin indexar», unas 280 palabras) ampliado desde el panel a 9 platos (con la medfouna de Rissani/Merzouga y la tanjia), dónde comer y consejos (~870 palabras ES, también EN/FR). Título nuevo: «Gastronomía marroquí: 9 platos típicos que debes probar». Este commit sirve también para volver a generar el pre-renderizado con el texto nuevo.
