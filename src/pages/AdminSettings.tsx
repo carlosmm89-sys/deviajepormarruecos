@@ -210,7 +210,7 @@ export default function AdminSettings() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-sm font-semibold text-gray-700">Contraseña SMTP</label>
-                  <p className="text-sm text-gray-500">Por seguridad no se guarda aquí: está en la variable <code>SMTP_PASSWORD</code> de Vercel (Settings → Environment Variables).</p>
+                  <p className="text-sm text-gray-500">Por seguridad no se ve ni se cambia aquí. Se cambia en Supabase: Table Editor → business_settings → columna smtp_password.</p>
                 </div>
                 <div className="space-y-1">
                   <label className="text-sm font-semibold text-gray-700">Remitente: Email</label>
