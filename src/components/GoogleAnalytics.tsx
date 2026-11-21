@@ -15,11 +15,21 @@ export default function GoogleAnalytics() {
         setGaId(id);
 
         if (!document.getElementById('ga-script')) {
-          const script1 = document.createElement('script');
-          script1.id = 'ga-script';
-          script1.async = true;
-          script1.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
-          document.head.appendChild(script1);
+          // El script de gtag (~190 KB) se carga cuando el visitante interactúa o 2,5 s después de cargar la página,
+          // igual que GTM en index.html, para no competir con la foto de portada (LCP). Los eventos se quedan en
+          // dataLayer y se envían en cuanto carga.
+          const loadGa = () => {
+            if (document.getElementById('ga-script')) return;
+            const script1 = document.createElement('script');
+            script1.id = 'ga-script';
+            script1.async = true;
+            script1.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
+            document.head.appendChild(script1);
+          };
+          ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(ev =>
+            window.addEventListener(ev, loadGa, { once: true, passive: true }));
+          if (document.readyState === 'complete') setTimeout(loadGa, 2500);
+          else window.addEventListener('load', () => setTimeout(loadGa, 2500), { once: true });
 
           const w = window as any;
           w.dataLayer = w.dataLayer || [];
