@@ -176,6 +176,13 @@ async function localizeHeroImage(url) {
     fs.mkdirSync(dir, { recursive: true });
     const entries = [];
     for (const w of [480, 768, 1024, 1600]) {
+      // Si ya hay una versión redimensionada en public/images/hero/ (Vite la copia a dist), se usa esa:
+      // Supabase no redimensiona en el plan actual y sin esto las cuatro versiones serían la foto original.
+      const prebuilt = `hero-${hash}-${w}.webp`;
+      if (fs.existsSync(path.join(dir, prebuilt))) {
+        entries.push({ w, path: `/images/hero/${prebuilt}` });
+        continue;
+      }
       const res = await fetch(optImg(url, w, w <= 768 ? 55 : 65), { headers: { Accept: 'image/webp,image/*;q=0.8' } });
       if (!res.ok) return null;
       const ct = res.headers.get('content-type') || '';
