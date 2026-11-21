@@ -4,7 +4,7 @@ import { dbService } from '../services/dbService';
 import { GalleryImage } from '../types';
 import SEO from '../components/SEO';
 import { Maximize2, X } from 'lucide-react';
-import { optImg } from '../lib/image';
+import { optImg, fallbackToOriginal } from '../lib/image';
 
 import { useTranslation } from '../hooks/useTranslation';
 export default function Gallery() {
@@ -74,6 +74,7 @@ export default function Gallery() {
               >
                 <img 
                   src={optImg(img.image_url, 800)} 
+                  onError={fallbackToOriginal(img.image_url)}
                   alt={img.title || tr({ es: 'Marruecos Paisaje', en: 'Moroccan landscape', fr: 'Paysage marocain' })} 
                   className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
@@ -110,7 +111,9 @@ export default function Gallery() {
           </button>
           
           <img 
+            key={selectedImage.image_url}
             src={optImg(selectedImage.image_url, 1600)} 
+            onError={fallbackToOriginal(selectedImage.image_url)}
             alt={selectedImage.title || tr({ es: 'Marruecos Expanded', en: 'Morocco', fr: 'Maroc' })}
             className="max-w-full max-h-full object-contain rounded-lg"
             onClick={(e) => e.stopPropagation()} 

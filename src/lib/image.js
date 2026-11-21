@@ -62,3 +62,18 @@ export function optSrcSet(url, widths = [640, 960, 1600], quality = 70) {
   if (!/\.supabase\.co\/storage\/v1\/object\/public\/|images\.unsplash\.com\/|images\.pexels\.com\//.test(url)) return undefined;
   return widths.map(w => `${optImg(url, w, quality)} ${w}w`).join(', ');
 }
+
+/**
+ * onError para <img>: si falla la versión optimizada, carga la foto original (una sola vez).
+ * Úsalo con key={url} en imágenes que cambian de foto, para que cada foto tenga su propio intento.
+ * @param {string | null | undefined} original
+ */
+export function fallbackToOriginal(original) {
+  return (e) => {
+    const img = e.currentTarget;
+    if (original && img.dataset.fallback !== '1' && img.src !== original) {
+      img.dataset.fallback = '1';
+      img.src = original;
+    }
+  };
+}

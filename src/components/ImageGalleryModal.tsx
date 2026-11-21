@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { optImg } from '../lib/image';
+import { optImg, fallbackToOriginal } from '../lib/image';
 
 interface ImageGalleryModalProps {
   isOpen: boolean;
@@ -84,6 +84,7 @@ export default function ImageGalleryModal({ isOpen, images, initialIndex = 0, on
               exit={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
               src={optImg(images[currentIndex], 1600)}
+              onError={fallbackToOriginal(images[currentIndex])}
               alt={`Gallery image ${currentIndex + 1}`}
               className="max-w-full max-h-full object-contain drop-shadow-2xl"
               referrerPolicy="no-referrer"
@@ -113,7 +114,7 @@ export default function ImageGalleryModal({ isOpen, images, initialIndex = 0, on
                     : 'opacity-40 hover:opacity-100'
                 }`}
               >
-                <img src={optImg(img, 300)} loading="lazy" className="w-full h-full object-cover" alt="" referrerPolicy="no-referrer" />
+                <img src={optImg(img, 300)} onError={fallbackToOriginal(img)} loading="lazy" className="w-full h-full object-cover" alt="" referrerPolicy="no-referrer" />
               </button>
             ))}
           </div>
