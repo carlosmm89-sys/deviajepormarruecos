@@ -50,7 +50,19 @@ function slugifyCategory(str = '') {
 
 const OG_LOCALE = { es: 'es_ES', en: 'en_GB', fr: 'fr_FR' };
 
-function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml, preloadImage, modulePreload, lang = 'es' }) {
+/**
+ * Foto de portada visible en el HTML del servidor (solo portada): se pinta antes de que cargue React, así el
+ * elemento más grande (LCP) no espera al JavaScript. Va en posición absoluta, debajo de la cabecera (97 px),
+ * y React la sustituye al montar (createRoot reemplaza el contenido de #root), sin mover nada (sin CLS).
+ */
+function heroPlaceholderHtml(hero) {
+  return `<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:97px;background:#fff;border-bottom:1px solid #f3f4f6"></div>`
+    + `<div aria-hidden="true" style="position:absolute;left:0;right:0;top:97px;height:85vh;min-height:560px;overflow:hidden;background:rgba(26,95,122,.2)">`
+    + `<img src="${escapeHtml(hero.src)}" srcset="${escapeHtml(hero.srcset)}" sizes="100vw" alt="" fetchpriority="high" style="width:100%;height:100%;object-fit:cover;transform:scale(1.05)" />`
+    + `<div style="position:absolute;inset:0;background:rgba(0,0,0,.4)"></div></div>`;
+}
+
+function injectPageSeo(baseHtml, { title, description, canonicalPath, image, type = 'website', schema, bodyHtml, preloadImage, modulePreload, heroPlaceholder, lang = 'es' }) {
   const safeTitle = escapeHtml(fitTitle(title || HOME_TITLE));
   const safeDesc = escapeHtml(
     excerpt(description || 'Descubre la magia de Marruecos con nuestros tours y excursiones organizadas a medida.', 160)
@@ -92,7 +104,7 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
     // para que no ocupe espacio y no provoque un salto de diseño (CLS) cuando React lo sustituye por la página real.
     html = html.replace(
       '<div id="root"></div>',
-      `<div id="root"><div data-prerender style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">${bodyHtml}</div></div>`
+      `<div id="root">${heroPlaceholder ? heroPlaceholderHtml(heroPlaceholder) : ''}<div data-prerender style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">${bodyHtml}</div></div>`
     );
   }
 
@@ -301,6 +313,7 @@ async function prerender() {
       canonicalPath: L('/'),
       image: settings?.hero_image_url,
       preloadImage: heroLocal || settings?.hero_image_url,
+      heroPlaceholder: heroLocal,
       // Descarga anticipada del código de la portada (si no, el navegador solo lo pide después de ejecutar el JS principal).
       modulePreload: HOME_CHUNK,
       schema: [{
