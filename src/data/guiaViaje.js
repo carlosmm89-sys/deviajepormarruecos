@@ -11,10 +11,10 @@ export const GUIDE = {
   title: 'Viaje a Marruecos: guía completa para organizar tu viaje',
   metaTitle: 'Viaje a Marruecos: rutas, precios y consejos (guía 2026)',
   description:
-    'Organiza tu viaje a Marruecos: rutas de 3 a 13 días, precios, mejor época, documentación y el desierto de Merzouga, con una agencia local.',
+    'Organiza tu viaje a Marruecos: rutas de 3 a 13 días, precios, mejor época, documentación y el desierto de Merzouga, con una empresa local.',
   updated: '2026-11-13',
   intro: [
-    'Marruecos está a una hora de avión de España y, sin embargo, parece otro mundo: medinas laberínticas, montañas del Atlas, kasbahs de adobe y las dunas del Sáhara. En esta guía te contamos, como agencia local con base en Merzouga, lo que preguntan de verdad nuestros viajeros antes de reservar.',
+    'Marruecos está a una hora de avión de España y, sin embargo, parece otro mundo: medinas laberínticas, montañas del Atlas, kasbahs de adobe y las dunas del Sáhara. En esta guía te contamos, como empresa local con base en Merzouga, lo que preguntan de verdad nuestros viajeros antes de reservar.',
     'Aquí tienes las rutas más habituales según los días que tengas, cuánto cuesta el viaje, cuándo ir, qué documentación necesitas y cómo es la noche en el desierto.'
   ],
   sections: [
@@ -106,9 +106,9 @@ export const GUIDE = {
     },
     {
       id: 'agencia',
-      h2: 'Viajar con una agencia local',
+      h2: 'Viajar con una empresa local',
       html: `
-<p>Vivir Marruecos es una agencia de Hassi Labied (Merzouga) que organiza el viaje de principio a fin: vehículo privado, conductor de habla española, alojamientos y campamento en el desierto. Puedes adaptar la ruta, el ritmo y el tipo de alojamiento a tu medida.</p>
+<p>Vivir Marruecos es una empresa de Hassi Labied (Merzouga) que organiza el viaje de principio a fin: vehículo privado, conductor de habla española, alojamientos y campamento en el desierto. Puedes adaptar la ruta, el ritmo y el tipo de alojamiento a tu medida.</p>
 <p>Echa un vistazo a <a href="/tours">todos nuestros tours por Marruecos</a> o escríbenos para pedir un presupuesto sin compromiso.</p>`
     }
   ],
@@ -146,10 +146,10 @@ const GUIDE_EN = {
   title: 'Travelling to Morocco: the complete guide to planning your trip',
   metaTitle: 'Morocco travel guide: routes, prices and tips (2026)',
   description:
-    'Plan your trip to Morocco: 3 to 13-day routes, prices, best time to go, entry requirements and the Merzouga desert, with a local agency.',
+    'Plan your trip to Morocco: 3 to 13-day routes, prices, best time to go, entry requirements and the Merzouga desert, with a local company.',
   updated: GUIDE.updated,
   intro: [
-    'Morocco is a short flight from most of Europe, yet it feels like another world: maze-like medinas, the Atlas Mountains, mud-brick kasbahs and the dunes of the Sahara. In this guide we share, as a local agency based in Merzouga, what our travellers really ask before they book.',
+    'Morocco is a short flight from most of Europe, yet it feels like another world: maze-like medinas, the Atlas Mountains, mud-brick kasbahs and the dunes of the Sahara. In this guide we share, as a local company based in Merzouga, what our travellers really ask before they book.',
     'Here you will find the most popular routes depending on how many days you have, what the trip costs, when to go, what documents you need and what a night in the desert is like.'
   ],
   sections: [
@@ -241,9 +241,9 @@ const GUIDE_EN = {
     },
     {
       id: 'agencia',
-      h2: 'Travelling with a local agency',
+      h2: 'Travelling with a local company',
       html: `
-<p>Vivir Marruecos is an agency based in Hassi Labied (Merzouga) that organises your trip from start to finish: private vehicle, a driver who speaks English, Spanish and French, accommodation and a desert camp. You can adapt the route, pace and type of accommodation to suit you.</p>
+<p>Vivir Marruecos is a company based in Hassi Labied (Merzouga) that organises your trip from start to finish: private vehicle, a driver who speaks English, Spanish and French, accommodation and a desert camp. You can adapt the route, pace and type of accommodation to suit you.</p>
 <p>Take a look at <a href="/tours">all our tours in Morocco</a> or write to us for a free, no-obligation quote.</p>`
     }
   ],
@@ -275,10 +275,10 @@ const GUIDE_FR = {
   title: 'Voyager au Maroc : le guide complet pour organiser votre voyage',
   metaTitle: 'Voyage au Maroc : itinéraires, prix et conseils (guide 2026)',
   description:
-    'Organisez votre voyage au Maroc : itinéraires de 3 à 13 jours, prix, meilleure période, formalités et le désert de Merzouga, avec une agence locale.',
+    'Organisez votre voyage au Maroc : itinéraires de 3 à 13 jours, prix, meilleure période, formalités et le désert de Merzouga, avec une entreprise locale.',
   updated: GUIDE.updated,
   intro: [
-    'Le Maroc n’est qu’à quelques heures d’avion de l’Europe et pourtant, c’est un autre monde : médinas labyrinthiques, montagnes de l’Atlas, kasbahs en pisé et dunes du Sahara. Dans ce guide, en tant qu’agence locale basée à Merzouga, nous répondons aux questions que nos voyageurs se posent vraiment avant de réserver.',
+    'Le Maroc n’est qu’à quelques heures d’avion de l’Europe et pourtant, c’est un autre monde : médinas labyrinthiques, montagnes de l’Atlas, kasbahs en pisé et dunes du Sahara. Dans ce guide, en tant qu’entreprise locale basée à Merzouga, nous répondons aux questions que nos voyageurs se posent vraiment avant de réserver.',
     'Vous y trouverez les itinéraires les plus courants selon le nombre de jours dont vous disposez, le coût du voyage, la meilleure période, les documents nécessaires et à quoi ressemble une nuit dans le désert.'
   ],
   sections: [
@@ -370,9 +370,9 @@ const GUIDE_FR = {
     },
     {
       id: 'agencia',
-      h2: 'Voyager avec une agence locale',
+      h2: 'Voyager avec une entreprise locale',
       html: `
-<p>Vivir Marruecos est une agence de Hassi Labied (Merzouga) qui organise votre voyage de A à Z : véhicule privé, chauffeur parlant français, anglais et espagnol, hébergements et campement dans le désert. Vous pouvez adapter l’itinéraire, le rythme et le type d’hébergement à vos envies.</p>
+<p>Vivir Marruecos est une entreprise de Hassi Labied (Merzouga) qui organise votre voyage de A à Z : véhicule privé, chauffeur parlant français, anglais et espagnol, hébergements et campement dans le désert. Vous pouvez adapter l’itinéraire, le rythme et le type d’hébergement à vos envies.</p>
 <p>Découvrez <a href="/tours">tous nos circuits au Maroc</a> ou écrivez-nous pour un devis gratuit et sans engagement.</p>`
     }
   ],

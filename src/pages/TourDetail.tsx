@@ -238,7 +238,7 @@ export default function TourDetail() {
       "url": `https://www.vivirmarruecos.com${tourPath(tour)}`
     },
     "provider": {
-      "@type": "TravelAgency",
+      "@type": "LocalBusiness",
       "name": settings?.site_name || "Vivir Marruecos",
       "image": settings?.logo_url || 'https://www.vivirmarruecos.com/pwa-512x512.png'
     }

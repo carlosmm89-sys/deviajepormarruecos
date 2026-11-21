@@ -30,9 +30,9 @@ export default function Home() {
   const { howItWorks: HOW_IT_WORKS, tripTypes: TRIP_TYPES, faqs: HOME_FAQS, priceNote: PRICE_NOTE } = getHomeContent(currentLanguage);
   // Textos de portada guardados en Ajustes (en español); en inglés y francés se usan estos.
   const heroTexts = currentLanguage === 'en'
-    ? { subtitle: 'Tailor-made routes from Marrakech, Fez, Tangier and Casablanca, with a night in a tent in the Erg Chebbi dunes. Local agency based in Merzouga.', title: 'Private tours of Morocco and the Merzouga desert' }
+    ? { subtitle: 'Tailor-made routes from Marrakech, Fez, Tangier and Casablanca, with a night in a tent in the Erg Chebbi dunes. Local company based in Merzouga.', title: 'Private tours of Morocco and the Merzouga desert' }
     : currentLanguage === 'fr'
-      ? { subtitle: 'Itinéraires sur mesure depuis Marrakech, Fès, Tanger et Casablanca, avec une nuit sous la tente dans les dunes de l’Erg Chebbi. Agence locale basée à Merzouga.', title: 'Circuits privés au Maroc et dans le désert de Merzouga' }
+      ? { subtitle: 'Itinéraires sur mesure depuis Marrakech, Fès, Tanger et Casablanca, avec une nuit sous la tente dans les dunes de l’Erg Chebbi. Entreprise locale basée à Merzouga.', title: 'Circuits privés au Maroc et dans le désert de Merzouga' }
       : null;
   const { formatPrice } = useCurrency();
 

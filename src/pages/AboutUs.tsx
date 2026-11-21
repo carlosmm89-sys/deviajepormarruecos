@@ -20,7 +20,7 @@ export default function AboutUs() {
     inLanguage: currentLanguage,
     url: `${DOMAIN}${localizePath(ABOUT_PATH, currentLanguage)}`,
     mainEntity: {
-      '@type': 'TravelAgency',
+      '@type': 'LocalBusiness',
       name: COMPANY.brand,
       foundingDate: '2015-05',
       founder: { '@type': 'Person', name: 'Ali' },

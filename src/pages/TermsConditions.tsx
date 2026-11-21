@@ -20,7 +20,7 @@ export default function TermsConditions() {
         <h1 className="text-4xl font-serif font-bold text-gray-900 mb-8">Términos y Condiciones de Uso y Reserva</h1>
         <div className="prose prose-brand max-w-none text-gray-700">
           <p className="lead text-lg mb-6">
-            Las presentes condiciones regulan y son aplicables a todos los procesos de reserva, consultas y participación en los viajes planificados y operados por nuestra agencia.
+            Las presentes condiciones regulan y son aplicables a todos los procesos de reserva, consultas y participación en los viajes planificados y operados por nuestra empresa.
           </p>
 
           <h2 className={h2}>1. Objeto del Servicio</h2>
@@ -50,7 +50,7 @@ export default function TermsConditions() {
         <h1 className="text-4xl font-serif font-bold text-gray-900 mb-8">Terms and Conditions of Use and Booking</h1>
         <div className="prose prose-brand max-w-none text-gray-700">
           <p className="lead text-lg mb-6">
-            These conditions govern and apply to all bookings, enquiries and participation in the trips planned and operated by our agency.
+            These conditions govern and apply to all bookings, enquiries and participation in the trips planned and operated by our company.
           </p>
 
           <h2 className={h2}>1. Purpose of the service</h2>
@@ -80,7 +80,7 @@ export default function TermsConditions() {
         <h1 className="text-4xl font-serif font-bold text-gray-900 mb-8">Conditions générales d’utilisation et de réservation</h1>
         <div className="prose prose-brand max-w-none text-gray-700">
           <p className="lead text-lg mb-6">
-            Les présentes conditions régissent et s’appliquent à toutes les réservations, demandes et participations aux voyages organisés et opérés par notre agence.
+            Les présentes conditions régissent et s’appliquent à toutes les réservations, demandes et participations aux voyages organisés et opérés par notre entreprise.
           </p>
 
           <h2 className={h2}>1. Objet du service</h2>

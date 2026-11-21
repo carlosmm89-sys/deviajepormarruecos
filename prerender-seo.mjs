@@ -276,7 +276,7 @@ async function prerender() {
 
     // 1. Portada
     const homeSeo = lang === 'es'
-      ? { title: HOME_TITLE, h1: stripHtml(settings?.hero_title || HOME_H1_FALLBACK), subtitle: settings?.hero_subtitle || 'Agencia especializada en tours privados, excursiones al desierto de Merzouga y rutas por Marruecos.', description: settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION }
+      ? { title: HOME_TITLE, h1: stripHtml(settings?.hero_title || HOME_H1_FALLBACK), subtitle: settings?.hero_subtitle || 'Organizamos tours privados, excursiones al desierto de Merzouga y rutas por Marruecos.', description: settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION }
       : { ...HOME_I18N_SEO[lang], subtitle: HOME_I18N_SEO[lang].description };
     const reviewsLine = T({
       es: `${REVIEW_TOTALS.tripadvisor.rating} de 5 en Tripadvisor (${REVIEW_TOTALS.tripadvisor.count} opiniones) y ${REVIEW_TOTALS.google.rating} de 5 en Google`,
@@ -298,7 +298,7 @@ async function prerender() {
       modulePreload: HOME_CHUNK,
       schema: [{
         '@context': 'https://schema.org',
-        '@type': 'TravelAgency',
+        '@type': 'LocalBusiness',
         name: siteName,
         url: `${DOMAIN}${L('/')}`,
         telephone: settings?.whatsapp_number || '+34 604 48 82 23',
@@ -443,7 +443,7 @@ async function prerender() {
     const A = getAbout(lang);
     const aboutBody = `<main>${navHtml}<article><h1>${escapeHtml(A.h1)}</h1><p>${escapeHtml(A.intro)}</p><section><h2>${escapeHtml(A.founder.h2)}</h2>${A.founder.paragraphs.map(p => `<p>${escapeHtml(p)}</p>`).join('')}</section>${A.sections.map(sec => `<section><h2>${escapeHtml(sec.h2)}</h2>${(sec.paragraphs || []).map(p => `<p>${escapeHtml(p)}</p>`).join('')}${sec.list ? `<ul>${sec.list.map(li => `<li>${escapeHtml(li)}</li>`).join('')}</ul>` : ''}</section>`).join('')}<p><a href="${L('/tours')}">${escapeHtml(A.ctaTours)}</a> | <a href="${L(CONTACT_PATH)}">${escapeHtml(A.ctaContact)}</a></p></article></main>`;
     const agencyLd = (extra = {}) => ({
-      '@type': 'TravelAgency',
+      '@type': 'LocalBusiness',
       name: siteName,
       legalName: COMPANY.legalName,
       email: COMPANY.email,
@@ -483,11 +483,11 @@ async function prerender() {
       includes: T({ es: 'Qué incluye', en: 'What’s included', fr: 'Ce qui est inclus' }),
       excludes: T({ es: 'Qué no incluye', en: 'Not included', fr: 'Ce qui n’est pas inclus' }),
       tips: T({ es: 'Recomendaciones', en: 'Recommendations', fr: 'Recommandations' }),
-      agencyH: T({ es: 'Un tour privado con una agencia local', en: 'A private tour with a local agency', fr: 'Un circuit privé avec une agence locale' }),
+      agencyH: T({ es: 'Un tour privado con una empresa local', en: 'A private tour with a local company', fr: 'Un circuit privé avec une entreprise locale' }),
       agencyP: T({
-        es: 'Vivir Marruecos es una agencia con base en Hassi Labied, a los pies de las dunas de Erg Chebbi (Merzouga). Organizamos el viaje nosotros mismos: vehículo privado, conductor de habla española y campamento en el desierto, con presupuesto a medida según el número de viajeros.',
-        en: 'Vivir Marruecos is an agency based in Hassi Labied, at the foot of the Erg Chebbi dunes (Merzouga). We organise the trip ourselves: private vehicle, English-speaking driver and desert camp, with a tailor-made quote for your number of travellers.',
-        fr: 'Vivir Marruecos est une agence basée à Hassi Labied, au pied des dunes de l’Erg Chebbi (Merzouga). Nous organisons le voyage nous-mêmes : véhicule privé, chauffeur francophone et campement dans le désert, avec un devis sur mesure selon le nombre de voyageurs.'
+        es: 'Vivir Marruecos es una empresa con base en Hassi Labied, a los pies de las dunas de Erg Chebbi (Merzouga). Organizamos el viaje nosotros mismos: vehículo privado, conductor de habla española y campamento en el desierto, con presupuesto a medida según el número de viajeros.',
+        en: 'Vivir Marruecos is a company based in Hassi Labied, at the foot of the Erg Chebbi dunes (Merzouga). We organise the trip ourselves: private vehicle, English-speaking driver and desert camp, with a tailor-made quote for your number of travellers.',
+        fr: 'Vivir Marruecos est une entreprise basée à Hassi Labied, au pied des dunes de l’Erg Chebbi (Merzouga). Nous organisons le voyage nous-mêmes : véhicule privé, chauffeur francophone et campement dans le désert, avec un devis sur mesure selon le nombre de voyageurs.'
       }),
       others: T({ es: 'Otros tours por Marruecos', en: 'Other tours in Morocco', fr: 'Autres circuits au Maroc' })
     };
@@ -511,7 +511,7 @@ async function prerender() {
           description: descText,
           inLanguage: lang,
           image: tour.featured_image || tour.gallery?.[0],
-          provider: { '@type': 'TravelAgency', name: siteName, url: DOMAIN, address: BUSINESS_ADDRESS },
+          provider: { '@type': 'LocalBusiness', name: siteName, url: DOMAIN, address: BUSINESS_ADDRESS },
           offers: {
             '@type': 'Offer',
             priceCurrency: 'EUR',

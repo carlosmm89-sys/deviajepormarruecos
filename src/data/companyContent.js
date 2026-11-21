@@ -21,8 +21,8 @@ export const COMPANY = {
 
 const ABOUT = {
   es: {
-    metaTitle: 'Quiénes somos: agencia local en Merzouga desde 2015 | Vivir Marruecos',
-    description: 'Vivir Marruecos es una agencia local de Hassi Labied, a los pies de las dunas de Merzouga. Organizamos tours privados por Marruecos desde 2015.',
+    metaTitle: 'Quiénes somos: empresa local en Merzouga desde 2015 | Vivir Marruecos',
+    description: 'Vivir Marruecos es una empresa local de Hassi Labied, a los pies de las dunas de Merzouga. Organizamos tours privados por Marruecos desde 2015.',
     h1: 'Quiénes somos',
     founder: {
       h2: 'Hola, soy Ali',
@@ -33,10 +33,10 @@ const ABOUT = {
         'Cada viaje que organizamos lo preparo como si fuera para un amigo: con cariño, con calma y con las ganas de que te lleves Marruecos en el corazón.'
       ]
     },
-    intro: 'Vivir Marruecos es una agencia de viajes a medida por todo Marruecos, con base en Hassi Labied, a los pies de las dunas de Erg Chebbi, en Merzouga. Desde 2015 organizamos viajes por Marruecos para viajeros de todo el mundo.',
+    intro: 'Vivir Marruecos es una empresa local que organiza viajes a medida por todo Marruecos, con base en Hassi Labied, a los pies de las dunas de Erg Chebbi, en Merzouga. Desde 2015 organizamos viajes por Marruecos para viajeros de todo el mundo.',
     sections: [
       {
-        h2: 'Una agencia local, en el desierto',
+        h2: 'Una empresa local, en el desierto',
         paragraphs: [
           'Vivimos y trabajamos en Hassi Labied, el pueblo que está justo al lado de las dunas. Por eso conocemos el desierto de Merzouga, sus campamentos y sus caminos de primera mano, y organizamos el viaje nosotros mismos, sin intermediarios.',
           'Desde aquí preparamos rutas que salen de Marrakech, Fez, Tánger, Casablanca o Errachidia y que cruzan el Atlas, los valles y las gargantas hasta llegar al Sáhara.'
@@ -68,8 +68,8 @@ const ABOUT = {
     ctaContact: 'Contactar'
   },
   en: {
-    metaTitle: 'About us: local agency in Merzouga since 2015 | Vivir Marruecos',
-    description: 'Vivir Marruecos is a local agency from Hassi Labied, at the foot of the Merzouga dunes. We have organised private tours of Morocco since 2015.',
+    metaTitle: 'About us: local company in Merzouga since 2015 | Vivir Marruecos',
+    description: 'Vivir Marruecos is a local company from Hassi Labied, at the foot of the Merzouga dunes. We have organised private tours of Morocco since 2015.',
     h1: 'About us',
     founder: {
       h2: 'Hello, I’m Ali',
@@ -80,10 +80,10 @@ const ABOUT = {
         'I plan every trip we organise as if it were for a friend: with care, without rushing, and hoping you take Morocco home in your heart.'
       ]
     },
-    intro: 'Vivir Marruecos is a tailor-made travel agency for trips all over Morocco, based in Hassi Labied, at the foot of the Erg Chebbi dunes in Merzouga. Since 2015 we have organised trips around Morocco for travellers from all over the world.',
+    intro: 'Vivir Marruecos is a local company that organises tailor-made trips all over Morocco, based in Hassi Labied, at the foot of the Erg Chebbi dunes in Merzouga. Since 2015 we have organised trips around Morocco for travellers from all over the world.',
     sections: [
       {
-        h2: 'A local agency, in the desert',
+        h2: 'A local company, in the desert',
         paragraphs: [
           'We live and work in Hassi Labied, the village right next to the dunes. That is why we know the Merzouga desert, its camps and its tracks first-hand, and we organise your trip ourselves, with no middlemen.',
           'From here we plan routes starting in Marrakech, Fez, Tangier, Casablanca or Errachidia, crossing the Atlas, the valleys and the gorges all the way to the Sahara.'
@@ -115,8 +115,8 @@ const ABOUT = {
     ctaContact: 'Contact us'
   },
   fr: {
-    metaTitle: 'Qui sommes-nous : agence locale à Merzouga depuis 2015 | Vivir Marruecos',
-    description: 'Vivir Marruecos est une agence locale de Hassi Labied, au pied des dunes de Merzouga. Nous organisons des circuits privés au Maroc depuis 2015.',
+    metaTitle: 'Qui sommes-nous : entreprise locale à Merzouga depuis 2015 | Vivir Marruecos',
+    description: 'Vivir Marruecos est une entreprise locale de Hassi Labied, au pied des dunes de Merzouga. Nous organisons des circuits privés au Maroc depuis 2015.',
     h1: 'Qui sommes-nous',
     founder: {
       h2: 'Bonjour, je suis Ali',
@@ -127,10 +127,10 @@ const ABOUT = {
         'Je prépare chaque voyage comme s’il était pour un ami : avec attention, sans précipitation et avec l’envie que vous rentriez avec le Maroc dans le cœur.'
       ]
     },
-    intro: 'Vivir Marruecos est une agence de voyages sur mesure dans tout le Maroc, basée à Hassi Labied, au pied des dunes de l’Erg Chebbi, à Merzouga. Depuis 2015, nous organisons des voyages au Maroc pour des voyageurs du monde entier.',
+    intro: 'Vivir Marruecos est une entreprise locale qui organise des voyages sur mesure dans tout le Maroc, basée à Hassi Labied, au pied des dunes de l’Erg Chebbi, à Merzouga. Depuis 2015, nous organisons des voyages au Maroc pour des voyageurs du monde entier.',
     sections: [
       {
-        h2: 'Une agence locale, dans le désert',
+        h2: 'Une entreprise locale, dans le désert',
         paragraphs: [
           'Nous vivons et travaillons à Hassi Labied, le village juste à côté des dunes. C’est pourquoi nous connaissons de près le désert de Merzouga, ses campements et ses pistes, et nous organisons votre voyage nous-mêmes, sans intermédiaires.',
           'D’ici, nous préparons des itinéraires au départ de Marrakech, Fès, Tanger, Casablanca ou Errachidia, qui traversent l’Atlas, les vallées et les gorges jusqu’au Sahara.'

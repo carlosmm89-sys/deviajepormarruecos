@@ -36,7 +36,7 @@ export default function Contact() {
     inLanguage: currentLanguage,
     url: `${DOMAIN}${localizePath(CONTACT_PATH, currentLanguage)}`,
     mainEntity: {
-      '@type': 'TravelAgency',
+      '@type': 'LocalBusiness',
       name: COMPANY.brand,
       legalName: COMPANY.legalName,
       email: COMPANY.email,
