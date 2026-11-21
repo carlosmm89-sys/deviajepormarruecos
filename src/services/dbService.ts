@@ -2,6 +2,9 @@ import { currentLang } from '../i18n/urlLang';
 import { getSupabase } from '../lib/supabaseLazy';
 import { Destination, Tour, Lead, BusinessSettings, BlogPost, GalleryImage } from '../types';
 
+// Columnas de business_settings que puede leer la web. NO incluye smtp_password (no debe llegar al navegador).
+const PUBLIC_SETTINGS_COLUMNS = 'id,site_name,admin_email,whatsapp_number,whatsapp_welcome_message,instagram_url,facebook_url,tripadvisor_url,footer_address,created_at,updated_at,logo_url,favicon_url,google_reviews_widget,instagram_widget,smtp_host,smtp_port,smtp_user,smtp_from_email,smtp_from_name,home_views,hero_image_url,hero_title,hero_subtitle,google_analytics_id';
+
 // Los textos pegados en el editor del panel guardan «&nbsp;» entre palabras: impiden que las líneas se corten
 // y en el móvil el texto salía cortado por los lados. En la web pública se cambian por espacios normales.
 const NBSP = /&nbsp;|\u00A0/g;
@@ -207,7 +210,7 @@ export const dbService = {
     }
     settingsPromise = (async () => {
       try {
-        const { data, error } = await (await getSupabase()).from('business_settings').select('*').limit(1).single();
+        const { data, error } = await (await getSupabase()).from('business_settings').select(PUBLIC_SETTINGS_COLUMNS).limit(1).single();
         if (error) return null;
         settingsCache = { data, ts: Date.now() };
         return data;
@@ -218,7 +221,9 @@ export const dbService = {
     return settingsPromise;
   },
   saveBusinessSettings: async (settings: Partial<BusinessSettings>): Promise<BusinessSettings> => {
-    const { data, error } = await (await getSupabase()).from('business_settings').upsert([settings]).select().single();
+    // La contraseña del correo (SMTP) ya no se guarda desde el panel: va en la variable SMTP_PASSWORD de Vercel.
+    const { smtp_password: _omit, ...rest } = settings;
+    const { data, error } = await (await getSupabase()).from('business_settings').upsert([rest]).select(PUBLIC_SETTINGS_COLUMNS).single();
     if (error) throw error;
     settingsCache = { data, ts: Date.now() };
     return data;

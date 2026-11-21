@@ -57,7 +57,7 @@ export default async function handler(req: any, res: any) {
     rateLimitMap.set(clientIp, { count: 1, resetAt: now + 10 * 60 * 1000 });
   }
 
-  const { lead, settings: clientSettings, tour_title } = req.body || {};
+  const { lead, tour_title } = req.body || {};
 
   if (!lead || typeof lead !== 'object' || !lead.email || !lead.first_name) {
     return res.status(400).json({ message: 'Datos de formulario incompletos.' });
@@ -68,21 +68,34 @@ export default async function handler(req: any, res: any) {
     return res.status(400).json({ message: 'Datos de contacto no válidos.' });
   }
 
-  // Fetch authoritative SMTP settings from Supabase when env vars are available
-  let settings = clientSettings;
+  // Datos SMTP: host, usuario y remitente desde Supabase (columnas públicas);
+  // la contraseña desde la variable de entorno SMTP_PASSWORD de Vercel (no se lee del navegador).
+  // Mientras no exista SMTP_PASSWORD, se intenta leer smtp_password de Supabase como antes.
+  let settings: any = null;
   const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
   const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
   if (supabaseUrl && supabaseKey) {
     try {
       const sb = createClient(supabaseUrl, supabaseKey);
-      const { data: dbSettings } = await sb.from('business_settings').select('*').limit(1).single();
-      if (dbSettings && dbSettings.smtp_host) {
-        settings = dbSettings;
+      const { data } = await sb
+        .from('business_settings')
+        .select('admin_email,smtp_host,smtp_port,smtp_user,smtp_from_email,smtp_from_name')
+        .limit(1)
+        .single();
+      if (data) settings = { ...data };
+      if (settings && !process.env.SMTP_PASSWORD) {
+        const { data: pw } = await sb.from('business_settings').select('smtp_password').limit(1).single();
+        if (pw?.smtp_password) settings.smtp_password = pw.smtp_password;
       }
     } catch (e) {
-      // Fallback to clientSettings if Supabase fetch fails
+      // sin ajustes de Supabase
     }
   }
+  settings = settings || {};
+  if (process.env.SMTP_HOST) settings.smtp_host = process.env.SMTP_HOST;
+  if (process.env.SMTP_PORT) settings.smtp_port = process.env.SMTP_PORT;
+  if (process.env.SMTP_USER) settings.smtp_user = process.env.SMTP_USER;
+  if (process.env.SMTP_PASSWORD) settings.smtp_password = process.env.SMTP_PASSWORD;
 
   if (!settings || !settings.smtp_host) {
     return res.status(400).json({ message: 'Falta configuración SMTP.' });

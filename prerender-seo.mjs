@@ -218,7 +218,7 @@ async function prerender() {
         supabase.from('tours').select('*, destinations(*)').eq('is_active', true),
         supabase.from('destinations').select('*'),
         supabase.from('blog_posts').select('*').eq('is_published', true),
-        supabase.from('business_settings').select('*').limit(1).single()
+        supabase.from('business_settings').select('hero_image_url,hero_title,hero_subtitle,logo_url,site_name').limit(1).single()
       ]);
       tours = toursRes.data || [];
       destinations = destsRes.data || [];
