@@ -23,7 +23,7 @@ export const COLLECTION_EXTRA = {
     ],
     'viajes-de-lujo': [
       'Un viaje de lujo por Marruecos empieza por el transporte: vehículo privado con aire acondicionado y conductor que habla español, inglés y francés durante toda la ruta, sin horarios fijos ni esperas. Paramos donde queráis y repartimos los kilómetros para que cada etapa sea cómoda.',
-      'En el desierto de Merzouga podéis dormir en un campamento de lujo en las dunas de Erg Chebbi, con jaimas amplias. En las ciudades elegimos riads con encanto dentro de la medina o hoteles más grandes, según lo que prefiráis.',
+      'En el desierto de Merzouga podéis dormir en un campamento de lujo en las dunas de Erg Chebbi, con jaimas amplias y baño privado. En las ciudades elegimos riads con encanto dentro de la medina o hoteles más grandes, según lo que prefiráis.',
       'Cada viaje se prepara a medida, así que el presupuesto depende de las noches, el tipo de alojamiento y las experiencias que queráis añadir, como una cena privada en las dunas. Cuéntanos cómo os imagináis el viaje y te enviamos una propuesta sin compromiso.'
     ],
     'viajes-exclusivos': [
@@ -47,7 +47,7 @@ export const COLLECTION_EXTRA = {
       'Si cruzas en ferry desde Tarifa o Algeciras, dinos a qué hora llega tu barco y te esperamos en el puerto de Tánger Ciudad o de Tánger Med. Puedes dejar el coche en España y hacer todo el viaje con nuestro vehículo y conductor.'
     ],
     'viajes-en-familia': [
-      'Para viajar con niños solemos proponer etapas de no más de unas horas al día, con paradas para estirar las piernas, comer tranquilos y hacer fotos. En el vehículo privado hay sitio para las maletas y el carrito.',
+      'Para viajar con niños solemos proponer etapas de no más de unas horas al día, con paradas para estirar las piernas, comer tranquilos y hacer fotos. En el vehículo privado hay sitio para las maletas y el carrito, y disponemos de sillas para niños.',
       'En el desierto de Merzouga los niños disfrutan del dromedario, de tirarse por las dunas en sandboard y de dormir en una jaima bajo las estrellas. Si son pequeños, podemos reducir los kilómetros y pasar dos noches en el desierto en lugar de una.',
       'Nuestros conductores hablan español, inglés y francés y conocen bien la ruta, así que saben dónde parar y cómo adaptar el día si los niños están cansados. Cuéntanos las edades y el número de días y te preparamos un itinerario a medida.'
     ],
@@ -85,7 +85,7 @@ export const COLLECTION_EXTRA = {
     ],
     'viajes-de-lujo': [
       'A luxury trip in Morocco starts with the transport: a private air-conditioned vehicle and a driver who speaks English, Spanish and French for the whole route, with no fixed timetables or waiting. We stop wherever you like and spread out the kilometres so every stage is comfortable.',
-      'In the Merzouga desert you can sleep in a luxury camp in the Erg Chebbi dunes, with spacious tents. In the cities we choose charming riads inside the medina or larger hotels, depending on what you prefer.',
+      'In the Merzouga desert you can sleep in a luxury camp in the Erg Chebbi dunes, with spacious tents and a private bathroom. In the cities we choose charming riads inside the medina or larger hotels, depending on what you prefer.',
       'Every trip is tailor-made, so the price depends on the nights, the type of accommodation and the experiences you want to add, such as a private dinner in the dunes. Tell us how you picture the trip and we will send you a free proposal.'
     ],
     'viajes-exclusivos': [
@@ -109,7 +109,7 @@ export const COLLECTION_EXTRA = {
       'If you cross by ferry from Tarifa or Algeciras, tell us what time your boat arrives and we will meet you at the port of Tanger Ville or Tanger Med. You can leave your car in Spain and do the whole trip with our vehicle and driver.'
     ],
     'viajes-en-familia': [
-      'When travelling with children we usually suggest stages of no more than a few hours a day, with stops to stretch your legs, eat calmly and take photos. The private vehicle has room for luggage and a pushchair.',
+      'When travelling with children we usually suggest stages of no more than a few hours a day, with stops to stretch your legs, eat calmly and take photos. The private vehicle has room for luggage and a pushchair, and we have child seats.',
       'In the Merzouga desert children love the camel ride, sliding down the dunes on a sandboard and sleeping in a tent under the stars. If they are young, we can reduce the driving and spend two nights in the desert instead of one.',
       'Our drivers speak English, Spanish and French and know the route well, so they know where to stop and how to adapt the day if the children are tired. Tell us their ages and how many days you have and we will plan a tailor-made itinerary.'
     ],
@@ -147,7 +147,7 @@ export const COLLECTION_EXTRA = {
     ],
     'viajes-de-lujo': [
       'Un voyage de luxe au Maroc commence par le transport : véhicule privé climatisé et chauffeur parlant français, anglais et espagnol pendant tout le circuit, sans horaires fixes ni attente. Nous nous arrêtons où vous le souhaitez et répartissons les kilomètres pour que chaque étape soit confortable.',
-      'Dans le désert de Merzouga, vous pouvez dormir dans un campement de luxe au cœur des dunes de l’Erg Chebbi, avec des tentes spacieuses. Dans les villes, nous choisissons des riads de charme dans la médina ou des hôtels plus grands, selon vos préférences.',
+      'Dans le désert de Merzouga, vous pouvez dormir dans un campement de luxe au cœur des dunes de l’Erg Chebbi, avec des tentes spacieuses et salle de bains privée. Dans les villes, nous choisissons des riads de charme dans la médina ou des hôtels plus grands, selon vos préférences.',
       'Chaque voyage est sur mesure : le prix dépend du nombre de nuits, du type d’hébergement et des expériences que vous souhaitez ajouter, comme un dîner privé dans les dunes. Dites-nous comment vous imaginez votre voyage et nous vous enverrons une proposition sans engagement.'
     ],
     'viajes-exclusivos': [
@@ -171,7 +171,7 @@ export const COLLECTION_EXTRA = {
       'Si vous traversez en ferry depuis Tarifa ou Algésiras, indiquez-nous l’heure d’arrivée de votre bateau et nous vous attendrons au port de Tanger Ville ou de Tanger Med. Vous pouvez laisser votre voiture en Espagne et faire tout le voyage avec notre véhicule et notre chauffeur.'
     ],
     'viajes-en-familia': [
-      'Pour voyager avec des enfants, nous proposons en général des étapes de quelques heures par jour au maximum, avec des pauses pour se dégourdir les jambes, manger tranquillement et prendre des photos. Le véhicule privé a de la place pour les bagages et la poussette.',
+      'Pour voyager avec des enfants, nous proposons en général des étapes de quelques heures par jour au maximum, avec des pauses pour se dégourdir les jambes, manger tranquillement et prendre des photos. Le véhicule privé a de la place pour les bagages et la poussette, et nous disposons de sièges enfants.',
       'Dans le désert de Merzouga, les enfants adorent le dromadaire, les glissades en sandboard sur les dunes et la nuit sous la tente à la belle étoile. S’ils sont petits, nous pouvons réduire les trajets et passer deux nuits dans le désert au lieu d’une.',
       'Nos chauffeurs parlent français, anglais et espagnol et connaissent bien la route : ils savent où s’arrêter et comment adapter la journée si les enfants sont fatigués. Indiquez-nous leur âge et le nombre de jours et nous vous préparerons un itinéraire sur mesure.'
     ],
