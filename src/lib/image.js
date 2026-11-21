@@ -2,7 +2,7 @@
 
 /**
  * Devuelve una versión redimensionada y comprimida de una imagen.
- * - Supabase Storage: usa el endpoint de transformación (/render/image/), que sirve WebP si el navegador lo admite.
+ * - Supabase Storage: se sirve la foto original (la transformación /render/image/ no está activada en el plan actual).
  * - Unsplash: ajusta los parámetros w / q / auto=format.
  * - Cualquier otra URL se devuelve tal cual.
  * @param {string | null | undefined} url
@@ -14,10 +14,12 @@ export function optImg(url, width = 800, quality = 70) {
   if (!url) return url || '';
   if (/\.(svg|gif)(\?|$)/i.test(url)) return url;
 
-  if (url.includes('.supabase.co/storage/v1/object/public/')) {
-    const base = url.split('?')[0].replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
-    return `${base}?width=${width}&quality=${quality}&resize=contain`;
+  // Supabase Storage: la transformación de imágenes (/render/image/) no está activada en el plan actual
+  // (responde 403 «FeatureNotEnabled»), así que se sirve la foto original.
+  if (url.includes('.supabase.co/storage/v1/render/image/public/')) {
+    return url.split('?')[0].replace('/storage/v1/render/image/public/', '/storage/v1/object/public/');
   }
+  if (url.includes('.supabase.co/storage/v1/object/public/')) return url;
 
   if (url.includes('images.unsplash.com/')) {
     try {
@@ -59,7 +61,7 @@ export function optImg(url, width = 800, quality = 70) {
  */
 export function optSrcSet(url, widths = [640, 960, 1600], quality = 70) {
   if (!url) return undefined;
-  if (!/\.supabase\.co\/storage\/v1\/object\/public\/|images\.unsplash\.com\/|images\.pexels\.com\//.test(url)) return undefined;
+  if (!/images\.unsplash\.com\/|images\.pexels\.com\//.test(url)) return undefined;
   return widths.map(w => `${optImg(url, w, quality)} ${w}w`).join(', ');
 }
 
