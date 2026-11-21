@@ -121,13 +121,6 @@ export const REVIEWS = [
     date: 'noviembre 2026',
     trip: 'Con amigas',
     text: 'Fuimos 4 amigas de viaje con la agencia vivirmarruecos, todo de 10 los alojamientos, guías y sobre todo el paseo en camello nos encantó el desierto, gracias a todos los guías. Recomendado 100/1000'
-  },
-  {
-    source: 'google',
-    author: 'Rosario Isabel L.',
-    date: 'noviembre 2026',
-    trip: '',
-    text: 'Una experiencia de 10 hemos disfrutado mucho de nuestra experiencia, muchas gracias por todo.'
   }
 ];
 
