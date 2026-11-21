@@ -139,14 +139,14 @@ export default function TourDetail() {
     return unique;
   })();
 
-  // Si la versión optimizada de una foto falla, se carga la original; si también falla, se oculta.
+  // Si la versión optimizada de una foto falla, se carga la original.
+  // (No se oculta la foto: el respaldo global de main.tsx puede haber cambiado ya la foto a la original
+  // en este mismo error, y ocultarla dejaba la portada en blanco aunque la original cargara bien.)
   const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>, original?: string) => {
     const img = e.currentTarget;
     if (original && img.dataset.fallback !== '1' && img.src !== original) {
       img.dataset.fallback = '1';
       img.src = original;
-    } else {
-      img.style.visibility = 'hidden';
     }
   };
 
