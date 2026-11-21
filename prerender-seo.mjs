@@ -57,7 +57,7 @@ const OG_LOCALE = { es: 'es_ES', en: 'en_GB', fr: 'fr_FR' };
  */
 function heroPlaceholderHtml(hero) {
   return `<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:97px;background:#fff;border-bottom:1px solid #f3f4f6"></div>`
-    + `<div aria-hidden="true" style="position:absolute;left:0;right:0;top:97px;height:85vh;min-height:560px;overflow:hidden;background:rgba(26,95,122,.2)">`
+    + `<div aria-hidden="true" style="position:absolute;left:0;right:0;top:97px;height:100vh;min-height:760px;overflow:hidden;background:rgba(26,95,122,.2)">`
     + `<img src="${escapeHtml(hero.src)}" srcset="${escapeHtml(hero.srcset)}" sizes="100vw" alt="" fetchpriority="high" style="width:100%;height:100%;object-fit:cover;transform:scale(1.05)" />`
     + `<div style="position:absolute;inset:0;background:rgba(0,0,0,.4)"></div></div>`;
 }
