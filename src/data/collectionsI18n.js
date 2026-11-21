@@ -1,6 +1,7 @@
 // Traducción al inglés y al francés de las colecciones (/coleccion/:slug).
 // El español está en seoContent.js (COLLECTION_INTROS y COLLECTION_BODIES).
 import { collectionContent } from './seoContent.js';
+import { COLLECTION_EXTRA } from './collectionsExtra.js';
 
 const COLLECTIONS_I18N = {
   en: {
@@ -267,5 +268,7 @@ const COLLECTIONS_I18N = {
 export function collectionContentI18n(slug, fallbackName, lang) {
   const base = collectionContent(slug, fallbackName);
   const tr = COLLECTIONS_I18N[lang]?.[slug];
-  return tr ? { ...base, ...tr } : base;
+  const merged = tr ? { ...base, ...tr } : base;
+  const extra = COLLECTION_EXTRA[lang in COLLECTION_EXTRA ? lang : 'es']?.[slug] || [];
+  return extra.length ? { ...merged, body: [...(merged.body || []), ...extra] } : merged;
 }
