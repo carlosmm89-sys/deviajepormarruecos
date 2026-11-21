@@ -32,7 +32,7 @@ export const TRIP_TYPES = [
 export const HOME_FAQS = [
   {
     q: '¿Cuánto cuesta un viaje privado por Marruecos?',
-    a: 'Nuestros tours privados empiezan en 180 € por persona para 3 días, 250 € para 4 días y 300 € para 5 días. Son precios orientativos para un grupo de 4: si viajáis 2 o 3 personas, el precio por persona cambia, así que pídenos presupuesto para tu grupo.'
+    a: 'Nuestros tours privados empiezan en 180 € por persona para 3 días, 250 € para 4 días y 300 € para 5 días. Son precios orientativos: el precio final depende de cuántos viajéis, así que pídenos presupuesto para tu grupo.'
   },
   {
     q: '¿Cuántos días necesito?',
@@ -56,7 +56,7 @@ export const HOME_FAQS = [
   }
 ];
 
-export const PRICE_NOTE = 'Precios orientativos por persona para un grupo de 4. Si viajáis 2 o 3 personas, el precio por persona cambia: pídenos presupuesto sin compromiso.';
+export const PRICE_NOTE = 'Precios orientativos por persona. El precio final depende de cuántos viajéis: pídenos presupuesto sin compromiso.';
 
 // Opiniones reales copiadas de las fichas de Tripadvisor y Google (nov. 2026).
 // Los textos largos están recortados con «…», sin cambiar palabras.
@@ -151,14 +151,14 @@ const HOME_I18N = {
       'entrega-de-anillo': { title: 'Marriage proposal', text: 'We prepare the surprise in the Erg Chebbi dunes at sunset.' }
     },
     faqs: [
-      { q: 'How much does a private trip to Morocco cost?', a: 'Our private tours start at €180 per person for 3 days, €250 for 4 days and €300 for 5 days. These are guide prices for a group of 4: if you are 2 or 3 people, the price per person changes, so ask us for a quote for your group.' },
+      { q: 'How much does a private trip to Morocco cost?', a: 'Our private tours start at €180 per person for 3 days, €250 for 4 days and €300 for 5 days. These are guide prices: the final price depends on how many of you are travelling, so ask us for a quote for your group.' },
       { q: 'How many days do I need?', a: 'With 3 or 4 days you can go from Marrakech to the Merzouga desert and back. With 7 or 8 days you do the classic route of cities, Atlas and desert, and with 9 to 13 days you travel the country from north to south.' },
       { q: 'What does a private trip mean?', a: 'The vehicle and driver are only for your group. You choose the dates, the pace and the stops, and you do not share the trip with strangers. Our drivers speak English, French and Spanish.' },
       { q: 'Which cities do the tours start from?', a: 'We depart from Marrakech, Fez, Tangier and Casablanca, with pick-up at the airport or your hotel. Our base is in Hassi Labied, next to the Merzouga dunes.' },
       { q: 'When is the best time to travel?', a: 'Spring (March to May) and autumn (September to November). In winter desert nights are cold and in summer the south is very hot.' },
       { q: 'Do I need a visa?', a: 'Citizens of the EU, the UK, the USA and Canada do not need a visa for tourist stays of up to 90 days. You need a valid passport. If you have another nationality, check with the Moroccan consulate.' }
     ],
-    priceNote: 'Guide prices per person for a group of 4. If you are 2 or 3 people, the price per person changes: ask us for a no-obligation quote.'
+    priceNote: 'Guide prices per person. The final price depends on how many of you are travelling: ask us for a no-obligation quote.'
   },
   fr: {
     howItWorks: [
@@ -176,14 +176,14 @@ const HOME_I18N = {
       'entrega-de-anillo': { title: 'Demande en mariage', text: 'Nous préparons la surprise dans les dunes de l’Erg Chebbi au coucher du soleil.' }
     },
     faqs: [
-      { q: 'Combien coûte un voyage privé au Maroc ?', a: 'Nos circuits privés commencent à 180 € par personne pour 3 jours, 250 € pour 4 jours et 300 € pour 5 jours. Ce sont des prix indicatifs pour un groupe de 4 : si vous êtes 2 ou 3, le prix par personne change, alors demandez-nous un devis pour votre groupe.' },
+      { q: 'Combien coûte un voyage privé au Maroc ?', a: 'Nos circuits privés commencent à 180 € par personne pour 3 jours, 250 € pour 4 jours et 300 € pour 5 jours. Ce sont des prix indicatifs : le prix final dépend du nombre de voyageurs, alors demandez-nous un devis pour votre groupe.' },
       { q: 'De combien de jours ai-je besoin ?', a: 'En 3 ou 4 jours, vous pouvez aller de Marrakech au désert de Merzouga et revenir. En 7 ou 8 jours, vous faites l’itinéraire classique villes, Atlas et désert, et en 9 à 13 jours vous parcourez le pays du nord au sud.' },
       { q: 'Que signifie un voyage privé ?', a: 'Le véhicule et le chauffeur sont uniquement pour votre groupe. Vous choisissez les dates, le rythme et les arrêts, et vous ne partagez pas le voyage avec des inconnus. Nos chauffeurs parlent français, anglais et espagnol.' },
       { q: 'De quelles villes partent les circuits ?', a: 'Nous partons de Marrakech, Fès, Tanger et Casablanca, avec prise en charge à l’aéroport ou à votre hôtel. Notre base est à Hassi Labied, au pied des dunes de Merzouga.' },
       { q: 'Quelle est la meilleure période pour voyager ?', a: 'Le printemps (mars à mai) et l’automne (septembre à novembre). En hiver, les nuits dans le désert sont froides et en été il fait très chaud dans le sud.' },
       { q: 'Ai-je besoin d’un visa ?', a: 'Les citoyens de l’UE, de la Suisse et du Canada n’ont pas besoin de visa pour un séjour touristique de 90 jours maximum. Il faut un passeport en cours de validité. Pour toute autre nationalité, renseignez-vous auprès du consulat du Maroc.' }
     ],
-    priceNote: 'Prix indicatifs par personne pour un groupe de 4. Si vous êtes 2 ou 3, le prix par personne change : demandez-nous un devis sans engagement.'
+    priceNote: 'Prix indicatifs par personne. Le prix final dépend du nombre de voyageurs : demandez-nous un devis sans engagement.'
   }
 };
 

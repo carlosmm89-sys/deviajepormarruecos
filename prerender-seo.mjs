@@ -478,7 +478,7 @@ async function prerender() {
       duration: T({ es: 'Duración', en: 'Duration', fr: 'Durée' }),
       departure: T({ es: 'Salida', en: 'Departure', fr: 'Départ' }),
       arrival: T({ es: 'Llegada', en: 'Arrival', fr: 'Arrivée' }),
-      perPerson: T({ es: 'por persona (grupo de 4)', en: 'per person (group of 4)', fr: 'par personne (groupe de 4)' }),
+      perPerson: T({ es: 'por persona', en: 'per person', fr: 'par personne' }),
       itinerary: T({ es: 'Itinerario día a día', en: 'Day-by-day itinerary', fr: 'Itinéraire jour par jour' }),
       includes: T({ es: 'Qué incluye', en: 'What’s included', fr: 'Ce qui est inclus' }),
       excludes: T({ es: 'Qué no incluye', en: 'Not included', fr: 'Ce qui n’est pas inclus' }),

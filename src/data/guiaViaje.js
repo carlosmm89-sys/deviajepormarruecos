@@ -36,7 +36,7 @@ export const GUIDE = {
       id: 'precio',
       h2: '¿Cuánto cuesta un viaje a Marruecos?',
       html: `
-<p>Un tour privado sale más económico cuantos más viajeros sois, porque el vehículo y el conductor se comparten. Como referencia, nuestros precios por persona en grupo de 4 empiezan en:</p>
+<p>Un tour privado sale más económico cuantos más viajeros sois, porque el vehículo y el conductor se comparten. Como referencia, nuestros precios por persona empiezan en:</p>
 <ul>
 <li>Excursión de 3 días al desierto: desde 180 €.</li>
 <li>Tour de 4 días: desde 250 €.</li>
@@ -119,7 +119,7 @@ export const GUIDE = {
     },
     {
       q: '¿Cuánto cuesta un viaje a Marruecos?',
-      a: 'Nuestros tours privados empiezan en 180 € por persona para 3 días (grupo de 4), 250 € para 4 días y 300 € para 5 días. A eso se suman los vuelos y los gastos personales.'
+      a: 'Nuestros tours privados empiezan en 180 € por persona para 3 días, 250 € para 4 días y 300 € para 5 días. A eso se suman los vuelos y los gastos personales.'
     },
     {
       q: '¿Se necesita visado para viajar a Marruecos desde España?',
@@ -171,7 +171,7 @@ const GUIDE_EN = {
       id: 'precio',
       h2: 'How much does a trip to Morocco cost?',
       html: `
-<p>A private tour gets cheaper per person the more travellers there are, because the vehicle and driver are shared. As a guide, our prices per person for a group of 4 start at:</p>
+<p>A private tour gets cheaper per person the more travellers there are, because the vehicle and driver are shared. As a guide, our prices per person start at:</p>
 <ul>
 <li>3-day desert trip: from €180.</li>
 <li>4-day tour: from €250.</li>
@@ -254,7 +254,7 @@ const GUIDE_EN = {
     },
     {
       q: 'How much does a trip to Morocco cost?',
-      a: 'Our private tours start at €180 per person for 3 days (group of 4), €250 for 4 days and €300 for 5 days. Flights and personal expenses are extra.'
+      a: 'Our private tours start at €180 per person for 3 days, €250 for 4 days and €300 for 5 days. Flights and personal expenses are extra.'
     },
     {
       q: 'Do I need a visa to travel to Morocco?',
@@ -300,7 +300,7 @@ const GUIDE_FR = {
       id: 'precio',
       h2: 'Combien coûte un voyage au Maroc ?',
       html: `
-<p>Un circuit privé revient moins cher par personne quand vous êtes plus nombreux, car le véhicule et le chauffeur sont partagés. À titre indicatif, nos prix par personne pour un groupe de 4 commencent à :</p>
+<p>Un circuit privé revient moins cher par personne quand vous êtes plus nombreux, car le véhicule et le chauffeur sont partagés. À titre indicatif, nos prix par personne commencent à :</p>
 <ul>
 <li>Excursion de 3 jours dans le désert : à partir de 180 €.</li>
 <li>Circuit de 4 jours : à partir de 250 €.</li>
@@ -383,7 +383,7 @@ const GUIDE_FR = {
     },
     {
       q: 'Combien coûte un voyage au Maroc ?',
-      a: 'Nos circuits privés commencent à 180 € par personne pour 3 jours (groupe de 4), 250 € pour 4 jours et 300 € pour 5 jours. Les vols et les dépenses personnelles sont en plus.'
+      a: 'Nos circuits privés commencent à 180 € par personne pour 3 jours, 250 € pour 4 jours et 300 € pour 5 jours. Les vols et les dépenses personnelles sont en plus.'
     },
     {
       q: 'Faut-il un visa pour voyager au Maroc ?',
