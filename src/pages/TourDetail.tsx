@@ -429,6 +429,20 @@ export default function TourDetail() {
           </div>
 
           <div ref={descripcionRef} className="space-y-8">
+            {/* Descripción del tour (antes solo se usaba para Google; ahora también la ven los visitantes) */}
+            {(() => {
+              const raw = String(td(tour, 'description') || '').trim();
+              if (!raw) return null;
+              const html = raw.includes('<')
+                ? raw
+                : raw.split(/\r?\n\s*\r?\n/).map(p => `<p>${p.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</p>`).join('');
+              return (
+                <div
+                  className="prose prose-lg max-w-none text-gray-700 leading-relaxed [&_p]:mb-4"
+                  dangerouslySetInnerHTML={{ __html: html }}
+                />
+              );
+            })()}
             <div className="flex items-center gap-3">
               <div className="w-1 h-8 bg-brand-accent rounded-full" />
               <h2 className="text-3xl font-bold text-gray-900">{tr({ es: 'Incluye / Excluye', en: 'Included / Not included', fr: 'Inclus / Non inclus' })}</h2>
