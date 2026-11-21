@@ -15,7 +15,7 @@ export default defineConfig(({mode}) => {
         manifest: {
           name: 'Vivir Marruecos',
           short_name: 'VivirMarruecos',
-          description: 'Tu agencia de viajes en Marruecos',
+          description: 'Tours privados por Marruecos y el desierto de Merzouga',
           theme_color: '#1a5f7a',
           background_color: '#ffffff',
           display: 'standalone',
