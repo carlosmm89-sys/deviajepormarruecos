@@ -295,7 +295,7 @@ async function prerender() {
 
     // 1. Portada
     const homeSeo = lang === 'es'
-      ? { title: HOME_TITLE, h1: stripHtml(settings?.hero_title || HOME_H1_FALLBACK), subtitle: settings?.hero_subtitle || 'Organizamos tours privados, excursiones al desierto de Merzouga y rutas por Marruecos.', description: settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION }
+      ? { title: HOME_TITLE, h1: stripHtml(settings?.hero_title || HOME_H1_FALLBACK), subtitle: settings?.hero_subtitle || 'Organizamos tours privados, excursiones al desierto de Merzouga y rutas por Marruecos.', description: HOME_META_DESCRIPTION }
       : { ...HOME_I18N_SEO[lang], subtitle: HOME_I18N_SEO[lang].description };
     const reviewsLine = T({
       es: `${REVIEW_TOTALS.tripadvisor.rating} de 5 en Tripadvisor (${REVIEW_TOTALS.tripadvisor.count} opiniones) y ${REVIEW_TOTALS.google.rating} de 5 en Google`,
@@ -349,7 +349,7 @@ async function prerender() {
     write('/tours', page({
       title: TOURS_TITLE[lang],
       description: T({
-        es: 'Explora todos nuestros tours por Marruecos: excursiones al desierto de Merzouga, rutas desde Marrakech, Fez, Tánger y viajes a medida.',
+        es: 'Circuitos y tours privados por Marruecos: excursiones al desierto de Merzouga, rutas de 3 a 13 días desde Marrakech, Fez y Tánger y viajes a medida.',
         en: 'Explore all our tours of Morocco: trips to the Merzouga desert, routes from Marrakech, Fez and Tangier, and tailor-made journeys.',
         fr: 'Découvrez tous nos circuits au Maroc : excursions dans le désert de Merzouga, itinéraires depuis Marrakech, Fès, Tanger et voyages sur mesure.'
       }),
@@ -555,7 +555,7 @@ async function prerender() {
       const destHtml = `<main>${navHtml}<article><h1>${escapeHtml(headings.h1)}</h1><div>${dest.description ? links(dest.description) : `<p>${escapeHtml(descText)}</p>`}</div>${destToursHtml}</article></main>`;
       write(canonical, page({
         title: headings.title,
-        description: descText.slice(0, 160),
+        description: excerpt(descText, 160),
         canonicalPath: L(canonical),
         image: dest.image_url,
         schema: [{
@@ -615,7 +615,7 @@ async function prerender() {
       const col = collectionContentI18n(slug, '', lang);
       // La categoría se guarda en español: se filtra con el tour original
       const colTours = toursL.filter((t, i) => (baseToursEs[i].category || '').split(',').some(part => slugifyCategory(part) === slug));
-      const colHtml = `<main>${navHtml}<h1>${escapeHtml(col.title)}</h1><p>${escapeHtml(col.intro)}</p>${(col.body || []).map(b => `<p>${escapeHtml(b)}</p>`).join('')}${colTours.length ? `<ul>${colTours.map(t => `<li><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a> - ${from(t.price)}</li>`).join('')}</ul>` : ''}</main>`;
+      const colHtml = `<main>${navHtml}<h1>${escapeHtml(col.title)}</h1><p>${escapeHtml(col.intro)}</p>${(col.body || []).map(b => `<p>${escapeHtml(b)}</p>`).join('')}${colTours.length ? `<h2>${T({ es: 'Tours y circuitos', en: 'Tours and itineraries', fr: 'Circuits et itinéraires' })}: ${escapeHtml(col.title)}</h2><ul>${colTours.map(t => `<li><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a> - ${from(t.price)}</li>`).join('')}</ul>` : ''}</main>`;
       write(`/coleccion/${slug}`, page({
         title: `${col.title} | ${siteName}`,
         description: col.intro,

@@ -15,10 +15,10 @@ export function fitTitle(raw, brand = 'Vivir Marruecos', max = 60) {
   return full.length <= max ? full : base;
 }
 
-export const HOME_TITLE = 'Tours privados por Marruecos y Merzouga | Vivir Marruecos';
+export const HOME_TITLE = 'Viajes a Marruecos: tours privados y desierto de Merzouga';
 
 export const HOME_META_DESCRIPTION =
-  'Tours privados por Marruecos desde Marrakech, Fez, Tánger y Casablanca: desierto de Merzouga, noche en jaima en Erg Chebbi y viajes a medida.';
+  'Viajes privados a Marruecos con empresa local de Merzouga: circuitos de 3 a 13 días desde Marrakech, Fez o Tánger y noche en jaima en el desierto.';
 
 export const HOME_H1_FALLBACK = 'Tours privados por Marruecos y el desierto de Merzouga';
 

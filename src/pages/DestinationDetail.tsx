@@ -145,7 +145,7 @@ export default function DestinationDetail() {
     <div className="pb-24 bg-gray-50/50">
       <SEO 
         title={headings(destination).title}
-        description={(destination.description || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 160) || tr({ es: `Descubre los mejores tours y excursiones en ${destination.name}.`, en: `Discover the best tours and excursions in ${destination.name}.`, fr: `Découvrez les meilleurs circuits et excursions à ${destination.name}.` })}
+        description={(destination.description || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().replace(/^(.{0,157})(\s.*)$/s, (m, a) => a.replace(/[\s,;:.]+$/, '') + '…') || tr({ es: `Descubre los mejores tours y excursiones en ${destination.name}.`, en: `Discover the best tours and excursions in ${destination.name}.`, fr: `Découvrez les meilleurs circuits et excursions à ${destination.name}.` })}
         image={destination.image_url}
         url={`/destinations/${destination.slug || destination.id}`}
         schema={destinationSchema}

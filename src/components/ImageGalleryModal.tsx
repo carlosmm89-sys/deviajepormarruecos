@@ -10,7 +10,7 @@ interface ImageGalleryModalProps {
   onClose: () => void;
 }
 
-export default function ImageGalleryModal({ isOpen, images, initialIndex = 0, onClose }: ImageGalleryModalProps) {
+export default function ImageGalleryModal({ isOpen, images, initialIndex = 0, onClose, altBase }: ImageGalleryModalProps & { altBase?: string }) {
   const [currentIndex, setCurrentIndex] = React.useState(initialIndex);
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export default function ImageGalleryModal({ isOpen, images, initialIndex = 0, on
               transition={{ duration: 0.3, ease: 'easeOut' }}
               src={optImg(images[currentIndex], 1600)}
               onError={fallbackToOriginal(images[currentIndex])}
-              alt={`Gallery image ${currentIndex + 1}`}
+              alt={`${altBase ? altBase + ' – ' : ''}${currentIndex + 1} / ${images.length}`}
               className="max-w-full max-h-full object-contain drop-shadow-2xl"
               referrerPolicy="no-referrer"
               onClick={handleNext}

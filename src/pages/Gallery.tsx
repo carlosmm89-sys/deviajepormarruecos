@@ -75,7 +75,7 @@ export default function Gallery() {
                 <img 
                   src={optImg(img.image_url, 800)} 
                   onError={fallbackToOriginal(img.image_url)}
-                  alt={img.title || tr({ es: 'Marruecos Paisaje', en: 'Moroccan landscape', fr: 'Paysage marocain' })} 
+                  alt={img.title || tr({ es: 'Viajeros de Vivir Marruecos en Marruecos', en: 'Vivir Marruecos travellers in Morocco', fr: 'Voyageurs de Vivir Marruecos au Maroc' })} 
                   className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
                 />

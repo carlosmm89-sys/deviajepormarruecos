@@ -69,7 +69,7 @@ export default function Home() {
     <div className="space-y-24 pb-24">
       <SEO 
         title={currentLanguage === 'es' ? HOME_TITLE : HOME_I18N_SEO[currentLanguage].title}
-        description={currentLanguage === 'es' ? (settings?.hero_subtitle && settings.hero_subtitle.trim().length >= 90 ? settings.hero_subtitle : HOME_META_DESCRIPTION) : heroTexts!.subtitle}
+        description={currentLanguage === 'es' ? HOME_META_DESCRIPTION : heroTexts!.subtitle}
         url="/"
       />
       {/* Hero Section */}
@@ -79,7 +79,7 @@ export default function Home() {
             src={heroLocal ? heroLocal.hero_local_src : optImg(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800", 1600)}
             srcSet={heroLocal ? heroLocal.hero_local_srcset : optSrcSet(settings?.hero_image_url || "https://images.unsplash.com/photo-1540202403-b712f0e01cb4?auto=format&fit=crop&q=60&w=800")}
             sizes="100vw"
-            alt={tr({ es: 'Desierto de Merzouga al atardecer', en: 'Merzouga desert at sunset', fr: 'Désert de Merzouga au coucher du soleil' })}
+            alt={tr({ es: 'Caravana de dromedarios en las dunas de Erg Chebbi, desierto de Merzouga', en: 'Camel caravan in the Erg Chebbi dunes, Merzouga desert', fr: 'Caravane de dromadaires dans les dunes de l’Erg Chebbi, désert de Merzouga' })}
             className="w-full h-full object-cover scale-105"
             fetchPriority="high"
             loading="eager"
