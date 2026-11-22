@@ -29,6 +29,16 @@ export const TRIP_TYPES = [
   { slug: 'entrega-de-anillo', icon: 'sparkles', title: 'Pedida de mano', text: 'Preparamos la sorpresa en las dunas de Erg Chebbi al atardecer.' }
 ];
 
+// «Por qué reservar directamente con nosotros» (solo datos reales del negocio).
+export const WHY_DIRECT = [
+  { icon: 'handshake', title: 'Trato directo, sin intermediarios', text: 'Hablas con Ali y su familia, que organizan y hacen el viaje contigo. Sin plataformas ni agencias de por medio.' },
+  { icon: 'home', title: 'Empresa local del desierto', text: 'Vivimos en Hassi Labied, a los pies de las dunas de Merzouga, y organizamos viajes por Marruecos desde 2015.' },
+  { icon: 'languages', title: 'Conductores que hablan tu idioma', text: 'Nuestros conductores hablan español, inglés y francés durante todo el viaje.' },
+  { icon: 'route', title: 'Tu viaje, a tu ritmo', text: 'Viaje privado: el vehículo y el conductor son solo para vosotros. Cambiamos la ruta, las paradas y los alojamientos a tu gusto.' },
+  { icon: 'receipt', title: 'Presupuesto claro y sin compromiso', text: 'Antes de reservar sabes qué incluye y qué no. Sin cargos ocultos ni sorpresas.' },
+  { icon: 'star', title: 'Opiniones reales', text: '5,0 en Tripadvisor con más de 100 opiniones y premio Travellers\' Choice 2026.' }
+];
+
 export const HOME_FAQS = [
   {
     q: '¿Cuánto cuesta un viaje privado por Marruecos?',
@@ -129,6 +139,14 @@ export const REVIEWS = [
 // ---------------------------------------------------------------------------
 const HOME_I18N = {
   en: {
+    whyDirect: [
+      { title: 'Deal with us directly, no middlemen', text: 'You talk to Ali and his family, who plan the trip and travel it with you. No platforms or agencies in between.' },
+      { title: 'A local desert company', text: 'We live in Hassi Labied, at the foot of the Merzouga dunes, and have been organising trips around Morocco since 2015.' },
+      { title: 'Drivers who speak your language', text: 'Our drivers speak English, French and Spanish throughout the trip.' },
+      { title: 'Your trip, at your pace', text: 'A private trip: the vehicle and driver are only for you. We change the route, stops and accommodation to suit you.' },
+      { title: 'Clear, no-obligation quote', text: 'Before booking you know exactly what is and is not included. No hidden fees, no surprises.' },
+      { title: 'Real reviews', text: '5.0 on Tripadvisor with over 100 reviews and a Travellers\' Choice 2026 award.' }
+    ],
     howItWorks: [
       { title: 'Tell us your idea', text: 'Dates, how many of you and what you would like to see. By WhatsApp, email or our form.' },
       { title: 'Get your proposal', text: 'We send you a no-obligation itinerary and quote, designed for your group.' },
@@ -154,6 +172,14 @@ const HOME_I18N = {
     priceNote: 'Guide prices per person. The final price depends on how many of you are travelling: ask us for a no-obligation quote.'
   },
   fr: {
+    whyDirect: [
+      { title: 'En direct, sans intermédiaires', text: 'Vous parlez avec Ali et sa famille, qui organisent le voyage et le font avec vous. Ni plateformes ni agences entre nous.' },
+      { title: 'Une entreprise locale du désert', text: 'Nous vivons à Hassi Labied, au pied des dunes de Merzouga, et organisons des voyages au Maroc depuis 2015.' },
+      { title: 'Des chauffeurs qui parlent votre langue', text: 'Nos chauffeurs parlent français, anglais et espagnol pendant tout le voyage.' },
+      { title: 'Votre voyage, à votre rythme', text: 'Voyage privé : le véhicule et le chauffeur sont rien que pour vous. Nous adaptons l’itinéraire, les arrêts et les hébergements.' },
+      { title: 'Un devis clair et sans engagement', text: 'Avant de réserver, vous savez ce qui est inclus et ce qui ne l’est pas. Pas de frais cachés ni de surprises.' },
+      { title: 'De vrais avis', text: '5,0 sur Tripadvisor avec plus de 100 avis et le prix Travellers\' Choice 2026.' }
+    ],
     howItWorks: [
       { title: 'Racontez-nous votre idée', text: 'Vos dates, combien vous êtes et ce que vous aimeriez voir. Par WhatsApp, par e-mail ou avec notre formulaire.' },
       { title: 'Recevez votre proposition', text: 'Nous vous envoyons un itinéraire et un devis sans engagement, pensés pour votre groupe.' },
@@ -183,8 +209,9 @@ const HOME_I18N = {
 /** Contenido de la portada en el idioma pedido ('es', 'en' o 'fr'). */
 export function getHomeContent(lang) {
   const tr = HOME_I18N[lang];
-  if (!tr) return { howItWorks: HOW_IT_WORKS, tripTypes: TRIP_TYPES, faqs: HOME_FAQS, priceNote: PRICE_NOTE };
+  if (!tr) return { whyDirect: WHY_DIRECT, howItWorks: HOW_IT_WORKS, tripTypes: TRIP_TYPES, faqs: HOME_FAQS, priceNote: PRICE_NOTE };
   return {
+    whyDirect: WHY_DIRECT.map((w, i) => ({ ...w, ...(tr.whyDirect[i] || {}) })),
     howItWorks: tr.howItWorks,
     tripTypes: TRIP_TYPES.map(t => ({ ...t, ...(tr.tripTypes[t.slug] || {}) })),
     faqs: tr.faqs,

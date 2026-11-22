@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Destination, Tour, GalleryImage } from '../types';
-import { MapPin, Clock, ArrowRight, Star, Sparkles, Heart, Users, Gem, Compass, ChevronDown, MessageCircle, Mail, Map as MapIcon } from 'lucide-react';
+import { MapPin, Clock, ArrowRight, Star, Sparkles, Heart, Users, Gem, Compass, ChevronDown, MessageCircle, Mail, Map as MapIcon, Handshake, House, Languages, Route, Receipt } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { dbService } from '../services/dbService';
 import { BusinessSettings } from '../types';
@@ -16,6 +16,7 @@ import { optImg, optSrcSet } from '../lib/image';
 import { getHomeContent, localizeReviewMeta, REVIEWS, REVIEW_TOTALS, TRIPADVISOR_URL, GOOGLE_REVIEWS_URL, GOOGLE_WRITE_REVIEW_URL } from '../data/homeContent';
 
 const TRIP_ICONS: Record<string, React.ElementType> = { heart: Heart, family: Users, gem: Gem, compass: Compass, users: Users, sparkles: Sparkles };
+const WHY_ICONS: Record<string, React.ElementType> = { handshake: Handshake, home: House, languages: Languages, route: Route, receipt: Receipt, star: Star };
 
 const openQuoteWizard = () => window.dispatchEvent(new Event('open-quote-wizard'));
 
@@ -27,7 +28,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   
   const { t, tr, currentLanguage } = useTranslation();
-  const { howItWorks: HOW_IT_WORKS, tripTypes: TRIP_TYPES, faqs: HOME_FAQS, priceNote: PRICE_NOTE } = getHomeContent(currentLanguage);
+  const { whyDirect: WHY_DIRECT, howItWorks: HOW_IT_WORKS, tripTypes: TRIP_TYPES, faqs: HOME_FAQS, priceNote: PRICE_NOTE } = getHomeContent(currentLanguage);
   // Textos de portada guardados en Ajustes (en español); en inglés y francés se usan estos.
   const heroTexts = currentLanguage === 'en'
     ? { subtitle: 'Tailor-made routes from Marrakech, Fez, Tangier and Casablanca, with a night in a tent in the Erg Chebbi dunes. Local company based in Merzouga.', title: 'Private tours of Morocco and the Merzouga desert' }
@@ -236,6 +237,28 @@ export default function Home() {
           )}
         </div>
         <p className="text-sm text-gray-600 text-center">{PRICE_NOTE}</p>
+      </section>
+
+      {/* Por qué reservar directamente con nosotros */}
+      <section className="max-w-7xl mx-auto px-4 space-y-12">
+        <div className="text-center space-y-2">
+          <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">{tr({ es: 'Reserva directa', en: 'Book direct', fr: 'Réservation directe' })}</p>
+          <h2 className="text-4xl font-serif font-bold">{tr({ es: '¿Por qué reservar directamente con nosotros?', en: 'Why book directly with us?', fr: 'Pourquoi réserver directement avec nous ?' })}</h2>
+        </div>
+        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {WHY_DIRECT.map(item => {
+            const Icon = WHY_ICONS[item.icon] || Sparkles;
+            return (
+              <li key={item.icon} className="flex gap-5 bg-white rounded-[2rem] border border-gray-100 shadow-sm p-8">
+                <Icon className="w-8 h-8 shrink-0 text-brand-accent" />
+                <div className="space-y-2">
+                  <h3 className="text-xl font-serif font-bold">{item.title}</h3>
+                  <p className="text-gray-600">{item.text}</p>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </section>
 
       {/* Cómo funciona */}
