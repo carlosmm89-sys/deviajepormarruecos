@@ -55,6 +55,16 @@ const OG_LOCALE = { es: 'es_ES', en: 'en_GB', fr: 'fr_FR' };
  * elemento más grande (LCP) no espera al JavaScript. Va en posición absoluta, debajo de la cabecera (97 px),
  * y React la sustituye al montar (createRoot reemplaza el contenido de #root), sin mover nada (sin CLS).
  */
+/**
+ * Ficha de tour en móvil: la foto principal visible ya en el HTML del servidor (como la portada), en el mismo
+ * sitio que la pinta React (cabecera 97 px + margen; 40vh de alto, esquinas redondeadas). Así el LCP no espera
+ * al JavaScript. En pantallas grandes no se muestra (allí la foto ocupa media cabecera).
+ */
+function tourPlaceholderHtml(src) {
+  return `<style>.tph{position:absolute;top:121px;left:8px;right:8px;height:40vh;border-radius:24px;overflow:hidden;background:#f3ede4}@media(min-width:768px){.tph{display:none}}</style>`
+    + `<div class="tph" aria-hidden="true"><img src="${escapeHtml(src)}" alt="" fetchpriority="high" style="width:100%;height:100%;object-fit:cover" /></div>`;
+}
+
 function heroPlaceholderHtml(hero) {
   return `<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:97px;background:#fff;border-bottom:1px solid #f3f4f6"></div>`
     + `<div aria-hidden="true" style="position:absolute;left:0;right:0;top:97px;height:100vh;min-height:760px;overflow:hidden;background:rgba(26,95,122,.2)">`
@@ -104,7 +114,7 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
     // para que no ocupe espacio y no provoque un salto de diseño (CLS) cuando React lo sustituye por la página real.
     html = html.replace(
       '<div id="root"></div>',
-      `<div id="root">${heroPlaceholder ? heroPlaceholderHtml(heroPlaceholder) : ''}<div data-prerender style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">${bodyHtml}</div></div>`
+      `<div id="root">${heroPlaceholder ? (typeof heroPlaceholder === 'string' ? heroPlaceholder : heroPlaceholderHtml(heroPlaceholder)) : ''}<div data-prerender style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">${bodyHtml}</div></div>`
     );
   }
 
@@ -526,6 +536,7 @@ async function prerender() {
         type: 'product',
         // La foto principal de la ficha (LCP): se pide antes de que cargue el JavaScript
         preloadImage: (tour.featured_image || tour.gallery?.[0]) ? { src: optImg(tour.featured_image || tour.gallery[0], 1400), srcset: `${optImg(tour.featured_image || tour.gallery[0], 1400)} 1400w` } : undefined,
+        heroPlaceholder: (tour.featured_image || tour.gallery?.[0]) ? tourPlaceholderHtml(optImg(tour.featured_image || tour.gallery[0], 1400)) : undefined,
         schema: [{
           '@context': 'https://schema.org',
           '@type': 'TouristTrip',
