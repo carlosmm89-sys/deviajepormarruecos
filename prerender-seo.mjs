@@ -524,6 +524,8 @@ async function prerender() {
         canonicalPath: L(canonicalPath),
         image: tour.featured_image || tour.gallery?.[0],
         type: 'product',
+        // La foto principal de la ficha (LCP): se pide antes de que cargue el JavaScript
+        preloadImage: (tour.featured_image || tour.gallery?.[0]) ? { src: optImg(tour.featured_image || tour.gallery[0], 1400), srcset: `${optImg(tour.featured_image || tour.gallery[0], 1400)} 1400w` } : undefined,
         schema: [{
           '@context': 'https://schema.org',
           '@type': 'TouristTrip',

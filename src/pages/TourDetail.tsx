@@ -267,27 +267,27 @@ export default function TourDetail() {
       <section className="max-w-[1600px] mx-auto p-2 md:p-4 mt-4">
         <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-2 md:gap-3 h-[40vh] md:h-[65vh] rounded-3xl overflow-hidden relative group">
           <div className="md:col-span-2 row-span-2 relative cursor-pointer overflow-hidden" onClick={() => openGallery(0)}>
-            <img src={optImg(fullGallery[0], 1400)} onError={(e) => handleImgError(e, fullGallery[0])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt={tour.title} referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[0], 1400)} fetchPriority="high" onError={(e) => handleImgError(e, fullGallery[0])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt={tour.title} referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
           
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(1)}>
-            <img src={optImg(fullGallery[1], 800)} onError={(e) => handleImgError(e, fullGallery[1])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt={`${tour.title} – ${tr({ es: 'foto', en: 'photo', fr: 'photo' })} 2`} referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[1], 800)} loading="lazy" onError={(e) => handleImgError(e, fullGallery[1])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt={`${tour.title} – ${tr({ es: 'foto', en: 'photo', fr: 'photo' })} 2`} referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(2)}>
-            <img src={optImg(fullGallery[2], 800)} onError={(e) => handleImgError(e, fullGallery[2])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt={`${tour.title} – ${tr({ es: 'foto', en: 'photo', fr: 'photo' })} 3`} referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[2], 800)} loading="lazy" onError={(e) => handleImgError(e, fullGallery[2])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt={`${tour.title} – ${tr({ es: 'foto', en: 'photo', fr: 'photo' })} 3`} referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(3)}>
-            <img src={optImg(fullGallery[3], 800)} onError={(e) => handleImgError(e, fullGallery[3])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt={`${tour.title} – ${tr({ es: 'foto', en: 'photo', fr: 'photo' })} 4`} referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[3], 800)} loading="lazy" onError={(e) => handleImgError(e, fullGallery[3])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt={`${tour.title} – ${tr({ es: 'foto', en: 'photo', fr: 'photo' })} 4`} referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
           <div className="hidden md:block col-span-1 row-span-1 relative cursor-pointer overflow-hidden" onClick={() => openGallery(4)}>
-            <img src={optImg(fullGallery[4], 800)} onError={(e) => handleImgError(e, fullGallery[4])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt={`${tour.title} – ${tr({ es: 'foto', en: 'photo', fr: 'photo' })} 5`} referrerPolicy="no-referrer" />
+            <img src={optImg(fullGallery[4], 800)} loading="lazy" onError={(e) => handleImgError(e, fullGallery[4])} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt={`${tour.title} – ${tr({ es: 'foto', en: 'photo', fr: 'photo' })} 5`} referrerPolicy="no-referrer" />
             <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-300" />
           </div>
 
@@ -632,10 +632,10 @@ export default function TourDetail() {
                       </div>
 
                       <div className="flex gap-3">
-                        <input type="checkbox" className="mt-1 flex-shrink-0 w-4 h-4 rounded border-gray-300 text-brand-accent focus:ring-brand-accent cursor-pointer" required />
-                        <p className="text-xs text-gray-400 leading-tight pt-0.5">
+                        <input id="tour-privacy" type="checkbox" className="mt-1 flex-shrink-0 w-4 h-4 rounded border-gray-300 text-brand-accent focus:ring-brand-accent cursor-pointer" required />
+                        <label htmlFor="tour-privacy" className="text-xs text-gray-500 leading-tight pt-0.5">
                           {tr({ es: 'He leído y acepto la', en: 'I have read and accept the', fr: 'J’ai lu et j’accepte la' })} <Link to="/privacidad" className="underline hover:text-brand-primary transition-colors">{tr({ es: 'Política de Privacidad', en: 'Privacy Policy', fr: 'Politique de confidentialité' })}</Link> {tr({ es: 'referida al almacenamiento de mi consulta.', en: 'regarding the storage of my request.', fr: 'concernant la conservation de ma demande.' })}
-                        </p>
+                        </label>
                       </div>
 
                       <div className="space-y-3">
@@ -716,6 +716,7 @@ export default function TourDetail() {
                           <img
                               src={optImg(t.featured_image || t.gallery?.[0] || 'https://picsum.photos/seed/tour/800/600', 800)}
                               alt={t.title}
+                              loading="lazy"
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                               referrerPolicy="no-referrer"
                           />
@@ -760,6 +761,7 @@ export default function TourDetail() {
                   <img 
                     src={optImg(post.cover_image || '/images/blog/desert.png', 800)} 
                     alt={post.title}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-brand-accent">
