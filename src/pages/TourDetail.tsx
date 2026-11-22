@@ -207,6 +207,25 @@ export default function TourDetail() {
   };
 
   if (loading) {
+    const tph = typeof window !== 'undefined' ? (window as any).__TPH__ : null;
+    const firstPhoto = tph && tph.src && tph.path === window.location.pathname ? tph.src as string : null;
+    if (firstPhoto) {
+      // Misma cabecera que la ficha ya cargada: la foto principal se ve desde el primer momento
+      return (
+        <div className="min-h-screen">
+          <section className="max-w-[1600px] mx-auto p-2 md:p-4 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-2 md:gap-3 h-[40vh] md:h-[65vh] rounded-3xl overflow-hidden">
+              <div className="md:col-span-2 row-span-2 overflow-hidden">
+                <img src={firstPhoto} fetchPriority="high" alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+              </div>
+            </div>
+          </section>
+          <div className="flex justify-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-accent"></div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-accent"></div>

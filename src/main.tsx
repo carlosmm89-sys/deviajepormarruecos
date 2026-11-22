@@ -45,6 +45,10 @@ if (!redirecting) document.querySelectorAll('[data-prerender]').forEach(el => { 
 // Register Service Worker for PWA
 registerSW({ immediate: true });
 
+// Foto principal de la ficha de tour que ya venía en el HTML del servidor (móvil): TourDetail la sigue
+// mostrando mientras carga los datos, para que no desaparezca y vuelva a aparecer (mejor LCP).
+(window as any).__TPH__ = { path: location.pathname, src: document.querySelector('.tph img')?.getAttribute('src') || null };
+
 if (!redirecting) createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
