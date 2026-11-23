@@ -240,21 +240,6 @@ async function prerender() {
   fs.writeFileSync(path.join(DIST_DIR, 'spa-shell.html'), baseHtml, 'utf-8');
   console.log('🚀 Pre-renderizando páginas SEO en dist/...');
 
-  // CSS de la web dentro del propio HTML (~19 KB, ~4 KB comprimido) en las páginas pre-renderizadas: así el navegador
-  // no espera a descargar el archivo .css antes de pintar (PageSpeed lo marcaba como "solicitud que bloquea el
-  // renderizado", ~0,3 s en móvil). Solo si el CSS no tiene rutas relativas (url(...) sin "/" delante) que se romperían.
-  try {
-    const cssMatch = baseHtml.match(/<link rel="stylesheet"(?: crossorigin)? href="(\/assets\/[^"]+\.css)">/);
-    if (cssMatch) {
-      const css = fs.readFileSync(path.join(DIST_DIR, cssMatch[1]), 'utf-8');
-      const hasRelativeUrl = /url\(\s*['"]?(?!data:|https?:|\/|#)/i.test(css);
-      if (!hasRelativeUrl && css.length < 60000 && !css.includes('</style')) {
-        baseHtml = baseHtml.replace(cssMatch[0], () => `<style>${css}</style>`);
-      }
-    }
-  } catch (err) {
-    console.warn('No se pudo incrustar el CSS:', err?.message || err);
-  }
 
   let tours = [];
   let destinations = [];
