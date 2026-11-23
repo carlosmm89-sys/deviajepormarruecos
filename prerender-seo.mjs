@@ -97,7 +97,7 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
     `<meta property="og:locale" content="${OG_LOCALE[lang] || 'es_ES'}" data-prerender />`,
     // Conexión anticipada con Supabase (datos de tours y fotos): ahorra tiempo en móvil antes de pintar la página.
     // Dos conexiones: sin crossorigin para las imágenes (peticiones no-CORS) y con crossorigin para la API de datos.
-    SUPABASE_ORIGIN ? `<link rel="preconnect" href="${SUPABASE_ORIGIN}" /><link rel="preconnect" href="${SUPABASE_ORIGIN}" crossorigin />` : '',
+    SUPABASE_ORIGIN ? `<link rel="preconnect" href="${SUPABASE_ORIGIN}" crossorigin />` : '',
     modulePreload ? `<link rel="modulepreload" crossorigin href="${modulePreload}" />` : '',
     preloadImage && typeof preloadImage === 'object'
       ? `<link rel="preload" as="image" href="${escapeHtml(preloadImage.src)}" imagesrcset="${escapeHtml(preloadImage.srcset)}" imagesizes="100vw" fetchpriority="high" />`

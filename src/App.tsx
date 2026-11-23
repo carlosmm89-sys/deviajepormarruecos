@@ -50,11 +50,32 @@ const AboutUs = lazy(() => import('./pages/AboutUs'));
 const Contact = lazy(() => import('./pages/Contact'));
 
 // Minimal loading fallback for lazy routes
-const PageLoader = () => (
+const Spinner = () => (
   <div className="min-h-screen flex items-center justify-center">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-accent"></div>
   </div>
 );
+
+// Mientras se descarga el código de la portada, en vez del spinner se muestra ya la foto de portada
+// (la misma que trae el HTML del servidor). Antes React borraba la foto del HTML al arrancar, pintaba el
+// spinner y la foto no volvía a verse hasta cargar Home: el LCP en móvil subía a ~3,9 s.
+const PageLoader = () => {
+  const biz = typeof window !== 'undefined' ? (window as any).__BIZ__ : null;
+  if (!biz?.hero_local_src || stripLangPrefix(window.location.pathname) !== '/') return <Spinner />;
+  return (
+    <div className="relative min-h-screen overflow-hidden bg-brand-blue/20" aria-hidden="true">
+      <img
+        src={biz.hero_local_src}
+        srcSet={biz.hero_local_srcset}
+        sizes="100vw"
+        alt=""
+        fetchPriority="high"
+        className="absolute inset-0 w-full h-full object-cover scale-105"
+      />
+      <div className="absolute inset-0 bg-black/40" />
+    </div>
+  );
+};
 
 // /en/... y /fr/...: las mismas rutas con el prefijo del idioma (todos los <Link> lo añaden solos)
 const ROUTER_BASENAME = typeof window !== 'undefined' ? langPrefix(currentLang()) || undefined : undefined;
