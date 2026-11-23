@@ -110,6 +110,10 @@ function injectPageSeo(baseHtml, { title, description, canonicalPath, image, typ
   html = html.replace('</head>', `    ${extraHead}\n  </head>`);
 
   if (bodyHtml) {
+    // Enlaces de idioma del menú: a la misma página en el otro idioma (no a la portada), para que Google
+    // encuentre y relacione las versiones en inglés y francés de cada página.
+    const basePath = stripLangPrefix(new URL(fullUrl).pathname);
+    bodyHtml = bodyHtml.replace(/<a href="[^"]*" hreflang="(es|en|fr)">/g, (_, l) => `<a href="${localizePath(basePath, l)}" hreflang="${l}">`);
     // El contenido pre-renderizado es para buscadores y navegadores sin JS. Se oculta visualmente (patrón "sr-only")
     // para que no ocupe espacio y no provoque un salto de diseño (CLS) cuando React lo sustituye por la página real.
     html = html.replace(
@@ -235,6 +239,22 @@ async function prerender() {
   // artículos nuevos del blog, /wishlist, etc. vercel.json reescribe esas rutas a /spa-shell.
   fs.writeFileSync(path.join(DIST_DIR, 'spa-shell.html'), baseHtml, 'utf-8');
   console.log('🚀 Pre-renderizando páginas SEO en dist/...');
+
+  // CSS de la web dentro del propio HTML (~19 KB, ~4 KB comprimido) en las páginas pre-renderizadas: así el navegador
+  // no espera a descargar el archivo .css antes de pintar (PageSpeed lo marcaba como "solicitud que bloquea el
+  // renderizado", ~0,3 s en móvil). Solo si el CSS no tiene rutas relativas (url(...) sin "/" delante) que se romperían.
+  try {
+    const cssMatch = baseHtml.match(/<link rel="stylesheet"(?: crossorigin)? href="(\/assets\/[^"]+\.css)">/);
+    if (cssMatch) {
+      const css = fs.readFileSync(path.join(DIST_DIR, cssMatch[1]), 'utf-8');
+      const hasRelativeUrl = /url\(\s*['"]?(?!data:|https?:|\/|#)/i.test(css);
+      if (!hasRelativeUrl && css.length < 60000 && !css.includes('</style')) {
+        baseHtml = baseHtml.replace(cssMatch[0], () => `<style>${css}</style>`);
+      }
+    }
+  } catch (err) {
+    console.warn('No se pudo incrustar el CSS:', err?.message || err);
+  }
 
   let tours = [];
   let destinations = [];
