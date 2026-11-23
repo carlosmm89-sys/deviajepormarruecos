@@ -7,6 +7,7 @@ import { dbService } from '../services/dbService';
 import { BusinessSettings } from '../types';
 import WidgetRenderer from '../components/WidgetRenderer';
 import HeroSearch from '../components/HeroSearch';
+import DesertVideo from '../components/DesertVideo';
 import SEO from '../components/SEO';
 import { usePageViews } from '../hooks/usePageViews';
 import { useTranslation } from '../hooks/useTranslation';
@@ -238,6 +239,9 @@ export default function Home() {
         </div>
         <p className="text-sm text-gray-600 text-center">{PRICE_NOTE}</p>
       </section>
+
+      {/* Vídeo del desierto (se carga solo al llegar aquí) */}
+      <DesertVideo />
 
       {/* Por qué reservar directamente con nosotros */}
       <section className="max-w-7xl mx-auto px-4 space-y-12">
