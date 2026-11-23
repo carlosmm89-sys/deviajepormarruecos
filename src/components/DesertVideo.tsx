@@ -33,8 +33,8 @@ export default function DesertVideo() {
   return (
     <section className="max-w-7xl mx-auto px-4 space-y-8">
       <div className="text-center space-y-2">
-        <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">{tr({ es: 'Vive el desierto', en: 'Live the desert', fr: 'Vivez le désert' })}</p>
-        <h2 className="text-4xl font-serif font-bold">{tr({ es: 'Dunas, camellos y noche junto al fuego', en: 'Dunes, camels and nights by the fire', fr: 'Dunes, dromadaires et nuits au coin du feu' })}</h2>
+        <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">{tr({ es: 'Desierto de Merzouga', en: 'Merzouga desert', fr: 'Désert de Merzouga' })}</p>
+        <h2 className="text-4xl font-serif font-bold">{tr({ es: 'Vive la magia del desierto', en: 'Experience the magic of the desert', fr: 'Vivez la magie du désert' })}</h2>
       </div>
       <div className="relative rounded-[2rem] overflow-hidden shadow-sm bg-[#f3ede4] aspect-video">
         <video
