@@ -12,6 +12,11 @@ export default defineConfig(({mode}) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
+        workbox: {
+          // Archivos como /sitemap.xml, /robots.txt o /google….html no son páginas de la web: sin esto, quien ya
+          // tuviera la web instalada/en caché veía «Página no encontrada» al abrirlos.
+          navigateFallbackDenylist: [/\.[a-z0-9]+$/i, /^\/api\//],
+        },
         manifest: {
           name: 'Vivir Marruecos',
           short_name: 'VivirMarruecos',

@@ -139,6 +139,11 @@
       "permanent": true
     },
     {
+      "source": "/blog/guia-gastronomica-marruecos-platos-tipicos",
+      "destination": "/blog/gastronomia-marroqui-platos-tipicos",
+      "permanent": true
+    },
+    {
       "source": "/coleccion/:slug(.*,.*)",
       "destination": "/tours",
       "permanent": true
@@ -211,6 +216,11 @@
     {
       "source": "/:lang(en|fr)/blog/que-ver-en-marrakech-3-dias-itinerario-seo",
       "destination": "/:lang/blog/que-ver-en-marrakech-en-3-dias",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(en|fr)/blog/guia-gastronomica-marruecos-platos-tipicos",
+      "destination": "/:lang/blog/gastronomia-marroqui-platos-tipicos",
       "permanent": true
     },
     {
