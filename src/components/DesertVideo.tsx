@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from '../hooks/useTranslation';
 
 /**
- * Vídeo corto de la portada, grabado en los viajes de Vivir Marruecos (dunas, camellos, hoguera y tambores; ~2 MB).
+ * Vídeo corto de la portada, grabado en los viajes de Vivir Marruecos (dunas, camellos y hoguera; ~1,6 MB).
  * Empieza sin sonido (los navegadores no dejan reproducir solo con sonido); el botón activa el sonido.
  * No se descarga nada hasta que el visitante se acerca a esta sección, para no frenar la carga de la portada.
  */
@@ -34,7 +34,7 @@ export default function DesertVideo() {
     <section className="max-w-7xl mx-auto px-4 space-y-8">
       <div className="text-center space-y-2">
         <p className="text-brand-accent text-sm font-bold uppercase tracking-widest">{tr({ es: 'Vive el desierto', en: 'Live the desert', fr: 'Vivez le désert' })}</p>
-        <h2 className="text-4xl font-serif font-bold">{tr({ es: 'Dunas, camellos y noche con tambores', en: 'Dunes, camels and nights with drums', fr: 'Dunes, dromadaires et nuits aux tambours' })}</h2>
+        <h2 className="text-4xl font-serif font-bold">{tr({ es: 'Dunas, camellos y noche junto al fuego', en: 'Dunes, camels and nights by the fire', fr: 'Dunes, dromadaires et nuits au coin du feu' })}</h2>
       </div>
       <div className="relative rounded-[2rem] overflow-hidden shadow-sm bg-[#f3ede4] aspect-video">
         <video
@@ -45,7 +45,7 @@ export default function DesertVideo() {
           loop
           playsInline
           preload="none"
-          aria-label={tr({ es: 'Dunas de Erg Chebbi, paseo en camello, hoguera y tambores en el campamento', en: 'Erg Chebbi dunes, camel ride, campfire and drums at the camp', fr: 'Dunes de l’Erg Chebbi, balade à dromadaire, feu de camp et tambours au campement' })}
+          aria-label={tr({ es: 'Dunas de Erg Chebbi, paseo en camello y hoguera en el campamento', en: 'Erg Chebbi dunes, camel ride and campfire at the camp', fr: 'Dunes de l’Erg Chebbi, balade à dromadaire et feu de camp au campement' })}
         >
           {visible && <source src="/videos/desierto.mp4" type="video/mp4" />}
         </video>
