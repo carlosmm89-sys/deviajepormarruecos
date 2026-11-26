@@ -10,6 +10,7 @@ import { collectionContentI18n } from './src/data/collectionsI18n.js';
 import { getAbout, getContact, ABOUT_PATH, CONTACT_PATH, COMPANY, OPENING_HOURS } from './src/data/companyContent.js';
 import { getHomeContent, localizeReviewMeta, REVIEWS, REVIEW_TOTALS } from './src/data/homeContent.js';
 import { fitTitle, HOME_TITLE } from './src/data/seoContent.js';
+import { listingText } from './src/data/listingText.js';
 import { tourPath, tourMetaDescription, destinationHeadings, HOME_META_DESCRIPTION, HOME_H1_FALLBACK, BUSINESS_ADDRESS, BUSINESS_LEGAL_NAME, ACTIVITIES_EXTRA_I18N, HOME_I18N_SEO, TOURS_TITLE } from './src/data/seoContent.js';
 
 // «&nbsp;» del editor del panel → espacio normal (si no, las líneas no se cortan en el móvil)
@@ -360,7 +361,7 @@ async function prerender() {
       es: 'Todos nuestros tours y circuitos privados por Marruecos: el desierto del Sáhara, Marrakech, Fez, Tánger y las ciudades imperiales.',
       en: 'All our private tours and trips in Morocco: the Sahara desert, Marrakech, Fez, Tangier and the imperial cities.',
       fr: 'Tous nos circuits privés au Maroc : le désert du Sahara, Marrakech, Fès, Tanger et les villes impériales.'
-    })}</p><ul>${toursL.map(t => `<li><article><h2><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(excerpt(stripHtml(t.itinerary_summary || t.description || ''), 220))}</p><p>${priceFromLabel}: ${t.price || 0}€</p></article></li>`).join('')}</ul></main>`;
+    })}</p><ul>${toursL.map(t => `<li><article><h2><a href="${L(tourPath(t))}">${escapeHtml(t.title)}</a></h2><p>${escapeHtml(excerpt(stripHtml(t.itinerary_summary || t.description || ''), 220))}</p><p>${priceFromLabel}: ${t.price || 0}€</p></article></li>`).join('')}</ul>${listingText('tours', lang).map(sec => `<section><h2>${escapeHtml(sec.h2)}</h2>${sec.p.map(x => `<p>${escapeHtml(x)}</p>`).join('')}</section>`).join('')}</main>`;
     write('/tours', page({
       title: TOURS_TITLE[lang],
       description: T({
@@ -399,7 +400,7 @@ async function prerender() {
       es: 'Las mejores actividades para completar tu viaje por Marruecos: paseos en globo, quads en el desierto, rutas en dromedario y noche en campamento.',
       en: 'The best activities to complete your trip to Morocco: balloon rides, quad bikes in the desert, camel rides and a night at a desert camp.',
       fr: 'Les meilleures activités pour compléter votre voyage au Maroc : montgolfière, quad dans le désert, balades à dromadaire et nuit au campement.'
-    })}</p><p>${escapeHtml(ACTIVITIES_EXTRA_I18N[lang])}</p><ul>${actPosts.map(p => `<li><h2><a href="${L(`/blog/${p.slug}`)}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || '')}</p></li>`).join('')}</ul></main>`;
+    })}</p><p>${escapeHtml(ACTIVITIES_EXTRA_I18N[lang])}</p><ul>${actPosts.map(p => `<li><h2><a href="${L(`/blog/${p.slug}`)}">${escapeHtml(p.title)}</a></h2><p>${escapeHtml(p.excerpt || '')}</p></li>`).join('')}</ul>${listingText('actividades', lang).map(sec => `<section><h2>${escapeHtml(sec.h2)}</h2>${sec.p.map(x => `<p>${escapeHtml(x)}</p>`).join('')}</section>`).join('')}</main>`;
     write('/actividades', page({
       title: `${actTitle} | ${siteName}`,
       description: T({

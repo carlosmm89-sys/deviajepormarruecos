@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { TOURS_TITLE } from '../data/seoContent';
+import { listingText } from '../data/listingText';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Tour, Destination } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -363,6 +364,14 @@ export default function Tours() {
           </div>
         </main>
       </div>
+      <section className="max-w-4xl mx-auto px-4 pb-20 space-y-8 text-gray-700 leading-relaxed">
+        {listingText('tours', currentLanguage).map((sec, i) => (
+          <div key={i} className="space-y-3">
+            <h2 className="text-2xl font-serif font-bold text-gray-900">{sec.h2}</h2>
+            {sec.p.map((para, j) => <p key={j}>{para}</p>)}
+          </div>
+        ))}
+      </section>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 // El español está en seoContent.js (COLLECTION_INTROS y COLLECTION_BODIES).
 import { collectionContent } from './seoContent.js';
 import { COLLECTION_EXTRA } from './collectionsExtra.js';
+import { COLLECTION_EXTRA_2 } from './collectionsExtra2.js';
 
 const COLLECTIONS_I18N = {
   en: {
@@ -269,6 +270,7 @@ export function collectionContentI18n(slug, fallbackName, lang) {
   const base = collectionContent(slug, fallbackName);
   const tr = COLLECTIONS_I18N[lang]?.[slug];
   const merged = tr ? { ...base, ...tr } : base;
-  const extra = COLLECTION_EXTRA[lang in COLLECTION_EXTRA ? lang : 'es']?.[slug] || [];
+  const l = lang in COLLECTION_EXTRA ? lang : 'es';
+  const extra = [...(COLLECTION_EXTRA[l]?.[slug] || []), ...(COLLECTION_EXTRA_2[l]?.[slug] || [])];
   return extra.length ? { ...merged, body: [...(merged.body || []), ...extra] } : merged;
 }

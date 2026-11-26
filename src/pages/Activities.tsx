@@ -9,6 +9,7 @@ import { ACTIVITIES_EXTRA } from '../data/seoContent';
 import { optImg } from '../lib/image';
 
 import { useTranslation } from '../hooks/useTranslation';
+import { listingText } from '../data/listingText';
 export default function Activities() {
   const { tr, currentLanguage } = useTranslation();
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -145,6 +146,14 @@ export default function Activities() {
             </button>
           </div>
         )}
+      </section>
+      <section className="max-w-4xl mx-auto px-4 pb-20 space-y-8 text-gray-700 leading-relaxed">
+        {listingText('actividades', currentLanguage).map((sec, i) => (
+          <div key={i} className="space-y-3">
+            <h2 className="text-2xl font-serif font-bold text-gray-900">{sec.h2}</h2>
+            {sec.p.map((para, j) => <p key={j}>{para}</p>)}
+          </div>
+        ))}
       </section>
     </div>
   );
