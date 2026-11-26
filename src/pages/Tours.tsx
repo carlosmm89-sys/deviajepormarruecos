@@ -3,7 +3,7 @@ import { TOURS_TITLE } from '../data/seoContent';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Tour, Destination } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock, Calendar, ChevronRight, RotateCcw, Filter } from 'lucide-react';
+import { MapPin, Clock, Users, ChevronRight, RotateCcw, Filter } from 'lucide-react';
 import { dbService } from '../services/dbService';
 import { useCurrency } from '../context/CurrencyContext';
 import { useTranslation } from '../hooks/useTranslation';
@@ -11,6 +11,9 @@ import SEO from '../components/SEO';
 import { tourPath } from '../data/seoContent';
 import { optImg, optSrcSet } from '../lib/image';
 import { categoryLabel, durationLabel } from '../i18n/labels';
+
+// Solo la excursión de 3 días y el viaje de 5 días al desierto se hacen también en grupo; el resto, solo en privado
+const GROUP_OR_PRIVATE_SLUGS = ['escapada-3-dias-merzouga', 'viaje-5-dias-desierto-merzouga'];
 
 // Foto de cabecera: caravana de camellos en las dunas (Unsplash, foto de Carlos Leret, licencia Unsplash gratuita).
 const TOURS_HERO_IMAGE = 'https://images.unsplash.com/photo-1559586616-361e18714958';
@@ -344,8 +347,8 @@ export default function Tours() {
                             <span>{tour.itinerary_summary || tour.duration || tr({ es: 'Varios días', en: 'Several days', fr: 'Plusieurs jours' })}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4" />
-                            <span className="line-clamp-1">{tour.date_text || tr({ es: 'Salidas regulares', en: 'Regular departures', fr: 'Départs réguliers' })}</span>
+                            <Users className="w-4 h-4" />
+                            <span className="line-clamp-1">{GROUP_OR_PRIVATE_SLUGS.includes(tour.slug) ? tr({ es: 'Privado o en grupo', en: 'Private or group', fr: 'Privé ou en groupe' }) : tr({ es: 'Tour privado', en: 'Private tour', fr: 'Circuit privé' })}</span>
                         </div>
                         </div>
                     </div>

@@ -399,7 +399,6 @@ export default function Home() {
               </a>
             </div>
             <p className="text-sm font-bold text-[#00704A]">🏆 Tripadvisor {REVIEW_TOTALS.tripadvisor.award}</p>
-            {currentLanguage !== 'es' && <p className="text-xs text-gray-600">{tr({ es: '', en: 'Reviews are shown in their original language.', fr: 'Les avis sont affichés dans leur langue d’origine.' })}</p>}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {REVIEWS.map((review, idx) => (
@@ -409,7 +408,8 @@ export default function Home() {
                     ? Array(5).fill(0).map((_, i) => <span key={i} className="w-3.5 h-3.5 rounded-full bg-[#00AA6C] mr-0.5" />)
                     : Array(5).fill(0).map((_, i) => <Star key={i} className="w-4 h-4 text-[#F6B100] fill-[#F6B100]" />)}
                 </div>
-                <blockquote className="text-gray-700 leading-relaxed flex-1">“{review.text}”</blockquote>
+                <blockquote lang="es" className="text-gray-700 leading-relaxed flex-1">“{review.text}”
+                  {currentLanguage !== 'es' && <span className="block text-xs italic text-gray-500">{tr({ es: '', en: 'Review in Spanish', fr: 'Avis en espagnol' })}</span>}</blockquote>
                 <figcaption className="flex items-center gap-3 pt-2 border-t border-gray-100">
                   <span className="inline-flex items-center justify-center w-10 h-10 shrink-0 rounded-full bg-brand-primary/10 text-brand-primary font-bold uppercase">{review.author.charAt(0)}</span>
                   <span>

@@ -88,7 +88,8 @@ export default function ReviewsModal({ isOpen, onClose }: ReviewsModalProps) {
                     <div className="flex text-black">
                       {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
                     </div>
-                    <p className="text-gray-700 leading-relaxed text-sm">“{review.text}”</p>
+                    <p lang="es" className="text-gray-700 leading-relaxed text-sm">“{review.text}”</p>
+                    {currentLanguage !== 'es' && <span className="block text-xs italic text-gray-500">{tr({ es: '', en: 'Review in Spanish', fr: 'Avis en espagnol' })}</span>}
                   </div>
                 );
               })}

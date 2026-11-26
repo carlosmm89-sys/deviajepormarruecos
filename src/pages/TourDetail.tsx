@@ -216,7 +216,7 @@ export default function TourDetail() {
           <section className="max-w-[1600px] mx-auto p-2 md:p-4 mt-4">
             <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-2 md:gap-3 h-[40vh] md:h-[65vh] rounded-3xl overflow-hidden">
               <div className="md:col-span-2 row-span-2 overflow-hidden">
-                <img src={firstPhoto} fetchPriority="high" alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                <img src={firstPhoto} fetchPriority="high" alt={(tph && tph.alt) || ''} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               </div>
             </div>
           </section>

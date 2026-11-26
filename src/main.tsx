@@ -47,7 +47,7 @@ registerSW({ immediate: true });
 
 // Foto principal de la ficha de tour que ya venía en el HTML del servidor (móvil): TourDetail la sigue
 // mostrando mientras carga los datos, para que no desaparezca y vuelva a aparecer (mejor LCP).
-(window as any).__TPH__ = { path: location.pathname, src: document.querySelector('.tph img')?.getAttribute('src') || null };
+(window as any).__TPH__ = { path: location.pathname, src: document.querySelector('.tph img')?.getAttribute('src') || null, alt: document.querySelector('.tph img')?.getAttribute('alt') || '' };
 
 if (!redirecting) createRoot(document.getElementById('root')!).render(
   <StrictMode>
