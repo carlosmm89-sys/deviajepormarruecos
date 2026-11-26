@@ -53,6 +53,13 @@ const ABOUT = {
         ]
       },
       {
+        h2: 'Cómo pedir tu presupuesto',
+        paragraphs: [
+          'En la empresa trabajamos cuatro hermanos y atendemos nosotros mismos cada consulta, en español, inglés o francés. Escríbenos por email o por WhatsApp con las fechas, la ciudad de llegada y cuántos sois, y te enviamos una propuesta de ruta con el precio. Respondemos de lunes a viernes, de 9:00 a 21:00, hora de España.',
+          'Si todavía no sabes qué ruta elegir, cuéntanos cuántos días tienes y qué te gustaría ver, y te ayudamos a decidir.'
+        ]
+      },
+      {
         h2: 'Lo que dicen nuestros viajeros',
         paragraphs: [
           'Tenemos una valoración de 5,0 sobre 5 en Tripadvisor, con 105 opiniones, y el distintivo Travellers’ Choice 2026. Si ya has viajado con nosotros, nos ayuda mucho que dejes tu opinión en Google.'
@@ -100,6 +107,13 @@ const ABOUT = {
         ]
       },
       {
+        h2: 'How to ask for a quote',
+        paragraphs: [
+          'Four brothers work in the company and we answer every enquiry ourselves, in English, Spanish or French. Send us an email or a WhatsApp with your dates, arrival city and number of travellers, and we will send you a route proposal with the price. We reply Monday to Friday, 9:00 to 21:00, Spanish time.',
+          'If you are not sure which route to choose yet, tell us how many days you have and what you would like to see, and we will help you decide.'
+        ]
+      },
+      {
         h2: 'What our travellers say',
         paragraphs: [
           'We are rated 5.0 out of 5 on Tripadvisor, with 105 reviews, and hold the Travellers’ Choice 2026 award. If you have already travelled with us, leaving a review on Google helps us a lot.'
@@ -144,6 +158,13 @@ const ABOUT = {
           'Nos chauffeurs parlent français, anglais et espagnol.',
           'Tous nos véhicules sont assurés.',
           'Nous vous envoyons un devis ferme et sans engagement selon vos dates et le nombre de voyageurs.'
+        ]
+      },
+      {
+        h2: 'Comment demander un devis',
+        paragraphs: [
+          'Nous sommes quatre frères dans l’entreprise et nous répondons nous-mêmes à chaque demande, en français, anglais ou espagnol. Envoyez-nous un e-mail ou un WhatsApp avec vos dates, votre ville d’arrivée et le nombre de voyageurs, et nous vous enverrons une proposition d’itinéraire avec le prix. Nous répondons du lundi au vendredi, de 9 h à 21 h, heure d’Espagne.',
+          'Si vous ne savez pas encore quel itinéraire choisir, dites-nous combien de jours vous avez et ce que vous aimeriez voir : nous vous aiderons à décider.'
         ]
       },
       {
